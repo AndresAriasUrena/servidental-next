@@ -1,0 +1,203 @@
+
+Resumen de la migración:
+Total de productos: 61
+
+Productos por categoría:
+
+Anestesia (1):
+  - Jeringa
+
+Bombas de succión (1):
+  - ANYVAC 30
+
+Carrito para accesorios (1):
+  - CARRITO
+
+Compresores (4):
+  - TPC DC-701
+  - TPC DC-702
+  - TPC DC-703
+  - PlastPress 127V
+
+Cortadores (2):
+  - GP CUT & FIT
+  - UC CUT
+
+Cámaras Intraorales (2):
+  - Intraorales
+  - CONTEO DE FOTONES
+
+Equipo de Rayos X (2):
+  - SIRAY Max
+  - XVbeam1000
+
+Esterilización (2):
+  - SA-232
+  - SA-232X
+
+Fresadora (1):
+  - CRAFT 5X FRESADORA
+
+Lámparas Dentales (3):
+  - SIGER L500
+  - SIGER V1
+  - SIGER V2
+
+Lámparas de Fotocurado (2):
+  - DB686 Nano
+  - HONOR DB686
+
+Microarenador (1):
+  - Microjato SN-125748
+
+Motores (4):
+  - VC -10
+  - C-PUMA-MASTER
+  - SE -270M
+  - C-SAILOR PRO
+
+Otros (9):
+  - C-EXPLORER
+  - CP-1
+  - CX207-F H65
+  - H75-TP2
+  - UA-1
+  - UC ONE
+  - STD 127V
+  - Denta Film
+  - Eagle Edge 3D AXR
+
+Piezas de mano (10):
+  - C-SMART PILOT
+  - BA250LT
+  - SG200L
+  - DB686 Swift
+  - ELEC II mini
+  - NX-201N
+  - COXO CX207
+  - COXO CX235
+  - PT MASTER
+  - Super torque
+
+Scanner (5):
+  - Eagle IOS
+  - FREEDOM 1
+  - MEYER
+  - FREEDOM X5 SCANNER DE MOVIMIENTO
+  - DENTAL EDGE ESCÁNER DE LABORATORIO
+
+Selladoras (3):
+  - BIOSTAMP 127V
+  - SIGER
+  - SMART 127V
+
+Termofomadoras (2):
+  - PlastVac P7
+  - PlastVac P7 Plus
+
+Unidades Dentales (4):
+  - Serie S30
+  - Serie S30  Carrito
+  - Serie U100
+  - Serie V6000
+
+Vaporizadores (2):
+  - Pulverizador
+  - Pulverizador
+
+Productos por marca:
+
+BioArt (5):
+  - C-SMART PILOT
+  - PlastVac P7
+  - PlastVac P7 Plus
+  - BIOSTAMP 127V
+  - SMART 127V
+
+COXO (4):
+  - C-EXPLORER
+  - CX207-F H65
+  - COXO CX207
+  - COXO CX235
+
+DOF (4):
+  - FREEDOM 1
+  - CRAFT 5X FRESADORA
+  - FREEDOM X5 SCANNER DE MOVIMIENTO
+  - DENTAL EDGE ESCÁNER DE LABORATORIO
+
+Meyer (1):
+  - MEYER
+
+Micro NX (1):
+  - NX-201N
+
+Siger (40):
+  - Jeringa
+  - ANYVAC 30
+  - VC -10
+  - Intraorales
+  - CARRITO
+  - BA250LT
+  - SG200L
+  - GP CUT & FIT
+  - UC CUT
+  - CP-1
+  - Eagle IOS
+  - H75-TP2
+  - UA-1
+  - UC ONE
+  - DB686 Nano
+  - HONOR DB686
+  - DB686 Swift
+  - SIGER L500
+  - SIGER V1
+  - SIGER V2
+  - STD 127V
+  - Denta Film
+  - Microjato SN-125748
+  - C-PUMA-MASTER
+  - ELEC II mini
+  - SE -270M
+  - C-SAILOR PRO
+  - PlastPress 127V
+  - PT MASTER
+  - SIRAY Max
+  - SIGER
+  - CONTEO DE FOTONES
+  - Super torque
+  - Eagle Edge 3D AXR
+  - Serie S30
+  - Serie S30  Carrito
+  - Serie U100
+  - Serie V6000
+  - Pulverizador
+  - Pulverizador
+
+Sturdy (2):
+  - SA-232
+  - SA-232X
+
+TPC (3):
+  - TPC DC-701
+  - TPC DC-702
+  - TPC DC-703
+
+Xpect Vision (1):
+  - XVbeam1000
+
+Productos sin categoría asignada:
+- C-EXPLORER
+- CP-1
+- CX207-F H65
+- H75-TP2
+- UA-1
+- UC ONE
+- STD 127V
+- Denta Film
+- Eagle Edge 3D AXR
+
+Estadísticas:
+- Total de imágenes: 118
+- Productos con características únicas: 61
+- Productos con características generales: 13
