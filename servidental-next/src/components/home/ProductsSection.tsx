@@ -10,19 +10,19 @@ const featuredProducts = [
   {
     id: 1,
     name: 'Unidades Dentales',
-    image: assets.products.unidadDental.s30.default,
+    image: assets.products.unidadesDentales.s30.default,
     href: '/products#unidades-dentales'
   },
   {
     id: 2,
     name: 'Fresadora',
-    image: assets.products.fresadora,
+    image: assets.products.fresadora.images[0],
     href: '/products#fresadora'
   },
   {
     id: 3,
     name: 'Rayos X',
-    image: assets.products.rayosX,
+    image: assets.products.rayosX.portatil[4],
     href: '/products#rayos-x'
   },
 ] as const

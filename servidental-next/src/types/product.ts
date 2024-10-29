@@ -1,4 +1,5 @@
-// src/types/product.ts
+import { StaticImageData } from 'next/image';
+
 export type ProductCategory =
   | 'Unidades Dentales'
   | 'Bombas de succión'
@@ -37,13 +38,13 @@ export type ProductBrand =
   | 'Sturdy'
   | 'Xpect Vision';
 
-export interface ProductImage {
-  url: string;
-  alt: string;
-  width: number;
-  height: number;
-  isPrimary?: boolean;
-}
+  export interface ProductImage {
+    url: StaticImageData;  // Cambiado de string a StaticImageData
+    alt: string;
+    width: number;
+    height: number;
+    isPrimary?: boolean;
+  }
 
 export interface ProductFeature {
   title: string;
@@ -69,7 +70,7 @@ export interface Product {
   subtitle?: string;
   brand: {
     name: ProductBrand;
-    logo: string;
+    logo: StaticImageData;
   };
   description: string;
   shortDescription?: string;

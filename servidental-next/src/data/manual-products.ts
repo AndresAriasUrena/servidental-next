@@ -46,7 +46,7 @@ export const products: Product[] = [
       subtitle: "Anestesia",
       brand: {
         name: "COXO",
-        logo: "coxo_logo.png"
+        logo: assets.logos.brands.coxo
       },
       description: "Alta precisión",
       shortDescription: "Alta precisión",
@@ -65,7 +65,7 @@ export const products: Product[] = [
       },
       images: [
         {
-          url: "anestesia/GENI2.png",
+          url: assets.products.anestesia.default,
           alt: "Jeringa Anestesia",
           width: 800,
           height: 600,
@@ -84,7 +84,7 @@ export const products: Product[] = [
       subtitle: "Bomba de vacío húmeda",
       brand: {
         name: "Siger",
-        logo: "siger_logo.png"
+        logo: assets.logos.brands.siger
       },
       description: "Reduce consumo de agua hasta en un tercio",
       shortDescription: "Reduce consumo de agua hasta en un tercio",
@@ -107,7 +107,7 @@ export const products: Product[] = [
       },
       images: [
         {
-          url: "bomba_de_vacio_humeda/anyvac30_1.png",
+          url: assets.products.bombasVacio.anyvac30,
           alt: "ANYVAC 30",
           width: 800,
           height: 600,
@@ -126,7 +126,7 @@ export const products: Product[] = [
       subtitle: "Bomba de vacío seca",
       brand: {
         name: "Siger",
-        logo: "siger_logo.png"
+        logo: assets.logos.brands.siger
       },
       description: "Separación eficiente entre agua y desechos",
       shortDescription: "Separación eficiente entre agua y desechos",
@@ -154,7 +154,7 @@ export const products: Product[] = [
       },
       images: [
         {
-          url: "bomba_de_vacio_seca/vc-10_1.png",
+          url: assets.products.bombasVacio.vc10,
           alt: "VC-10",
           width: 800,
           height: 600,
@@ -174,7 +174,7 @@ export const products: Product[] = [
         subtitle: "MULTIFUNCIONAL",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Tomacorrientes incorporados",
         shortDescription: "Tomacorrientes incorporados",
@@ -198,7 +198,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "carrito_multifuncional/carrito-1_1.png",
+            url: assets.products.carrito.images[0],
             alt: "CARRITO",
             width: 800,
             height: 600,
@@ -217,7 +217,7 @@ export const products: Product[] = [
         subtitle: "Compresor de aire super silencioso",
         brand: {
           name: "TPC",
-          logo: "tpc_logo.png"
+          logo: assets.logos.brands.tpc
         },
         description: "Libre de Aceite",
         shortDescription: "Libre de Aceite",
@@ -241,7 +241,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "compresor/DC-701-1hp_1.png",
+            url: assets.products.compresores.dc701,
             alt: "TPC DC-701",
             width: 800,
             height: 600,
@@ -260,7 +260,7 @@ export const products: Product[] = [
         subtitle: "Compresor de aire super silencioso",
         brand: {
           name: "TPC",
-          logo: "tpc_logo.png"
+          logo: assets.logos.brands.tpc
         },
         description: "Libre de Aceite",
         shortDescription: "Libre de Aceite",
@@ -283,7 +283,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "compresor/DC-702-2hp_1.jpg",
+            url: assets.products.compresores.dc702,
             alt: "TPC DC-702",
             width: 800,
             height: 600,
@@ -302,7 +302,7 @@ export const products: Product[] = [
         subtitle: "Compresor de aire super silencioso",
         brand: {
           name: "TPC",
-          logo: "tpc_logo.png"
+          logo: assets.logos.brands.tpc
         },
         description: "Libre de Aceite",
         shortDescription: "Libre de Aceite",
@@ -325,7 +325,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "compresor/DC-703-3hp_1.jpg",
+            url: assets.products.compresores.dc703,
             alt: "TPC DC-703",
             width: 800,
             height: 600,
@@ -345,7 +345,7 @@ export const products: Product[] = [
         subtitle: "Contra-ángulo 1:5",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Diseño ergonómico",
         shortDescription: "Diseño ergonómico",
@@ -369,7 +369,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "contrangulo/contrangulo-1_1.jpg",
+            url: assets.products.contraangulos.standard[0],
             alt: "BA250LT",
             width: 800,
             height: 600,
@@ -388,7 +388,7 @@ export const products: Product[] = [
         subtitle: "Contra-ángulo para implantes",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Acero inoxidable",
         shortDescription: "Acero inoxidable",
@@ -410,7 +410,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "contrangulo-implantes/contrangulo-para-implantes.png",
+            url: assets.products.contraangulos.implantes,
             alt: "SG200L",
             width: 800,
             height: 600,
@@ -429,7 +429,7 @@ export const products: Product[] = [
         subtitle: "CORTADOR DE GUTTA PERCHA",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Tamaño ajustable (3 tipos)",
         shortDescription: "Tamaño ajustable (3 tipos)",
@@ -451,7 +451,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "gp_cut_fit/rs=w_888,h_1184 (2).jpg",
+            url: assets.products.cortadores.gpCutFit,
             alt: "GP CUT & FIT",
             width: 800,
             height: 600,
@@ -470,7 +470,7 @@ export const products: Product[] = [
         subtitle: "CORTADOR DE GUTTA PERCHA ULTRASÓNICO",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Punta multiusos",
         shortDescription: "Punta multiusos",
@@ -494,7 +494,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "cortador_gutta_percha_ultrasonico/rs=w_888,h_1184_1.jpg",
+            url: assets.products.cortadores.gutta,
             alt: "UC CUT",
             width: 800,
             height: 600,
@@ -514,7 +514,7 @@ export const products: Product[] = [
         subtitle: "Endomotor 2 en 1",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Con localizador de ápice",
         shortDescription: "Con localizador de ápice",
@@ -539,7 +539,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "c-smart-endomotor/endomotor.jpg",
+            url: assets.products.motores.endomotor,
             alt: "C-SMART PILOT",
             width: 800,
             height: 600,
@@ -558,7 +558,7 @@ export const products: Product[] = [
         subtitle: "Cámaras",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Cámaras Inalámbrica de alta definición",
         shortDescription: "Cámaras Inalámbrica de alta definición",
@@ -587,7 +587,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "camara-intraoral/camara-1.png",
+            url: assets.products.camaras.intraoral[0],
             alt: "Intraorales",
             width: 800,
             height: 600,
@@ -606,7 +606,7 @@ export const products: Product[] = [
         subtitle: "RADIOVISIÓGRAFO Intraoral",
         brand: {
           name: "Xpect Vision",
-          logo: "xpect-vision.png"
+          logo: assets.logos.brands.xpectVision
         },
         description: "2 tamaños disponibles: 0.8 y 1.5",
         shortDescription: "2 tamaños disponibles: 0.8 y 1.5",
@@ -629,7 +629,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "sensor_digital/sensor-digital-3.png",
+            url: assets.products.sensores.digital[2],
             alt: "CONTEO DE FOTONES",
             width: 800,
             height: 600,
@@ -649,7 +649,7 @@ export const products: Product[] = [
         subtitle: "Escáner intraoral portátil",
         brand: {
           name: "DOF",
-          logo: "dof_logo.png"
+          logo: assets.logos.brands.dof
         },
         description: "Compacto y ergonómico",
         shortDescription: "Compacto y ergonómico",
@@ -671,7 +671,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "escaner_portatil_eagle/eagle-ios-0_1.jpeg",
+            url: assets.products.scanner.eagleIOS,
             alt: "Eagle IOS",
             width: 800,
             height: 600,
@@ -690,7 +690,7 @@ export const products: Product[] = [
         subtitle: "Esterilizador Manual",
         brand: {
           name: "Sturdy",
-          logo: "sturdy_logo.jpg"
+          logo: assets.logos.brands.sturdy
         },
         description: "Protector térmico",
         shortDescription: "Protector térmico",
@@ -715,7 +715,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "esterilizador_manual/esterilizador-manual_1.png",
+            url: assets.products.esterilizadores.manual,
             alt: "SA-232",
             width: 800,
             height: 600,
@@ -734,7 +734,7 @@ export const products: Product[] = [
         subtitle: "Esterilizador semi automático",
         brand: {
           name: "Sturdy",
-          logo: "sturdy_logo.jpg"
+          logo: assets.logos.brands.sturdy
         },
         description: "Ciclo de secado incorporado",
         shortDescription: "Ciclo de secado incorporado",
@@ -761,7 +761,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "esterilizador_semiautomatico/esterilziador-semiautomatico.png",
+            url: assets.products.esterilizadores.semiAuto,
             alt: "SA-232X",
             width: 800,
             height: 600,
@@ -781,7 +781,7 @@ export const products: Product[] = [
         subtitle: "Scanner Intraoral",
         brand: {
           name: "DOF",
-          logo: "dof_logo.png"
+          logo: assets.logos.brands.dof
         },
         description: "5 megapíxeles con tecnología patentada",
         shortDescription: "5 megapíxeles con tecnología patentada",
@@ -805,7 +805,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "scanner/freedom-1.png",
+            url: assets.products.scanner.freedom,
             alt: "FREEDOM 1",
             width: 800,
             height: 600,
@@ -824,7 +824,7 @@ export const products: Product[] = [
         subtitle: "TODO EN UNO",
         brand: {
           name: "DOF",
-          logo: "dof_logo.png"
+          logo: assets.logos.brands.dof
         },
         description: "Fresado húmedo y seco",
         shortDescription: "Fresado húmedo y seco",
@@ -862,7 +862,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "fresadora/fresadora-2.png",
+            url: assets.products.fresadora.images[1],
             alt: "CRAFT 5X FRESADORA",
             width: 800,
             height: 600,
@@ -881,7 +881,7 @@ export const products: Product[] = [
         subtitle: "Scanner Intraoral",
         brand: {
           name: "Meyer",
-          logo: "meyer.png"
+          logo: assets.logos.brands.meyer
         },
         description: "Procesamiento inteligente de imágenes",
         shortDescription: "Procesamiento inteligente de imágenes",
@@ -911,7 +911,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "scanner/meyer.webp",
+            url: assets.products.scanner.meyer,
             alt: "MEYER",
             width: 800,
             height: 600,
@@ -931,7 +931,7 @@ export const products: Product[] = [
         subtitle: "Lámpara de fotocurado",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Con detector de caries incorporado",
         shortDescription: "Con detector de caries incorporado",
@@ -958,7 +958,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "lampara_fotocurado_detector_caries/fotocurado-1.png",
+            url: assets.products.lamparasFotocurado.detector.images[0],
             alt: "DB686 Nano",
             width: 800,
             height: 600,
@@ -977,7 +977,7 @@ export const products: Product[] = [
         subtitle: "Lámpara de fotocurado",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Alta potencia lumínica ajustable",
         shortDescription: "Alta potencia lumínica ajustable",
@@ -1003,7 +1003,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "lampara_fotocurado_detector_caries/fotocurado-4.png",
+            url: assets.products.lamparasFotocurado.detector.images[3],
             alt: "HONOR DB686",
             width: 800,
             height: 600,
@@ -1022,7 +1022,7 @@ export const products: Product[] = [
         subtitle: "Lámpara de fotocurado para Ortodoncia",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Modos de trabajo: Soft up, High power y Ortodoncia",
         shortDescription: "Tres modos de trabajo especializados",
@@ -1046,7 +1046,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "lampara_fotocurado_ortodoncia/lampara-ortodoncia-1.png",
+            url: assets.products.lamparasFotocurado.ortodoncia[0],
             alt: "DB686 Swift",
             width: 800,
             height: 600,
@@ -1066,7 +1066,7 @@ export const products: Product[] = [
         subtitle: "Lámpara dental LED",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Disponible cabezal o juego completo de lámpara de techo",
         shortDescription: "Disponible cabezal o juego completo de lámpara de techo",
@@ -1094,7 +1094,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "lamparas_dentales/L500.png",
+            url: assets.products.lamparasDentales.l500,
             alt: "SIGER L500",
             width: 800,
             height: 600,
@@ -1113,7 +1113,7 @@ export const products: Product[] = [
         subtitle: "Lámpara dental LED",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Luz libre de efectos de sombra",
         shortDescription: "Luz libre de efectos de sombra",
@@ -1141,7 +1141,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "lamparas_dentales/v1.png",
+            url: assets.products.lamparasDentales.v1,
             alt: "SIGER V1",
             width: 800,
             height: 600,
@@ -1160,7 +1160,7 @@ export const products: Product[] = [
         subtitle: "Motor Eléctrico de cirugía",
         brand: {
           name: "Micro NX",
-          logo: "micro_nx_logo.png"
+          logo: assets.logos.brands.microNx
         },
         description: "El motor más pequeño y poderoso del mundo",
         shortDescription: "El motor más pequeño y poderoso del mundo",
@@ -1185,7 +1185,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "motor_electrico_cirugia/motor-electrico-cirugia.png",
+            url: assets.products.motores.electrico.cirugia,
             alt: "ELEC II mini",
             width: 800,
             height: 600,
@@ -1205,7 +1205,7 @@ export const products: Product[] = [
         subtitle: "Motor de implantes",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Control variable de velocidad y torque",
         shortDescription: "Control variable de velocidad y torque",
@@ -1230,7 +1230,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "motor_implantes/sailor-pro.png",
+            url: assets.products.motores.implantes.sailorPro,
             alt: "C-SAILOR PRO",
             width: 800,
             height: 600,
@@ -1249,7 +1249,7 @@ export const products: Product[] = [
         subtitle: "Motor de laboratorio",
         brand: {
           name: "Micro NX",
-          logo: "micro_nx_logo.png"
+          logo: assets.logos.brands.microNx
         },
         description: "Motor con controlador y pieza de mano",
         shortDescription: "Motor con controlador y pieza de mano",
@@ -1274,7 +1274,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "motor_nx-210n_laboratorio/nx-201n-2.png",
+            url: assets.products.motores.laboratorio.nx201n[1],
             alt: "NX-201N",
             width: 800,
             height: 600,
@@ -1293,7 +1293,7 @@ export const products: Product[] = [
         subtitle: "Kit de 3 piezas",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Contra-ángulo, Pieza de mano recta y Motor de aire",
         shortDescription: "Kit completo de piezas de mano",
@@ -1322,7 +1322,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "piezas_de_mano/kit-3-partes-piezas-de-mano.png",
+            url: assets.products.piezasMano.kit3Partes,
             alt: "Kit Piezas de Mano CX235",
             width: 800,
             height: 600,
@@ -1342,7 +1342,7 @@ export const products: Product[] = [
         subtitle: "Laminadora de presión positiva",
         brand: {
           name: "BioArt",
-          logo: "bioart_logo.png"
+          logo: assets.logos.brands.bioart
         },
         description: "Diseño compacto con mejor fidelidad de copia",
         shortDescription: "Diseño compacto con mejor fidelidad de copia",
@@ -1365,7 +1365,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "termoformdoras/plast-press-1.png",
+            url: assets.products.termoformadoras.plastPress[1],
             alt: "PlastPress 127V",
             width: 800,
             height: 600,
@@ -1384,7 +1384,7 @@ export const products: Product[] = [
         subtitle: "Termoformadora análoga",
         brand: {
           name: "BioArt",
-          logo: "bioart_logo.png"
+          logo: assets.logos.brands.bioart
         },
         description: "Sistema exclusivo de calentamiento rápido y uniforme",
         shortDescription: "Sistema exclusivo de calentamiento rápido y uniforme",
@@ -1409,7 +1409,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "termoformdoras/plastvac-p7-127v-analogo.png",
+            url: assets.products.termoformadoras.plastvac.analogo,
             alt: "PlastVac P7",
             width: 800,
             height: 600,
@@ -1428,7 +1428,7 @@ export const products: Product[] = [
         subtitle: "Termoformadora Digital",
         brand: {
           name: "BioArt",
-          logo: "bioart_logo.png"
+          logo: assets.logos.brands.bioart
         },
         description: "Control digital avanzado con display programable",
         shortDescription: "Control digital avanzado con display programable",
@@ -1455,7 +1455,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "termoformdoras/plastvac-p7-127v-digital-0.png",
+            url: assets.products.termoformadoras.plastvac.digital[0],
             alt: "PlastVac P7 Plus",
             width: 800,
             height: 600,
@@ -1474,7 +1474,7 @@ export const products: Product[] = [
         subtitle: "Raspador dental y pulidor de aire",
         brand: {
           name: "COXO",
-          logo: "coxo_logo.png"
+          logo: assets.logos.brands.coxo
         },
         description: "Sistema multifuncional con pantalla táctil",
         shortDescription: "Sistema multifuncional con pantalla táctil",
@@ -1502,7 +1502,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "piezas_de_mano/pt-master-2.png",
+            url: assets.products.piezasMano.ptMaster[1],
             alt: "PT MASTER",
             width: 800,
             height: 600,
@@ -1521,7 +1521,7 @@ export const products: Product[] = [
         subtitle: "Rayos X Portátil",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Rayos X portátil con pantalla táctil",
         shortDescription: "Rayos X portátil con pantalla táctil",
@@ -1546,7 +1546,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "rayos_x_portatil/rayos-x-portatil-2.png",
+            url: assets.products.rayosX.portatil[1],
             alt: "SIRAY Max",
             width: 800,
             height: 600,
@@ -1566,7 +1566,7 @@ export const products: Product[] = [
         subtitle: "Selladora con guillotina",
         brand: {
           name: "BioArt",
-          logo: "bioart_logo.png"
+          logo: assets.logos.brands.bioart
         },
         description: "Selladora con guillotina integrada y diseño innovador",
         shortDescription: "Selladora con guillotina integrada",
@@ -1589,7 +1589,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "selladora_biostamp_127v/seladora_01.png",
+            url: assets.products.selladoras.biostamp,
             alt: "BIOSTAMP 127V",
             width: 800,
             height: 600,
@@ -1608,7 +1608,7 @@ export const products: Product[] = [
         subtitle: "Unidad Dental Premium",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Unidad dental con tapicería italiana de alta calidad",
         shortDescription: "Tapicería italiana premium",
@@ -1647,14 +1647,14 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "unidad_dental_serie_s30/serie-s30.png",
+            url: assets.products.unidadesDentales.s30.default,
             alt: "Serie S30",
             width: 800,
             height: 600,
             isPrimary: true
           },
           {
-            url: "unidad_dental_serie_s30/serie-s30-tapiceria.png",
+            url: assets.products.unidadesDentales.s30.tapiceria,
             alt: "Tapicería Serie S30",
             width: 800,
             height: 600,
@@ -1673,7 +1673,7 @@ export const products: Product[] = [
         subtitle: "Unidad Dental Premium con Carrito",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Unidad dental con mesa de doctor tipo carrito",
         shortDescription: "Mesa de doctor tipo carrito móvil",
@@ -1712,7 +1712,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "unidad_dental_serie_s30/serie-s30-carrito.png",
+            url: assets.products.unidadesDentales.s30.carrito,
             alt: "Serie S30 Carrito",
             width: 800,
             height: 600,
@@ -1731,7 +1731,7 @@ export const products: Product[] = [
         subtitle: "Unidad Dental Diseño Cuadrado",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Unidad dental con diseño cuadrado moderno",
         shortDescription: "Diseño cuadrado con tapicería microfibra",
@@ -1769,7 +1769,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "unidad_dental_u200/u-200.png",
+            url: assets.products.unidadesDentales.u200.default,
             alt: "Serie U100",
             width: 800,
             height: 600,
@@ -1789,7 +1789,7 @@ export const products: Product[] = [
         subtitle: "Unidad Dental Diseño Redondo",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Unidad dental de diseño redondo con panel de botones",
         shortDescription: "Diseño redondo con panel de botones",
@@ -1827,14 +1827,14 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "unidad_dental_v600/v-600.png",
+            url: assets.products.unidadesDentales.v600.default,
             alt: "Serie V6000",
             width: 800,
             height: 600,
             isPrimary: true
           },
           {
-            url: "unidad_dental_v600/v-6000-tapiceria.png",
+            url: assets.products.unidadesDentales.v600.tapiceria,
             alt: "Tapicería V6000",
             width: 800,
             height: 600,
@@ -1853,7 +1853,7 @@ export const products: Product[] = [
         subtitle: "Sistema de Rayos X Dental Portátil",
         brand: {
           name: "Xpect Vision",
-          logo: "xpect-vision.png"
+          logo: assets.logos.brands.xpectVision
         },
         description: "Sistema portátil con doble protección radiológica",
         shortDescription: "Sistema portátil con protección avanzada",
@@ -1883,7 +1883,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "rayos_x_portatil/rayos-x-portatil-4.png",
+            url: assets.products.rayosX.portatil[3],
             alt: "XV beam 1000",
             width: 800,
             height: 600,
@@ -1902,7 +1902,7 @@ export const products: Product[] = [
         subtitle: "Vaporizador para desinfección",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Sistema de desinfección con control remoto",
         shortDescription: "Sistema de desinfección con control remoto",
@@ -1932,7 +1932,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "vaporizador_desinfeccion_1tubo/CK-A3.png",
+            url: assets.products.vaporizadores.unTubo.ckA[2],
             alt: "Pulverizador CK-A3",
             width: 800,
             height: 600,
@@ -1951,7 +1951,7 @@ export const products: Product[] = [
         subtitle: "Vaporizador para desinfección doble",
         brand: {
           name: "Siger",
-          logo: "siger_logo.png"
+          logo: assets.logos.brands.siger
         },
         description: "Sistema de desinfección dual con panel digital",
         shortDescription: "Sistema de desinfección dual con panel digital",
@@ -1981,7 +1981,7 @@ export const products: Product[] = [
         },
         images: [
           {
-            url: "vaporizador_desinfeccion_2tubo/CK-C1.png",
+            url: assets.products.vaporizadores.dosTubos.ckC[1],
             alt: "Pulverizador CK-C1",
             width: 800,
             height: 600,

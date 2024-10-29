@@ -43,6 +43,10 @@ import carrito1 from './products/carrito_multifuncional/carrito-1_1.png'
 import carrito2 from './products/carrito_multifuncional/carrito-2_1.png'
 import carrito3 from './products/carrito_multifuncional/carrito-3_1.png'
 
+//Fresadora
+import fresadora1 from './products/fresadora/fresadora-1.png'
+import fresadora2 from './products/fresadora/fresadora-2.png'
+
 // Compresores
 import compresor701 from './products/compresor/DC-701-1hp_1.png'
 import compresor702 from './products/compresor/DC-702-2hp_1.jpg'
@@ -239,6 +243,9 @@ const assets = {
     },
     carrito: {
       images: [carrito1, carrito2, carrito3]
+    },
+    fresadora: {
+      images: [fresadora1, fresadora2]
     },
     compresores: {
       dc701: compresor701,
