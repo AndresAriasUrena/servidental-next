@@ -18,9 +18,9 @@ async function getProduct(slug: string) {
 }
 
 export async function generateMetadata(
-  props: PageProps
+  { params }: PageProps
 ): Promise<Metadata> {
-  const product = await getProduct(props.params.slug)
+  const product = await getProduct(params.slug)
   
   if (!product) {
     return {
@@ -44,9 +44,9 @@ export async function generateMetadata(
 }
 
 export default async function ProductPage(
-  props: PageProps
+  { params }: PageProps
 ) {
-  const product = await getProduct(props.params.slug)
+  const product = await getProduct(params.slug)
   
   if (!product) {
     notFound()
