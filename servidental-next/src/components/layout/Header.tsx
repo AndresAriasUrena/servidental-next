@@ -23,14 +23,16 @@ export default function Header() {
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">ServiDental</span>
-            <Image
-              className="h-12 w-auto"
-              src={assets.logos.main}
-              alt="ServiDental Logo"
-              width={180}
-              height={48}
-              priority
-            />
+            <div className="relative h-12 w-[180px]">
+              <Image
+                src={assets.logos.main.default}
+                alt="ServiDental Logo"
+                fill
+                sizes="180px"
+                className="object-contain"
+                priority
+              />
+            </div>
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -72,14 +74,16 @@ export default function Header() {
           <div className="flex items-center justify-between">
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">ServiDental</span>
-              <Image
-                className="h-8 w-auto"
-                src={assets.logos.main}
-                alt="ServiDental Logo"
-                width={120}
-                height={32}
-                priority
-              />
+              <div className="relative h-8 w-[120px]">
+                <Image
+                  src={assets.logos.main.default}
+                  alt="ServiDental Logo"
+                  fill
+                  sizes="120px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </Link>
             <button
               type="button"

@@ -75,13 +75,13 @@ export default function Footer() {
             className="col-span-1"
           >
             <h4 className="text-lg font-semibold mb-4">Certificaciones</h4>
-            <div className="w-32 h-16 relative">
+            <div className="relative w-32 h-16">
               <Image
                 src={assets.logos.main.pymeCostaRica}
                 alt="PYME Costa Rica"
-                className="object-contain"
                 fill
-                sizes="(max-width: 768px) 100vw, 128px"
+                sizes="128px"
+                className="object-contain"
               />
             </div>
           </motion.div>
@@ -119,13 +119,15 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="inline-block"
               >
-                <Image
-                  src={assets.logos.main.mainlyDigital}
-                  alt="Mainly Digital Works"
-                  className="h-8 w-auto"
-                  width={120}
-                  height={32}
-                />
+                <div className="relative h-8 w-[120px]">
+                  <Image
+                    src={assets.logos.main.mainlyDigital}
+                    alt="Mainly Digital Works"
+                    fill
+                    sizes="120px"
+                    className="object-contain"
+                  />
+                </div>
               </Link>
             </div>
           </div>
