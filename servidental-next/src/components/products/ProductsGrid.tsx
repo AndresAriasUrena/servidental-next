@@ -49,10 +49,12 @@ export default function ProductGrid({ products }: ProductGridProps) {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar Filter - Desktop */}
         <aside className="hidden lg:block w-64 flex-shrink-0">
-          <ProductFilter
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
+          <div className="sticky top-4 max-h-[calc(100vh-4rem)] overflow-y-auto rounded-lg bg-white shadow">
+            <ProductFilter
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+          </div>
         </aside>
 
         {/* Mobile Filter Overlay */}
