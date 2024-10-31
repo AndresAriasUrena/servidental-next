@@ -25,6 +25,16 @@ export default function ProductGrid({ products }: ProductGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Search Bar - Always visible at top */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Buscar productos..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       {/* Mobile Filter Button */}
       <div className="lg:hidden mb-4">
         <button
@@ -42,7 +52,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
           <ProductFilter
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
-            onSearchChange={setSearchQuery}
           />
         </aside>
 
@@ -65,7 +74,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
                   setSelectedCategory(category)
                   setIsMobileFilterOpen(false)
                 }}
-                onSearchChange={setSearchQuery}
               />
             </div>
           </div>
@@ -73,16 +81,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
         
         {/* Main Content */}
         <main className="flex-1">
-          {/* Search Bar - Always visible */}
-          <div className="mb-6">
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12">
               <h3 className="text-lg font-medium text-gray-900">

@@ -6,24 +6,24 @@ import { categories } from '@/data/manual-products'
 interface ProductFilterProps {
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
-  onSearchChange: (search: string) => void;
+  // onSearchChange: (search: string) => void;
 }
 
 export default function ProductFilter({ 
   selectedCategory, 
   onCategoryChange, 
-  onSearchChange 
+  // onSearchChange 
 }: ProductFilterProps) {
   return (
     <div className="sticky top-24 space-y-4">
-      <div className="w-full">
+      {/* <div className="w-full">
         <input
           type="text"
           placeholder="Buscar productos..."
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => onSearchChange(e.target.value)}
         />
-      </div>
+      </div> */}
       
       <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-3">Categorías</h3>
