@@ -1,9 +1,10 @@
 // src/components/home/ProductsSection.tsx
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, PanInfo, useAnimation, useMotionValue } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import assets from '@/assets'
 
 const categories = [
@@ -57,59 +58,82 @@ const categories = [
   }
 ] as const
 
-// Duplicamos el array para crear un efecto infinito
-const extendedCategories = [...categories, ...categories]
+// Duplicamos las categorías para el efecto infinito
+const extendedCategories = [...categories, ...categories, ...categories]
 
 export default function ProductsSection() {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
-  const controls = useAnimation()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const x = useMotionValue(0)
-  const autoScrollRef = useRef<NodeJS.Timeout>()
+  const [currentIndex, setCurrentIndex] = useState<number>(categories.length)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
-  const startAutoScroll = () => {
-    if (autoScrollRef.current) {
-      clearInterval(autoScrollRef.current)
-    }
-
-    autoScrollRef.current = setInterval(() => {
-      if (!isHovered && !isDragging) {
-        const currentX = x.get()
-        const nextX = currentX - 1
-        
-        // Reset position cuando llegue al final
-        if (nextX <= -1920) { // Ajusta este valor según el ancho total
-          x.set(0)
-        } else {
-          x.set(nextX)
-        }
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex: number) => {
+      const next = prevIndex + 1
+      // Si llegamos al final del set duplicado, volvemos al set del medio
+      if (next >= categories.length * 2) {
+        return categories.length
       }
-    }, 16) // Aproximadamente 60fps
+      return next
+    })
+  }
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex: number) => {
+      const prev = prevIndex - 1
+      // Si llegamos al inicio del set duplicado, volvemos al set del medio
+      if (prev < 0) {
+        return categories.length - 1
+      }
+      return prev
+    })
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index + categories.length)
   }
 
   useEffect(() => {
-    startAutoScroll()
-    return () => {
-      if (autoScrollRef.current) {
-        clearInterval(autoScrollRef.current)
-      }
-    }
-  }, [isHovered, isDragging])
+    if (!isAutoPlaying) return
 
-  const handleDragStart = () => {
-    setIsDragging(true)
-  }
+    const timer = setInterval(() => {
+      nextSlide()
+    }, 3000)
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    setIsDragging(false)
-    // Añade inercia después del arrastre
-    const velocity = info.velocity.x
-    const currentX = x.get()
+    return () => clearInterval(timer)
+  }, [isAutoPlaying])
+
+  // Normaliza el índice para los indicadores
+  const normalizedIndex = currentIndex % categories.length
+  
+  const [slideTransform, setSlideTransform] = useState<string>('0%')
+
+  // Función para calcular el desplazamiento según el viewport
+  const getSlideTransform = (): string => {
+    if (typeof window === 'undefined') return '0%';
     
-    x.set(currentX + velocity * 0.2)
-    startAutoScroll()
+    // En móvil (menos de 640px)
+    if (window.innerWidth < 640) {
+      return `-${currentIndex * 100}%`;
+    }
+    // En tablet (menos de 1024px)
+    else if (window.innerWidth < 1024) {
+      return `-${currentIndex * 50}%`;
+    }
+    // En desktop
+    return `-${currentIndex * (100/4)}%`;
   }
+
+useEffect(() => {
+  const updateTransform = () => {
+    setSlideTransform(getSlideTransform());
+  }
+
+  // Actualizar en el montaje y al cambiar el tamaño de la ventana
+  updateTransform();
+  window.addEventListener('resize', updateTransform);
+
+  return () => window.removeEventListener('resize', updateTransform);
+}, [currentIndex]);
+
 
   return (
     <section className="bg-gray-50 py-16">
@@ -129,73 +153,112 @@ export default function ProductsSection() {
         </motion.div>
 
         <div 
-          className="relative overflow-hidden touch-pan-x"
-          ref={containerRef}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          className="relative"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
         >
-          <motion.div 
-            className="flex gap-6"
-            style={{ x }}
-            drag="x"
-            dragConstraints={containerRef}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            dragElastic={0.1}
-            dragMomentum={true}
-          >
-            {extendedCategories.map((product, index) => (
-              <motion.div
-                key={`${product.id}-${index}`}
-                className="flex-none w-[280px]"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  {/* Brand logo */}
-                  <div className="absolute top-2 left-2 z-10 bg-white p-1.5 rounded-lg shadow-sm">
-                    <div className="relative h-6 w-16">
+          <div className="overflow-hidden">
+            <motion.div 
+              className="flex"
+              animate={{
+                x: slideTransform
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut"
+              }}
+            >
+              {extendedCategories.map((product, index) => (
+                <motion.div
+                  key={`${product.id}-${index}`}
+                  className="flex-none w-full sm:w-1/2 lg:w-1/4 px-4"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    {/* Brand logo */}
+                    <div className="absolute top-2 left-6 z-10 bg-white p-1.5 rounded-lg shadow-sm">
+                      <div className="relative h-6 w-16">
+                        <Image
+                          src={product.brand}
+                          alt="Brand logo"
+                          fill
+                          sizes="64px"
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Product image */}
+                    <div className="relative aspect-[4/3]">
                       <Image
-                        src={product.brand}
-                        alt="Brand logo"
+                        src={product.image}
+                        alt={product.name}
                         fill
-                        sizes="64px"
-                        className="object-contain"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover"
+                        priority
                       />
                     </div>
-                  </div>
 
-                  {/* Product image */}
-                  <div className="relative aspect-[4/3]">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      sizes="280px"
-                      className="object-cover"
-                    />
+                    {/* Product info */}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {product.description}
+                      </p>
+                    </div>
                   </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
-                  {/* Product info */}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      {product.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* Navigation arrows */}
+          <div className="absolute -bottom-12 left-0 right-0 flex justify-center items-center gap-4">
+            <button
+              onClick={() => {
+                prevSlide()
+                setIsAutoPlaying(false)
+              }}
+              className="bg-white/80 hover:bg-white p-2 rounded-full text-gray-800 hover:text-gray-900 transition-colors shadow-sm"
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={20} />
+            </button>
 
-          {/* Gradient overlays */}
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none z-10" />
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none z-10" />
+            {/* Dots Indicator */}
+            <div className="flex gap-2">
+              {categories.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    goToSlide(index)
+                    setIsAutoPlaying(false)
+                  }}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === normalizedIndex ? "bg-blue-600 w-4" : "bg-gray-300"
+                  }`}
+                  aria-label={`Ir a slide ${index + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                nextSlide()
+                setIsAutoPlaying(false)
+              }}
+              className="bg-white/80 hover:bg-white p-2 rounded-full text-gray-800 hover:text-gray-900 transition-colors shadow-sm"
+              aria-label="Siguiente"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-24 text-center">
           <Link
             href="/products"
             className="inline-block bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors"
