@@ -1,3 +1,4 @@
+// src/app/products/[slug]/page.tsx
 import { Metadata } from 'next'
 import { products } from '@/data/manual-products'
 import { notFound } from 'next/navigation'
@@ -9,18 +10,27 @@ const baseUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:3000'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
+}
+
+export function generateStaticParams() {
+  return products.map((product) => ({
+    slug: product.slug,
+  }))
 }
 
 async function getProduct(slug: string) {
   'use server'
+  await new Promise(resolve => setTimeout(resolve, 0))
   return products.find(p => p.slug === slug)
 }
 
 export async function generateMetadata(
   { params }: PageProps
 ): Promise<Metadata> {
-  const product = await getProduct(params.slug)
+  // Esperamos los parámetros
+  const resolvedParams = await params
+  const product = await getProduct(resolvedParams.slug)
   
   if (!product) {
     return {
@@ -46,7 +56,9 @@ export async function generateMetadata(
 export default async function ProductPage(
   { params }: PageProps
 ) {
-  const product = await getProduct(params.slug)
+  // Esperamos los parámetros
+  const resolvedParams = await params
+  const product = await getProduct(resolvedParams.slug)
   
   if (!product) {
     notFound()
@@ -62,10 +74,4 @@ export default async function ProductPage(
       </div>
     </div>
   )
-}
-
-export function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }))
 }

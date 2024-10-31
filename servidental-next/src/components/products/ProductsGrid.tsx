@@ -3,6 +3,7 @@
 
 import { useState } from 'react'
 import { Product } from '@/types/product'
+import { Filter } from 'lucide-react'
 import ProductCard from './ProductCard'
 import ProductFilter from './ProductFilter'
 
@@ -13,6 +14,7 @@ interface ProductGridProps {
 export default function ProductGrid({ products }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
@@ -23,16 +25,64 @@ export default function ProductGrid({ products }: ProductGridProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex gap-8">
-        <aside className="w-64 flex-shrink-0">
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden mb-4">
+        <button
+          onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          <Filter size={20} />
+          Filtrar Productos
+        </button>
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Sidebar Filter - Desktop */}
+        <aside className="hidden lg:block w-64 flex-shrink-0">
           <ProductFilter
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
             onSearchChange={setSearchQuery}
           />
         </aside>
+
+        {/* Mobile Filter Overlay */}
+        {isMobileFilterOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
+            <div className="absolute right-0 top-0 h-full w-80 bg-white p-4 overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Filtros</h3>
+                <button 
+                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              </div>
+              <ProductFilter
+                selectedCategory={selectedCategory}
+                onCategoryChange={(category) => {
+                  setSelectedCategory(category)
+                  setIsMobileFilterOpen(false)
+                }}
+                onSearchChange={setSearchQuery}
+              />
+            </div>
+          </div>
+        )}
         
+        {/* Main Content */}
         <main className="flex-1">
+          {/* Search Bar - Always visible */}
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12">
               <h3 className="text-lg font-medium text-gray-900">
@@ -43,7 +93,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -16,25 +16,24 @@ export class ProductService {
     return ProductService.instance;
   }
 
-  // Getters básicos
-  getAllProducts(): Product[] {
+  // Convertimos los métodos a async
+  async getAllProducts(): Promise<Product[]> {
     return this.products;
   }
 
-  getProductBySlug(slug: string): Product | undefined {
+  async getProductBySlug(slug: string): Promise<Product | undefined> {
     return this.products.find(p => p.slug === slug);
   }
 
-  getProductsByCategory(category: ProductCategory): Product[] {
+  async getProductsByCategory(category: ProductCategory): Promise<Product[]> {
     return this.products.filter(p => p.category === category);
   }
 
-  getProductsByBrand(brand: ProductBrand): Product[] {
+  async getProductsByBrand(brand: ProductBrand): Promise<Product[]> {
     return this.products.filter(p => p.brand.name === brand);
   }
 
-  // Búsqueda y filtrado
-  searchProducts(query: string): Product[] {
+  async searchProducts(query: string): Promise<Product[]> {
     const searchTerm = query.toLowerCase();
     return this.products.filter(product => 
       product.name.toLowerCase().includes(searchTerm) ||
@@ -45,8 +44,7 @@ export class ProductService {
     );
   }
 
-  // Productos relacionados
-  getRelatedProducts(productId: string, limit: number = 4): Product[] {
+  async getRelatedProducts(productId: string, limit: number = 4): Promise<Product[]> {
     const product = this.products.find(p => p.id === productId);
     if (!product) return [];
 
@@ -58,16 +56,15 @@ export class ProductService {
       .slice(0, limit);
   }
 
-  // Categorías y marcas
-  getCategories(): ProductCategory[] {
+  async getCategories(): Promise<ProductCategory[]> {
     return Array.from(new Set(this.products.map(p => p.category)));
   }
 
-  getBrands(): ProductBrand[] {
+  async getBrands(): Promise<ProductBrand[]> {
     return Array.from(new Set(this.products.map(p => p.brand.name)));
   }
 
-  // Importación de datos
+  // Este método puede permanecer síncrono ya que es interno
   importProducts(products: Product[]): void {
     this.products = products;
   }
