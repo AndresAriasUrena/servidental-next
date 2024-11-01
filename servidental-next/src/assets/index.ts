@@ -1,5 +1,8 @@
 import { StaticImageData } from 'next/image'
 
+// Imagenes
+import herobg from './images/herobg.png'
+
 // Logos principales
 import logo from './logos/Logo-servidental-medical-equipment.png'
 import logoBlanco from './logos/logo-blanco-servidental.png'
@@ -196,6 +199,9 @@ import mantenimientosImg from './services/mantenimientos.jpg'
 import calibracionesImg from './services/calibraciones.jpg'
 
 const assets = {
+  images:{
+    herobg: herobg,
+  },
   logos: {
     main: {
       default: logo,

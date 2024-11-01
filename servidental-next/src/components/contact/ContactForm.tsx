@@ -102,7 +102,7 @@ export default function ContactForm() {
           className={`w-full rounded-md px-4 py-2 text-white font-medium transition-colors ${
             isSubmitting 
               ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-servi_green hover:bg-servi_dark'
           }`}
         >
           {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}

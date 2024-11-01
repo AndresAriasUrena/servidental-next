@@ -59,14 +59,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           <ul className="space-y-1 text-sm text-gray-500">
             {product.features.unique.items.slice(0, 3).map((feature, index) => (
               <li key={index} className="flex items-center">
-                <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                <span className="w-1.5 h-1.5 bg-servi_green rounded-full mr-2"></span>
                 {feature}
               </li>
             ))}
           </ul>
 
           <div className="mt-6 flex justify-end">
-            <span className="text-blue-600 font-medium hover:text-blue-700 transition-colors">
+            <span className="text-servi_green font-medium hover:text-servi_dark transition-colors">
               Ver detalles →
             </span>
           </div>

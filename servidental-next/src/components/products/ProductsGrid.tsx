@@ -39,7 +39,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
       <div className="lg:hidden mb-4">
         <button
           onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-servi_green text-white rounded-lg"
         >
           <Filter size={20} />
           Filtrar Productos

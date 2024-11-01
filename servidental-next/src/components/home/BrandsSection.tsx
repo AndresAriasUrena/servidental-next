@@ -9,7 +9,7 @@ const brandLogos = Object.entries(assets.logos.brands)
 
 export default function BrandsSection() {
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0 }}
@@ -36,7 +36,7 @@ export default function BrandsSection() {
               <Image
                 src={logo}
                 alt={`Logo ${name}`}
-                className="object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
+                className="object-contain filter hover:grayscale-0 transition-all duration-300"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />

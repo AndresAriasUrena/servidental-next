@@ -50,7 +50,7 @@ export default function ContactInfo() {
         {contactInfo.map((info) => (
           <div key={info.title} className="flex items-start space-x-4">
             <div className="flex-shrink-0">
-              <info.icon className="h-6 w-6 text-blue-600" />
+              <info.icon className="h-6 w-6 text-servi_green" />
             </div>
             <div>
               <h3 className="text-lg font-medium text-gray-900">{info.title}</h3>
@@ -59,7 +59,7 @@ export default function ContactInfo() {
                   href={info.href}
                   target={info.href.startsWith('http') ? '_blank' : undefined}
                   rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                  className="text-gray-600 hover:text-servi_green transition-colors"
                 >
                   {info.content}
                 </a>
@@ -78,7 +78,7 @@ export default function ContactInfo() {
             href="https://www.facebook.com/Servidentalcr"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 hover:text-blue-600 transition-colors"
+            className="text-gray-400 hover:text-servi_green transition-colors"
             aria-label="Facebook"
           >
             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">

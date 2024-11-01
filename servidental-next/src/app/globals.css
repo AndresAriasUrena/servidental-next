@@ -19,10 +19,10 @@ body {
   }
   
   .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors;
+    @apply bg-servi_green text-white px-4 py-2 rounded-md hover:bg-servi_dark transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md hover:bg-blue-50 transition-colors;
+    @apply bg-white text-servi_green border border-servi_green px-4 py-2 rounded-md hover:bg-blue-50 transition-colors;
   }
 }

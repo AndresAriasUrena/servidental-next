@@ -37,7 +37,7 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-24">
+      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -135,7 +135,7 @@ export default function AboutPage() {
                   <ul className="space-y-2">
                     {specialties.map((specialty) => (
                       <li key={specialty} className="flex items-center text-gray-600">
-                        <span className="h-1.5 w-1.5 bg-blue-600 rounded-full mr-2" />
+                        <span className="h-1.5 w-1.5 bg-servi_green rounded-full mr-2" />
                         {specialty}
                       </li>
                     ))}
@@ -150,7 +150,7 @@ export default function AboutPage() {
                   <ul className="space-y-2">
                     {products.map((product) => (
                       <li key={product} className="flex items-center text-gray-600">
-                        <span className="h-1.5 w-1.5 bg-blue-600 rounded-full mr-2" />
+                        <span className="h-1.5 w-1.5 bg-servi_green rounded-full mr-2" />
                         {product}
                       </li>
                     ))}
@@ -161,7 +161,7 @@ export default function AboutPage() {
               <div className="mt-8">
                 <Link
                   href="/services"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-servi_green hover:bg-servi_dark"
                 >
                   Explorar servicios
                 </Link>
@@ -184,7 +184,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-blue-700 py-16">
+      <section className="bg-servi_dark py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white">
             Comuníquese con nuestros asesores para cotizaciones, servicio técnico y consultas generales.
@@ -192,7 +192,7 @@ export default function AboutPage() {
           <div className="mt-8">
             <Link
               href="/contact"
-              className="inline-block bg-white text-blue-700 px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition-colors"
+              className="inline-block bg-white text-servi_dark px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition-colors"
             >
               Enviar mensaje
             </Link>

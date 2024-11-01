@@ -43,71 +43,23 @@ const services: Service[] = [
 ]
 
 export default function ServicesSection() {
-  // return (
-  //   <section className="bg-white py-16">
-  //     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  //       <motion.div
-  //         initial={{ opacity: 0 }}
-  //         whileInView={{ opacity: 1 }}
-  //         viewport={{ once: true }}
-  //         className="text-center"
-  //       >
-  //         <h2 className="text-4xl font-bold text-gray-900 mb-4">
-  //           Nuestros Servicios
-  //         </h2>
-  //         <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-  //           Proveemos servicio técnico especializado en todas nuestras marcas para
-  //           garantizar la experiencia de usuario de mayor calidad para usted y sus clientes.
-  //         </p>
-  //       </motion.div>
-
-  //       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-  //         {services.map((service, index) => (
-  //           <motion.div
-  //             key={service.title}
-  //             initial={{ opacity: 0, y: 20 }}
-  //             whileInView={{ opacity: 1, y: 0 }}
-  //             viewport={{ once: true }}
-  //             transition={{ duration: 0.5, delay: index * 0.1 }}
-  //             className="w-full max-w-md"
-  //           >
-  //             {/* Image container */}
-  //             <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden">
-  //               <Image
-  //                 src={service.image}
-  //                 alt={service.title}
-  //                 fill
-  //                 className="object-cover"
-  //               />
-  //             </div>
-
-  //             {/* Content */}
-  //             <div>
-  //               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-  //                 {service.title}
-  //               </h3>
-  //               <p className="text-gray-600 mb-4">
-  //                 {service.description}
-  //               </p>
-  //               {service.hasLink && (
-  //                 <Link 
-  //                   href="/services" 
-  //                   className="inline-block text-blue-600 hover:text-blue-700 font-medium"
-  //                 >
-  //                   Ver más →
-  //                 </Link>
-  //               )}
-  //             </div>
-  //           </motion.div>
-  //         ))}
-  //       </div>
-  //     </div>
-  //   </section>
-  // )
   return (
-    <section className="bg-white py-16">
+    <section className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header section se mantiene igual */}
+        <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Nuestros Servicios
+            </h2>
+            <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+              Proveemos servicio técnico especializado en todas nuestras marcas para
+              garantizar la experiencia de usuario de mayor calidad para usted y sus clientes.
+            </p>
+          </motion.div>
         
         <div className="flex flex-wrap justify-center gap-8">
           {services.map((service, index) => (
@@ -117,10 +69,10 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)]"
+              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)] bg-white p-2 rounded-lg shadow-md"
             >
               {/* Image container */}
-              <div className="relative aspect-[4/3] mb-4 rounded-lg overflow-hidden">
+              <div className="relative aspect-[8/5] mb-4 rounded-lg overflow-hidden">
                 <Image
                   src={service.image}
                   alt={service.title}
@@ -134,13 +86,13 @@ export default function ServicesSection() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-500 mb-4">
                   {service.description}
                 </p>
                 {service.hasLink && (
                   <Link 
                     href="/services" 
-                    className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                    className="inline-flex items-center text-servi_green hover:text-servi_dark font-medium"
                   >
                     Ver más →
                   </Link>

@@ -50,7 +50,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           <div className="mt-4 space-y-2">
             {product.features.unique.items.map((feature, index) => (
               <div key={index} className="flex items-center">
-                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
+                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-servi_green"></div>
                 <p className="text-gray-600">{feature}</p>
               </div>
             ))}
@@ -65,7 +65,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             <div className="mt-4 space-y-2">
               {product.features.general.items.map((feature, index) => (
                 <div key={index} className="flex items-center">
-                  <div className="mr-3 h-1.5 w-1.5 rounded-full bg-blue-600"></div>
+                  <div className="mr-3 h-1.5 w-1.5 rounded-full bg-servi_green"></div>
                   <p className="text-gray-600">{feature}</p>
                 </div>
               ))}
@@ -80,13 +80,13 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           href={`https://api.whatsapp.com/send?phone=50687045556&text=Hola, me interesa el producto ${product.name}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 rounded-md bg-blue-600 px-6 py-3 text-center text-base font-medium text-white hover:bg-blue-700"
+          className="flex-1 rounded-md bg-servi_green px-6 py-3 text-center text-base font-medium text-white hover:bg-servi_dark"
         >
           Consultar por WhatsApp
         </a>
         <a
           href="tel:+50621016114"
-          className="flex-1 rounded-md border border-blue-600 px-6 py-3 text-center text-base font-medium text-blue-600 hover:bg-blue-50"
+          className="flex-1 rounded-md border border-servi_green px-6 py-3 text-center text-base font-medium text-servi_green hover:bg-blue-50"
         >
           Llamar ahora
         </a>

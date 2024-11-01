@@ -51,7 +51,7 @@ export default function ServicesPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-24">
+      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -122,7 +122,7 @@ export default function ServicesPage() {
                 <ul className="space-y-3">
                   {maintenanceActivities.map((activity) => (
                     <li key={activity} className="flex items-center space-x-2">
-                      <div className="h-2 w-2 bg-blue-600 rounded-full" />
+                      <div className="h-2 w-2 bg-servi_green rounded-full" />
                       <span className="text-gray-600">{activity}</span>
                     </li>
                   ))}
@@ -136,7 +136,7 @@ export default function ServicesPage() {
                 <ul className="space-y-3">
                   {stockAccessories.map((accessory) => (
                     <li key={accessory} className="flex items-center space-x-2">
-                      <div className="h-2 w-2 bg-blue-600 rounded-full" />
+                      <div className="h-2 w-2 bg-servi_green rounded-full" />
                       <span className="text-gray-600">{accessory}</span>
                     </li>
                   ))}
@@ -206,7 +206,7 @@ export default function ServicesPage() {
                 <ul className="space-y-3">
                   {maintenanceServices.map((service) => (
                     <li key={service.name} className="flex items-center space-x-2">
-                      <div className="h-2 w-2 bg-blue-600 rounded-full" />
+                      <div className="h-2 w-2 bg-servi_green rounded-full" />
                       <span className="text-gray-600">
                         {service.name} {service.duration}
                       </span>
@@ -219,10 +219,10 @@ export default function ServicesPage() {
                 <h3 className="text-lg font-semibold text-blue-900 mb-4">
                   Garantía
                 </h3>
-                <p className="text-blue-700">
+                <p className="text-servi_dark">
                   30 días después del correctivo en la parte donde se realizó.
                 </p>
-                <p className="mt-4 text-sm text-blue-600">
+                <p className="mt-4 text-sm text-servi_green">
                   El tiempo de respuesta en caso de fallo repentino de los equipos 
                   será menor a 12 horas hábiles de trabajo.
                 </p>
@@ -233,7 +233,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-blue-700 py-16">
+      <section className="bg-servi_dark py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white">
             Comuníquese con nuestros asesores para cotizaciones, servicio técnico y consultas generales.
@@ -241,7 +241,7 @@ export default function ServicesPage() {
           <div className="mt-8">
             <Link
               href="/contact"
-              className="inline-block bg-white text-blue-700 px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition-colors"
+              className="inline-block bg-white text-servi_dark px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition-colors"
             >
               Enviar mensaje
             </Link>
