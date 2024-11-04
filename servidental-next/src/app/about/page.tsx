@@ -37,7 +37,7 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white py-24">
+      <section className="bg-nosotros_bg bg-cover bg-center bg-no-repeat text-white pb-20 pt-40 md:pt-[27rem]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -78,12 +78,12 @@ export default function AboutPage() {
       </section>
 
       {/* Mission, Vision, Values */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-services_gradient">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Misión */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Misión</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Misión</h3>
               <p className="text-gray-600">
                 Garantizar una atención eficiente para todos los requerimientos técnicos
                 relacionados con las clínicas odontológicas, ofreciendo soluciones
@@ -93,7 +93,7 @@ export default function AboutPage() {
 
             {/* Visión */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Visión</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Visión</h3>
               <p className="text-gray-600">
                 Ser la empresa líder y la primera opción para la resolución de problemas
                 técnicos en cualquier clínica odontológica del país, ofreciendo
@@ -104,7 +104,7 @@ export default function AboutPage() {
 
             {/* ServiDental */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">ServiDental</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">ServiDental</h3>
               <p className="text-gray-600">
                 Servidental CR centraliza todos sus esfuerzos y desarrollos con un grupo
                 multidisciplinario adecuadamente calificado en pro de la excelencia en
@@ -184,7 +184,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-servi_dark py-16">
+      <section className="bg-gradient-to-r from-servi_green to-blue-800 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white">
             Comuníquese con nuestros asesores para cotizaciones, servicio técnico y consultas generales.

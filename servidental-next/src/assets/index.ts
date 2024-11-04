@@ -7,6 +7,7 @@ import herobg from './images/herobg.png'
 import logo from './logos/Logo-servidental-medical-equipment.png'
 import logoBlanco from './logos/logo-blanco-servidental.png'
 import mainlyDigital from './logos/mainlydigital.png'
+import aurigital from './logos/aurigital.png'
 import pymeCostaRica from './logos/PYME_CostaRica.jpg'
 
 // Logos de marcas
@@ -197,6 +198,8 @@ import ckC1 from './products/vaporizador_desinfeccion_2tubo/CK-C1.png'
 import instalacionesImg from './services/instalaciones.jpg'
 import mantenimientosImg from './services/mantenimientos.jpg'
 import calibracionesImg from './services/calibraciones.jpg'
+import trasladosImg from './services/traslados.jpg'
+import certificacionesImg from './services/certificaciones.jpg'
 
 const assets = {
   images:{
@@ -207,6 +210,7 @@ const assets = {
       default: logo,
       white: logoBlanco,
       mainlyDigital,
+      aurigital,
       pymeCostaRica,
     },
     brands: {
@@ -376,6 +380,8 @@ const assets = {
     instalaciones: instalacionesImg,
     mantenimientos: mantenimientosImg,
     calibraciones: calibracionesImg,
+    traslados: trasladosImg,
+    certificaciones: certificacionesImg,
   },
 } as const
 

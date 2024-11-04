@@ -27,7 +27,7 @@ export default function ProductsPage() {
       </section>
 
       {/* Products Grid Section */}
-      <section className="bg-gray-50">
+      <section className="bg-gray-100">
         <ProductsGrid products={products} />
       </section>
     </>

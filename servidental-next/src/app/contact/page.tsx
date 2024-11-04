@@ -12,7 +12,7 @@ export default function ContactPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white py-24">
+      <section className="bg-contacto_bg bg-cover bg-center bg-no-repeat text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

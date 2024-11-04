@@ -114,15 +114,15 @@ export default function Footer() {
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>Diseño y Desarrollo Web:</span>
               <Link
-                href="https://www.mainlydigitalworks.com/"
+                href="https://www.aurigital.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block"
               >
                 <div className="relative h-8 w-[120px]">
                   <Image
-                    src={assets.logos.main.mainlyDigital}
-                    alt="Mainly Digital Works"
+                    src={assets.logos.main.aurigital}
+                    alt="Aurigital"
                     fill
                     sizes="120px"
                     className="object-contain"

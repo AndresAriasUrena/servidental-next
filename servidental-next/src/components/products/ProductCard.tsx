@@ -20,13 +20,13 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.slug}`}>
         <div className="relative">
           {/* Brand logo */}
-          <div className="absolute top-4 left-4 z-10 bg-white p-2 rounded-lg shadow-sm">
-            <div className="relative h-8 w-20">
+          <div className="absolute top-1 right-4 z-10 bg-white p-2 rounded-lg shadow-sm">
+            <div className="relative h-6 w-16">
               <Image
                 src={product.brand.logo}
                 alt={product.brand.name}
                 fill
-                sizes="80px"
+                sizes="64px"
                 className="object-contain"
                 priority
               />
@@ -40,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               alt={product.images[0].alt}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-              className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+              className="object-contain object-center group-hover:scale-105 transition-transform duration-300"
               priority
             />
           </div>
@@ -48,7 +48,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="p-6">
           <div className="mb-4">
-            <h3 className="text-xl font-semibold text-gray-900">{product.name}</h3>
+            <h3 className="text-xl font-semibold text-servi_dark">{product.name}</h3>
             {product.subtitle && (
               <p className="text-sm text-gray-500">{product.subtitle}</p>
             )}

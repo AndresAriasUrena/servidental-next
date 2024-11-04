@@ -10,7 +10,7 @@ const baseUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:3000'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 export function generateStaticParams() {
@@ -19,18 +19,15 @@ export function generateStaticParams() {
   }))
 }
 
-async function getProduct(slug: string) {
-  'use server'
-  await new Promise(resolve => setTimeout(resolve, 0))
+// Reemplazamos la función getProduct con una versión síncrona
+function getProduct(slug: string) {
   return products.find(p => p.slug === slug)
 }
 
-export async function generateMetadata(
+export function generateMetadata(
   { params }: PageProps
-): Promise<Metadata> {
-  // Esperamos los parámetros
-  const resolvedParams = await params
-  const product = await getProduct(resolvedParams.slug)
+): Metadata {
+  const product = getProduct(params.slug)
   
   if (!product) {
     return {
@@ -53,12 +50,8 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductPage(
-  { params }: PageProps
-) {
-  // Esperamos los parámetros
-  const resolvedParams = await params
-  const product = await getProduct(resolvedParams.slug)
+export default function ProductPage({ params }: PageProps) {
+  const product = getProduct(params.slug)
   
   if (!product) {
     notFound()

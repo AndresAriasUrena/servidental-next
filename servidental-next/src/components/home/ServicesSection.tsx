@@ -33,33 +33,33 @@ const services: Service[] = [
   {
     title: 'Traslado de equipos',
     description: 'Ofrecemos un servicio de traslado de equipos que incluye la desinstalación, el transporte y la instalación, todo ello tras una cuidadosa coordinación.',
-    image: assets.services.instalaciones
+    image: assets.services.traslados
   },
   {
     title: 'Certificación de Rayos X',
     description: 'Contamos con una profesional que está debidamente registrada ante el Ministerio de Salud para poder emitir una certificación basada en la verificación de parámetros para el buen funcionamiento de su equipo radiológico.',
-    image: assets.services.calibraciones
+    image: assets.services.certificaciones
   }
 ]
 
 export default function ServicesSection() {
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-services_gradient py-24"> {/* Cambiado a py-24 para más espacio vertical */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Nuestros Servicios
-            </h2>
-            <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-              Proveemos servicio técnico especializado en todas nuestras marcas para
-              garantizar la experiencia de usuario de mayor calidad para usted y sus clientes.
-            </p>
-          </motion.div>
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Nuestros Servicios
+          </h2>
+          <p className="text-lg text-gray-600 mb-16 max-w-3xl mx-auto"> {/* Aumentado mb-12 a mb-16 */}
+            Proveemos servicio técnico especializado en todas nuestras marcas para
+            garantizar la experiencia de usuario de mayor calidad para usted y sus clientes.
+          </p>
+        </motion.div>
         
         <div className="flex flex-wrap justify-center gap-8">
           {services.map((service, index) => (
@@ -69,10 +69,10 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)] bg-white p-2 rounded-lg shadow-md"
+              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)] bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow" // Mejorados los estilos de las cards
             >
               {/* Image container */}
-              <div className="relative aspect-[8/5] mb-4 rounded-lg overflow-hidden">
+              <div className="relative aspect-[8/5] mb-6 rounded-lg overflow-hidden">
                 <Image
                   src={service.image}
                   alt={service.title}
@@ -83,16 +83,16 @@ export default function ServicesSection() {
   
               {/* Content */}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
                   {service.title}
                 </h3>
-                <p className="text-gray-500 mb-4">
+                <p className="text-gray-600 mb-4 leading-relaxed">
                   {service.description}
                 </p>
                 {service.hasLink && (
                   <Link 
                     href="/services" 
-                    className="inline-flex items-center text-servi_green hover:text-servi_dark font-medium"
+                    className="inline-flex items-center text-servi_green hover:text-servi_dark font-medium transition-colors"
                   >
                     Ver más →
                   </Link>

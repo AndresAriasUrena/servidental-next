@@ -23,7 +23,7 @@ export default function ProductFilter({
             onClick={() => onCategoryChange('all')}
             className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
               selectedCategory === 'all'
-                ? 'bg-blue-500 text-white'
+                ? 'bg-servi_green text-white'
                 : 'hover:bg-gray-100'
             }`}
           >
@@ -35,7 +35,7 @@ export default function ProductFilter({
               onClick={() => onCategoryChange(category)}
               className={`w-full text-left px-3 py-1 rounded-md transition-colors ${
                 selectedCategory === category
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-servi_green text-white'
                   : 'hover:bg-gray-100'
               }`}
             >

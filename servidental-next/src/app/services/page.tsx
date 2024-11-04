@@ -51,7 +51,7 @@ export default function ServicesPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white py-24">
+      <section className="bg-servicios_bg bg-cover bg-center bg-no-repeat text-white pb-20 pt-40 md:pt-[27rem]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -233,7 +233,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-servi_dark py-16">
+      <section className="bg-gradient-to-r from-servi_green to-blue-800 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white">
             Comuníquese con nuestros asesores para cotizaciones, servicio técnico y consultas generales.

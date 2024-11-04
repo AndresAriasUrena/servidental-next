@@ -21,7 +21,7 @@ export const categories: ProductCategory[] = [
   "Selladoras",
   "Sensores Digitales",
   "Termofomadoras",
-  "Tomógrafos",
+  // "Tomógrafos",
   "Unidades Dentales",
   "Vaporizadores"
 ];
@@ -39,6 +39,48 @@ export const brands: ProductBrand[] = [
 ];
 
 export const products: Product[] = [
+    {
+      id: "microarenador",
+      slug: "microanerador",
+      name: "Microjato SN-125748",
+      subtitle: "MicroArenador Standard",
+      brand: {
+        name: "BioArt",
+        logo: assets.logos.brands.bioart
+      },
+      description: "Punta fabricada de carburo",
+      shortDescription: "Punta fabricada de carburo",
+      features: {
+        unique: {
+          title: "Características Únicas",
+          items: [
+            "1 punta fija montada en ángulo de 138°",
+            "Peso c/ embalaje: 210g",
+            "Dimensiones del embalaje (A x P x A): 190 x 133 x 50 mm",
+            "Acepta platos redondos y cuadrados",
+            "Presión de trabajo: 60 a 80 lbf/pol² (4~5,5 Kgf/cm²)",
+            "Granulación de óxido de aluminio soportada: hasta 100 microns",
+          ]
+        },
+        general: {
+          title: "Características Generales",
+          items: []
+        }
+      },
+      images: [
+        {
+          url: assets.products.microarenador.lab,
+          alt: "Microjato lab",
+          width: 800,
+          height: 600,
+          isPrimary: true
+        }
+      ],
+      category: "Microarenador",
+      isActive: true,
+      createdAt: "2024-10-29T00:10:22.089Z",
+      updatedAt: "2024-10-29T00:10:22.089Z"
+    },
     {
       id: "anestesia",
       slug: "anestesia",
@@ -1610,7 +1652,7 @@ export const products: Product[] = [
           name: "Siger",
           logo: assets.logos.brands.siger
         },
-        description: "Unidad dental con tapicería italiana de alta calidad",
+        description: "Silla dental con tapicería italiana de alta calidad",
         shortDescription: "Tapicería italiana premium",
         features: {
           unique: {
@@ -1675,7 +1717,7 @@ export const products: Product[] = [
           name: "Siger",
           logo: assets.logos.brands.siger
         },
-        description: "Unidad dental con mesa de doctor tipo carrito",
+        description: "Silla dental con mesa de doctor tipo carrito",
         shortDescription: "Mesa de doctor tipo carrito móvil",
         features: {
           unique: {
@@ -1733,7 +1775,7 @@ export const products: Product[] = [
           name: "Siger",
           logo: assets.logos.brands.siger
         },
-        description: "Unidad dental con diseño cuadrado moderno",
+        description: "Silla dental con diseño cuadrado moderno",
         shortDescription: "Diseño cuadrado con tapicería microfibra",
         features: {
           unique: {
@@ -1791,7 +1833,7 @@ export const products: Product[] = [
           name: "Siger",
           logo: assets.logos.brands.siger
         },
-        description: "Unidad dental de diseño redondo con panel de botones",
+        description: "Silla dental de diseño redondo con panel de botones",
         shortDescription: "Diseño redondo con panel de botones",
         features: {
           unique: {

@@ -1,7 +1,9 @@
+// src/components/ContactForm.tsx
 'use client'
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -13,16 +15,27 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      // Aquí iría la lógica de envío del formulario
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Simulación
+      await emailjs.send(
+        'YOUR_SERVICE_ID', // Reemplaza con tu Service ID
+        'YOUR_TEMPLATE_ID', // Reemplaza con tu Template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+        },
+        'YOUR_PUBLIC_KEY' // Reemplaza con tu Public Key
+      )
+
       setSubmitStatus('success')
       setFormData({ name: '', email: '', phone: '', message: '' })
     } catch (error) {
+      console.error('Error:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)

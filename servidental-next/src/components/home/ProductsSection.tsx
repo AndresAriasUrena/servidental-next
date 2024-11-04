@@ -119,7 +119,7 @@ export default function ProductsSection() {
       return `-${currentIndex * 50}%`;
     }
     // En desktop
-    return `-${currentIndex * (100/4)}%`;
+    return `-${currentIndex * (100/3)}%`;
   }
 
 useEffect(() => {
@@ -171,12 +171,12 @@ useEffect(() => {
               {extendedCategories.map((product, index) => (
                 <motion.div
                   key={`${product.id}-${index}`}
-                  className="flex-none w-full sm:w-1/2 lg:w-1/4 px-4"
+                  className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4"
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     {/* Brand logo */}
-                    <div className="absolute top-2 left-6 z-10 bg-white p-1.5 rounded-lg shadow-sm">
+                    <div className="absolute top-2 right-6 z-10 bg-white p-1.5 rounded-lg shadow-sm">
                       <div className="relative h-6 w-16">
                         <Image
                           src={product.brand}
@@ -189,20 +189,20 @@ useEffect(() => {
                     </div>
 
                     {/* Product image */}
-                    <div className="relative aspect-[4/3]">
+                    <div className="relative aspect-[16/12] p-2">
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-cover"
+                        className="object-contain"
                         priority
                       />
                     </div>
 
                     {/* Product info */}
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-gray-900 text-lg">
                         {product.name}
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
@@ -238,7 +238,7 @@ useEffect(() => {
                     setIsAutoPlaying(false)
                   }}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === normalizedIndex ? "bg-blue-600 w-4" : "bg-gray-300"
+                    index === normalizedIndex ? "bg-servi_green w-4" : "bg-gray-300"
                   }`}
                   aria-label={`Ir a slide ${index + 1}`}
                 />
@@ -261,7 +261,7 @@ useEffect(() => {
         <div className="mt-24 text-center">
           <Link
             href="/products"
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors"
+            className="inline-block bg-servi_green text-white px-8 py-3 rounded-md hover:bg-servi_dark transition-colors"
           >
             Ver catálogo completo
           </Link>
