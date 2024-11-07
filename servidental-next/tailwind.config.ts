@@ -16,10 +16,10 @@ const config: Config = {
         servi_light: "#f3feff",
       },
       backgroundImage: {
-       "hero_bg": "url('../assets/images/herobg.png')",
-       "contacto_bg": "url('../assets/images/contactobg.png')",
-       "nosotros_bg": "url('../assets/images/nosotrosbg.png')",
-       "servicios_bg": "url('../assets/images/serviciobg.png')",
+       "hero_bg": "url('../assets/images/herobg.avif')",
+       "contacto_bg": "url('../assets/images/contactobg.avif')",
+       "nosotros_bg": "url('../assets/images/nosotrosbg.avif')",
+       "servicios_bg": "url('../assets/images/serviciobg.avif')",
         "services_gradient": `linear-gradient(
           180deg,
           #FFFFFF 0%,
