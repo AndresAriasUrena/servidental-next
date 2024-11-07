@@ -1,8 +1,10 @@
-// src/app/page.tsx
-import Hero from '@/components/home/Hero'
-import ProductsSection from '@/components/home/ProductsSection'
-import ServicesSection from '@/components/home/ServicesSection'
-import BrandsSection from '@/components/home/BrandsSection'
+import dynamic from 'next/dynamic';
+
+const Hero = dynamic(() => import('@/components/home/Hero'));
+const ProductsSection = dynamic(() => import('@/components/home/ProductsSection'));
+const ServicesSection = dynamic(() => import('@/components/home/ServicesSection'));
+const BrandsSection = dynamic(() => import('@/components/home/BrandsSection'));
+const Instagram = dynamic(() => import('@/components/home/instagram'));
 
 export default function Home() {
   return (
@@ -11,7 +13,7 @@ export default function Home() {
       <ProductsSection />
       <ServicesSection />
       <BrandsSection />
-      
+      <Instagram />
     </>
-  )
+  );
 }
