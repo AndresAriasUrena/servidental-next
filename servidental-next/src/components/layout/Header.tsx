@@ -4,13 +4,14 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Facebook, Instagram } from 'lucide-react'
 import assets from '@/assets'
 
 const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
   { name: 'EQUIPO MÉDICO', href: '/products' },
-  { name: 'NUESTROS SERVICIOS', href: '/services' },
+  { name: 'NUESTROS SERVICIOS', href: '/#services' },
   { name: 'CONTACTO', href: '/contact' },
 ]
 
@@ -56,13 +57,20 @@ export default function Header() {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
           <Link
-            href="https://api.whatsapp.com/send?phone=50687045556"
+            href="https://www.instagram.com/servidentalcr/?hl=es-la"
             target="_blank"
-            className="text-sm font-semibold leading-6 text-white bg-green-600 px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+            className="text-sm font-semibold leading-6 text-pink-500 px-2 py-2 rounded-md hover:text-pink-700 transition-colors"
           >
-            WhatsApp <span aria-hidden="true">&rarr;</span>
+            <Instagram className="w-7 h-7"/>
+          </Link>
+          <Link
+            href="https://www.facebook.com/Servidentalcr"
+            target="_blank"
+            className="text-sm font-semibold leading-6 text-blue-500 px-2 py-2 rounded-md hover:text-blue-700 transition-colors"
+          >
+            <Facebook className="w-7 h-7"/>
           </Link>
         </div>
       </nav>

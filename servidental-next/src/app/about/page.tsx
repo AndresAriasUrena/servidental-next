@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import assets from '@/assets'
-
+import { ValuesSection } from './ValuesSection'
 export const metadata: Metadata = {
   title: '¿Quiénes Somos? | ServiDental',
   description: 'Expertos en equipamiento dental desde 2007, brindando soluciones técnicas y mantenimiento especializado para clínicas dentales en Costa Rica.',
@@ -32,6 +32,7 @@ const products = [
   'Escáneres dentales',
   'Impresión 3D',
 ]
+
 
 export default function AboutPage() {
   return (
@@ -116,6 +117,8 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <ValuesSection />
+
       {/* Specialties Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,7 +163,7 @@ export default function AboutPage() {
 
               <div className="mt-8">
                 <Link
-                  href="/services"
+                  href="/#services"
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-servi_green hover:bg-servi_dark"
                 >
                   Explorar servicios

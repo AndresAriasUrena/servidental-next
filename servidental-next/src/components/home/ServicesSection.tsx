@@ -44,7 +44,7 @@ const services: Service[] = [
 
 export default function ServicesSection() {
   return (
-    <section className="bg-services_gradient py-24"> {/* Cambiado a py-24 para más espacio vertical */}
+    <section id="services" className="bg-services_gradient py-24"> {/* Cambiado a py-24 para más espacio vertical */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0 }}

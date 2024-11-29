@@ -1,16 +1,26 @@
-// next.config.js  (cambia la extensión de .ts a .js)
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-    remotePatterns: [], // Si tienes patrones de imágenes remotas
+    remotePatterns: [],
   },
   trailingSlash: true,
   typescript: {
-    // Si hay errores de tipos que quieras ignorar temporalmente
     ignoreBuildErrors: true,
   },
-}
+  webpack(config) {
+    // Agregar regla para manejar archivos multimedia
+    config.module.rules.push({
+      test: /\.(mp4|webm)$/, // Extensiones soportadas
+      type: 'asset/resource', // Utiliza Webpack Asset Modules
+      generator: {
+        filename: 'static/media/[name].[hash][ext]', // Define el nombre y ubicación del archivo exportado
+      },
+    });
 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;

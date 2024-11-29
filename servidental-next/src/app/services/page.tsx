@@ -165,7 +165,9 @@ export default function ServicesPage() {
                 <p className="mt-4 text-gray-600 leading-relaxed">
                   El concepto de mantenimiento correctivo se refiere a las acciones o 
                   actividades destinadas a preservar un aparato, maquinaria o producto, 
-                  o a restaurar alguno de estos para asegurar que funcione de manera óptima.
+                  o a restaurar alguno de estos para asegurar que funcione de manera óptima.<br/>
+                  Es importante destacar que este tipo de mantenimiento es realizado por profesionales con amplia experiencia y un profundo conocimiento del equipo o máquina en cuestión.
+                  El proceso de mantenimiento correctivo generalmente comienza con una inspección exhaustiva del equipo.
                 </p>
 
                 <h3 className="mt-8 text-xl font-semibold text-gray-900">
