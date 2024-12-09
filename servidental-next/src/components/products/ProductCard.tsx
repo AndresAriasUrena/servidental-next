@@ -57,9 +57,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           <p className="text-gray-600 line-clamp-2 mb-4">{product.description}</p>
 
           <ul className="space-y-1 text-sm text-gray-500">
-            {product.features.unique.items.slice(0, 3).map((feature, index) => (
+            {product.features.unique.items.slice(0, 1).map((feature, index) => (
               <li key={index} className="flex items-center">
-                <span className="w-1.5 h-1.5 bg-servi_green rounded-full mr-2"></span>
+                <span className="min-h-1.5 min-w-1.5 bg-servi_green rounded-full mr-2"></span>
                 {feature}
               </li>
             ))}

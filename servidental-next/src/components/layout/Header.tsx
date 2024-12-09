@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Facebook, Instagram } from 'lucide-react'
+import { Facebook, Instagram, MessageCircle  } from 'lucide-react'
 import assets from '@/assets'
 
 const navigation = [
@@ -71,6 +71,13 @@ export default function Header() {
             className="text-sm font-semibold leading-6 text-blue-500 px-2 py-2 rounded-md hover:text-blue-700 transition-colors"
           >
             <Facebook className="w-7 h-7"/>
+          </Link>
+          <Link
+            href="https://api.whatsapp.com/send?phone=50687045556"
+            target="_blank"
+            className="text-sm font-semibold leading-6 text-green-500 px-2 py-2 rounded-md hover:text-green-700 transition-colors"
+          >
+            <MessageCircle className="w-7 h-7"/>
           </Link>
         </div>
       </nav>

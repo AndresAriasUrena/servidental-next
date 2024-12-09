@@ -24,7 +24,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           alt={product.brand.name}
           width={120}
           height={48}
-          className="w-auto h-6 md:h-8 object-contain"
+          className="w-auto min-h-6 md:min-h-8 max-h-8 object-contain"
           priority
         />
       </div>
@@ -38,7 +38,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* Características */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mt-8"
@@ -50,7 +50,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           <div className="mt-4 space-y-2">
             {product.features.unique.items.map((feature, index) => (
               <div key={index} className="flex items-center">
-                <div className="mr-3 h-1.5 w-1.5 rounded-full bg-servi_green"></div>
+                <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
                 <p className="text-gray-600">{feature}</p>
               </div>
             ))}
@@ -65,13 +65,62 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             <div className="mt-4 space-y-2">
               {product.features.general.items.map((feature, index) => (
                 <div key={index} className="flex items-center">
-                  <div className="mr-3 h-1.5 w-1.5 rounded-full bg-servi_green"></div>
+                  <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
                   <p className="text-gray-600">{feature}</p>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+
+        {/* Incluye */}
+        {(product.features.includes?.items ?? []).length > 0 && (
+          <div className="mt-8 border-t border-gray-200 pt-8">
+            <h3 className="text-lg font-medium text-gray-900">{product.features.includes?.title}</h3>
+            <div className="mt-4 space-y-2">
+              {product.features.includes?.items.map((item, index) => (
+                <div key={index} className="flex items-center">
+                  <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
+                  <p className="text-gray-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Opcional */}
+        {(product.features.optional?.items ?? []).length > 0 && (
+          <div className="mt-8 border-t border-gray-200 pt-8">
+            <h3 className="text-lg font-medium text-gray-900">{product.features.optional?.title ?? 'Puede incorporar (consultar el valor)'}</h3>
+            <div className="mt-4 space-y-2">
+              {product.features.optional?.items.map((item, index) => (
+                <div key={index} className="flex items-center">
+                  <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
+                  <p className="text-gray-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Videos del producto */}
+        {product.videoIframes && product.videoIframes.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-medium text-gray-900">Videos del producto</h3>
+            <div className="mt-4">
+              {product.videoIframes.map((video, index) => (
+                <div key={index} className="aspect-w-16 mt-2 aspect-h-9">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: video }}
+                    className="iframe-container"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </motion.div>
 
       {/* Botones de acción */}

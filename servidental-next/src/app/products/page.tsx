@@ -12,7 +12,7 @@ export default function ProductsPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-servi_green to-blue-800 text-white">
+      <section className="bg-gradient-to-r from-gradient_gray to-gradient_green text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

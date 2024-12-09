@@ -10,51 +10,51 @@ import assets from '@/assets'
 const categories = [
   {
     id: 1,
-    name: 'Unidades Dentales',
-    description: 'Máximo confort y tecnología',
-    image: assets.products.unidadesDentales.s30.default,
+    name: 'Raspador dental y pulidor de aire PT Master',
+    description: 'Pieza de mano de alto rendimiento',
+    image: assets.products.pulidoras.RaspadorDentalYpulidorDeAirePTMaster.default,
     // href: '/products?category=Unidades+Dentales', // Cambiado
-    brand: assets.logos.brands.siger
+    brand: assets.logos.brands.coxo
   },
   {
     id: 2,
-    name: 'Rayos X',
-    description: 'Alta precisión diagnóstica',
-    image: assets.products.rayosX.portatil[3],
+    name: 'Pulidora dental por aire CP-1',
+    description: 'Pieza de mano de alto rendimiento',
+    image: assets.products.pulidoras.PulidoraDentalPorAireCP.default,
     // href: '/products?category=Equipo+de+Rayos+X', // Cambiado
-    brand: assets.logos.brands.siger
+    brand: assets.logos.brands.coxo
   },
   {
     id: 3,
-    name: 'Fresadora',
-    description: 'Tecnología CAD/CAM avanzada',
-    image: assets.products.fresadora.images[1],
+    name: 'Microarenador Standar Microblaster"',
+    description: 'Rápido y fácil de usar',
+    image: assets.products.pulidoras.MicroarenadorStandarMicroblaster.default,
     // href: '/products?category=Fresadora', // Cambiado
-    brand: assets.logos.brands.dof
+    brand: assets.logos.brands.bioart
   },
   {
     id: 4,
-    name: 'Compresores',
-    description: 'Rendimiento silencioso',
-    image: assets.products.compresores.dc702,
+    name: 'Lavadora ultrasónica BioWhash',
+    description: 'Optimiza y acelera el proceso de lavado',
+    image: assets.products.lavadoraUltrasonido.LavadoraUltrasonicaBioWhash.default,
     // href: '/products?category=Compresores', // Cambiado
-    brand: assets.logos.brands.tpc
+    brand: assets.logos.brands.bioart
   },
   {
     id: 5,
-    name: 'Autoclaves',
-    description: 'Esterilización confiable',
-    image: assets.products.esterilizadores.semiAuto,
+    name: 'Carro-movil-multifuncional',
+    description: 'Diseño minimalista',
+    image: assets.products.Mobiliario.CarroMovilMultifuncional.default,
     // href: '/products?category=Esterilización', // Cambiado
-    brand: assets.logos.brands.sturdy
+    brand: assets.logos.brands.siger//CAMBIAR ESTO!!!
   },
   {
     id: 6,
-    name: 'Scanner',
-    description: 'Digitalización 3D precisa',
-    image: assets.products.scanner.meyer,
+    name: 'Escáner intraoral DL-300P, Coxo, Launca',
+    description: 'Alámbrico',
+    image: assets.products.scanner.EscanerIntraoralDL300PCoxoLaunca.default,
     // href: '/products?category=Scanner', // Cambiado
-    brand: assets.logos.brands.meyer
+    brand: assets.logos.brands.coxo 
   }
 ] as const
 

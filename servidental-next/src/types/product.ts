@@ -2,7 +2,8 @@ import { StaticImageData } from 'next/image';
 
 export type ProductCategory =
   | 'Unidades Dentales'
-  | 'Bombas de succión'
+  | 'Bombas de vacío'
+  | 'Activaodor UV para implantes'
   | 'Carrito para accesorios'
   | 'Compresores'
   | 'Contra-ángulos'
@@ -13,18 +14,35 @@ export type ProductCategory =
   | 'Motores'
   | 'Lámparas Dentales'
   | 'Lámparas de Fotocurado'
+  | 'Lámparas de blanqueamiento'
   | 'Piezas de mano'
   | 'Selladoras'
   | 'Tomógrafos'
   | 'Termofomadoras'
   | 'Vaporizadores'
   | 'Cámaras Intraorales'
-  | 'Scanner'
+  | 'Escáneres'
   | 'Sensores Digitales'
   | 'Fresadora'
   | 'Anestesia'
   | 'Implantes'
-  | 'Otros';
+  | 'Implantes'
+  | 'Pulidores'
+  | 'Equipo portátil'
+  | 'Equipo para endodoncia'
+  | 'Motores de implantes'
+  | 'Lavadoras ultrasónicas'
+  | 'Motor NX-201N'
+  | 'Motores de cirugías'
+  | 'Otros'
+  | 'Mobiliario'
+  | 'Carritos'
+  | 'Armarios'
+  | 'Pulverizador'
+
+  
+
+
 
 export type ProductBrand =
   | 'Siger'
@@ -36,7 +54,14 @@ export type ProductBrand =
   | 'Meyer'
   | 'Micro NX'
   | 'Sturdy'
-  | 'Xpect Vision';
+  | 'Xpect Vision'
+  | 'elec'
+  | 'DenTech'
+  | 'DentaFilm'
+  | 'epdent'
+  | 'mdmed'
+  | 'whitebrand'
+  ;
 
   export interface ProductImage {
     url: StaticImageData;  // Cambiado de string a StaticImageData
@@ -63,6 +88,7 @@ export interface ProductGift {
   image: ProductImage;
 }
 
+
 export interface Product {
   id: string;
   slug: string;
@@ -80,14 +106,18 @@ export interface Product {
   features: {
     unique: ProductFeature;
     general: ProductFeature;
+    includes?: ProductFeature; 
+    optional?: ProductFeature;
   };
   specifications?: ProductSpecification[];
-  images: ProductImage[];
+  images?: ProductImage[];
   gifts?: ProductGift[];
-  relatedProducts?: string[]; // Array of product IDs
+  relatedProducts?: string[]; 
   tags?: string[];
   isActive: boolean;
   inStock?: boolean;
   createdAt: string;
   updatedAt: string;
+  videoIframe?: string; 
+  videoIframes?: string[]; 
 }

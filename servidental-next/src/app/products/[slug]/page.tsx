@@ -61,7 +61,7 @@ export default function ProductPage({ params }: PageProps) {
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-          <ProductGallery images={product.images} />
+          <ProductGallery images={product.images} product={product} />
           <ProductInfo product={product} />
         </div>
       </div>

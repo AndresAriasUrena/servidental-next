@@ -235,7 +235,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-servi_green to-blue-800 py-16">
+      <section className="bg-gradient-to-r from-gradient_gray to-gradient_green py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white">
             Comuníquese con nuestros asesores para cotizaciones, servicio técnico y consultas generales.

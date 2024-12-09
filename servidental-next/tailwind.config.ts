@@ -1,3 +1,5 @@
+import { GrAidOption } from "react-icons/gr";
+import { PiGradient } from "react-icons/pi";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -17,6 +19,8 @@ const config: Config = {
         servi_green: "#037971",
         servi_dark: "#256c68",
         servi_light: "#f3feff",
+        gradient_green: "#003B46",
+        gradient_gray: "#999B9E",
       },
       backgroundImage: {
        "hero_bg": "url('../assets/images/herobg.avif')",

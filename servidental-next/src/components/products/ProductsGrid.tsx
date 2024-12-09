@@ -6,23 +6,32 @@ import { Product } from '@/types/product'
 import { Filter } from 'lucide-react'
 import ProductCard from './ProductCard'
 import ProductFilter from './ProductFilter'
+import { categoryGroups } from './ProductFilter';
 
 interface ProductGridProps {
   products: Product[]
 }
 
+
 export default function ProductGrid({ products }: ProductGridProps) {
+  
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
 
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === 'all' ||
+      product.category === selectedCategory || // Categoría principal
+      (product.subcategory && product.subcategory === selectedCategory) || // Verifica si subcategory existe antes de comparar
+      (categoryGroups[selectedCategory]?.includes(product.subcategory ?? '') ?? false); // Maneja subcategorías relacionadas
+  
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+  
+    return matchesCategory && matchesSearch;
+  });
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Search Bar - Always visible at top */}
