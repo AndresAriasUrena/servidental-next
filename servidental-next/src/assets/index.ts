@@ -2,6 +2,10 @@ import { StaticImageData } from 'next/image'
 
 // Imagenes
 import herobg from './images/herobg.avif'
+import Mantenimiento from './images/Mantenimiento.avif'
+import VentaDeEquipo from './images/Venta de equipo.avif'
+import Capacitaciones from './images/Capacitaciones.avif'
+import EquipoDeProfesionales from './images/Equipo de profesionales.avif'
 
 // Logos principales
 import logo from './logos/Logo-servidental-medical-equipment.avif'
@@ -543,6 +547,10 @@ import certificacionesImg from './services/certificaciones.avif'
 const assets = {
   images:{
     herobg: herobg,
+    Mantenimiento: Mantenimiento, 
+    EquipoDeProfesionales: EquipoDeProfesionales,
+    VentaDeEquipo: VentaDeEquipo,
+    Capacitaciones: Capacitaciones,
   },
   logos: {
     main: {

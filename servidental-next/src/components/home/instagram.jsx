@@ -24,6 +24,11 @@ const Instagram = () => {
   return (
     <>
     <div className="pb-6 ">
+      <div className="flex justify-center">
+      <h2 className="text-4xl font-bold text-gray-900 mb-8">
+            Nuestro Instagram
+          </h2>
+      </div>
         <div
           className="elfsight-app-4a9d8a5c-734d-4c05-8734-7d524dd964ed"
           data-elfsight-app-lazy
