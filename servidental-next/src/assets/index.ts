@@ -31,6 +31,8 @@ import DentaFilm from './logos/brands/DentaFilm.avif'
 import epdent from './logos/brands/epdent.avif'
 import mdmed from './logos/brands/mdmed.avif'
 import elec from './logos/brands/elec.avif'
+import Launca from './logos/brands/Launca.avif'
+
 
 // Unidades dentales
 //v600
@@ -98,91 +100,91 @@ import SelladoraBiostamp127V_2 from './products/selladora_biostamp_127v/2.avif'
 
 // Rayos X
 //Tomógrafo Meyer, SS-X9010Dpro-3DE
-import TomografoMeyerSSX9010Dpro3DE_1  from './products/TomografoMeyerSS-X9010Dpro-3DE/1.avif'
-import TomografoMeyerSSX9010Dpro3DE_2  from './products/TomografoMeyerSS-X9010Dpro-3DE/2.avif'
-import TomografoMeyerSSX9010Dpro3DE_3  from './products/TomografoMeyerSS-X9010Dpro-3DE/3.avif'
-import TomografoMeyerSSX9010Dpro3DE_4  from './products/TomografoMeyerSS-X9010Dpro-3DE/4.avif'
-import TomografoMeyerSSX9010Dpro3DE_5  from './products/TomografoMeyerSS-X9010Dpro-3DE/5.avif'
-import TomografoMeyerSSX9010Dpro3DE_6  from './products/TomografoMeyerSS-X9010Dpro-3DE/6.avif'
-import TomografoMeyerSSX9010Dpro3DE_7  from './products/TomografoMeyerSS-X9010Dpro-3DE/7.avif'
+import TomografoMeyerSSX9010Dpro3DE_1 from './products/TomografoMeyerSS-X9010Dpro-3DE/1.avif'
+import TomografoMeyerSSX9010Dpro3DE_2 from './products/TomografoMeyerSS-X9010Dpro-3DE/2.avif'
+import TomografoMeyerSSX9010Dpro3DE_3 from './products/TomografoMeyerSS-X9010Dpro-3DE/3.avif'
+import TomografoMeyerSSX9010Dpro3DE_4 from './products/TomografoMeyerSS-X9010Dpro-3DE/4.avif'
+import TomografoMeyerSSX9010Dpro3DE_5 from './products/TomografoMeyerSS-X9010Dpro-3DE/5.avif'
+import TomografoMeyerSSX9010Dpro3DE_6 from './products/TomografoMeyerSS-X9010Dpro-3DE/6.avif'
+import TomografoMeyerSSX9010Dpro3DE_7 from './products/TomografoMeyerSS-X9010Dpro-3DE/7.avif'
 
 //Sensor dental
-import SensorDental_1  from './products/SensorDental/1.avif'
-import SensorDental_2  from './products/SensorDental/2.avif'
-import SensorDental_3  from './products/SensorDental/3.avif'
-import SensorDental_4  from './products/SensorDental/4.avif'
+import SensorDental_1 from './products/SensorDental/1.avif'
+import SensorDental_2 from './products/SensorDental/2.avif'
+import SensorDental_3 from './products/SensorDental/3.avif'
+import SensorDental_4 from './products/SensorDental/4.avif'
 
 //SensordeRayosXintraoralDigital 
-import SensordeRayosXintraoralDigital_1  from './products/SensordeRayosXintraoralDigital/1.avif'
-import SensordeRayosXintraoralDigital_2  from './products/SensorDental/2.avif'
-import SensordeRayosXintraoralDigital_3  from './products/SensorDental/3.avif'
-import SensordeRayosXintraoralDigital_4  from './products/SensorDental/4.avif'
+import SensordeRayosXintraoralDigital_1 from './products/SensordeRayosXintraoralDigital/1.avif'
+import SensordeRayosXintraoralDigital_2 from './products/SensorDental/2.avif'
+import SensordeRayosXintraoralDigital_3 from './products/SensorDental/3.avif'
+import SensordeRayosXintraoralDigital_4 from './products/SensorDental/4.avif'
 
 //Rayos X portátil XVbeam1000
-import RayosXportatilXVbeam1000_1  from './products/RayosXportatilXVbeam1000/1.avif'
-import RayosXportatilXVbeam1000_2  from './products/RayosXportatilXVbeam1000/2.avif'
+import RayosXportatilXVbeam1000_1 from './products/RayosXportatilXVbeam1000/1.avif'
+import RayosXportatilXVbeam1000_2 from './products/RayosXportatilXVbeam1000/2.avif'
 
 //Rayos X Portátil Siray Max
-import rayos_x_portatil_siraymax_1  from './products/rayos_x_portatil_siraymax/1.avif'
-import rayos_x_portatil_siraymax_2  from './products/rayos_x_portatil_siraymax/2.avif'
-import rayos_x_portatil_siraymax_3  from './products/rayos_x_portatil_siraymax/3.avif'
-import rayos_x_portatil_siraymax_4  from './products/rayos_x_portatil_siraymax/4.avif'
-import rayos_x_portatil_siraymax_5  from './products/rayos_x_portatil_siraymax/5.avif'
+import rayos_x_portatil_siraymax_1 from './products/rayos_x_portatil_siraymax/1.avif'
+import rayos_x_portatil_siraymax_2 from './products/rayos_x_portatil_siraymax/2.avif'
+import rayos_x_portatil_siraymax_3 from './products/rayos_x_portatil_siraymax/3.avif'
+import rayos_x_portatil_siraymax_4 from './products/rayos_x_portatil_siraymax/4.avif'
+import rayos_x_portatil_siraymax_5 from './products/rayos_x_portatil_siraymax/5.avif'
 
 //Chaleco plomado sin cuello
-import ChalecoPlomadoSinCuello_1  from './products/ChalecoPlomadoSinCuello/1.avif'
-import ChalecoPlomadoSinCuello_2  from './products/ChalecoPlomadoSinCuello/2.avif'
+import ChalecoPlomadoSinCuello_1 from './products/ChalecoPlomadoSinCuello/1.avif'
+import ChalecoPlomadoSinCuello_2 from './products/ChalecoPlomadoSinCuello/2.avif'
 
 
 
 //Pulidoras
 //Raspador dental y pulidor de aire PT Master
-import RaspadorDentalYpulidorDeAirePTMaster_1  from './products/RaspadorDentalYpulidorDeAirePTMaster/1.avif'
-import RaspadorDentalYpulidorDeAirePTMaster_2  from './products/RaspadorDentalYpulidorDeAirePTMaster/2.avif'
-import RaspadorDentalYpulidorDeAirePTMaster_3  from './products/RaspadorDentalYpulidorDeAirePTMaster/3.avif'
-import RaspadorDentalYpulidorDeAirePTMaster_4  from './products/RaspadorDentalYpulidorDeAirePTMaster/4.avif'
-import RaspadorDentalYpulidorDeAirePTMaster_5  from './products/RaspadorDentalYpulidorDeAirePTMaster/5.avif'
+import RaspadorDentalYpulidorDeAirePTMaster_1 from './products/RaspadorDentalYpulidorDeAirePTMaster/1.avif'
+import RaspadorDentalYpulidorDeAirePTMaster_2 from './products/RaspadorDentalYpulidorDeAirePTMaster/2.avif'
+import RaspadorDentalYpulidorDeAirePTMaster_3 from './products/RaspadorDentalYpulidorDeAirePTMaster/3.avif'
+import RaspadorDentalYpulidorDeAirePTMaster_4 from './products/RaspadorDentalYpulidorDeAirePTMaster/4.avif'
+import RaspadorDentalYpulidorDeAirePTMaster_5 from './products/RaspadorDentalYpulidorDeAirePTMaster/5.avif'
 
 //Pulidora dental por aire CP-1
-import PulidoraDentalPorAireCP_1  from './products/PulidoraDentalPorAireCP-1/1.avif'
-import PulidoraDentalPorAireCP_2  from './products/PulidoraDentalPorAireCP-1/2.avif'
-import PulidoraDentalPorAireCP_3  from './products/PulidoraDentalPorAireCP-1/3.avif'
-import PulidoraDentalPorAireCP_4  from './products/PulidoraDentalPorAireCP-1/4.avif'
-import PulidoraDentalPorAireCP_5  from './products/PulidoraDentalPorAireCP-1/5.avif'
+import PulidoraDentalPorAireCP_1 from './products/PulidoraDentalPorAireCP-1/1.avif'
+import PulidoraDentalPorAireCP_2 from './products/PulidoraDentalPorAireCP-1/2.avif'
+import PulidoraDentalPorAireCP_3 from './products/PulidoraDentalPorAireCP-1/3.avif'
+import PulidoraDentalPorAireCP_4 from './products/PulidoraDentalPorAireCP-1/4.avif'
+import PulidoraDentalPorAireCP_5 from './products/PulidoraDentalPorAireCP-1/5.avif'
 
 //Microarenador Standar Microblaster
-import MicroarenadorStandarMicroblaster_1  from './products/MicroarenadorStandarMicroblaster/1.avif'
-import MicroarenadorStandarMicroblaster_2  from './products/MicroarenadorStandarMicroblaster/2.avif'
+import MicroarenadorStandarMicroblaster_1 from './products/MicroarenadorStandarMicroblaster/1.avif'
+import MicroarenadorStandarMicroblaster_2 from './products/MicroarenadorStandarMicroblaster/2.avif'
 
 
 
 //Motores de implantes
 //Motor de implantes ISE-270M
-import MotorDeImplantesISE270M_1  from './products/MotorDeImplantesISE270M/1.avif'
-import MotorDeImplantesISE270M_2  from './products/MotorDeImplantesISE270M/2.avif'
+import MotorDeImplantesISE270M_1 from './products/MotorDeImplantesISE270M/1.avif'
+import MotorDeImplantesISE270M_2 from './products/MotorDeImplantesISE270M/2.avif'
 
 //Motor de implantes C-SAILOR PRO
-import MotorDeImplantesCSAILORPRO_1  from './products/MotorDeImplantesCSAILORPRO/1.avif'
+import MotorDeImplantesCSAILORPRO_1 from './products/MotorDeImplantesCSAILORPRO/1.avif'
 
 
 
 //Motores de cirugías
 //Motor eléctrico de cirugía
-import MotorElectricoDeCirugia_1  from './products/MotorElectricoDeCirugia/1.avif'
+import MotorElectricoDeCirugia_1 from './products/MotorElectricoDeCirugia/1.avif'
 
 //Motor de cirugía C-Puma-Master
-import MotorDeCirugiaCPumaMaster_1  from './products/MotorDeCirugiaCPumaMaster/1.avif'
-import MotorDeCirugiaCPumaMaster_2  from './products/MotorDeCirugiaCPumaMaster/2.avif'
+import MotorDeCirugiaCPumaMaster_1 from './products/MotorDeCirugiaCPumaMaster/1.avif'
+import MotorDeCirugiaCPumaMaster_2 from './products/MotorDeCirugiaCPumaMaster/2.avif'
 
 
 
 //MotorNX201N_1
 //MotorNX201N_1
-import MotorNX201N_1  from './products/MotorNX201N/1.avif'
-import MotorNX201N_2  from './products/MotorNX201N/2.avif'
-import MotorNX201N_3  from './products/MotorNX201N/3.avif'
-import MotorNX201N_4  from './products/MotorNX201N/4.avif'
-import MotorNX201N_5  from './products/MotorNX201N/5.avif'
+import MotorNX201N_1 from './products/MotorNX201N/1.avif'
+import MotorNX201N_2 from './products/MotorNX201N/2.avif'
+import MotorNX201N_3 from './products/MotorNX201N/3.avif'
+import MotorNX201N_4 from './products/MotorNX201N/4.avif'
+import MotorNX201N_5 from './products/MotorNX201N/5.avif'
 
 
 
@@ -190,40 +192,41 @@ import MotorNX201N_5  from './products/MotorNX201N/5.avif'
 
 //Carritos
 //Carro MovilMulti funcional
-import CarroMovilMultifuncional_1  from './products/CarroMovilMultifuncional/1.avif'
-import CarroMovilMultifuncional_2  from './products/CarroMovilMultifuncional/2.avif'
-import CarroMovilMultifuncional_3  from './products/CarroMovilMultifuncional/3.avif'
-import CarroMovilMultifuncional_4  from './products/CarroMovilMultifuncional/4.avif'
-import CarroMovilMultifuncional_5  from './products/CarroMovilMultifuncional/5.avif'
+import CarroMovilMultifuncional_1 from './products/CarroMovilMultifuncional/1.avif'
+import CarroMovilMultifuncional_15 from './products/CarroMovilMultifuncional/15.avif'
+import CarroMovilMultifuncional_2 from './products/CarroMovilMultifuncional/2.avif'
+import CarroMovilMultifuncional_3 from './products/CarroMovilMultifuncional/3.avif'
+import CarroMovilMultifuncional_4 from './products/CarroMovilMultifuncional/4.avif'
+import CarroMovilMultifuncional_5 from './products/CarroMovilMultifuncional/5.avif'
 
 //Carrito móvil T3-3
-import CarritoMovilT3_3_1  from './products/CarritoMovilT3_3/1.avif'
-import CarritoMovilT3_3_2  from './products/CarritoMovilT3_3/2.avif'
+import CarritoMovilT3_3_1 from './products/CarritoMovilT3_3/1.avif'
+import CarritoMovilT3_3_2 from './products/CarritoMovilT3_3/2.avif'
 
 //Carrito móvil K1
-import CarritoMovilK1_1  from './products/CarritoMovilK1/1.avif'
-import CarritoMovilK1_2  from './products/CarritoMovilK1/2.avif'
-import CarritoMovilK1_3  from './products/CarritoMovilK1/3.avif'
+import CarritoMovilK1_1 from './products/CarritoMovilK1/1.avif'
+import CarritoMovilK1_2 from './products/CarritoMovilK1/2.avif'
+import CarritoMovilK1_3 from './products/CarritoMovilK1/3.avif'
 
 //Lavadoras
 //Lavadora ultrasónica BioWhash
-import  LavadoraUltrasonicaBioWhash_1 from './products/LavadoraUltrasonicaBioWhash/1.avif'
-import  LavadoraUltrasonicaBioWhash_2 from './products/LavadoraUltrasonicaBioWhash/2.avif'
-import  LavadoraUltrasonicaBioWhash_3 from './products/LavadoraUltrasonicaBioWhash/3.avif'
+import LavadoraUltrasonicaBioWhash_1 from './products/LavadoraUltrasonicaBioWhash/1.avif'
+import LavadoraUltrasonicaBioWhash_2 from './products/LavadoraUltrasonicaBioWhash/2.avif'
+import LavadoraUltrasonicaBioWhash_3 from './products/LavadoraUltrasonicaBioWhash/3.avif'
 
 
 //Armarios
 //Armario G14-1
-import ArmarioG14_1_1  from './products/ArmarioG14_1/1.avif'
-import ArmarioG14_1_2  from './products/ArmarioG14_1/2.avif'
-import ArmarioG14_1_3  from './products/ArmarioG14_1/3.avif'
-import ArmarioG14_1_4  from './products/ArmarioG14_1/4.avif'
+import ArmarioG14_1_1 from './products/ArmarioG14_1/1.avif'
+import ArmarioG14_1_2 from './products/ArmarioG14_1/2.avif'
+import ArmarioG14_1_3 from './products/ArmarioG14_1/3.avif'
+import ArmarioG14_1_4 from './products/ArmarioG14_1/4.avif'
 
 //Armario G16
-import ArmarioG16_1  from './products/ArmarioG16/1.avif'
-import ArmarioG16_2  from './products/ArmarioG16/2.avif'
-import ArmarioG16_3  from './products/ArmarioG16/3.avif'
-import ArmarioG16_4  from './products/ArmarioG16/4.avif'
+import ArmarioG16_1 from './products/ArmarioG16/1.avif'
+import ArmarioG16_2 from './products/ArmarioG16/2.avif'
+import ArmarioG16_3 from './products/ArmarioG16/3.avif'
+import ArmarioG16_4 from './products/ArmarioG16/4.avif'
 
 
 
@@ -545,9 +548,9 @@ import trasladosImg from './services/traslados.avif'
 import certificacionesImg from './services/certificaciones.avif'
 
 const assets = {
-  images:{
+  images: {
     herobg: herobg,
-    Mantenimiento: Mantenimiento, 
+    Mantenimiento: Mantenimiento,
     EquipoDeProfesionales: EquipoDeProfesionales,
     VentaDeEquipo: VentaDeEquipo,
     Capacitaciones: Capacitaciones,
@@ -576,6 +579,7 @@ const assets = {
       dentafilm: DentaFilm,
       epdent: epdent,
       mdmed: mdmed,
+      launca: Launca,
       whitebrand: whitebrand,
     }
   },
@@ -600,7 +604,7 @@ const assets = {
         default: SensordeRayosXintraoralDigital_1,
         SensordeRayosXintraoralDigital_2: SensordeRayosXintraoralDigital_2,
         SensordeRayosXintraoralDigital_3: SensordeRayosXintraoralDigital_3,
-        SensordeRayosXintraoralDigital_4: SensordeRayosXintraoralDigital_4 
+        SensordeRayosXintraoralDigital_4: SensordeRayosXintraoralDigital_4
       },
       RayosXportatilXVbeam1000: {
         default: RayosXportatilXVbeam1000_1,
@@ -699,356 +703,357 @@ const assets = {
       },
     },
     MotordeImplantes: {
-      MotorDeImplantesISE270M:{
+      MotorDeImplantesISE270M: {
         default: MotorDeImplantesISE270M_1,
         MotorDeImplantesISE270M_2: MotorDeImplantesISE270M_2,
-    },
-    MotorDeImplantesCSAILORPRO:{
+      },
+      MotorDeImplantesCSAILORPRO: {
         default: MotorDeImplantesCSAILORPRO_1,
+      },
     },
-  },
-  MotoresDeCirugias: {
-    MotorElectricoDeCirugia:{
-      default: MotorElectricoDeCirugia_1,
-  },
-  MotorDeCirugiaCPumaMaster:{
-    default: MotorDeCirugiaCPumaMaster_1,
-    MotorDeCirugiaCPumaMaster_2: MotorDeCirugiaCPumaMaster_2,
-},
-},
-Mobiliario: {
-  CarroMovilMultifuncional: {
-    default: CarroMovilMultifuncional_1,
-    CarroMovilMultifuncional_2: CarroMovilMultifuncional_2,
-    CarroMovilMultifuncional_3: CarroMovilMultifuncional_3,
-    CarroMovilMultifuncional_4: CarroMovilMultifuncional_4,
-    CarroMovilMultifuncional_5: CarroMovilMultifuncional_5
-  },
-  CarritoMovilT3_3: {
-    default: CarritoMovilT3_3_1,
-    CarritoMovilT3_3_2: CarritoMovilT3_3_2,
-  },
-  CarritoMovilK1: {
-    default: CarritoMovilK1_1,
-    CarritoMovilK1_2: CarritoMovilK1_2,
-    CarritoMovilK1_3: CarritoMovilK1_3,
-},
-ArmarioG14_1: {
-  default: ArmarioG14_1_1,
-  ArmarioG14_1_2: ArmarioG14_1_2,
-  ArmarioG14_1_3: ArmarioG14_1_3,
-  ArmarioG14_1_4: ArmarioG14_1_4
-},
-ArmarioG16: {
-  default: ArmarioG16_1,
-  ArmarioG16_2: ArmarioG16_2,
-  ArmarioG16_3: ArmarioG16_3,
-  ArmarioG16_4: ArmarioG16_4
-}
-},
-lavadoraUltrasonido: {
-  LavadoraUltrasonicaBioWhash: {
-    default: LavadoraUltrasonicaBioWhash_1,
-    LavadoraUltrasonicaBioWhash_2: LavadoraUltrasonicaBioWhash_2,
-    LavadoraUltrasonicaBioWhash_3: LavadoraUltrasonicaBioWhash_3
-  },
-},
-lamparasDentales: {
-  LamparaDeCirugiaL500: {
-    default: LamparaDeCirugiaL500_1,
-  },
-  LamparaDentalV1: {
-    default: LamparaDentalV1_1,
-  },
-  LamparaDentalV2: {
-    default: LamparaDentalV2_1,
-  },
-},
-lamparasFotocurado: {
-  LEDDB686HONOR: {
-    default: LeDDB686HONOR_1,
-    LeDDB686HONOR_2: LeDDB686HONOR_2,
-    LeDDB686HONOR_3: LeDDB686HONOR_3,
-  },
-  NaNODB686: {
-    default: NaNODB686_1,
-    NaNODB686_2: NaNODB686_2,
-    NaNODB686_3: NaNODB686_3,
-  },
-  SwiftDB686: {
-    default: SwiftDB686_1,
-    SwiftDB686_2: SwiftDB686_2,
-    SwiftDB686_3: SwiftDB686_3,
-  },
-},
-fresadoras: {
-  Craft5x: {
-    default: Craft5x_1,
-    Craft5x_2: Craft5x_2,
-    Craft5x_3: Craft5x_3,
-    Craft5x_4: Craft5x_4,
-    Craft5x_5: Craft5x_5,
-  },
-  CraftDry: {
-    default:CraftDry_1,
-   CraftDry_2:CraftDry_2,
-   CraftDry_3:CraftDry_3,
-   CraftDry_4:CraftDry_4,
-   CraftDry_5:CraftDry_5,
-  },
-},
-esterilizadores: {
-  Sa260MB: {
-    default: Sa260MB_1,
-    Sa260MB_2: Sa260MB_2,
-  },
-  SA232x: {
-    default: SA232x_1,
-    SA232x_2: SA232x_2,
-  },
-  Sa232: {
-    default: Sa232_1,
-    Sa232_2: Sa232_2,
-  },
-},
-scanner: {
-  EscanerIntraoralDL300PCoxoLaunca: {
-    default: EscanerIntraoralDL300PCoxoLaunca_1,
-    EscanerIntraoralDL300PCoxoLaunca_2: EscanerIntraoralDL300PCoxoLaunca_2,
-    EscanerIntraoralDL300PCoxoLaunca_3: EscanerIntraoralDL300PCoxoLaunca_3
-  },
-  EscanerParaLaboratorioDentalEdgeHDDOF: {
-    default: EscanerParaLaboratorioDentalEdgeHDDOF_1,
-    EscanerParaLaboratorioDentalEdgeHDDOF_2: EscanerParaLaboratorioDentalEdgeHDDOF_2,
-    EscanerParaLaboratorioDentalEdgeHDDOF_3: EscanerParaLaboratorioDentalEdgeHDDOF_3,
-    EscanerParaLaboratorioDentalEdgeHDDOF_4: EscanerParaLaboratorioDentalEdgeHDDOF_4,
-    EscanerParaLaboratorioDentalEdgeHDDOF_5: EscanerParaLaboratorioDentalEdgeHDDOF_5
-  },
-  EscanerIntraoralFreedomIDOF: {
-    default: EscanerIntraoralFreedomIDOF_1,
-    EscanerIntraoralFreedomIDOF_2: EscanerIntraoralFreedomIDOF_2,
-    EscanerIntraoralFreedomIDOF_3: EscanerIntraoralFreedomIDOF_3,
-    EscanerIntraoralFreedomIDOF_4: EscanerIntraoralFreedomIDOF_4,
-    EscanerIntraoralFreedomIDOF_5: EscanerIntraoralFreedomIDOF_5
-  },
-  EscanerIntraoralMeyer: {
-    default: EscanerIntraoralMeyer_1,
-    EscanerIntraoralMeyer_2: EscanerIntraoralMeyer_2,
-    EscanerIntraoralMeyer_3: EscanerIntraoralMeyer_3,
-    EscanerIntraoralMeyer_4: EscanerIntraoralMeyer_4,
-  },
-  EscanerDePlacasParaImagenesDentales: {
-    default: EscanerDePlacasParaImagenesDentales_1,
-    EscanerDePlacasParaImagenesDentales_2: EscanerDePlacasParaImagenesDentales_2,
-    EscanerDePlacasParaImagenesDentales_3: EscanerDePlacasParaImagenesDentales_3,
-  },
-  EscanerDeModelosFreedomX5: {
-    default: FreedomX5_1,
-    EscanerDeModelosFreedomX5_2: FreedomX5_2,
-    EscanerDeModelosFreedomX5_3: FreedomX5_3,
-    EscanerDeModelosFreedomX5_4: FreedomX5_4,
-    EscanerDeModelosFreedomX5_5: FreedomX5_5,
-  }
+    MotoresDeCirugias: {
+      MotorElectricoDeCirugia: {
+        default: MotorElectricoDeCirugia_1,
+      },
+      MotorDeCirugiaCPumaMaster: {
+        default: MotorDeCirugiaCPumaMaster_1,
+        MotorDeCirugiaCPumaMaster_2: MotorDeCirugiaCPumaMaster_2,
+      },
+    },
+    Mobiliario: {
+      CarroMovilMultifuncional: {
+        default: CarroMovilMultifuncional_1,
+        CarroMovilMultifuncional_15: CarroMovilMultifuncional_15,
+        CarroMovilMultifuncional_2: CarroMovilMultifuncional_2,
+        CarroMovilMultifuncional_3: CarroMovilMultifuncional_3,
+        CarroMovilMultifuncional_4: CarroMovilMultifuncional_4,
+        CarroMovilMultifuncional_5: CarroMovilMultifuncional_5
+      },
+      CarritoMovilT3_3: {
+        default: CarritoMovilT3_3_1,
+        CarritoMovilT3_3_2: CarritoMovilT3_3_2,
+      },
+      CarritoMovilK1: {
+        default: CarritoMovilK1_1,
+        CarritoMovilK1_2: CarritoMovilK1_2,
+        CarritoMovilK1_3: CarritoMovilK1_3,
+      },
+      ArmarioG14_1: {
+        default: ArmarioG14_1_1,
+        ArmarioG14_1_2: ArmarioG14_1_2,
+        ArmarioG14_1_3: ArmarioG14_1_3,
+        ArmarioG14_1_4: ArmarioG14_1_4
+      },
+      ArmarioG16: {
+        default: ArmarioG16_1,
+        ArmarioG16_2: ArmarioG16_2,
+        ArmarioG16_3: ArmarioG16_3,
+        ArmarioG16_4: ArmarioG16_4
+      }
+    },
+    lavadoraUltrasonido: {
+      LavadoraUltrasonicaBioWhash: {
+        default: LavadoraUltrasonicaBioWhash_1,
+        LavadoraUltrasonicaBioWhash_2: LavadoraUltrasonicaBioWhash_2,
+        LavadoraUltrasonicaBioWhash_3: LavadoraUltrasonicaBioWhash_3
+      },
+    },
+    lamparasDentales: {
+      LamparaDeCirugiaL500: {
+        default: LamparaDeCirugiaL500_1,
+      },
+      LamparaDentalV1: {
+        default: LamparaDentalV1_1,
+      },
+      LamparaDentalV2: {
+        default: LamparaDentalV2_1,
+      },
+    },
+    lamparasFotocurado: {
+      LEDDB686HONOR: {
+        default: LeDDB686HONOR_1,
+        LeDDB686HONOR_2: LeDDB686HONOR_2,
+        LeDDB686HONOR_3: LeDDB686HONOR_3,
+      },
+      NaNODB686: {
+        default: NaNODB686_1,
+        NaNODB686_2: NaNODB686_2,
+        NaNODB686_3: NaNODB686_3,
+      },
+      SwiftDB686: {
+        default: SwiftDB686_1,
+        SwiftDB686_2: SwiftDB686_2,
+        SwiftDB686_3: SwiftDB686_3,
+      },
+    },
+    fresadoras: {
+      Craft5x: {
+        default: Craft5x_1,
+        Craft5x_2: Craft5x_2,
+        Craft5x_3: Craft5x_3,
+        Craft5x_4: Craft5x_4,
+        Craft5x_5: Craft5x_5,
+      },
+      CraftDry: {
+        default: CraftDry_1,
+        CraftDry_2: CraftDry_2,
+        CraftDry_3: CraftDry_3,
+        CraftDry_4: CraftDry_4,
+        CraftDry_5: CraftDry_5,
+      },
+    },
+    esterilizadores: {
+      Sa260MB: {
+        default: Sa260MB_1,
+        Sa260MB_2: Sa260MB_2,
+      },
+      SA232x: {
+        default: SA232x_1,
+        SA232x_2: SA232x_2,
+      },
+      Sa232: {
+        default: Sa232_1,
+        Sa232_2: Sa232_2,
+      },
+    },
+    scanner: {
+      EscanerIntraoralDL300PCoxoLaunca: {
+        default: EscanerIntraoralDL300PCoxoLaunca_1,
+        EscanerIntraoralDL300PCoxoLaunca_2: EscanerIntraoralDL300PCoxoLaunca_2,
+        EscanerIntraoralDL300PCoxoLaunca_3: EscanerIntraoralDL300PCoxoLaunca_3
+      },
+      EscanerParaLaboratorioDentalEdgeHDDOF: {
+        default: EscanerParaLaboratorioDentalEdgeHDDOF_1,
+        EscanerParaLaboratorioDentalEdgeHDDOF_2: EscanerParaLaboratorioDentalEdgeHDDOF_2,
+        EscanerParaLaboratorioDentalEdgeHDDOF_3: EscanerParaLaboratorioDentalEdgeHDDOF_3,
+        EscanerParaLaboratorioDentalEdgeHDDOF_4: EscanerParaLaboratorioDentalEdgeHDDOF_4,
+        EscanerParaLaboratorioDentalEdgeHDDOF_5: EscanerParaLaboratorioDentalEdgeHDDOF_5
+      },
+      EscanerIntraoralFreedomIDOF: {
+        default: EscanerIntraoralFreedomIDOF_1,
+        EscanerIntraoralFreedomIDOF_2: EscanerIntraoralFreedomIDOF_2,
+        EscanerIntraoralFreedomIDOF_3: EscanerIntraoralFreedomIDOF_3,
+        EscanerIntraoralFreedomIDOF_4: EscanerIntraoralFreedomIDOF_4,
+        EscanerIntraoralFreedomIDOF_5: EscanerIntraoralFreedomIDOF_5
+      },
+      EscanerIntraoralMeyer: {
+        default: EscanerIntraoralMeyer_1,
+        EscanerIntraoralMeyer_2: EscanerIntraoralMeyer_2,
+        EscanerIntraoralMeyer_3: EscanerIntraoralMeyer_3,
+        EscanerIntraoralMeyer_4: EscanerIntraoralMeyer_4,
+      },
+      EscanerDePlacasParaImagenesDentales: {
+        default: EscanerDePlacasParaImagenesDentales_1,
+        EscanerDePlacasParaImagenesDentales_2: EscanerDePlacasParaImagenesDentales_2,
+        EscanerDePlacasParaImagenesDentales_3: EscanerDePlacasParaImagenesDentales_3,
+      },
+      EscanerDeModelosFreedomX5: {
+        default: FreedomX5_1,
+        EscanerDeModelosFreedomX5_2: FreedomX5_2,
+        EscanerDeModelosFreedomX5_3: FreedomX5_3,
+        EscanerDeModelosFreedomX5_4: FreedomX5_4,
+        EscanerDeModelosFreedomX5_5: FreedomX5_5,
+      }
 
-},
-pulverizador: {
-  PulverizadorUltrasonicoCKCparaDesinfeccion: {
-    default: PulverizadorUltrasonicoCKCparaDesinfeccion_1,
-  },
-  PulverizadorUltrasonicoCKAparaDesinfeccion: {
-    default: PulverizadorUltrasonicoCKAparaDesinfeccion_1,
-  },
-},
-EquipoPortatil: {
-  SistemaDentalPortatil: {
-    default: SistemaDentalPortatil_1,
-    SistemaDentalPortatil_2: SistemaDentalPortatil_2,
-    SistemaDentalPortatil_3: SistemaDentalPortatil_3,
-  },
-  SillaDentalPortatil: {
-    default: SillaDentalPortatil_1,
-    SillaDentalPortatil_2: SillaDentalPortatil_2,
-    SillaDentalPortatil_3: SillaDentalPortatil_3,
-  },
-},
-EquipoParaEndodoncia: {
-  OCOne: {
-    default: OCOne_1,
-  },
-  SuccionEP: {
-    default: SuccionEP_1,
-  },
-  CortadoraUC: {
-    default: CortadoraUC_1,
-  },
-  GPCutFit: {
-    default: GPCutFit_1,
-  },
-  CSMARTiPILOT: {
-    default: CSMARTiPILOT_1,
-    CSMARTiPILOT_2: CSMARTiPILOT_2,
-    CSMARTiPILOT_3: CSMARTiPILOT_3,
-    CSMARTiPILOT_4: CSMARTiPILOT_4,
-    CSMARTiPILOT_5: CSMARTiPILOT_5,
-    CSMARTiPILOT_6: CSMARTiPILOT_6,
-  },
-  CExplorer: {
-    default: CExplorer_1,
-    CExplorer_2: CExplorer_2,
-    CExplorer_3: CExplorer_3,
-    CExplorer_4: CExplorer_4,
-  },
-},
-compresores: {
-  DC704220vAC: {
-    default: DC704220vAC_1,
-    DC704220vAC_2: DC704220vAC_2
-  },
-    DC703DconSecado: {
-    default: DC703DconSecado_1,
-    DC703DconSecado_2: DC703DconSecado_2
-  },
-  DC7033HP110vAC: {
-    default: DC7033HP110vAC_1,
-    DC7033HP110vAC_2: DC7033HP110vAC_2
-  },
-  DC702conSecado: {
-    default: DC702conSecado_1,
-    DC702conSecado_2: DC702conSecado_2
-  },
-  DC702110vAC: {
-    default: DC702110vAC_1,
-    DC702110vAC_2: DC702110vAC_2
-  },
-  DC7011HP110vAC: {
-    default: DC7011HP110vAC_1,
-    DC7011HP110vAC_2: DC7011HP110vAC_2
-  }
-},
-camaras: {
-  MonitorYcamara: {
-    default: MonitorYcamara_1,
-  },
-  MonitorCamaraYpc: {
-    default: MonitorCamaraYpc_1,
-  },
-},
-bombasVacio: {
-  BombaDeVacioVC10: {
-    default: BombaDeVacioVC10_1,
-    BombaDeVacioVC10_2: BombaDeVacioVC10_2,
-    BombaDeVacioVC10_3: BombaDeVacioVC10_3,
-  },
-  BombaDeVacioANYVAC30: {
-    default: BombaDeVacioANYVAC30_1,
-    BombaDeVacioANYVAC30_2: BombaDeVacioANYVAC30_2,
-  },
-},
-anestesia: {
-  JeringaDeAnestesiaDentalInteligente: {
-    default: JeringaDeAnestesiaDentalInteligente_1,
-    JeringaDeAnestesiaDentalInteligente_2: JeringaDeAnestesiaDentalInteligente_2,
-    JeringaDeAnestesiaDentalInteligente_3: JeringaDeAnestesiaDentalInteligente_3,
-  },
-},
-ActivaodorUV: {
-  ActivaodorUVparaImplantes: {
-    default: ActivaodorUVparaImplantes_1,
-    ActivaodorUVparaImplantes_2: ActivaodorUVparaImplantes_2,
-    ActivaodorUVparaImplantes_3: ActivaodorUVparaImplantes_3,
-    ActivaodorUVparaImplantes_4: ActivaodorUVparaImplantes_4,
-    ActivaodorUVparaImplantes_5: ActivaodorUVparaImplantes_5
-  },
-},
-PiezasDeMano: {
-  PiezasDeManoDeAltaVelocidad: {
-    PiezaDeManoPediatrica: {
-      default: PiezaDeManoPediatrica_1,
-      PiezaDeManoPediatrica_2: PiezaDeManoPediatrica_2,
-      PiezaDeManoPediatrica_3: PiezaDeManoPediatrica_3
     },
-    PiezaDeManoDeAltaVelocidadH75TP2: {
-      default: PiezaDeManoDeAltaVelocidadH75TP2_1,
-      PiezaDeManoDeAltaVelocidadH75TP2_2: PiezaDeManoDeAltaVelocidadH75TP2_2,
-      PiezaDeManoDeAltaVelocidadH75TP2_3: PiezaDeManoDeAltaVelocidadH75TP2_3
+    pulverizador: {
+      PulverizadorUltrasonicoCKCparaDesinfeccion: {
+        default: PulverizadorUltrasonicoCKCparaDesinfeccion_1,
+      },
+      PulverizadorUltrasonicoCKAparaDesinfeccion: {
+        default: PulverizadorUltrasonicoCKAparaDesinfeccion_1,
+      },
     },
-    PiezaDeManoDeAltaVelocidad: {
-      default: PiezaDeManoDeAltaVelocidad_1,
-      PiezaDeManoDeAltaVelocidad_2: PiezaDeManoDeAltaVelocidad_2,
-      PiezaDeManoDeAltaVelocidad_3: PiezaDeManoDeAltaVelocidad_3
+    EquipoPortatil: {
+      SistemaDentalPortatil: {
+        default: SistemaDentalPortatil_1,
+        SistemaDentalPortatil_2: SistemaDentalPortatil_2,
+        SistemaDentalPortatil_3: SistemaDentalPortatil_3,
+      },
+      SillaDentalPortatil: {
+        default: SillaDentalPortatil_1,
+        SillaDentalPortatil_2: SillaDentalPortatil_2,
+        SillaDentalPortatil_3: SillaDentalPortatil_3,
+      },
     },
-  },
-  PiezasDeManoRectaDeBajaVelocidad: {
-    sA100L: {
-      default: sA100L_1
+    EquipoParaEndodoncia: {
+      OCOne: {
+        default: OCOne_1,
+      },
+      SuccionEP: {
+        default: SuccionEP_1,
+      },
+      CortadoraUC: {
+        default: CortadoraUC_1,
+      },
+      GPCutFit: {
+        default: GPCutFit_1,
+      },
+      CSMARTiPILOT: {
+        default: CSMARTiPILOT_1,
+        CSMARTiPILOT_2: CSMARTiPILOT_2,
+        CSMARTiPILOT_3: CSMARTiPILOT_3,
+        CSMARTiPILOT_4: CSMARTiPILOT_4,
+        CSMARTiPILOT_5: CSMARTiPILOT_5,
+        CSMARTiPILOT_6: CSMARTiPILOT_6,
+      },
+      CExplorer: {
+        default: CExplorer_1,
+        CExplorer_2: CExplorer_2,
+        CExplorer_3: CExplorer_3,
+        CExplorer_4: CExplorer_4,
+      },
     },
-    s2C: {
-      default: s20_1
+    compresores: {
+      DC704220vAC: {
+        default: DC704220vAC_1,
+        DC704220vAC_2: DC704220vAC_2
+      },
+      DC703DconSecado: {
+        default: DC703DconSecado_1,
+        DC703DconSecado_2: DC703DconSecado_2
+      },
+      DC7033HP110vAC: {
+        default: DC7033HP110vAC_1,
+        DC7033HP110vAC_2: DC7033HP110vAC_2
+      },
+      DC702conSecado: {
+        default: DC702conSecado_1,
+        DC702conSecado_2: DC702conSecado_2
+      },
+      DC702110vAC: {
+        default: DC702110vAC_1,
+        DC702110vAC_2: DC702110vAC_2
+      },
+      DC7011HP110vAC: {
+        default: DC7011HP110vAC_1,
+        DC7011HP110vAC_2: DC7011HP110vAC_2
+      }
     },
-    CX235s2A: {
-      default: CX235s2A_1
+    camaras: {
+      MonitorYcamara: {
+        default: MonitorYcamara_1,
+      },
+      MonitorCamaraYpc: {
+        default: MonitorCamaraYpc_1,
+      },
     },
-    CX235s2: {
-      default: CX235s2_1
+    bombasVacio: {
+      BombaDeVacioVC10: {
+        default: BombaDeVacioVC10_1,
+        BombaDeVacioVC10_2: BombaDeVacioVC10_2,
+        BombaDeVacioVC10_3: BombaDeVacioVC10_3,
+      },
+      BombaDeVacioANYVAC30: {
+        default: BombaDeVacioANYVAC30_1,
+        BombaDeVacioANYVAC30_2: BombaDeVacioANYVAC30_2,
+      },
     },
-  },
-  Contrangulos: {
-    SG200l: {
-      default: SG200l_1
+    anestesia: {
+      JeringaDeAnestesiaDentalInteligente: {
+        default: JeringaDeAnestesiaDentalInteligente_1,
+        JeringaDeAnestesiaDentalInteligente_2: JeringaDeAnestesiaDentalInteligente_2,
+        JeringaDeAnestesiaDentalInteligente_3: JeringaDeAnestesiaDentalInteligente_3,
+      },
     },
-    CX235c6: {
-      default: CX235c6_1
+    ActivaodorUV: {
+      ActivaodorUVparaImplantes: {
+        default: ActivaodorUVparaImplantes_1,
+        ActivaodorUVparaImplantes_2: ActivaodorUVparaImplantes_2,
+        ActivaodorUVparaImplantes_3: ActivaodorUVparaImplantes_3,
+        ActivaodorUVparaImplantes_4: ActivaodorUVparaImplantes_4,
+        ActivaodorUVparaImplantes_5: ActivaodorUVparaImplantes_5
+      },
     },
-    CX235c14: {
-      default: CX235c14_1
+    PiezasDeMano: {
+      PiezasDeManoDeAltaVelocidad: {
+        PiezaDeManoPediatrica: {
+          default: PiezaDeManoPediatrica_1,
+          PiezaDeManoPediatrica_2: PiezaDeManoPediatrica_2,
+          PiezaDeManoPediatrica_3: PiezaDeManoPediatrica_3
+        },
+        PiezaDeManoDeAltaVelocidadH75TP2: {
+          default: PiezaDeManoDeAltaVelocidadH75TP2_1,
+          PiezaDeManoDeAltaVelocidadH75TP2_2: PiezaDeManoDeAltaVelocidadH75TP2_2,
+          PiezaDeManoDeAltaVelocidadH75TP2_3: PiezaDeManoDeAltaVelocidadH75TP2_3
+        },
+        PiezaDeManoDeAltaVelocidad: {
+          default: PiezaDeManoDeAltaVelocidad_1,
+          PiezaDeManoDeAltaVelocidad_2: PiezaDeManoDeAltaVelocidad_2,
+          PiezaDeManoDeAltaVelocidad_3: PiezaDeManoDeAltaVelocidad_3
+        },
+      },
+      PiezasDeManoRectaDeBajaVelocidad: {
+        sA100L: {
+          default: sA100L_1
+        },
+        s2C: {
+          default: s20_1
+        },
+        CX235s2A: {
+          default: CX235s2A_1
+        },
+        CX235s2: {
+          default: CX235s2_1
+        },
+      },
+      Contrangulos: {
+        SG200l: {
+          default: SG200l_1
+        },
+        CX235c6: {
+          default: CX235c6_1
+        },
+        CX235c14: {
+          default: CX235c14_1
+        },
+        CX235c12: {
+          default: CX235c12_1
+        },
+        CX235c11: {
+          default: CX235c11_1
+        },
+        cA100L: {
+          default: cA100L_1
+        },
+        c75: {
+          default: c75_1
+        },
+        C51m: {
+          default: C51m_1
+        },
+        C1c: {
+          default: C1c_1
+        },
+        BA250Lt15: {
+          default: BA250Lt15_1
+        },
+        BA45Ls11: {
+          default: BA45Ls11_1
+        }
+      },
+      KitDePiezasDeManoDeBajaVelocidad: {
+        default: KitDePiezasDeManoDeBajaVelocidad_1,
+        KitDePiezasDeManoDeBajaVelocidad_2: KitDePiezasDeManoDeBajaVelocidad_2
+      },
+      KitDePiezasDeManoDeBajaVelocidad2: {
+        default: KitDePiezasDeManoDeBajaVelocidad2_1,
+      },
+      PiezaDeManoDentalSuperTorque: {
+        default: PiezaDeManoDentalSuperTorque_1,
+        PiezaDeManoDentalSuperTorque_2: PiezaDeManoDentalSuperTorque_2,
+        PiezaDeManoDentalSuperTorque_3: PiezaDeManoDentalSuperTorque_3,
+        PiezaDeManoDentalSuperTorque_4: PiezaDeManoDentalSuperTorque_4
+      },
+      CX207Fh65: {
+        default: CX207Fh65_1,
+        CX207Fh65_2: CX207Fh65_2,
+      },
     },
-    CX235c12: {
-      default: CX235c12_1
+    LamparaDeBlanqueamientoLEDAdvance2505: {
+      default: LamparaDeBlanqueamientoLEDAdvance2505_1,
+      LamparaDeBlanqueamientoLEDAdvance2505_2: LamparaDeBlanqueamientoLEDAdvance2505_2
     },
-    CX235c11: {
-      default: CX235c11_1
-    },
-    cA100L: {
-      default: cA100L_1
-    },
-    c75: {
-      default: c75_1
-    },
-    C51m: {
-      default: C51m_1
-    },
-    C1c: {
-      default: C1c_1
-    },
-    BA250Lt15: {
-      default: BA250Lt15_1
-    },
-    BA45Ls11: {
-      default: BA45Ls11_1
-    }
-  },
-  KitDePiezasDeManoDeBajaVelocidad: {
-    default: KitDePiezasDeManoDeBajaVelocidad_1,
-    KitDePiezasDeManoDeBajaVelocidad_2: KitDePiezasDeManoDeBajaVelocidad_2
-  },
-  KitDePiezasDeManoDeBajaVelocidad2: {
-    default: KitDePiezasDeManoDeBajaVelocidad2_1,
-  },
-  PiezaDeManoDentalSuperTorque: {
-    default: PiezaDeManoDentalSuperTorque_1,
-    PiezaDeManoDentalSuperTorque_2: PiezaDeManoDentalSuperTorque_2,
-    PiezaDeManoDentalSuperTorque_3: PiezaDeManoDentalSuperTorque_3,
-    PiezaDeManoDentalSuperTorque_4: PiezaDeManoDentalSuperTorque_4
-  },
-  CX207Fh65: {
-    default: CX207Fh65_1,
-    CX207Fh65_2: CX207Fh65_2,
-  },
-},
-LamparaDeBlanqueamientoLEDAdvance2505: {
-  default: LamparaDeBlanqueamientoLEDAdvance2505_1,
-  LamparaDeBlanqueamientoLEDAdvance2505_2: LamparaDeBlanqueamientoLEDAdvance2505_2
-},
 
 
 

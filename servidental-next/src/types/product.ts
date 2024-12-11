@@ -60,6 +60,7 @@ export type ProductBrand =
   | 'DentaFilm'
   | 'epdent'
   | 'mdmed'
+  | 'launca'
   | 'whitebrand'
   ;
 
@@ -98,6 +99,10 @@ export interface Product {
     name: ProductBrand;
     logo: StaticImageData;
   };
+  brand2?: {
+    name: ProductBrand;
+    logo: StaticImageData;
+  };
   description: string;
   shortDescription?: string;
   price?: number;
@@ -108,6 +113,7 @@ export interface Product {
     general: ProductFeature;
     includes?: ProductFeature; 
     optional?: ProductFeature;
+    additional?: ProductFeature;
   };
   specifications?: ProductSpecification[];
   images?: ProductImage[];

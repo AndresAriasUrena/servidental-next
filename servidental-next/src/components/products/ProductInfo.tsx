@@ -27,6 +27,14 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           className="w-auto min-h-6 md:min-h-8 max-h-8 object-contain"
           priority
         />
+          <Image
+          src={product.brand2?.logo}
+          alt={product.brand2?.name}
+          width={120}
+          height={48}
+          className="w-auto min-h-4 md:min-h-4 max-h-4 object-contain"
+          priority
+        />
       </div>
 
       {/* Descripción */}
@@ -95,6 +103,20 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             <h3 className="text-lg font-medium text-gray-900">{product.features.optional?.title ?? 'Puede incorporar (consultar el valor)'}</h3>
             <div className="mt-4 space-y-2">
               {product.features.optional?.items.map((item, index) => (
+                <div key={index} className="flex items-center">
+                  <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
+                  <p className="text-gray-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+{(product.features.additional?.items ?? []).length > 0 && (
+          <div className="mt-8 border-t border-gray-200 pt-8">
+            <h3 className="text-lg font-medium text-gray-900">{product.features.additional?.title ?? 'Puede incorporar (consultar el valor)'}</h3>
+            <div className="mt-4 space-y-2">
+              {product.features.additional?.items.map((item, index) => (
                 <div key={index} className="flex items-center">
                   <div className="mr-3 min-h-1.5 min-w-1.5 rounded-full bg-servi_green"></div>
                   <p className="text-gray-600">{item}</p>

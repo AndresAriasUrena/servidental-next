@@ -8,7 +8,7 @@ interface ProductFilterProps {
 }
 export const categoryGroups: Record<string, string[]> = {
   Mobiliario: ['Carritos', 'Armarios'], 
-  "Piezas de mano": ['Contrangulos', 'Piezas de mano de alta velocidad', 'Piezas de mano recta de baja velocidad'],
+  "Piezas de mano": ['Contrangulos', 'Piezas de mano de alta velocidad', 'Piezas de mano recta de baja velocidad', 'Kits de piezas dentales'],
 
 };
 

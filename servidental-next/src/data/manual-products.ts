@@ -46,6 +46,7 @@ export const brands: ProductBrand[] = [
   "DentaFilm",
   "epdent",
   "mdmed",
+  "launca",
   "whitebrand"
 ];
 
@@ -458,8 +459,8 @@ export const products: Product[] = [
     name: "Motor NX-201N",
     subtitle: "Motor de laboratorio",
     brand: {
-      name: "whitebrand",
-      logo: assets.logos.brands.whitebrand
+      name: "Micro NX",
+      logo: assets.logos.brands.microNx
     },
     description: "",
     shortDescription: "",
@@ -668,8 +669,8 @@ export const products: Product[] = [
       name: "Siger",
       logo: assets.logos.brands.siger
     },
-    description: "Luz libre de efectos de sombra",
-    shortDescription: "Luz libre de efectos de sombra",
+    description: "",
+    shortDescription: "",
     features: {
       unique: {
         title: "Características",
@@ -716,8 +717,8 @@ export const products: Product[] = [
       name: "Siger",
       logo: assets.logos.brands.siger
     },
-    description: "Luz libre de efectos de sombra",
-    shortDescription: "Luz libre de efectos de sombra",
+    description: "",
+    shortDescription: "",
     features: {
       unique: {
         title: "Características",
@@ -984,7 +985,6 @@ export const products: Product[] = [
           "Robusto y con baja vibración",
           "Circuito cerrado",
           "Almacenamiento",
-          "Computadora incluida"
         ]
       },
       general: {
@@ -1176,7 +1176,7 @@ export const products: Product[] = [
     id: "SA-232X-Semi-automatico-clase-S",
     slug: "SA-232X-Semi-automatico-clase-S",
     name: "SA-232X - Semi automático, clase “S”",
-    subtitle: "Rendimiento de primera clase con diseño compacto",
+    subtitle: "Ciclo de secado incorporado",
     brand: {
       name: "Sturdy",
       logo: assets.logos.brands.sturdy
@@ -1187,20 +1187,17 @@ export const products: Product[] = [
       unique: {
         title: "Características Únicas",
         items: [
-          "Panel LCD",
-          "Pre y post vacío",
-          "Programa de priones",
-          "Fugas, Helix, B.D. Programa de prueba",
-          "Programa de personalización",
-          "Grabador de datos (tarjeta SD) e impresora",
-          "El tanque se puede llenar manualmente o por tubería (agua filtrada)",
-          "Protección contra el sobrecalentamiento",
-          "Sistema de evaluación de procesos",
-          "Cerradura de puerta automática a presión",
-          "Botón de parada de emergencia",
-          "Protección contra sobrecarga de presión",
-          "Tanques de agua dobles (Sólo para SA-300MB/302MB)",
-          "Volumen de la cámara: 24 L"
+          "Autoclave de valor",
+          "Semi automática. (Con ciclo de secado)",
+          "Cámara de 16 litros en acero inoxidable",
+          "Puerta con sistema de cerrado tipo tornillo de perilla hexagonal",
+          "Válvula de control de seguridad por alta presión",
+          "Dos temperaturas de trabajo (121º y 132º)",
+          "Con selectores e indicadores de tiempo",
+          "Selector para instrumentos envueltos o sin envoltura",
+          "Tanque para depósito de agua",
+          "Sistema de condensado para economizar agua",
+          "Protector térmico en caso de sobrecalentamiento"
         ]
       },
       general: {
@@ -1309,6 +1306,13 @@ export const products: Product[] = [
     images: [
       {
         url: assets.products.Mobiliario.CarroMovilMultifuncional.default,
+        alt: "Carro móvil multifuncional",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.Mobiliario.CarroMovilMultifuncional.CarroMovilMultifuncional_15,
         alt: "Carro móvil multifuncional",
         width: 800,
         height: 600,
@@ -1584,7 +1588,11 @@ export const products: Product[] = [
     subtitle: "Alámbrico",
     brand: {
       name: "COXO",
-      logo: assets.logos.brands.coxo //Marca SON 2
+      logo: assets.logos.brands.coxo 
+    },
+    brand2: {
+      name: "launca",
+      logo: assets.logos.brands.launca 
     },
     description: "",
     shortDescription: "",
@@ -1750,14 +1758,14 @@ export const products: Product[] = [
     },
     images: [
       {
-        url: assets.products.scanner.EscanerIntraoralFreedomIDOF.default,
+        url: assets.products.scanner.EscanerIntraoralFreedomIDOF.EscanerIntraoralFreedomIDOF_2,
         alt: "Escáner intraoral Freedom I, DOF",
         width: 800,
         height: 600,
         isPrimary: true
       },
       {
-        url: assets.products.scanner.EscanerIntraoralFreedomIDOF.EscanerIntraoralFreedomIDOF_2,
+        url: assets.products.scanner.EscanerIntraoralFreedomIDOF.default,
         alt: "Escáner intraoral Freedom I, DOF",
         width: 800,
         height: 600,
@@ -1919,7 +1927,7 @@ export const products: Product[] = [
         isPrimary: true
       }
     ],
-    category: 'Escáneres',
+    category: 'Equipo de Rayos X',
     isActive: true,
     createdAt: "2024-10-29T00:10:22.215Z",
     updatedAt: "2024-10-29T00:10:22.215Z",
@@ -2010,8 +2018,8 @@ export const products: Product[] = [
     name: "Sistema dental portátil",
     subtitle: "Totalmente autónomo",
     brand: {
-      name: "whitebrand",
-      logo: assets.logos.brands.whitebrand
+      name: "TPC",
+      logo: assets.logos.brands.tpc
     },
     description: "",
     shortDescription: "",
@@ -2070,8 +2078,8 @@ export const products: Product[] = [
     name: "Silla dental portátil",
     subtitle: "Taburete ligero bandeja PC2700",
     brand: {
-      name: "whitebrand",
-      logo: assets.logos.brands.whitebrand
+      name: "TPC",
+      logo: assets.logos.brands.tpc
     },
     description: "",
     shortDescription: "",
@@ -2227,9 +2235,6 @@ export const products: Product[] = [
         title: "Características",
         items: [
           "Excelente corte de gutapercha en cualquier medida. Es aplicable a todos los tamaños con solo 3 tipos de tamaño para hacer",
-          "Secado rápido del conducto radicular",
-          "Utilice sólo una punta de papel",
-          "Uso posterior"
         ]
       },
       general: {
@@ -2450,8 +2455,8 @@ export const products: Product[] = [
     videoIframe: '<iframe width="100%;" height="415" src="https://www.youtube.com/embed/FNYXEEWeR5g?si=TDnE41uQ62wYrveB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
   },
   {
-    id: "DC 704-4HP-220vAC",
-    slug: "DC 704-4HP-220vAC",
+    id: "DC-704-4HP-220vAC",
+    slug: "DC-704-4HP-220vAC",
     name: "DC 704 (4HP) 220vAC",
     subtitle: "Compresor de aire, silencioso",
     brand: {
@@ -2469,7 +2474,9 @@ export const products: Product[] = [
           "Flujo de aire: 608L/min (21.47CFM)",
           "Ruido: ≤65dB",
           "Peso neto: 98kg",
-          "Presión: 8Bar (120Psi)"
+          "Presión: 8Bar (120Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
         ]
       },
       general: {
@@ -2500,8 +2507,8 @@ export const products: Product[] = [
     updatedAt: "2024-10-29T00:10:22.215Z",
   },
   {
-    id: "DC 703D-3HP-con-secado",
-    slug: "DC 703D-3HP-con-secado",
+    id: "DC-703D-3HP-con-secado",
+    slug: "DC-703D-3HP-con-secado",
     name: "DC 703D (3HP) con secado",
     subtitle: "Compresor de aire, silencioso",
     brand: {
@@ -2519,7 +2526,9 @@ export const products: Product[] = [
           "Flujo de aire: 152L/min (5.37CFM)",
           "Ruido: ≤60dB",
           "Peso neto: 78kg",
-          "Presión: 8Bar (116Psi)"
+          "Presión: 8Bar (116Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
         ]
       },
       general: {
@@ -2569,7 +2578,9 @@ export const products: Product[] = [
           "Flujo de aire: 152L/min (5.37CFM)",
           "Ruido: ≤60dB",
           "Peso neto: 78kg",
-          "Presión: 8Bar (116Psi)"
+          "Presión: 8Bar (116Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
         ]
       },
       general: {
@@ -2619,7 +2630,9 @@ export const products: Product[] = [
           "Flujo de aire: 152L/min (5.37CFM)",
           "Ruido: ≤60dB",
           "Peso neto: 50kg",
-          "Presión: 8Bar (116Psi)"
+          "Presión: 8Bar (116Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
         ]
       },
       general: {
@@ -2669,7 +2682,10 @@ export const products: Product[] = [
           "Flujo de aire: 152L/min (5.37CFM)",
           "Ruido: ≤60dB",
           "Peso neto: 50kg",
-          "Presión: 8Bar (116Psi)"
+          "Presión: 8Bar (116Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
+
         ]
       },
       general: {
@@ -2700,8 +2716,8 @@ export const products: Product[] = [
     updatedAt: "2024-10-29T00:10:22.215Z",
   },
   {
-    id: "DC 701-1HP-110vAC",
-    slug: "DC 701-1HP-110vAC",
+    id: "DC-701-1HP-110vAC",
+    slug: "DC-701-1HP-110vAC",
     name: "DC 701 (1HP) 110vAC",
     subtitle: "Compresor de aire, silencioso",
     brand: {
@@ -2719,7 +2735,9 @@ export const products: Product[] = [
           "Flujo de aire: 152L/min (5.37CFM)",
           "Ruido: ≤60dB",
           "Peso neto: 29.5kg",
-          "Presión: 8Bar (116Psi)"
+          "Presión: 8Bar (116Psi)",
+          "Tratamiento anti herrumbre",
+          "Libre de aceite"
         ]
       },
       general: {
@@ -2856,7 +2874,6 @@ export const products: Product[] = [
           "Bajo nivel de ruido",
           "Tecnología de autocontrol",
           "Separación por succión altamente eficiente",
-          "Separación eficiente de aguas residuales"
         ]
       },
       general: {
@@ -3437,15 +3454,9 @@ export const products: Product[] = [
       unique: {
         title: "Características",
         items: [
-          "Máx. 70N.cm",
-          "Función de límite de par",
-          "Potente motor óptico",
-          "Visualización del par y las RPM en tiempo real",
-          "Modos de programación",
-          "Función de memoria",
-          "Función de calibración automática",
-          "Función de corte de hilo",
-          "¿Corte de rosca?"
+          "20:1",
+          "Velocidad máxima 2000 RPM",
+          "Fibra óptica"
         ]
       },
       general: {
@@ -3942,21 +3953,21 @@ export const products: Product[] = [
         height: 600,
         isPrimary: true
       },
-      { 
+      {
         url: assets.products.PiezasDeMano.PiezaDeManoDentalSuperTorque.PiezaDeManoDentalSuperTorque_2,
         alt: "Pieza de mano dental súper torque",
         width: 800,
         height: 600,
         isPrimary: true
       },
-      { 
+      {
         url: assets.products.PiezasDeMano.PiezaDeManoDentalSuperTorque.PiezaDeManoDentalSuperTorque_3,
         alt: "Pieza de mano dental súper torque",
         width: 800,
         height: 600,
         isPrimary: true,
-    },
-    {
+      },
+      {
         url: assets.products.PiezasDeMano.PiezaDeManoDentalSuperTorque.PiezaDeManoDentalSuperTorque_4,
         alt: "Pieza de mano dental súper torque",
         width: 800,
@@ -3965,6 +3976,7 @@ export const products: Product[] = [
       }
     ],
     category: "Piezas de mano",
+    subcategory: "Contrangulos",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
@@ -4017,6 +4029,7 @@ export const products: Product[] = [
       }
     ],
     category: "Piezas de mano",
+    subcategory: "Kits de piezas dentales",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
@@ -4061,6 +4074,7 @@ export const products: Product[] = [
       }
     ],
     category: "Piezas de mano",
+    subcategory: "Kits de piezas dentales",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
@@ -4118,12 +4132,12 @@ export const products: Product[] = [
       }
     ],
     category: "Piezas de mano",
+    subcategory: "Contrangulos",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
     videoIframe: '<iframe width="100%;" height="415" src="https://www.youtube.com/embed/RAFuaOIhuPY?si=87dj7kCeje92aa5q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
   },
-
   {
     id: "plast-press",
     slug: "plast-press",
@@ -4185,8 +4199,8 @@ export const products: Product[] = [
       name: "BioArt",
       logo: assets.logos.brands.bioart
     },
-    description: "Sistema exclusivo de calentamiento rápido y uniforme",
-    shortDescription: "Sistema exclusivo de calentamiento rápido y uniforme",
+    description: "",
+    shortDescription: "",
     features: {
       unique: {
         title: "Características",
@@ -4239,8 +4253,8 @@ export const products: Product[] = [
       name: "BioArt",
       logo: assets.logos.brands.bioart
     },
-    description: "Control digital avanzado con display programable",
-    shortDescription: "Control digital avanzado con display programable",
+    description: "",
+    shortDescription: "",
     features: {
       unique: {
         title: "Características",
@@ -4283,7 +4297,7 @@ export const products: Product[] = [
   {
     id: "selladora-X330",
     slug: "selladora-X330",
-    name: "selladora-X330",
+    name: "Selladora-X330",
     subtitle: "Diseño ergonómico",
     brand: {
       name: "Siger",
@@ -4568,6 +4582,7 @@ export const products: Product[] = [
     isActive: true,
     createdAt: "2024-10-29T00:10:22.425Z",
     updatedAt: "2024-10-29T00:10:22.425Z",
+    videoIframe: '<iframe width="560" height="315" src="https://www.youtube.com/embed/HAD7M8gRl5w?si=YYIxY1h6yXuDF4XZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
   },
   {
     id: "unidad-dental-serie-S30-carrito",
@@ -4818,7 +4833,7 @@ export const products: Product[] = [
           "Sistema succión por Venturi o bomba vacío",
           "Cabecera 2 ejes",
           "Caja de previstas externa o interna",
-          "5 memorias de movimiento",
+          "Memorias de movimiento",
           "2 descansabrazos, 1 abatible"
         ]
       },
@@ -4897,25 +4912,38 @@ export const products: Product[] = [
       unique: {
         title: "Características",
         items: [
-          "La potencia estable permite obtener imágenes claras",
-          "-El voltaje y la corriente de 65 Kv y 2,6 mA generan más potencia para penetrar los dientes y obtener imágenes claras",
-          "-El tamaño del punto focal de 0,4 mm enfoca significativamente más rayos X en los dientes objetivo y produce una imagen de mayor calidad",
           "El diseño de doble protección reduce la exposición del usuario a la radiación",
-          "Blindaje de retrodispersión externa",
-          "-El escudo anti reflejo minimiza significativamente la dosis de radiación para el operador",
           "Protección interna",
           "Dosis de exposición preestablecida",
           "Más de 300 exposiciones con una carga completa",
-          "Estación de acoplamiento",
-          "Permite su uso siempre que se necesite exposición. Al devolver el dispositivo a su estación de acoplamiento después de cada uso, se recargará automáticamente",
-          "Correa de seguridad, más seguro para usuarios con manos pequeñas",
         ]
       },
       general: {
-        title: "",
-        items: []
-      }
-    },
+        title: "La potencia estable permite obtener imágenes claras",
+        items: [
+          "El voltaje y la corriente de 65 Kv y 2,6 mA generan más potencia para penetrar los dientes y obtener imágenes claras",
+          "El tamaño del punto focal de 0,4 mm enfoca significativamente más rayos X en los dientes objetivo y produce una imagen de mayor calidad",
+        ]
+      },
+      includes: {
+        title: "Blindaje de retrodispersión externa",
+        items: [
+          "El escudo anti reflejo minimiza significativamente la dosis de radiación para el operador",
+        ]
+      },
+      optional: {
+        title: "Estación de acoplamiento",
+        items: [
+          "Permite su uso siempre que se necesite exposición. Al devolver el dispositivo a su estación de acoplamiento después de cada uso, se recargará automáticamente",
+        ]
+      },
+      additional: {
+        title: "Correa de seguridad",
+        items: [
+          "Más seguro para usuarios con manos pequeñas",
+        ]
+      },
+  },
     images: [
       {
         url: assets.products.rayosX.RayosXportatilXVbeam1000.default,
@@ -4959,7 +4987,6 @@ export const products: Product[] = [
           "Mejora la atención al paciente y la comunicación",
           "Escaneo panorámico IA de múltiples capas",
           "Escaneo cefalométrico y de modelos",
-          "Tiempo de exposición: 0.02-2S",
           "Endo mode: calidad de imagen"
         ]
       },
@@ -5333,14 +5360,14 @@ export const products: Product[] = [
       unique: {
         title: "Características",
         items: [
-"Escáner de modelos en movimiento con cámara",
-"Cámara de 5MP para completar detalles",
-"Velocidad de escaneo",
-"Tecnología patentada",
-"Sistema de movimiento de cámara",
-"Escaneo cómodo y estable",
-"La cámara se mueve libremente sin fijar el modelo",
-"Líneas de margen nítidas con la cámara con resolución UHD"
+          "Escáner de modelos en movimiento con cámara",
+          "Cámara de 5MP para completar detalles",
+          "Velocidad de escaneo",
+          "Tecnología patentada",
+          "Sistema de movimiento de cámara",
+          "Escaneo cómodo y estable",
+          "La cámara se mueve libremente sin fijar el modelo",
+          "Líneas de margen nítidas con la cámara con resolución UHD"
         ]
       },
       general: {
