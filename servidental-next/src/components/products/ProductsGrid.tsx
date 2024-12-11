@@ -1,50 +1,82 @@
-// src/components/products/ProductGrid.tsx
+// src/components/products/ProductsGrid.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Product } from '@/types/product'
 import { Filter } from 'lucide-react'
 import ProductCard from './ProductCard'
 import ProductFilter from './ProductFilter'
-import { categoryGroups } from './ProductFilter';
+import { categoryGroups } from './ProductFilter'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 interface ProductGridProps {
   products: Product[]
 }
 
-
 export default function ProductGrid({ products }: ProductGridProps) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [searchQuery, setSearchQuery] = useState('')
+  // Initialize state from URL parameters
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get('category') || 'all'
+  )
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get('search') || ''
+  )
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+
+  // Update URL when filters change
+  const updateFilters = (category: string, search: string) => {
+    const params = new URLSearchParams()
+    if (category !== 'all') params.set('category', category)
+    if (search) params.set('search', search)
+    
+    const newUrl = params.toString()
+      ? `?${params.toString()}`
+      : window.location.pathname
+    
+    router.push(newUrl, { scroll: false })
+  }
+
+  // Handle category changes
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    updateFilters(category, searchQuery)
+  }
+
+  // Handle search changes
+  const handleSearchChange = (search: string) => {
+    setSearchQuery(search)
+    updateFilters(selectedCategory, search)
+  }
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === 'all' ||
-      product.category === selectedCategory || // Categoría principal
-      (product.subcategory && product.subcategory === selectedCategory) || // Verifica si subcategory existe antes de comparar
-      (categoryGroups[selectedCategory]?.includes(product.subcategory ?? '') ?? false); // Maneja subcategorías relacionadas
-  
+      product.category === selectedCategory ||
+      (product.subcategory && product.subcategory === selectedCategory) ||
+      (categoryGroups[selectedCategory]?.includes(product.subcategory ?? '') ?? false)
+
     const matchesSearch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase());
-  
-    return matchesCategory && matchesSearch;
-  });
+      product.description.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return matchesCategory && matchesSearch
+  })
+
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Search Bar - Always visible at top */}
       <div className="mb-6">
         <input
           type="text"
           placeholder="Buscar productos..."
+          value={searchQuery}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
         />
       </div>
 
-      {/* Mobile Filter Button */}
       <div className="lg:hidden mb-4">
         <button
           onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
@@ -56,17 +88,15 @@ export default function ProductGrid({ products }: ProductGridProps) {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar Filter - Desktop */}
         <aside className="hidden lg:block w-64 flex-shrink-0">
           <div className="sticky top-4 max-h-[calc(100vh-4rem)] overflow-y-auto rounded-lg bg-white shadow">
             <ProductFilter
               selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
+              onCategoryChange={handleCategoryChange}
             />
           </div>
         </aside>
 
-        {/* Mobile Filter Overlay */}
         {isMobileFilterOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
             <div className="absolute right-0 top-0 h-full w-80 bg-white p-4 overflow-y-auto">
@@ -82,7 +112,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
               <ProductFilter
                 selectedCategory={selectedCategory}
                 onCategoryChange={(category) => {
-                  setSelectedCategory(category)
+                  handleCategoryChange(category)
                   setIsMobileFilterOpen(false)
                 }}
               />
@@ -90,7 +120,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
           </div>
         )}
         
-        {/* Main Content */}
         <main className="flex-1">
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12">

@@ -4,12 +4,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Product } from '@/types/product'
+import { useSearchParams } from 'next/navigation'
 
 interface ProductCardProps {
   product: Product
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const searchParams = useSearchParams()
+  const currentCategory = searchParams.get('category') || 'all'
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -17,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       viewport={{ once: true }}
       className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
     >
-      <Link href={`/products/${product.slug}`}>
+      <Link href={`/products/${product.slug}?returnCategory=${currentCategory}`}>
         <div className="relative">
           {/* Brand logo */}
           <div className="absolute top-1 right-4 z-10 bg-white p-2 rounded-lg shadow-sm">

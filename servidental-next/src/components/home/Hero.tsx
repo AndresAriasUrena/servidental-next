@@ -22,8 +22,8 @@ const slides: Slide[] = [
     image: assets.images.EquipoDeProfesionales,
     content: (
       <div className="flex flex-col z-10 p-6 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
-                      lg:ml-8 lg:mr-[-40%] text-center lg:text-left">
-        <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold leading-tight">
+                      lg:ml-8 lg:mr-[-40%] text-center lg:text-left lg:mt-[40%]">
+        <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">
           Equipo de ingenieros y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo
         </h2>
       </div>
@@ -38,8 +38,8 @@ const slides: Slide[] = [
     content: (
       <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-lg 
                       lg:ml-8 lg:mr-[-60%] text-center lg:text-left">
-        <h2 className="text-2xl md:text-4xl lg:text-6xl font-semibold">Mantenimiento preventivo y correctivo</h2>
-        <p className="text-xl lg:text-2xl">
+        <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Mantenimiento preventivo y correctivo</h2>
+        <p className="text-xl lg:text-2xl mt-3">
           Ofrecemos servicios de mantenimiento preventivo y correctivo para todo tipo de equipo odontológico, asegurando su óptimo funcionamiento y prolongando su vida útil.
         </p>
       </div>
@@ -54,8 +54,8 @@ const slides: Slide[] = [
     content: (
       <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
                       lg:ml-8 lg:mr-[-20%] text-center lg:text-left">
-        <h2 className="text-2xl md:text-4xl lg:text-6xl font-semibold">Capacitaciones</h2>
-        <p className="text-xl lg:text-2xl">
+        <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Capacitaciones</h2>
+        <p className="text-xl lg:text-2xl mt-3">
           Nuestro equipo recibe capacitación continua para ofrecerle los servicios de la más alta calidad
         </p>
       </div>
@@ -70,8 +70,8 @@ const slides: Slide[] = [
     content: (
       <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
                       lg:ml-8 lg:mr-[-20%] text-center lg:text-left">
-        <h2 className="text-2xl md:text-4xl lg:text-6xl font-semibold">Venta de equipo médico odontológico e instalaciones</h2>
-        <p className="text-xl lg:text-2xl">
+        <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Venta de equipo médico odontológico e instalaciones</h2>
+        <p className="text-xl lg:text-2xl mt-3">
           Adquiera su equipo con nosotros, contamos con variedad de opciones, instalación profesional y respaldo en mantenimiento preventivo
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function HeroCarousel() {
                   alt={slides[currentIndex].title}
                   placeholder="blur"
                   priority={currentIndex === 0}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-95"
                 />
               </div>
             </div>

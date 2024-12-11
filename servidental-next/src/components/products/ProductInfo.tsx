@@ -27,14 +27,16 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           className="w-auto min-h-6 md:min-h-8 max-h-8 object-contain"
           priority
         />
-          <Image
-          src={product.brand2?.logo}
-          alt={product.brand2?.name}
-          width={120}
-          height={48}
-          className="w-auto min-h-4 md:min-h-4 max-h-4 object-contain"
-          priority
-        />
+        {product.brand2 && (
+            <Image
+              src={product.brand2.logo}
+              alt={product.brand2.name}
+              width={120}
+              height={48}
+              className="w-auto min-h-4 md:min-h-4 max-h-4 object-contain"
+              priority
+            />
+          )}
       </div>
 
       {/* Descripción */}
