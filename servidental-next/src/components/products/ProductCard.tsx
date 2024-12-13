@@ -12,7 +12,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const searchParams = useSearchParams()
-  const currentCategory = searchParams.get('category') || 'all'
+  const currentCategory = searchParams.get('category')
+  
+  const productUrl = `/products/${product.slug}${currentCategory ? `?returnCategory=${encodeURIComponent(currentCategory)}` : ''}`
 
   return (
     <motion.div
@@ -21,32 +23,36 @@ export default function ProductCard({ product }: ProductCardProps) {
       viewport={{ once: true }}
       className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
     >
-      <Link href={`/products/${product.slug}?returnCategory=${currentCategory}`}>
+      <Link href={productUrl}>
         <div className="relative">
           {/* Brand logo */}
-          <div className="absolute top-1 right-4 z-10 bg-white p-2 rounded-lg shadow-sm">
-            <div className="relative h-6 w-16">
-              <Image
-                src={product.brand.logo}
-                alt={product.brand.name}
-                fill
-                sizes="64px"
-                className="object-contain"
-                priority
-              />
+          {product.brand?.logo && (
+            <div className="absolute top-1 right-4 z-10 bg-white p-2 rounded-lg shadow-sm">
+              <div className="relative h-6 w-16">
+                <Image
+                  src={product.brand.logo}
+                  alt={product.brand?.name || 'Brand logo'}
+                  fill
+                  sizes="64px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </div>
-          </div>
+          )}
           
           {/* Product image */}
           <div className="relative aspect-[4/3] w-full">
-            <Image
-              src={product.images[0].url}
-              alt={product.images[0].alt}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-              className="object-contain object-center group-hover:scale-105 transition-transform duration-300"
-              priority
-            />
+            {product.images?.[0]?.url && (
+              <Image
+                src={product.images[0].url}
+                alt={product.images[0].alt || product.name}
+                fill
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                className="object-contain object-center group-hover:scale-105 transition-transform duration-300"
+                priority
+              />
+            )}
           </div>
         </div>
 
@@ -61,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <p className="text-gray-600 line-clamp-2 mb-4">{product.description}</p>
 
           <ul className="space-y-1 text-sm text-gray-500">
-            {product.features.unique.items.slice(0, 1).map((feature, index) => (
+            {product.features?.unique?.items?.slice(0, 1).map((feature, index) => (
               <li key={index} className="flex items-center">
                 <span className="min-h-1.5 min-w-1.5 bg-servi_green rounded-full mr-2"></span>
                 {feature}

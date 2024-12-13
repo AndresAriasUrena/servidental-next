@@ -30,7 +30,7 @@ type ProductCategory =
   | 'Lámparas de Fotocurado'
   | 'Piezas de mano'
   | 'Selladoras'
-  | 'Termofomadoras'
+  | 'Termoformadoras'
   | 'Vaporizadores'
   | 'Cámaras Intraorales'
   | 'Scanner'
@@ -138,7 +138,7 @@ function improvedCategoryDetection(name: string, description: string, features: 
         keywords: ['fresadora', 'craft 5x', 'fresado']
       },
       {
-        category: 'Termofomadoras',
+        category: 'Termoformadoras',
         keywords: ['termoformadora', 'plastvac', 'plast press']
       },
       {

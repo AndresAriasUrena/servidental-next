@@ -1,36 +1,36 @@
 // src/app/products/[slug]/page.tsx
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import { products } from '@/data/manual-products'
 import { notFound } from 'next/navigation'
 import ProductGallery from '@/components/products/ProductGallery'
 import ProductInfo from '@/components/products/ProductInfo'
+import BackButton from '@/components/products/BackButton'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 
 const baseUrl = process.env.NODE_ENV === 'production' 
   ? 'https://servidentalcr.com' 
   : 'http://localhost:3000'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ returnCategory?: string }>
+  params: Promise<{ slug: string }> | { slug: string }
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return products.map((product) => ({
     slug: product.slug,
   }))
 }
 
-async function getProduct(slug: string) {
+async function getProduct(params: PageProps['params']) {
+  const { slug } = 'then' in params ? await params : params
   return products.find(p => p.slug === slug)
 }
 
 export async function generateMetadata(
   props: PageProps
 ): Promise<Metadata> {
-  const { slug } = await props.params
-  const product = await getProduct(slug)
+  const product = await getProduct(props.params)
   
   if (!product) {
     return {
@@ -40,12 +40,13 @@ export async function generateMetadata(
   }
 
   return {
+    metadataBase: new URL(baseUrl),
     title: `${product.name} | ServiDental`,
     description: product.description,
     openGraph: {
       title: product.name,
       description: product.description,
-      url: `${baseUrl}/products/${product.slug}`,
+      url: `/products/${product.slug}`,
       siteName: 'ServiDental CR',
       locale: 'es_CR',
       type: 'website',
@@ -53,30 +54,20 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductPage(props: PageProps) {
-  const { slug } = await props.params
-  const { returnCategory = 'all' } = await props.searchParams
-  
-  const product = await getProduct(slug)
-  
-  if (!product) {
-    notFound()
-  }
-
+// Componente que contiene el contenido de la página
+function ProductContent({ product }: { product: NonNullable<typeof products[number]> }) {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Botón de regreso con categoría */}
-        <Link
-          href={`/products${returnCategory !== 'all' ? `?category=${returnCategory}` : ''}`}
-          className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-8"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver a {returnCategory === 'all' ? 'productos' : 'la categoría'}
-        </Link>
+        <Suspense fallback={<div>Loading...</div>}>
+          <BackButton />
+        </Suspense>
 
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-          <ProductGallery images={product.images} product={product} />
+          <ProductGallery 
+            images={product.images || []} 
+            product={product} 
+          />
           <ProductInfo product={product} />
         </div>
 
@@ -94,7 +85,7 @@ export default async function ProductPage(props: PageProps) {
                 return (
                   <Link
                     key={relatedProduct.id}
-                    href={`/products/${relatedProduct.slug}?returnCategory=${returnCategory}`}
+                    href={`/products/${relatedProduct.slug}`}
                     className="group"
                   >
                     <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg">
@@ -118,5 +109,20 @@ export default async function ProductPage(props: PageProps) {
         )}
       </div>
     </div>
+  )
+}
+
+// Componente principal de la página
+export default async function ProductPage(props: PageProps) {
+  const product = await getProduct(props.params)
+  
+  if (!product) {
+    notFound()
+  }
+
+  return (
+    <Suspense fallback={<div>Loading product...</div>}>
+      <ProductContent product={product} />
+    </Suspense>
   )
 }

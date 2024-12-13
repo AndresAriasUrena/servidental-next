@@ -5,7 +5,7 @@ import assets from '@/assets';
 export const categories: ProductCategory[] = [
   "Anestesia",
   "Bombas de vacío",
-  "Activaodor UV para implantes",
+  "Activador UV para implantes",
   "Compresores",
   "Equipo de Rayos X",
   "Esterilización",
@@ -17,7 +17,7 @@ export const categories: ProductCategory[] = [
   "Piezas de mano",
   "Escáneres",
   "Selladoras",
-  "Termofomadoras",
+  "Termoformadoras",
   "Motores de implantes",
   "Motores de cirugías",
   "Lavadoras ultrasónicas",
@@ -3061,42 +3061,42 @@ export const products: Product[] = [
     },
     images: [
       {
-        url: assets.products.ActivaodorUV.ActivaodorUVparaImplantes.default,
+        url: assets.products.ActivadorUV.ActivadorUVparaImplantes.default,
         alt: "Activador UV para implantes",
         width: 800,
         height: 600,
         isPrimary: true
       },
       {
-        url: assets.products.ActivaodorUV.ActivaodorUVparaImplantes.ActivaodorUVparaImplantes_2,
+        url: assets.products.ActivadorUV.ActivadorUVparaImplantes.ActivadorUVparaImplantes_2,
         alt: "Activador UV para implantes",
         width: 800,
         height: 600,
         isPrimary: true
       },
       {
-        url: assets.products.ActivaodorUV.ActivaodorUVparaImplantes.ActivaodorUVparaImplantes_3,
+        url: assets.products.ActivadorUV.ActivadorUVparaImplantes.ActivadorUVparaImplantes_3,
         alt: "Activador UV para implantes",
         width: 800,
         height: 600,
         isPrimary: true
       },
       {
-        url: assets.products.ActivaodorUV.ActivaodorUVparaImplantes.ActivaodorUVparaImplantes_4,
+        url: assets.products.ActivadorUV.ActivadorUVparaImplantes.ActivadorUVparaImplantes_4,
         alt: "Activador UV para implantes",
         width: 800,
         height: 600,
         isPrimary: true
       },
       {
-        url: assets.products.ActivaodorUV.ActivaodorUVparaImplantes.ActivaodorUVparaImplantes_5,
+        url: assets.products.ActivadorUV.ActivadorUVparaImplantes.ActivadorUVparaImplantes_5,
         alt: "Activador UV para implantes",
         width: 800,
         height: 600,
         isPrimary: true
       },
     ],
-    category: "Activaodor UV para implantes",
+    category: "Activador UV para implantes",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
@@ -4184,7 +4184,7 @@ export const products: Product[] = [
         isPrimary: true
       }
     ],
-    category: "Termofomadoras",
+    category: "Termoformadoras",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.353Z",
     updatedAt: "2024-10-29T00:10:22.353Z",
@@ -4238,7 +4238,7 @@ export const products: Product[] = [
         isPrimary: true
       },
     ],
-    category: "Termofomadoras",
+    category: "Termoformadoras",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.363Z",
     updatedAt: "2024-10-29T00:10:22.363Z",
@@ -4289,7 +4289,7 @@ export const products: Product[] = [
         isPrimary: true
       }
     ],
-    category: "Termofomadoras",
+    category: "Termoformadoras",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.363Z",
     updatedAt: "2024-10-29T00:10:22.363Z",
@@ -4627,7 +4627,7 @@ export const products: Product[] = [
           "Sistema succión por Venturi o bomba vacío",
           "Cabecera 2 ejes",
           "Caja de previstas externa o interna",
-          "5 memorias de movimiento",
+          "Memorias de movimiento",
           "2 descansa brazos, 1 abatible"
         ]
       },
@@ -4730,7 +4730,7 @@ export const products: Product[] = [
           "Sistema succión por Venturi o bomba vacío",
           "Cabecera 2 ejes",
           "Caja de previstas externa o interna",
-          "5 memorias de movimiento",
+          "Memorias de movimiento",
           "2 descansa brazos, 1 abatible"
         ]
       },

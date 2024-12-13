@@ -91,7 +91,7 @@ Selladoras (3):
   - SIGER
   - SMART 127V
 
-Termofomadoras (2):
+Termoformadoras (2):
   - PlastVac P7
   - PlastVac P7 Plus
 

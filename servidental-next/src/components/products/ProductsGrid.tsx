@@ -1,7 +1,6 @@
-// src/components/products/ProductsGrid.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState } from 'react'
 import { Product } from '@/types/product'
 import { Filter } from 'lucide-react'
 import ProductCard from './ProductCard'
@@ -9,15 +8,11 @@ import ProductFilter from './ProductFilter'
 import { categoryGroups } from './ProductFilter'
 import { useSearchParams, useRouter } from 'next/navigation'
 
-interface ProductGridProps {
-  products: Product[]
-}
-
-export default function ProductGrid({ products }: ProductGridProps) {
+// Component that uses searchParams
+function FilteredProducts({ products }: { products: Product[] }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   
-  // Initialize state from URL parameters
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get('category') || 'all'
   )
@@ -26,7 +21,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
   )
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
 
-  // Update URL when filters change
   const updateFilters = (category: string, search: string) => {
     const params = new URLSearchParams()
     if (category !== 'all') params.set('category', category)
@@ -39,13 +33,11 @@ export default function ProductGrid({ products }: ProductGridProps) {
     router.push(newUrl, { scroll: false })
   }
 
-  // Handle category changes
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
     updateFilters(category, searchQuery)
   }
 
-  // Handle search changes
   const handleSearchChange = (search: string) => {
     setSearchQuery(search)
     updateFilters(selectedCategory, search)
@@ -66,7 +58,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
   })
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
       <div className="mb-6">
         <input
           type="text"
@@ -139,6 +131,17 @@ export default function ProductGrid({ products }: ProductGridProps) {
           )}
         </main>
       </div>
+    </>
+  )
+}
+
+// Main ProductGrid component that wraps FilteredProducts with Suspense
+export default function ProductGrid({ products }: { products: Product[] }) {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <Suspense fallback={<div>Loading...</div>}>
+        <FilteredProducts products={products} />
+      </Suspense>
     </div>
   )
 }

@@ -447,11 +447,11 @@ import JeringaDeAnestesiaDentalInteligente_3 from './products/JeringaDeAnestesia
 
 
 //Activador UV para implantes
-import ActivaodorUVparaImplantes_1 from './products/ActivaodorUVparaImplantes/1.avif'
-import ActivaodorUVparaImplantes_2 from './products/ActivaodorUVparaImplantes/2.avif'
-import ActivaodorUVparaImplantes_3 from './products/ActivaodorUVparaImplantes/3.avif'
-import ActivaodorUVparaImplantes_4 from './products/ActivaodorUVparaImplantes/4.avif'
-import ActivaodorUVparaImplantes_5 from './products/ActivaodorUVparaImplantes/5.avif'
+import ActivadorUVparaImplantes_1 from './products/ActivadorUVparaImplantes/1.avif'
+import ActivadorUVparaImplantes_2 from './products/ActivadorUVparaImplantes/2.avif'
+import ActivadorUVparaImplantes_3 from './products/ActivadorUVparaImplantes/3.avif'
+import ActivadorUVparaImplantes_4 from './products/ActivadorUVparaImplantes/4.avif'
+import ActivadorUVparaImplantes_5 from './products/ActivadorUVparaImplantes/5.avif'
 
 
 
@@ -956,13 +956,13 @@ const assets = {
         JeringaDeAnestesiaDentalInteligente_3: JeringaDeAnestesiaDentalInteligente_3,
       },
     },
-    ActivaodorUV: {
-      ActivaodorUVparaImplantes: {
-        default: ActivaodorUVparaImplantes_1,
-        ActivaodorUVparaImplantes_2: ActivaodorUVparaImplantes_2,
-        ActivaodorUVparaImplantes_3: ActivaodorUVparaImplantes_3,
-        ActivaodorUVparaImplantes_4: ActivaodorUVparaImplantes_4,
-        ActivaodorUVparaImplantes_5: ActivaodorUVparaImplantes_5
+    ActivadorUV: {
+      ActivadorUVparaImplantes: {
+        default: ActivadorUVparaImplantes_1,
+        ActivadorUVparaImplantes_2: ActivadorUVparaImplantes_2,
+        ActivadorUVparaImplantes_3: ActivadorUVparaImplantes_3,
+        ActivadorUVparaImplantes_4: ActivadorUVparaImplantes_4,
+        ActivadorUVparaImplantes_5: ActivadorUVparaImplantes_5
       },
     },
     PiezasDeMano: {

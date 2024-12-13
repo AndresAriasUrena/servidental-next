@@ -3,7 +3,7 @@ import { StaticImageData } from 'next/image';
 export type ProductCategory =
   | 'Unidades Dentales'
   | 'Bombas de vacío'
-  | 'Activaodor UV para implantes'
+  | 'Activador UV para implantes'
   | 'Carrito para accesorios'
   | 'Compresores'
   | 'Contra-ángulos'
@@ -18,7 +18,7 @@ export type ProductCategory =
   | 'Piezas de mano'
   | 'Selladoras'
   | 'Tomógrafos'
-  | 'Termofomadoras'
+  | 'Termoformadoras'
   | 'Vaporizadores'
   | 'Cámaras Intraorales'
   | 'Escáneres'
