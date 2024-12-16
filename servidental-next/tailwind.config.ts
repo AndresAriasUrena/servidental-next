@@ -34,6 +34,16 @@ const config: Config = {
           #C1F7FC 80%,
           #FFFFFF 100%
         )`,
+        "horizontal_gradient": `linear-gradient(
+          to right,
+          rgba(0, 59, 70, 1) 0%,
+          rgba(153, 155, 158, 0.5) 100%
+        )`,
+        "vertical_gradient": `linear-gradient(
+          to top,
+          rgba(0, 59, 70, 1) 0%,
+          rgba(153, 155, 158, 0.5) 100%
+        )`,
       }
     },
   },

@@ -21,7 +21,7 @@ const slides: Slide[] = [
     title: 'Frame 1',
     image: assets.images.EquipoDeProfesionales,
     content: (
-      <div className="flex flex-col z-10 p-6 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
+      <div className="flex flex-col z-10 p-6 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-2xl 
                       lg:ml-8 lg:mr-[-40%] text-center lg:text-left lg:mt-[40%]">
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">
           Equipo de ingenieros y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo
@@ -36,7 +36,7 @@ const slides: Slide[] = [
     title: 'Frame 2',
     image: assets.images.Mantenimiento,
     content: (
-      <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-lg 
+      <div className="flex flex-col z-10 p-8 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-lg 
                       lg:ml-8 lg:mr-[-60%] text-center lg:text-left">
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Mantenimiento preventivo y correctivo</h2>
         <p className="text-xl lg:text-2xl mt-3">
@@ -52,7 +52,7 @@ const slides: Slide[] = [
     title: 'Frame 3',
     image: assets.images.Capacitaciones,
     content: (
-      <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
+      <div className="flex flex-col z-10 p-8 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-2xl 
                       lg:ml-8 lg:mr-[-20%] text-center lg:text-left">
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Capacitaciones</h2>
         <p className="text-xl lg:text-2xl mt-3">
@@ -68,7 +68,7 @@ const slides: Slide[] = [
     title: 'Frame 4',
     image: assets.images.VentaDeEquipo,
     content: (
-      <div className="flex flex-col z-10 p-8 text-white bg-[#A5A5A5BF] bg-opacity-90 rounded-2xl 
+      <div className="flex flex-col z-10 p-8 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-2xl 
                       lg:ml-8 lg:mr-[-20%] text-center lg:text-left">
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">Venta de equipo médico odontológico e instalaciones</h2>
         <p className="text-xl lg:text-2xl mt-3">
@@ -99,7 +99,7 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative w-full h-screen bg-[#037971] text-white overflow-hidden">
+    <section className="relative w-full h-screen bg-[#003B46] text-white overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
         <AnimatePresence initial={false}>
           <motion.div
