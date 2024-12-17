@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
         url: '/favicon-48x48.png',
         width: 48,
         height: 48,
-        alt: 'Servidental Icon'
+        alt: 'Servidental Icon',
       },
     ],
     type: 'website',
@@ -29,37 +28,26 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servidentalcr.aurigital.com/',
   },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+    other: [
+      { rel: 'manifest', url: '/site.webmanifest' },
+    ],
+  },
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="es">
-      <Head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `
-          {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "ServidentalCR",
-            "url": "https://servidentalcr.aurigital.com/",
-            "logo": "https://servidentalcr.aurigital.com/favicon.ico",
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+506-21016114",
-              "contactType": "Customer Service",
-              "areaServed": "CR",
-              "availableLanguage": "es"
-            },
-            "sameAs": [
-              "https://www.instagram.com/servidentalcr/?hl=es-la",
-              "https://www.facebook.com/Servidentalcr"
-            ]
-          }
-        `}} />
-      </Head>
       <body className={inter.className}>
         <Header />
         <main className="min-h-screen pt-16">
