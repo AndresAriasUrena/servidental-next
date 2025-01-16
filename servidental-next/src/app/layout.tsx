@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ServidentalCR',
     description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
-    url: 'https://servidentalcr.aurigital.com/',
+    url: 'http://servidentalcr.com/',
     images: [
       {
         url: '/favicon-48x48.png',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   authors: [{ name: 'ServidentalCR' }],
   alternates: {
-    canonical: 'https://servidentalcr.aurigital.com/',
+    canonical: 'http://servidentalcr.com/',
   },
   icons: {
     icon: [
