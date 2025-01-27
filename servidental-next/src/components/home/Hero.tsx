@@ -6,6 +6,8 @@ import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import Image, { StaticImageData } from 'next/image';
 import assets from '@/assets';
 
+import CTAButtons from '@/components/CTAButtons';
+
 type Slide = {
   id: number;
   title: string;
@@ -26,6 +28,9 @@ const slides: Slide[] = [
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">
           Equipo de ingenieros y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo
         </h2>
+        <div className="mt-6 lg:mt-8 px-6 lg:px-0 lg:ml-[25%] lg:w-[75%] flex justify-center">
+          <CTAButtons className="lg:justify-center" />
+        </div>
       </div>
     ),
     textWidthClass: 'lg:w-[70%]',
@@ -42,6 +47,9 @@ const slides: Slide[] = [
         <p className="text-xl lg:text-2xl mt-3">
           Ofrecemos servicios de mantenimiento preventivo y correctivo para todo tipo de equipo odontológico, asegurando su óptimo funcionamiento y prolongando su vida útil.
         </p>
+        <div className="mt-6 lg:mt-8 px-6 lg:px-0 lg:ml-[25%] lg:w-[75%] flex justify-center">
+          <CTAButtons className="lg:justify-center" />
+        </div>
       </div>
     ),
     textWidthClass: 'lg:w-[40%]',
@@ -58,6 +66,9 @@ const slides: Slide[] = [
         <p className="text-xl lg:text-2xl mt-3">
           Nuestro equipo recibe capacitación continua para ofrecerle los servicios de la más alta calidad
         </p>
+        <div className="mt-6 lg:mt-8 px-6 lg:px-0 lg:ml-[25%] lg:w-[75%] flex justify-center">
+          <CTAButtons className="lg:justify-center" />
+        </div>
       </div>
     ),
     textWidthClass: 'lg:w-[38%]',
@@ -74,6 +85,9 @@ const slides: Slide[] = [
         <p className="text-xl lg:text-2xl mt-3">
           Adquiera su equipo con nosotros, contamos con variedad de opciones, instalación profesional y respaldo en mantenimiento preventivo
         </p>
+        <div className="mt-6 lg:mt-8 px-6 lg:px-0 lg:ml-[25%] lg:w-[75%] flex justify-center">
+          <CTAButtons className="lg:justify-center" />
+        </div>
       </div>
     ),
     textWidthClass: 'lg:w-[45%]',
