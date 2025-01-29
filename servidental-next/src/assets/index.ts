@@ -63,6 +63,10 @@ import unidadDentalS30_3 from './products/unidad_dental_serie_s30/3.avif'
 import unidadDentalS30_4 from './products/unidad_dental_serie_s30/4.avif'
 import unidadDentalS30_5 from './products/unidad_dental_serie_s30/5.avif'
 
+//Banquetas
+import Banquetas_1 from './products/Banquetas/1.avif'
+import Banquetas_2 from './products/Banquetas/2.avif'
+
 
 
 // Termoformadoras
@@ -135,6 +139,11 @@ import rayos_x_portatil_siraymax_5 from './products/rayos_x_portatil_siraymax/5.
 import ChalecoPlomadoSinCuello_1 from './products/ChalecoPlomadoSinCuello/1.avif'
 import ChalecoPlomadoSinCuello_2 from './products/ChalecoPlomadoSinCuello/2.avif'
 
+//Bolso para rayos X portátil
+import BolsoParaRayosXportatil_1 from './products/BolsoParaRayosXportatil/1.avif'
+import BolsoParaRayosXportatil_2 from './products/BolsoParaRayosXportatil/2.avif'
+import BolsoParaRayosXportatil_3 from './products/BolsoParaRayosXportatil/3.avif'
+
 
 
 //Pulidoras
@@ -162,6 +171,9 @@ import MicroarenadorStandarMicroblaster_2 from './products/MicroarenadorStandarM
 //Motor de implantes ISE-270M
 import MotorDeImplantesISE270M_1 from './products/MotorDeImplantesISE270M/1.avif'
 import MotorDeImplantesISE270M_2 from './products/MotorDeImplantesISE270M/2.avif'
+
+//Motor de implantes C-SAILOR S1
+import MotorDeImplantesCSAILORS1_1 from './products/MotorDeImplantesCSAILORS1/1.avif'
 
 //Motor de implantes C-SAILOR PRO
 import MotorDeImplantesCSAILORPRO_1 from './products/MotorDeImplantesCSAILORPRO/1.avif'
@@ -240,7 +252,8 @@ import LamparaDentalV1_1 from './products/LamparaDentalV1/1.avif'
 //Lámpara dental V2
 import LamparaDentalV2_1 from './products/LamparaDentalV2/1.avif'
 
-
+//Lámpara dental V5
+import LamparaDentalV5_1 from './products/LamparaDentalV5/1.avif'
 
 //Lamparas Fotocurado
 //LED DB686HONOR
@@ -358,6 +371,9 @@ import SillaDentalPortatil_1 from './products/SillaDentalPortatil/1.avif'
 import SillaDentalPortatil_2 from './products/SillaDentalPortatil/2.avif'
 import SillaDentalPortatil_3 from './products/SillaDentalPortatil/3.avif'
 
+//Carro médico móvil Mirage 2.0
+import CarroMedicoMovilMirage_1 from './products/CarroMedicoMovilMirage/1.avif'
+import CarroMedicoMovilMirage_2 from './products/CarroMedicoMovilMirage/2.avif'
 
 
 //Equipo para endodoncia
@@ -621,6 +637,11 @@ const assets = {
         default: ChalecoPlomadoSinCuello_1,
         ChalecoPlomadoSinCuello_2: ChalecoPlomadoSinCuello_2
       },
+      BolsoParaRayosXportatil: {
+        default: BolsoParaRayosXportatil_1,
+        BolsoParaRayosXportatil_2: BolsoParaRayosXportatil_2,
+        BolsoParaRayosXportatil_3: BolsoParaRayosXportatil_3
+      },
     },
     selladoras: {
       SelladoraX330: {
@@ -680,6 +701,10 @@ const assets = {
         unidadDentalV600_3: unidadDentalV600_3,
         unidadDentalV600_4: unidadDentalV600_4,
         unidadDentalV600_5: unidadDentalV600_5,
+      },
+      Banquetas: {
+        default: Banquetas_1,
+        Banquetas_2: Banquetas_2
       }
     },
     pulidoras: {
@@ -706,6 +731,9 @@ const assets = {
       MotorDeImplantesISE270M: {
         default: MotorDeImplantesISE270M_1,
         MotorDeImplantesISE270M_2: MotorDeImplantesISE270M_2,
+      },
+      MotorDeImplantesCSAILORS1: {
+        default: MotorDeImplantesCSAILORS1_1,
       },
       MotorDeImplantesCSAILORPRO: {
         default: MotorDeImplantesCSAILORPRO_1,
@@ -767,6 +795,9 @@ const assets = {
       },
       LamparaDentalV2: {
         default: LamparaDentalV2_1,
+      },
+      LamparaDentalV5: {
+        default: LamparaDentalV5_1,
       },
     },
     lamparasFotocurado: {
@@ -874,6 +905,10 @@ const assets = {
         default: SillaDentalPortatil_1,
         SillaDentalPortatil_2: SillaDentalPortatil_2,
         SillaDentalPortatil_3: SillaDentalPortatil_3,
+      },
+      CarroMedicoMovilMirage: {
+        default: CarroMedicoMovilMirage_1,
+        CarroMedicoMovilMirage_2: CarroMedicoMovilMirage_2,
       },
     },
     EquipoParaEndodoncia: {

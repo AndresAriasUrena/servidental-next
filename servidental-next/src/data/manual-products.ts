@@ -297,6 +297,66 @@ export const products: Product[] = [
     videoIframe: '<iframe width="100%;" height="415" src="https://www.youtube.com/embed/C-F8sxdQsuo?si=k9zLMfsqUCBG0lJw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
   },
   {
+    id: "Motor-de-implantes-C-SAILOR-S1",
+    slug: "Motor-de-implantes-C-SAILOR-S1",
+    name: "Motor de implantes C-SAILOR S1",
+    subtitle: "Rendimiento y precisión",
+    brand: {
+      name: "COXO",
+      logo: assets.logos.brands.coxo
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "La pantalla táctil permite ver los parámetros en tiempo real",
+          "Puede utilizarse tanto para la inserción de implantes como para las maniobras quirúrgicas",
+          "Menú gráfico intuitivo que permite cambiar muchos parámetros con un solo toque, diseñado para facilitar y acelerar la cirugía",
+          "Selección del caudal de refrigerante con una sola pulsación",
+          "4 niveles de flujo de agua de refrigeración, hasta 50 ml/min.",
+          "Bomba peristáltica de alto rendimiento incorporada",
+          "Motor de nueva generación sin escobillas, de alto rendimiento y fiable, con un par máximo de 80 N.cm",
+          "Cables y micromotor autoclavables",
+          "Micromotor de bajo peso, lo que facilita las maniobras quirúrgicas",
+          "Equipado con fibra óptica y fuente de luz LED con una luminosidad de 30.000 lux que permite realizar maniobras quirúrgicas con mayor precisión",
+          "Volumen de sonido ajustable",
+          "Intensidad de luz regulable",
+          "Interfaz que permite la personalización de los programas",
+          "Pedal multifunción con conexión metálica"
+        ]
+      },
+      general: {
+        title: "Características técnicas",
+        items: [
+          "Alimentación: 100 – 230 V / 50 Hz VA",
+          "Frecuencia de trabajo: 24 kHz – 36 kHz",
+          "Potencia máx.: 70N.cm",
+          "Velocidad regulable: 300-40000 rpm",
+          "Par de apriete ajustable: 5 Ncm – 55 Ncm",
+          "Caudal de agua de refrigeración ajustable: 4 niveles ajustables",
+          "Fuente de luz: LED 7000 lux",
+          "Motor: micromotor quirúrgico de inducción"        
+        ]
+      }
+    },
+    images: [
+      {
+        url: assets.products.MotordeImplantes.MotorDeImplantesCSAILORS1.default,
+        alt: "Motor de implantes C-SAILOR S1",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+    ],
+    category: "Motores de implantes",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.089Z",
+    updatedAt: "2024-10-29T00:10:22.089Z",
+    videoIframe: '<iframe width="560" height="315" src="https://www.youtube.com/embed/wxga_pCorBI?si=_wpGZasvtwQRUviF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  },
+  {
     id: "Motor-de-implantes-C-SAILOR-PRO",
     slug: "Motor-de-implantes-C-SAILOR-PRO",
     name: "Motor de implantes C-SAILOR PRO",
@@ -748,6 +808,53 @@ export const products: Product[] = [
       {
         url: assets.products.lamparasDentales.LamparaDentalV2.default,
         alt: "Lámpara dental V2",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      }
+    ],
+    category: "Lámparas Dentales",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.280Z",
+    updatedAt: "2024-10-29T00:10:22.280Z"
+  },
+  {
+    id: "Lampara-Dental-v5",
+    slug: "Lampara-Dental-v5",
+    name: "Lámpara dental V5",
+    subtitle: "Luz libre de efectos de sombra",
+    brand: {
+      name: "Siger",
+      logo: assets.logos.brands.siger
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "3 niveles de color temperatura",
+          "5 niveles de brillo ajustable",
+          "Con función de corte de luz azul",
+          "El brillo del punto está igualado",
+          "Excelente efecto sin sombra",
+          "Fuente de luz: LED",
+          "Iluminación: 8000-35000 LUX",
+          "Temperatura de color: 3000-4500-5500K",
+          "Dimensión del punto: 75 x 200 MM (@700 MM)",
+          "Potencia: 10VA",
+          "Voltaje: 12-24V AC"
+        ]
+      },
+      general: {
+        title: "",
+        items: []
+      }
+    },
+    images: [
+      {
+        url: assets.products.lamparasDentales.LamparaDentalV5.default,
+        alt: "Lámpara dental V5",
         width: 800,
         height: 600,
         isPrimary: true
@@ -2066,6 +2173,62 @@ export const products: Product[] = [
         height: 600,
         isPrimary: true
       },
+    ],
+    category: 'Equipo portátil',
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.215Z",
+    updatedAt: "2024-10-29T00:10:22.215Z"
+  },
+  {
+    id: "CarroMedicoMovilMirage",
+    slug: "Carro-Medico-Movil-Mirage",
+    name: "Carro médico móvil Mirage 2.0",
+    subtitle: "Equipo portátil",
+    brand: {
+      name: "TPC",
+      logo: assets.logos.brands.tpc
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "Carro con paquete de vacío",
+          "Selección automática de pieza de mano Asepsis 3 con sistema de botella",
+          "Jeringa de 3 vías con punta esterilizable en autoclave de cambio rápido",
+          "Alternar encendido/apagado maestro",
+          "Ajuste de presión de aire/agua para cada pieza de mano",
+          "Manómetro",
+          "Ajuste y purga de refrigerante de agua/aire no retráctil",
+          "Tubo de la pieza de mano de asepsia",
+          "Marco en H pintado con ajuste de altura, 27\" a 39\"",
+          "Bidón de vacío con pantalla extraíble 2 1/8\"",
+          "1 eyector y tubo de Hve y saliva esterilizables en autoclave",
+          "Control de pie de velocidad variable",
+          "10 pies de umbilical"        ]
+      },
+      general: {
+        title: "",
+        items: [
+        ]
+      }
+    },
+    images: [
+      {
+        url: assets.products.EquipoPortatil.CarroMedicoMovilMirage.default,
+        alt: "Carro médico móvil Mirage 2.0",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.EquipoPortatil.CarroMedicoMovilMirage.CarroMedicoMovilMirage_2,
+        alt: "Carro médico móvil Mirage 2.0",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      }
     ],
     category: 'Equipo portátil',
     isActive: true,
@@ -4898,6 +5061,54 @@ export const products: Product[] = [
     videoIframe: '<iframe width="100%;" height="415" src="https://www.youtube.com/embed/qIfQZhXNwdQ?si=cTvdszIcehTxS30d" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
   },
   {
+    id: "Banquetas",
+    slug: "Banquetas",
+    name: "Banquetas",
+    subtitle: "Cómodas",
+    brand: {
+      name: "Siger",
+      logo: assets.logos.brands.siger
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Banqueta para doctor",
+        items: [
+          "La altura del asiento y la inclinación del respaldo se pueden ajustar para adaptarse a la ergonomía.",
+          "La estrella es de aluminio colado y están equipadas con ruedas giratorias silenciosas y de alto tránsito."
+        ]
+      },
+      general: {
+        title: "Banqueta para asistente",
+        items: [
+          "La estrella es de aluminio colado y están equipadas con ruedas giratorias silenciosas y de alto tránsito.",
+          "El descansabrazos puede moverse.",
+        ]
+      }
+      },
+      images: [
+      {
+        url: assets.products.unidadesDentales.Banquetas.default,
+        alt: "Banquetas",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.unidadesDentales.Banquetas.Banquetas_2,
+        alt: "Banquetas",
+        width: 800,
+        height: 600,
+        isPrimary: false
+      }
+    ],
+    category: "Unidades Dentales",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.441Z",
+    updatedAt: "2024-10-29T00:10:22.441Z",
+  },
+  {
     id: "rayos-x-portatil-xv-beam-1000",
     slug: "rayos-x-portatil-xv-beam-1000",
     name: "Rayos X portátil XVbeam1000",
@@ -5335,6 +5546,59 @@ export const products: Product[] = [
       {
         url: assets.products.rayosX.ChalecoPlomadoSinCuello.ChalecoPlomadoSinCuello_2,
         alt: "SIRAY Max",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      }
+    ],
+    category: "Equipo de Rayos X",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.374Z",
+    updatedAt: "2024-10-29T00:10:22.374Z",
+  },
+  {
+    id: "BolsoParaRayosXportatil",
+    slug: "Bolso-Para-RayosX-portatil",
+    name: "Bolso para rayos X portátil",
+    subtitle: "Accesorio",
+    brand: {
+      name: "Xpect Vision",
+      logo: assets.logos.brands.xpectVision
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características ",
+        items: [
+          "Cómodo",
+          "Varios compartimientos",
+          "Incluye espumas para proteger su equipo"
+        ]
+      },
+      general: {
+        title: "",
+        items: []
+      },
+    },
+    images: [
+      {
+        url: assets.products.rayosX.BolsoParaRayosXportatil.default,
+        alt: "Bolso para rayos X portátil",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.rayosX.BolsoParaRayosXportatil.BolsoParaRayosXportatil_2,
+        alt: "Bolso para rayos X portátil",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.rayosX.BolsoParaRayosXportatil.BolsoParaRayosXportatil_3,
+        alt: "Bolso para rayos X portátil",
         width: 800,
         height: 600,
         isPrimary: true
