@@ -120,9 +120,9 @@ import SensorDental_4 from './products/SensorDental/4.avif'
 
 //SensordeRayosXintraoralDigital 
 import SensordeRayosXintraoralDigital_1 from './products/SensordeRayosXintraoralDigital/1.avif'
-import SensordeRayosXintraoralDigital_2 from './products/SensorDental/2.avif'
-import SensordeRayosXintraoralDigital_3 from './products/SensorDental/3.avif'
-import SensordeRayosXintraoralDigital_4 from './products/SensorDental/4.avif'
+import SensordeRayosXintraoralDigital_2 from './products/SensordeRayosXintraoralDigital/2.avif'
+import SensordeRayosXintraoralDigital_3 from './products/SensordeRayosXintraoralDigital/3.avif'
+import SensordeRayosXintraoralDigital_4 from './products/SensordeRayosXintraoralDigital/4.avif'
 
 //Rayos X portátil XVbeam1000
 import RayosXportatilXVbeam1000_1 from './products/RayosXportatilXVbeam1000/1.avif'
