@@ -11,6 +11,7 @@ const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
   { name: 'EQUIPO MÉDICO', href: '/products' },
+  { name: 'REPUESTOS', href: '/spare-parts' },
   { name: 'NUESTROS SERVICIOS', href: '/#services' },
   { name: 'CONTACTO', href: '/contact' },
 ]
