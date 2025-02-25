@@ -563,6 +563,64 @@ import calibracionesImg from './services/calibraciones.avif'
 import trasladosImg from './services/traslados.avif'
 import certificacionesImg from './services/certificaciones.avif'
 
+
+//Repuestos
+import AceiteDetergenteBienAirROJO_1 from './spareparts/AceiteDetergenteBienAirROJO/1.webp';
+import AceiteLubricanteBienAir_1 from './spareparts/AceiteLubricanteBienAir/1.webp';
+import AcopleCavitronHembraDCI_1 from './spareparts/AcopleCavitronHembraDCI/1.webp';
+import AcopleCavitronMacho_1 from './spareparts/AcopleCavitronMacho/1.webp';
+import Bombillohalogeno12v50w_1 from './spareparts/Bombillohalogeno12v50w/1.webp';
+import BoquillasuctorbajaMetalicaGenerica_1 from './spareparts/BoquillasuctorbajaMetalicaGenerica/1.webp';
+import BotonOnOff_1 from './spareparts/BotonOnOff/1.webp';
+import Jeringatriple_1 from './spareparts/Jeringatriple/1.webp';
+import JeringatripleRecta_1 from './spareparts/JeringatripleRecta/1.webp';
+import Manguera31x19_1 from './spareparts/Manguera31x19/1.webp';
+import Manguera4x25_1 from './spareparts/Manguera4x25/1.webp';
+import Manguera6x4_1 from './spareparts/Manguera6x4/1.webp';
+import Manguera8x55_1 from './spareparts/Manguera8x55/1.webp';
+import Manguera8x6_1 from './spareparts/Manguera8x6/1.webp';
+import SIGERMangueraBorden2huecos_1 from './spareparts/SIGERMangueraBorden2huecos/1.webp';
+import SIGERMangueraMidwest4huecos_1 from './spareparts/SIGERMangueraMidwest4huecos/1.webp';
+import WoodpeckerPiezademanotransductorHW1_1 from './spareparts/WoodpeckerPiezademanotransductorHW1/1.webp';
+import WoodpeckerPiezademanotransductorHW3H_1 from './spareparts/WoodpeckerPiezademanotransductorHW3H/1.webp';
+import WoodpeckerPuntasG1_1 from './spareparts/WoodpeckerPuntasG1/1.webp';
+import WoodpeckerPuntasG2_1 from './spareparts/WoodpeckerPuntasG2/1.webp';
+import WoodpeckerPuntaslimpiador_1 from './spareparts/WoodpeckerPuntaslimpiador/1.webp';
+import WoodpeckerPuntasP1_1 from './spareparts/WoodpeckerPuntasP1/1.webp';
+import CompresorAnillosgenericos_1 from './spareparts/CompresorAnillosgenericos/1.webp';
+import CompresorCapacitor80uf_1 from './spareparts/CompresorCapacitor80uf/1.webp';
+import CompresorElectrovalvula_1 from './spareparts/CompresorElectrovalvula/1.webp';
+import CompresorFiltrocompresorintake_1 from './spareparts/CompresorFiltrocompresorintake/1.webp';
+import CompresorFiltrodeairereguladorconManometro_1 from './spareparts/CompresorFiltrodeairereguladorconManometro/1.webp';
+import CompresorMotorcompleto_1 from './spareparts/CompresorMotorcompleto/1.webp';
+import CompresorPresostato_1 from './spareparts/CompresorPresostato/1.webp';
+import CompresorValvulaAlivioseguridad_1 from './spareparts/CompresorValvulaAlivioseguridad/1.webp';
+import CompresorValvulacheck_1 from './spareparts/CompresorValvulacheck/1.webp';
+import CabezaContranguloNSKPUSHBOTON_1 from './spareparts/CabezaContranguloNSKPUSHBOTON/1.webp';
+import COXOCabezaContranguloNSKPalancaCH2_1 from './spareparts/COXOCabezaContranguloNSKPalancaCH2/1.webp';
+import COXOCabezaContranguloNSKPushButtonCH4_1 from './spareparts/COXOCabezaContranguloNSKPushButtonCH4/1.webp';
+import DTEMangueradepiezademanoSatelec_1 from './spareparts/DTEMangueradepiezademanoSatelec/1.webp';
+import DTEPiezademanoHD7HSatelec_1 from './spareparts/DTEPiezademanoHD7HSatelec/1.webp';
+import DTEPiezademanoSatelec_1 from './spareparts/DTEPiezademanoSatelec/1.webp';
+import DTEPuntaDT1_1 from './spareparts/DTEPuntaDT1/1.webp';
+import PuntasdejeringaTripleCanula_1 from './spareparts/PuntasdejeringaTripleCanula/1.webp';
+import SIGERBrazodemonitor_1 from './spareparts/SIGERBrazodemonitor/1.webp';
+import SIGERMotorderespaldoTiMotion_1 from './spareparts/SIGERMotorderespaldoTiMotion/1.webp';
+import SIGERPistondebanquetaSOLO_1 from './spareparts/SIGERPistondebanquetaSOLO/1.webp';
+import SIGERPistondesillonHidraulico_1 from './spareparts/SIGERPistondesillonHidraulico/1.webp';
+import SturdyJuegodeValvuladeescape_1 from './spareparts/SturdyJuegodeValvuladeescape/1.webp';
+import SturdyResistenciaSA232X_1 from './spareparts/SturdyResistenciaSA232X/1.webp';
+import SturdySetTarjetaPrincipalPCBSA232_1 from './spareparts/SturdySetTarjetaPrincipalPCBSA232/1.webp';
+import SturdySetTarjetaPrincipalPCBSA232X_1 from './spareparts/SturdySetTarjetaPrincipalPCBSA232X/1.webp';
+import SturdySwitchdeTemperatura_1 from './spareparts/SturdySwitchdeTemperatura/1.webp';
+import SturdyValvulasolenoidedevapor_1 from './spareparts/SturdyValvulasolenoidedevapor/1.webp';
+import SturdyValvuladeseguridadSA23218KGcm2_1 from './spareparts/SturdyValvuladeseguridadSA23218KGcm2/1.webp';
+import SturdyValvuladevaporprincipal_1 from './spareparts/SturdyValvuladevaporprincipal/1.webp';
+import TPCBrazoparamonitor_1 from './spareparts/TPCBrazoparamonitor/1.webp';
+import TPCCilindrocompresorGrande_1 from './spareparts/TPCCilindrocompresorGrande/1.webp';
+import TPCCodomanguera_1 from './spareparts/TPCCodomanguera/1.webp';
+
+
 const assets = {
   images: {
     herobg: herobg,
@@ -1114,6 +1172,170 @@ const assets = {
     traslados: trasladosImg,
     certificaciones: certificacionesImg,
   },
+  spareparts: {
+    AceiteDetergenteBienAirROJO: {
+      default: AceiteDetergenteBienAirROJO_1,
+    },
+    AceiteLubricanteBienAir: {
+      default: AceiteLubricanteBienAir_1,
+    },
+    AcopleCavitronHembraDCI: {
+      default: AcopleCavitronHembraDCI_1,
+    },
+    AcopleCavitronMacho: {
+      default: AcopleCavitronMacho_1,
+    },
+    Bombillohalogeno12v50w: {
+      default: Bombillohalogeno12v50w_1,
+    },
+    BoquillasuctorbajaMetalicaGenerica: {
+      default: BoquillasuctorbajaMetalicaGenerica_1,
+    },
+    BotonOnOff: {
+      default: BotonOnOff_1,
+    },
+    Jeringatriple: {
+      default: Jeringatriple_1,
+    },
+    JeringatripleRecta: {
+      default: JeringatripleRecta_1,
+    },
+    Manguera31x19: {
+      default: Manguera31x19_1,
+    },
+    Manguera4x25: {
+      default: Manguera4x25_1,
+    },
+    Manguera6x4: {
+      default: Manguera6x4_1,
+    },
+    Manguera8x55: {
+      default: Manguera8x55_1,
+    },
+    Manguera8x6: {
+      default: Manguera8x6_1,
+    },
+    SIGERMangueraBorden2huecos: {
+      default: SIGERMangueraBorden2huecos_1,
+    },
+    SIGERMangueraMidwest4huecos: {
+      default: SIGERMangueraMidwest4huecos_1,
+    },
+    WoodpeckerPiezademanotransductorHW1: {
+      default: WoodpeckerPiezademanotransductorHW1_1,
+    },
+    WoodpeckerPiezademanotransductorHW3H: {
+      default: WoodpeckerPiezademanotransductorHW3H_1,
+    },
+    WoodpeckerPuntasG1: {
+      default: WoodpeckerPuntasG1_1,
+    },
+    WoodpeckerPuntasG2: {
+      default: WoodpeckerPuntasG2_1,
+    },
+    WoodpeckerPuntaslimpiador: {
+      default: WoodpeckerPuntaslimpiador_1,
+    },
+    WoodpeckerPuntasP1: {
+      default: WoodpeckerPuntasP1_1,
+    },
+    CompresorAnillosgenericos: {
+      default: CompresorAnillosgenericos_1,
+    },
+    CompresorCapacitor80uf: {
+      default: CompresorCapacitor80uf_1,
+    },
+    CompresorElectrovalvula: {
+      default: CompresorElectrovalvula_1,
+    },
+    CompresorFiltrocompresorintake: {
+      default: CompresorFiltrocompresorintake_1,
+    },
+    CompresorFiltrodeairereguladorconManometro: {
+      default: CompresorFiltrodeairereguladorconManometro_1,
+    },
+    CompresorMotorcompleto: {
+      default: CompresorMotorcompleto_1,
+    },
+    CompresorPresostato: {
+      default: CompresorPresostato_1,
+    },
+    CompresorValvulaAlivioseguridad: {
+      default: CompresorValvulaAlivioseguridad_1,
+    },
+    CompresorValvulacheck: {
+      default: CompresorValvulacheck_1,
+    },
+    CabezaContranguloNSKPUSHBOTON: {
+      default: CabezaContranguloNSKPUSHBOTON_1,
+    },
+    COXOCabezaContranguloNSKPalancaCH2: {
+      default: COXOCabezaContranguloNSKPalancaCH2_1,
+    },
+    COXOCabezaContranguloNSKPushButtonCH4: {
+      default: COXOCabezaContranguloNSKPushButtonCH4_1,
+    },
+    DTEMangueradepiezademanoSatelec: {
+      default: DTEMangueradepiezademanoSatelec_1,
+    },
+    DTEPiezademanoHD7HSatelec: {
+      default: DTEPiezademanoHD7HSatelec_1,
+    },
+    DTEPiezademanoSatelec: {
+      default: DTEPiezademanoSatelec_1,
+    },
+    DTEPuntaDT1: {
+      default: DTEPuntaDT1_1,
+    },
+    PuntasdejeringaTripleCanula: {
+      default: PuntasdejeringaTripleCanula_1,
+    },
+    SIGERBrazodemonitor: {
+      default: SIGERBrazodemonitor_1,
+    },
+    SIGERMotorderespaldoTiMotion: {
+      default: SIGERMotorderespaldoTiMotion_1,
+    },
+    SIGERPistondebanquetaSOLO: {
+      default: SIGERPistondebanquetaSOLO_1,
+    },
+    SIGERPistondesillonHidraulico: {
+      default: SIGERPistondesillonHidraulico_1,
+    },
+    SturdyJuegodeValvuladeescape: {
+      default: SturdyJuegodeValvuladeescape_1,
+    },
+    SturdyResistenciaSA232X: {
+      default: SturdyResistenciaSA232X_1,
+    },
+    SturdySetTarjetaPrincipalPCBSA232: {
+      default: SturdySetTarjetaPrincipalPCBSA232_1,
+    },
+    SturdySetTarjetaPrincipalPCBSA232X: {
+      default: SturdySetTarjetaPrincipalPCBSA232X_1,
+    },
+    SturdySwitchdeTemperatura: {
+      default: SturdySwitchdeTemperatura_1,
+    },
+    SturdyValvulasolenoidedevapor: {
+      default: SturdyValvulasolenoidedevapor_1,
+    },
+    SturdyValvuladeseguridadSA23218KGcm2: {
+      default: SturdyValvuladeseguridadSA23218KGcm2_1,
+    },
+    SturdyValvuladevaporprincipal: {
+      default: SturdyValvuladevaporprincipal_1,
+    },
+    TPCBrazoparamonitor: {
+      default: TPCBrazoparamonitor_1,
+    },
+    TPCCilindrocompresorGrande: {
+      default: TPCCilindrocompresorGrande_1,
+    },
+    TPCCodomanguera: {
+      default: TPCCodomanguera_1,
+    },
+  }
 } as const
 
 export type AssetsType = typeof assets
