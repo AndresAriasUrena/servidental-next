@@ -7,6 +7,7 @@ import { TbBrandWaze } from "react-icons/tb";
 import { TbBrandInstagram } from "react-icons/tb";
 import { TbBrandFacebook } from "react-icons/tb";
 import { TbBrandWhatsapp } from "react-icons/tb";
+import { TbBrandYoutube } from "react-icons/tb";
 
 interface ContactItem {
     icon: React.ComponentType<{ className?: string }>;
@@ -127,7 +128,15 @@ export default function ContactInfo() {
           >
             <TbBrandTiktok className="h-7 w-7" />
          </a>
-
+         <a
+            href="https://www.youtube.com/@ServiDentalCR"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-red-500 transition-colors"
+            aria-label="WhatsApp"
+          >
+            <TbBrandYoutube className="h-7 w-7" />
+         </a>
           
         </div>
       </div>

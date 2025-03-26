@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Facebook, Instagram, MessageCircleMore} from 'lucide-react'
 import { TbBrandTiktok } from "react-icons/tb";
 import { TbBrandWaze } from "react-icons/tb";
+import { TbBrandYoutube } from "react-icons/tb";
 
 import assets from '@/assets'
 
@@ -35,6 +36,11 @@ const socialLinks = [
     name: 'Tiktok',
     href: 'https://www.tiktok.com/@servidentalcr',
     icon: TbBrandTiktok,
+  },
+  {
+    name: 'YouTube',
+    href: 'https://www.youtube.com/@ServiDentalCR',
+    icon: TbBrandYoutube,
   },
 ] as const
 

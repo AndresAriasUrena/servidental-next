@@ -619,6 +619,25 @@ import SturdyValvuladevaporprincipal_1 from './spareparts/SturdyValvuladevaporpr
 import TPCBrazoparamonitor_1 from './spareparts/TPCBrazoparamonitor/1.webp';
 import TPCCilindrocompresorGrande_1 from './spareparts/TPCCilindrocompresorGrande/1.webp';
 import TPCCodomanguera_1 from './spareparts/TPCCodomanguera/1.webp';
+import Basedemanilladepuerta_1 from './spareparts/Basedemanilladepuerta/1.webp';
+import SigerBanquetadeasistente_1 from './spareparts/SigerBanquetadeasistente/1.webp';
+import SigerBanquetadeDoctor_1 from './spareparts/SigerBanquetadeDoctor/1.webp';
+import SigerBlockde6salidasMesadoctorU100_1 from './spareparts/SigerBlockde6salidasMesadoctorU100/1.webp';
+import SIGERBlockselenoidesS30Triple_1 from './spareparts/SIGERBlockselenoidesS30Triple/1.webp';
+import SigerBotonFrenodeBraket_1 from './spareparts/SigerBotonFrenodeBraket/1.webp';
+import SIGERCobertordeholderinferiorV6000_1 from './spareparts/SIGERCobertordeholderinferiorV6000/1.webp';
+import SIGERCobertordeholdersuperiorV6000_1 from './spareparts/SIGERCobertordeholdersuperiorV6000/1.webp';
+import SIGERCobertordePasconescupideraCeramica_1 from './spareparts/SIGERCobertordePasconescupideraCeramica/1.webp';
+import SIGERCobertordepiesplastico_1 from './spareparts/SIGERCobertordepiesplastico/1.webp';
+import SIGERCobertorinferiormesaasistenteV6000_1 from './spareparts/SIGERCobertorinferiormesaasistenteV6000/1.webp';
+import SIGERCobertorinferiormesadeldoctorV6000_1 from './spareparts/SIGERCobertorinferiormesadeldoctorV6000/1.webp';
+import SIGERCobertorsiliconademesadoctorV6000_1 from './spareparts/SIGERCobertorsiliconademesadoctorV6000/1.webp';
+import SturdyEmpaquedepuertaAutoclaveSA232_1 from './spareparts/SturdyEmpaquedepuertaAutoclaveSA232/1.webp';
+import SturdyLimpiadorenpolvo_1 from './spareparts/SturdyLimpiadorenpolvo/1.webp';
+import SturdyManometrodepresionprincipal_1 from './spareparts/SturdyManometrodepresionprincipal/1.webp';
+import SturdyPerilladepuerta_1 from './spareparts/SturdyPerilladepuerta/1.webp';
+import SturdyPresostatoInterruptordepresion_1 from './spareparts/SturdyPresostatoInterruptordepresion/1.webp';
+import SturdyValvuladeseguridad_1 from './spareparts/SturdyValvuladeseguridad/1.webp';
 
 
 const assets = {
@@ -1334,6 +1353,63 @@ const assets = {
     },
     TPCCodomanguera: {
       default: TPCCodomanguera_1,
+    },
+    Basedemanilladepuerta: {
+      default: Basedemanilladepuerta_1,
+    },
+    SigerBanquetadeasistente: {
+      default: SigerBanquetadeasistente_1,
+    },
+    SigerBanquetadeDoctor: {
+      default: SigerBanquetadeDoctor_1,
+    },
+    SigerBlockde6salidasMesadoctorU100: {
+      default: SigerBlockde6salidasMesadoctorU100_1,
+    },
+    SIGERBlockselenoidesS30Triple: {
+      default: SIGERBlockselenoidesS30Triple_1,
+    },
+    SigerBotonFrenodeBraket: {
+      default: SigerBotonFrenodeBraket_1,
+    },
+    SIGERCobertordeholderinferiorV6000: {
+      default: SIGERCobertordeholderinferiorV6000_1,
+    },
+    SIGERCobertordeholdersuperiorV6000: {
+      default: SIGERCobertordeholdersuperiorV6000_1,
+    },
+    SIGERCobertordePasconescupideraCeramica: {
+      default: SIGERCobertordePasconescupideraCeramica_1,
+    },
+    SIGERCobertordepiesplastico: {
+      default: SIGERCobertordepiesplastico_1,
+    },
+    SIGERCobertorinferiormesaasistenteV6000: {
+      default: SIGERCobertorinferiormesaasistenteV6000_1,
+    },
+    SIGERCobertorinferiormesadeldoctorV6000: {
+      default: SIGERCobertorinferiormesadeldoctorV6000_1,
+    },
+    SIGERCobertorsiliconademesadoctorV6000: {
+      default: SIGERCobertorsiliconademesadoctorV6000_1,
+    },
+    SturdyEmpaquedepuertaAutoclaveSA232: {
+      default: SturdyEmpaquedepuertaAutoclaveSA232_1,
+    },
+    SturdyLimpiadorenpolvo: {
+      default: SturdyLimpiadorenpolvo_1,
+    },
+    SturdyManometrodepresionprincipal: {
+      default: SturdyManometrodepresionprincipal_1,
+    },
+    SturdyPerilladepuerta: {
+      default: SturdyPerilladepuerta_1,
+    },
+    SturdyPresostatoInterruptordepresion: {
+      default: SturdyPresostatoInterruptordepresion_1,
+    },
+    SturdyValvuladeseguridad: {
+      default: SturdyValvuladeseguridad_1,
     },
   }
 } as const

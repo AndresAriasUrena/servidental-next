@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Facebook, Instagram, MessageCircle  } from 'lucide-react'
+import { TbBrandYoutube } from "react-icons/tb";
 import assets from '@/assets'
 
 const navigation = [
@@ -58,7 +59,7 @@ export default function Header() {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-1">
           <Link
             href="https://www.instagram.com/servidentalcr/?hl=es-la"
             target="_blank"
@@ -79,6 +80,13 @@ export default function Header() {
             className="text-sm font-semibold leading-6 text-green-500 px-2 py-2 rounded-md hover:text-green-700 transition-colors"
           >
             <MessageCircle className="w-7 h-7"/>
+          </Link>
+          <Link
+            href="https://www.youtube.com/@ServiDentalCR"
+            target="_blank"
+            className="text-sm font-semibold leading-6 text-red-500 px-2 py-2 rounded-md hover:text-red-700 transition-colors"
+          >
+            <TbBrandYoutube className="w-7 h-7"/>
           </Link>
         </div>
       </nav>

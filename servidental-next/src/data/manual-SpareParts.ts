@@ -15,8 +15,21 @@ export const categories: SparePartsCategory[] = [
   "Transductores",
   "Puntas",
   "Compresores",
+  "Contrangulos",
   "Partes de Sillón",
   "Refacciones Autoclave",
+  "Accesorios de Mobiliario Dental",
+  "Equipamiento Ergonómico",
+  "Sistemas de Distribución Neumática",
+  "Sistemas de Control Neumático",
+  "Componentes de Seguridad",
+  "Protección de Instrumentos",
+  "Accesorios de Consultorio",
+  "Componentes Mecánicos",
+  "Repuestos para Esterilización",
+  "Productos de Limpieza y Desinfección",
+  "Instrumentos de Medición",
+  "Instrumentos de Control"
 
 ];
 
@@ -943,7 +956,7 @@ export const spareParts: SpareParts[] = [
     id: "TPC---Cilindro-compresor-Grande",
     slug: "TPC---Cilindro-compresor-Grande",
     name: "TPC - Cilindro compresor (Grande)",
-    category: "Compresores", 
+    category: "Compresores",
     images: [
       {
         url: assets.spareparts.TPCCilindrocompresorGrande.default,
@@ -961,7 +974,7 @@ export const spareParts: SpareParts[] = [
     id: "TPC---Codo-manguera",
     slug: "TPC---Codo-manguera",
     name: "TPC - Codo manguera",
-    category: "Mangueras", 
+    category: "Mangueras",
     images: [
       {
         url: assets.spareparts.TPCCodomanguera.default,
@@ -974,5 +987,349 @@ export const spareParts: SpareParts[] = [
     isActive: true,
     createdAt: "2025-02-24T21:38:36.639283",
     updatedAt: "2025-02-24T21:38:36.639283",
+  },
+
+  {
+    id: "Base-de-manilla-de-puerta",
+    slug: "Base-de-manilla-de-puerta",
+    name: "Base de manilla de puerta",
+    category: "Accesorios de Mobiliario Dental",
+    images: [
+      {
+        url: assets.spareparts.Basedemanilladepuerta.default,
+        alt: "Base de manilla de puerta",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:11.844748",
+    updatedAt: "2025-03-25T18:06:11.844748"
+  },
+  {
+    id: "Siger---Banqueta-de-asistente",
+    slug: "Siger---Banqueta-de-asistente",
+    name: "Siger - Banqueta de asistente",
+    category: "Equipamiento Ergonómico",
+    images: [
+      {
+        url: assets.spareparts.SigerBanquetadeasistente.default,
+        alt: "Siger - Banqueta de asistente",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:11.950771",
+    updatedAt: "2025-03-25T18:06:11.950771"
+  },
+  {
+    id: "Siger---Banqueta-de-Doctor",
+    slug: "Siger---Banqueta-de-Doctor",
+    name: "Siger - Banqueta de Doctor",
+    category: "Equipamiento Ergonómico",
+    images: [
+      {
+        url: assets.spareparts.SigerBanquetadeDoctor.default,
+        alt: "Siger - Banqueta de Doctor",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.060852",
+    updatedAt: "2025-03-25T18:06:12.060852"
+  },
+  {
+    id: "Siger---Block-de-6-salidas-Mesa-doctor-U100",
+    slug: "Siger---Block-de-6-salidas-Mesa-doctor-U100",
+    name: "Siger - Block de 6 salidas (Mesa doctor U100)",
+    category: "Sistemas de Distribución Neumática",
+    images: [
+      {
+        url: assets.spareparts.SigerBlockde6salidasMesadoctorU100.default,
+        alt: "Siger - Block de 6 salidas (Mesa doctor U100)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.167550",
+    updatedAt: "2025-03-25T18:06:12.167550"
+  },
+  {
+    id: "SIGER---Block-selenoides-S30-Triple",
+    slug: "SIGER---Block-selenoides-S30-Triple",
+    name: "SIGER - Block selenoides S30 (Triple)",
+    category: "Sistemas de Control Neumático",
+    images: [
+      {
+        url: assets.spareparts.SIGERBlockselenoidesS30Triple.default,
+        alt: "SIGER - Block selenoides S30 (Triple)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.282303",
+    updatedAt: "2025-03-25T18:06:12.282303"
+  },
+  {
+    id: "Siger---Boton-Freno-de-Braket",
+    slug: "Siger---Boton-Freno-de-Braket",
+    name: "Siger - Botón Freno de Braket",
+    category: "Componentes de Seguridad",
+    images: [
+      {
+        url: assets.spareparts.SigerBotonFrenodeBraket.default,
+        alt: "Siger - Botón Freno de Braket",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.418918",
+    updatedAt: "2025-03-25T18:06:12.418918"
+  },
+  {
+    id: "SIGER---Cobertor-de-holder-inferior-V6000",
+    slug: "SIGER---Cobertor-de-holder-inferior-V6000",
+    name: "SIGER - Cobertor de holder inferior (V6000)",
+    category: "Protección de Instrumentos",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertordeholderinferiorV6000.default,
+        alt: "SIGER - Cobertor de holder inferior (V6000)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.533512",
+    updatedAt: "2025-03-25T18:06:12.533512"
+  },
+  {
+    id: "SIGER---Cobertor-de-holder-superior-V6000",
+    slug: "SIGER---Cobertor-de-holder-superior-V6000",
+    name: "SIGER - Cobertor de holder superior (V6000)",
+    category: "Protección de Instrumentos",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertordeholdersuperiorV6000.default,
+        alt: "SIGER - Cobertor de holder superior (V6000)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.643177",
+    updatedAt: "2025-03-25T18:06:12.643177"
+  },
+  {
+    id: "SIGER---Cobertor-de-Pascon-escupidera-Ceramica",
+    slug: "SIGER---Cobertor-de-Pascon-escupidera-Ceramica",
+    name: "SIGER - Cobertor de Pascón escupidera (Cerámica)",
+    category: "Accesorios de Consultorio",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertordePasconescupideraCeramica.default,
+        alt: "SIGER - Cobertor de Pascón escupidera (Cerámica)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.756436",
+    updatedAt: "2025-03-25T18:06:12.756436"
+  },
+  {
+    id: "SIGER---Cobertor-de-pies-plastico",
+    slug: "SIGER---Cobertor-de-pies-plastico",
+    name: "SIGER - Cobertor de pies plástico",
+    category: "Accesorios de Mobiliario Dental",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertordepiesplastico.default,
+        alt: "SIGER - Cobertor de pies plástico",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:12.893693",
+    updatedAt: "2025-03-25T18:06:12.893693"
+  },
+  {
+    id: "SIGER---Cobertor-inferior-mesa-asistente-V6000",
+    slug: "SIGER---Cobertor-inferior-mesa-asistente-V6000",
+    name: "SIGER - Cobertor inferior mesa asistente (V6000)",
+    category: "Accesorios de Mobiliario Dental",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertorinferiormesaasistenteV6000.default,
+        alt: "SIGER - Cobertor inferior mesa asistente (V6000)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.013926",
+    updatedAt: "2025-03-25T18:06:13.013926"
+  },
+  {
+    id: "SIGER---Cobertor-inferior-mesa-del-doctor-V6000",
+    slug: "SIGER---Cobertor-inferior-mesa-del-doctor-V6000",
+    name: "SIGER - Cobertor inferior mesa del doctor (V6000)",
+    category: "Accesorios de Mobiliario Dental",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertorinferiormesadeldoctorV6000.default,
+        alt: "SIGER - Cobertor inferior mesa del doctor (V6000)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.152462",
+    updatedAt: "2025-03-25T18:06:13.152462"
+  },
+  {
+    id: "SIGER---Cobertor-silicona-de-mesa-doctor-V6000",
+    slug: "SIGER---Cobertor-silicona-de-mesa-doctor-V6000",
+    name: "SIGER - Cobertor silicona de mesa doctor (V6000)",
+    category: "Accesorios de Mobiliario Dental",
+    images: [
+      {
+        url: assets.spareparts.SIGERCobertorsiliconademesadoctorV6000.default,
+        alt: "SIGER - Cobertor silicona de mesa doctor (V6000)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.259830",
+    updatedAt: "2025-03-25T18:06:13.259830"
+  },
+  {
+    id: "Sturdy---Empaque-de-puerta-Autoclave-SA-232",
+    slug: "Sturdy---Empaque-de-puerta-Autoclave-SA-232",
+    name: "Sturdy - Empaque de puerta (Autoclave SA-232)",
+    category: "Repuestos para Esterilización",
+    images: [
+      {
+        url: assets.spareparts.SturdyEmpaquedepuertaAutoclaveSA232.default,
+        alt: "Sturdy - Empaque de puerta (Autoclave SA-232)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.493422",
+    updatedAt: "2025-03-25T18:06:13.493422"
+  },
+  {
+    id: "Sturdy---Limpiador-en-polvo",
+    slug: "Sturdy---Limpiador-en-polvo",
+    name: "Sturdy - Limpiador en polvo",
+    category: "Productos de Limpieza y Desinfección",
+    images: [
+      {
+        url: assets.spareparts.SturdyLimpiadorenpolvo.default,
+        alt: "Sturdy - Limpiador en polvo",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.665284",
+    updatedAt: "2025-03-25T18:06:13.665284"
+  },
+  {
+    id: "Sturdy---Manometro-de-presion-principal",
+    slug: "Sturdy---Manometro-de-presion-principal",
+    name: "Sturdy - Manómetro de presión principal",
+    category: "Instrumentos de Medición",
+    images: [
+      {
+        url: assets.spareparts.SturdyManometrodepresionprincipal.default,
+        alt: "Sturdy - Manómetro de presión principal",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.794641",
+    updatedAt: "2025-03-25T18:06:13.794641"
+  },
+  {
+    id: "Sturdy---Perilla-de-puerta",
+    slug: "Sturdy---Perilla-de-puerta",
+    name: "Sturdy - Perilla de puerta",
+    category: "Repuestos para Esterilización",
+    images: [
+      {
+        url: assets.spareparts.SturdyPerilladepuerta.default,
+        alt: "Sturdy - Perilla de puerta",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:13.902699",
+    updatedAt: "2025-03-25T18:06:13.902699"
+  },
+  {
+    id: "Sturdy---Presostato-Interruptor-de-presion",
+    slug: "Sturdy---Presostato-Interruptor-de-presion",
+    name: "Sturdy - Presostato (Interruptor de presión)",
+    category: "Instrumentos de Control",
+    images: [
+      {
+        url: assets.spareparts.SturdyPresostatoInterruptordepresion.default,
+        alt: "Sturdy - Presostato (Interruptor de presión)",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:14.017512",
+    updatedAt: "2025-03-25T18:06:14.017512"
+  },
+  {
+    id: "Sturdy---Valvula-de-seguridad",
+    slug: "Sturdy---Valvula-de-seguridad",
+    name: "Sturdy - Válvula de seguridad",
+    category: "Componentes de Seguridad",
+    images: [
+      {
+        url: assets.spareparts.SturdyValvuladeseguridad.default,
+        alt: "Sturdy - Válvula de seguridad",
+        width: 1080,
+        height: 1080,
+        isPrimary: true
+      }
+    ],
+    isActive: true,
+    createdAt: "2025-03-25T18:06:14.121985",
+    updatedAt: "2025-03-25T18:06:14.121985"
   }
+
 ];
