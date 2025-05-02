@@ -47,7 +47,10 @@ export const brands: ProductBrand[] = [
   "epdent",
   "mdmed",
   "launca",
-  "whitebrand"
+  "dimed",
+  "artelectron",
+  "fame",
+  "whitebrand",
 ];
 
 export const products: Product[] = [
@@ -3118,7 +3121,6 @@ export const products: Product[] = [
         height: 600,
         isPrimary: true
       },
-
     ],
     category: 'Bombas de vacío',
     isActive: true,
@@ -5739,4 +5741,162 @@ export const products: Product[] = [
     createdAt: "2024-10-29T00:10:22.374Z",
     updatedAt: "2024-10-29T00:10:22.374Z",
   },
+  {
+    id: "Laser-de-diodo-dental-Berylas-II",
+    slug: "Laser-de-diodo-dental-Berylas-II",
+    name: "Láser de diodo dental Berylas II",
+    subtitle: "Tres longitudes de onda",
+    brand: {
+      name: "dimed",
+      logo: assets.logos.brands.dimed
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "Diseño portátil: Tamaño pequeño, ligero y portátil con diseño modular",
+          "Interfaz intuitiva: 7 pulgadas, clara y lo suficientemente grande para un fácil tacto",
+          "Puntas de fibra desechables: Puntas de fibra estériles para tratamientos inmediatos y seguros",
+          "Pieza de mano ergonómica: Fácil reemplazo para diferentes cabezales",
+          "Batería recargable de iones de litio: Se puede utilizar en diferentes escenarios de tratamiento durante mucho tiempo",
+          "Almacenamiento seguro del cable: Solución de apertura en sentido antihorario para un transporte y almacenamiento más seguros",
+          "Mango ergonómico (en la parte posterior): Diseñado para facilitar la movilidad y la portabilidad"
+        ]
+      },
+      general: {
+        title: "Tres longitudes de onda innovadoras: 450 nm, 650 nm y 980 nm en odontología láser",
+        items: [
+          "Longitud de onda de 450 nm: El láser azul de 450 nm es una longitud de onda ideal para procedimientos quirúrgicos de tejidos blandos, como cortes, ablaciones, coagulaciones e incisiones",
+          "Longitud de onda de 650 nm: El láser de 650 nm puede ser bien absorbido por la melanina, lo que garantiza una alta concentración de energía en la región superficial. A menudo se utiliza para terapia de bajo nivel (LLLT)",
+          "Longitud de onda de 980 nm: El láser tradicional de 980 nm con alta absorción en agua y altos efectos térmicos tiene excelente capacidad de vaporización, hemostasia y reducida posibilidad de necrosis tisular"
+        ]
+      },
+      includes: {
+        title: "Aplicaciones",
+        items: [
+          "Endodoncia: Descontaminación de raíces, Pulpotomía, Descontaminación de Apex, Recubrimiento pulpar",
+          "Periodoncia: Descontaminación de bolsillos, Bioestimulación, Tratamiento de la recesión de las encías, Reducción de la inflamación",
+          "Terapia: Desensibilización Hipersensibilidad dentinaria, Aftas/queilitis, Terapia antálgica para la ATM, Fotobiomodulación",
+          "Cirugía: Gingivectomía/Gingivoplastia, Frenectomía labial/lingual, Preparación del surco, Incisión y drenaje del absceso",
+          "Implantes: Descontaminación de periimplantitis, Descubrimiento del implante, Bioestimulación postoperatoria, Descontaminación post-extracción",
+          "Cosmético: Blanqueo, Hemangioma, Despigmentación de las encías, Sonrisa de encías",
+          "Conservador: Descontaminación de ranuras, Descontaminación de cavidades, Vitrificación",
+          "Derma: Cirugía dermatológica, Hiperpigmentación, Regeneración de la piel"
+        ]
+      },
+      optional: {
+        title: "Ventajas clínicas del tratamiento láser dental",
+        items: [
+          "Sangrado mínimo, hinchazón",
+          "Menos o ninguna anestesia",
+          "Corte más preciso",
+          "Menos o ningún dolor",
+          "Sutura mínima o nula",
+          "Poca o ninguna recesión gingival",
+          "Menos intervención farmacológica",
+          "Reducción del tiempo quirúrgico",
+          "Mínimas molestias postoperatorias",
+          "Curación más rápida",
+          "Blanqueamiento eficaz con excelentes resultados"
+        ]
+      }
+    },
+    images: [
+      {
+        url: assets.products.LaserDeDiodoDentalBerylasII.default,
+        alt: "Lámpara de blanqueamiento LED Advance 2505",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.LaserDeDiodoDentalBerylasII.LaserDeDiodoDentalBerylasII_2,
+        alt: "áser de diodo dental Berylas II",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },   
+      {
+        url: assets.products.LaserDeDiodoDentalBerylasII.LaserDeDiodoDentalBerylasII_3,
+        alt: "áser de diodo dental Berylas II",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },   
+      {
+        url: assets.products.LaserDeDiodoDentalBerylasII.LaserDeDiodoDentalBerylasII_4,
+        alt: "áser de diodo dental Berylas II",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },   
+    ],
+    category: "Láseres dentales",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.089Z",
+    updatedAt: "2024-10-29T00:10:22.089Z",
+    videoIframe: ''
+  },
+  {
+    id: "Maquina-de-succion-movil",
+    slug: "Maquina-de-succion-movil",
+    name: "Máquina de succión móvil",
+    subtitle: "Succión fuerte y débil ajustable",
+    brand: {
+      name: "fame",
+      logo: assets.logos.brands.fame
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "Sistema de control por microcomputadora",
+          "Tanque de almacenamiento de aguas residuales de gran capacidad",
+          "Pedal y botón de control para el arranque",
+          "Pérdida cero de recursos hídricos",
+          "Ruido ultra bajo",
+          "Alcantarillado con un solo botón",
+          "Fuerte succión",
+          "Retraso de cinco segundos en la succión de saliva para evitar residuos de líquido en el tubo y evitar infecciones cruzadas"
+        ]
+      },
+      general: {
+        title: "",
+        items: []
+      }
+    },
+    images: [
+      {
+        url: assets.products.bombasVacio.MaquinaDeSuccionMovil.default,
+        alt: "Máquina de succión móvil",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.bombasVacio.MaquinaDeSuccionMovil.MaquinaDeSuccionMovil_2,
+        alt: "Máquina de succión móvil",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.bombasVacio.MaquinaDeSuccionMovil.MaquinaDeSuccionMovil_3,
+        alt: "Máquina de succión móvil",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+        ],
+    category: "Bombas de vacío",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.089Z",
+    updatedAt: "2024-10-29T00:10:22.089Z",
+    videoIframe: ''
+  },
+  
 ];

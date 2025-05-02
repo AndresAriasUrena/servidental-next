@@ -39,6 +39,7 @@ export type ProductCategory =
   | 'Carritos'
   | 'Armarios'
   | 'Pulverizador'
+  | 'Láseres dentales'
 
   
 
@@ -62,6 +63,9 @@ export type ProductBrand =
   | 'mdmed'
   | 'launca'
   | 'whitebrand'
+  | 'dimed'
+  | 'artelectron'
+  | 'fame'
   ;
 
   export interface ProductImage {

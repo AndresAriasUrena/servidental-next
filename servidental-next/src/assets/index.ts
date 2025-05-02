@@ -18,7 +18,6 @@ import pymeCostaRica from './logos/PYME_CostaRica.avif'
 import bioartLogo from './logos/brands/bioart_logo.avif'
 import coxoLogo from './logos/brands/coxo_logo.avif'
 import dofLogo from './logos/brands/dof_logo.avif'
-import fengDanLogo from './logos/brands/feng_dan_logo.avif'
 import meyerLogo from './logos/brands/meyer.avif'
 import microNxLogo from './logos/brands/micro_nx_logo.avif'
 import sigerLogo from './logos/brands/siger_logo.avif'
@@ -32,6 +31,10 @@ import epdent from './logos/brands/epdent.avif'
 import mdmed from './logos/brands/mdmed.avif'
 import elec from './logos/brands/elec.avif'
 import Launca from './logos/brands/Launca.avif'
+import Dimed from './logos/brands/DIMED.avif'
+import ARTElectron from './logos/brands/ARTElectron.avif'
+import Fame from './logos/brands/FAME.avif'
+
 
 
 // Unidades dentales
@@ -452,6 +455,11 @@ import BombaDeVacioVC10_3 from './products/BombaDeVacioVC10/3.avif'
 import BombaDeVacioANYVAC30_1 from './products/BombaDeVacioANYVAC30/1.avif'
 import BombaDeVacioANYVAC30_2 from './products/BombaDeVacioANYVAC30/2.avif'
 
+//Máquina de succión móvil
+import MaquinaDeSuccionMovil_1 from './products/MaquinaDeSuccionMovil/1.avif'
+import MaquinaDeSuccionMovil_2 from './products/MaquinaDeSuccionMovil/2.avif'
+import MaquinaDeSuccionMovil_3 from './products/MaquinaDeSuccionMovil/3.avif'
+
 
 
 // Anestesia
@@ -548,6 +556,16 @@ import BA250Lt15_1 from './products/BA250Lt15/1.avif';
 import BA45Ls11_1 from './products/BA45Ls11/1.avif';
 
 
+//Electro bisturí Electrón ART-E1
+import ElectroBisturiElectronARTE1_1 from './products/ElectroBisturiElectronARTE1/1.avif';
+import ElectroBisturiElectronARTE1_2 from './products/ElectroBisturiElectronARTE1/2.avif';
+import ElectroBisturiElectronARTE1_3 from './products/ElectroBisturiElectronARTE1/3.avif';
+
+//Láser de diodo dental Berylas II
+import LaserDeDiodoDentalBerylasII_1 from './products/LaserDeDiodoDentalBerylasII/1.avif';
+import LaserDeDiodoDentalBerylasII_2 from './products/LaserDeDiodoDentalBerylasII/2.avif';
+import LaserDeDiodoDentalBerylasII_3 from './products/LaserDeDiodoDentalBerylasII/3.avif';
+import LaserDeDiodoDentalBerylasII_4 from './products/LaserDeDiodoDentalBerylasII/3.avif';
 
 //KitDePiezasDeManoDeBajaVelocidad
 import KitDePiezasDeManoDeBajaVelocidad_1 from './products/KitDePiezasDeManoDeBajaVelocidad/1.avif';
@@ -660,7 +678,6 @@ const assets = {
       bioart: bioartLogo,
       coxo: coxoLogo,
       dof: dofLogo,
-      fengDan: fengDanLogo,
       meyer: meyerLogo,
       microNx: microNxLogo,
       siger: sigerLogo,
@@ -673,6 +690,9 @@ const assets = {
       epdent: epdent,
       mdmed: mdmed,
       launca: Launca,
+      dimed: Dimed,
+      artelectron: ARTElectron,
+      fame: Fame,
       whitebrand: whitebrand,
     }
   },
@@ -924,6 +944,12 @@ const assets = {
         Sa232_2: Sa232_2,
       },
     },
+    LaserDeDiodoDentalBerylasII: {
+      default: LaserDeDiodoDentalBerylasII_1,
+      LaserDeDiodoDentalBerylasII_2: LaserDeDiodoDentalBerylasII_2,
+      LaserDeDiodoDentalBerylasII_3: LaserDeDiodoDentalBerylasII_3,
+      LaserDeDiodoDentalBerylasII_4: LaserDeDiodoDentalBerylasII_4,
+    },
     scanner: {
       EscanerIntraoralDL300PCoxoLaunca: {
         default: EscanerIntraoralDL300PCoxoLaunca_1,
@@ -1060,6 +1086,11 @@ const assets = {
         default: BombaDeVacioANYVAC30_1,
         BombaDeVacioANYVAC30_2: BombaDeVacioANYVAC30_2,
       },
+      MaquinaDeSuccionMovil: {
+        default: MaquinaDeSuccionMovil_1,
+        MaquinaDeSuccionMovil_2: MaquinaDeSuccionMovil_2,
+        MaquinaDeSuccionMovil_3: MaquinaDeSuccionMovil_3,
+      },
     },
     anestesia: {
       JeringaDeAnestesiaDentalInteligente: {
@@ -1143,6 +1174,11 @@ const assets = {
         BA45Ls11: {
           default: BA45Ls11_1
         }
+      },
+      ElectroBisturiElectronARTE1: {
+        default: ElectroBisturiElectronARTE1_1,
+        ElectroBisturiElectronARTE1_2: ElectroBisturiElectronARTE1_2,
+        ElectroBisturiElectronARTE1_3: ElectroBisturiElectronARTE1_3,
       },
       KitDePiezasDeManoDeBajaVelocidad: {
         default: KitDePiezasDeManoDeBajaVelocidad_1,
