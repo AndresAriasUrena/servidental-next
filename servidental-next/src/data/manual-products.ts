@@ -28,7 +28,8 @@ export const categories: ProductCategory[] = [
   "Mobiliario",
   "Pulverizador",
   "Equipo portátil",
-  "Equipo para endodoncia"
+  "Equipo para endodoncia",
+  "Láseres dentales"
 ];
 
 export const brands: ProductBrand[] = [
