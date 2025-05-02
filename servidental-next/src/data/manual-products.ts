@@ -29,7 +29,8 @@ export const categories: ProductCategory[] = [
   "Pulverizador",
   "Equipo portátil",
   "Equipo para endodoncia",
-  "Láseres dentales"
+  "Láseres dentales",
+  "Electro bisturís",
 ];
 
 export const brands: ProductBrand[] = [
@@ -5899,5 +5900,68 @@ export const products: Product[] = [
     updatedAt: "2024-10-29T00:10:22.089Z",
     videoIframe: ''
   },
-  
+  {
+    id: "Electro-bisturi-Electron-ART-E1",
+    slug: "Electro-bisturi-Electron-ART-E1",
+    name: "Electro bisturí Electrón ART-E1",
+    subtitle: "Tanto para dentistas como para veterinarios",
+    brand: {
+      name: "fame",
+      logo: assets.logos.brands.fame
+    },
+    description: "",
+    shortDescription: "",
+    features: {
+      unique: {
+        title: "Características",
+        items: [
+          "Tanto para dentistas como para veterinarios",
+          "Rapidez de corte, facilidad de uso y antecedentes de implementación segura",
+          "Para incisiones, escisiones y drenajes menores",
+          "Utiliza ondas de radio monopolares (no calor) para cortar el tejido",
+          "Elimina las cicatrices de los tejidos que dejaban las antiguas máquinas de cauterización y pone una precisión exacta a su alcance",
+          "Lectura LED nítida que resalta cada uno de los 10 niveles de potencia y 3 modos (Corte, Coag1 y Coag2)"
+        ]
+      },
+      general: {
+        title: "Técnicas",
+        items: [
+          "Salida de potencia máxima: 50 W (carga de 400 ohmios)",
+          "Fuente de alimentación: 110V±5% ~50/60Hz 92VA o 220V±5% ~50/60Hz 92VA",
+          "Frecuencia de trabajo: 1,5 ~ 1,7 MHz ± 5%",
+          "Dimensiones (cm): 23 (largo) x 22,5 (ancho) x 8,5 (alto)",
+          "Longitud del cable de la pieza de mano: 190 cm",
+          "Longitud del cable de la placa de indiferencia: 190 cm.",
+          "Peso: 12 libras"
+        ]
+      }
+    },
+    images: [
+      {
+        url: assets.products.ElectroBisturiElectronARTE1.default,
+        alt: "Electro bisturí Electrón ART-E1",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },
+      {
+        url: assets.products.ElectroBisturiElectronARTE1.ElectroBisturiElectronARTE1_2,
+        alt: "Electro bisturí Electrón ART-E1",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },   
+      {
+        url: assets.products.ElectroBisturiElectronARTE1.ElectroBisturiElectronARTE1_3,
+        alt: "Electro bisturí Electrón ART-E1",
+        width: 800,
+        height: 600,
+        isPrimary: true
+      },       ],
+    category: "Electro bisturís",
+    isActive: true,
+    createdAt: "2024-10-29T00:10:22.089Z",
+    updatedAt: "2024-10-29T00:10:22.089Z",
+    videoIframe: ''
+  }
 ];

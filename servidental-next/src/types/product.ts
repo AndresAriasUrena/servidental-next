@@ -40,6 +40,7 @@ export type ProductCategory =
   | 'Armarios'
   | 'Pulverizador'
   | 'Láseres dentales'
+  | 'Electro bisturís'
 
   
 

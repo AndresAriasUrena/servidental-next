@@ -697,6 +697,11 @@ const assets = {
     }
   },
   products: {
+    ElectroBisturiElectronARTE1: {
+      default: ElectroBisturiElectronARTE1_1,
+      ElectroBisturiElectronARTE1_2: ElectroBisturiElectronARTE1_2,
+      ElectroBisturiElectronARTE1_3: ElectroBisturiElectronARTE1_3,
+    },
     rayosX: {
       TomografoMeyerSSX9010Dpro3DE: {
         default: TomografoMeyerSSX9010Dpro3DE_1,
@@ -1174,11 +1179,6 @@ const assets = {
         BA45Ls11: {
           default: BA45Ls11_1
         }
-      },
-      ElectroBisturiElectronARTE1: {
-        default: ElectroBisturiElectronARTE1_1,
-        ElectroBisturiElectronARTE1_2: ElectroBisturiElectronARTE1_2,
-        ElectroBisturiElectronARTE1_3: ElectroBisturiElectronARTE1_3,
       },
       KitDePiezasDeManoDeBajaVelocidad: {
         default: KitDePiezasDeManoDeBajaVelocidad_1,
