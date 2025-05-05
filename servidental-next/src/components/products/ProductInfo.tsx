@@ -24,7 +24,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           alt={product.brand.name}
           width={120}
           height={48}
-          className="w-auto min-h-6 md:min-h-8 max-h-8 object-contain"
+          className="w-auto min-h-6 md:min-h-14 max-h-14 object-contain"
           priority
         />
         {product.brand2 && (

@@ -5906,8 +5906,8 @@ export const products: Product[] = [
     name: "Electro bisturí Electrón ART-E1",
     subtitle: "Tanto para dentistas como para veterinarios",
     brand: {
-      name: "fame",
-      logo: assets.logos.brands.fame
+      name: "artelectron",
+      logo: assets.logos.brands.artelectron
     },
     description: "",
     shortDescription: "",
