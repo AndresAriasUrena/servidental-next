@@ -5107,7 +5107,7 @@ export const products: Product[] = [
         isPrimary: false
       }
     ],
-    category: "Unidades Dentales",
+    category: "Mobiliario",
     isActive: true,
     createdAt: "2024-10-29T00:10:22.441Z",
     updatedAt: "2024-10-29T00:10:22.441Z",

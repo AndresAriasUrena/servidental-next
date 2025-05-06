@@ -16,6 +16,10 @@ export default function ProductCard({ product }: ProductCardProps) {
   
   const productUrl = `/products/${product.slug}${currentCategory ? `?returnCategory=${encodeURIComponent(currentCategory)}` : ''}`
 
+  // Verificar si es una unidad dental o el escáner específico
+  const isExclusive = product.category === "Unidades Dentales" || 
+                      product.slug === "Escaner-Intraoral-DL-300P-Coxo-Launca"
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,6 +29,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <Link href={productUrl}>
         <div className="relative">
+          {/* Etiqueta Exclusivo */}
+          {isExclusive && (
+            <div className="absolute top-2 left-2 z-10 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-bold">
+              EXCLUSIVO
+            </div>
+          )}
+          
           {/* Brand logo */}
           {product.brand?.logo && (
             <div className="absolute top-1 right-4 z-10 bg-white p-2 rounded-lg shadow-sm">

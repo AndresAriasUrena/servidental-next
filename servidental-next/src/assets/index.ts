@@ -565,7 +565,7 @@ import ElectroBisturiElectronARTE1_3 from './products/ElectroBisturiElectronARTE
 import LaserDeDiodoDentalBerylasII_1 from './products/LaserDeDiodoDentalBerylasII/1.avif';
 import LaserDeDiodoDentalBerylasII_2 from './products/LaserDeDiodoDentalBerylasII/2.avif';
 import LaserDeDiodoDentalBerylasII_3 from './products/LaserDeDiodoDentalBerylasII/3.avif';
-import LaserDeDiodoDentalBerylasII_4 from './products/LaserDeDiodoDentalBerylasII/3.avif';
+import LaserDeDiodoDentalBerylasII_4 from './products/LaserDeDiodoDentalBerylasII/4.avif';
 
 //KitDePiezasDeManoDeBajaVelocidad
 import KitDePiezasDeManoDeBajaVelocidad_1 from './products/KitDePiezasDeManoDeBajaVelocidad/1.avif';

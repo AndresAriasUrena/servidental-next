@@ -47,6 +47,13 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         </div>
       </div>
 
+      {/* Etiqueta de Exclusividad */}
+      {(product.category === "Unidades Dentales" || product.slug === "Escaner-Intraoral-DL-300P-Coxo-Launca") && (
+        <div className="mt-4">
+          <p className="font-bold text-black">Equipo exclusivo en Servi Dental</p>
+        </div>
+      )}
+
       {/* Características */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
