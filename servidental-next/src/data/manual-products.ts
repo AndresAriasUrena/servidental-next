@@ -5839,7 +5839,7 @@ export const products: Product[] = [
     isActive: true,
     createdAt: "2024-10-29T00:10:22.089Z",
     updatedAt: "2024-10-29T00:10:22.089Z",
-    videoIframe: ''
+    videoIframe: '<iframe width="560" height="315" src="https://www.youtube.com/embed/vmKTOE5HlNg?si=9N3APb3Ls6yYPIbk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
   },
   {
     id: "Maquina-de-succion-movil",
