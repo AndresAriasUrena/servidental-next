@@ -6,6 +6,9 @@ import Mantenimiento from './images/Mantenimiento.avif'
 import VentaDeEquipo from './images/Venta de equipo.avif'
 import Capacitaciones from './images/Capacitaciones.avif'
 import EquipoDeProfesionales from './images/Equipo de profesionales.avif'
+import Compu from './images/Compu.avif'
+import Celular from './images/Celular.avif'
+import Tablet from './images/Tablet.avif'
 
 // Logos principales
 import logo from './logos/Logo-servidental-medical-equipment.avif'
@@ -300,15 +303,15 @@ import CraftDry_5 from './products/FresadoraDentalCraftDry/5.avif'
 
 
 //Esterilizadores
-//SA-260MB - Súper deluxe automático, clase “B”
+//SA-260MB - Súper deluxe automático, clase "B"
 import Sa260MB_1 from './products/Sa260MB/1.avif'
 import Sa260MB_2 from './products/Sa260MB/2.avif'
 
-//SA-232X - Semi automático, clase “S”
+//SA-232X - Semi automático, clase "S"
 import SA232x_1 from './products/SA232x/1.avif'
 import SA232x_2 from './products/SA232x/2.avif'
 
-//SA-232 - Manual, clase “N”
+//SA-232 - Manual, clase "N"
 import Sa232_1 from './products/Sa232/1.avif'
 import Sa232_2 from './products/Sa232/2.avif'
 
@@ -665,6 +668,9 @@ const assets = {
     EquipoDeProfesionales: EquipoDeProfesionales,
     VentaDeEquipo: VentaDeEquipo,
     Capacitaciones: Capacitaciones,
+    Compu: Compu,
+    Celular: Celular,
+    Tablet: Tablet,
   },
   logos: {
     main: {

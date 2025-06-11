@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import Image, { StaticImageData } from 'next/image';
@@ -15,13 +15,24 @@ type Slide = {
   content: JSX.Element;
   imageWidthClass: string;
   textWidthClass: string;
+  responsiveImages?: {
+    mobile: StaticImageData;
+    tablet: StaticImageData;
+    desktop: StaticImageData;
+  };
 };
+
+const deviceImages = [
+  { src: assets.images.Compu, alt: 'Versión Computadora' },
+  { src: assets.images.Tablet, alt: 'Versión Tablet' },
+  { src: assets.images.Celular, alt: 'Versión Celular' }
+];
 
 const slides: Slide[] = [
   {
     id: 1,
     title: 'Frame 1',
-    image: assets.images.EquipoDeProfesionales,
+    image: assets.images.Compu,
     content: (
       <div className="flex flex-col z-10 p-6 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-2xl 
                       lg:ml-8 lg:mr-[-40%] text-center lg:text-left lg:mt-[40%]">
@@ -34,7 +45,12 @@ const slides: Slide[] = [
       </div>
     ),
     textWidthClass: 'lg:w-[70%]',
-    imageWidthClass: 'lg:w-[90%]',
+    imageWidthClass: 'lg:w-[120%]',
+    responsiveImages: {
+      mobile: assets.images.Celular,
+      tablet: assets.images.Tablet,
+      desktop: assets.images.Tablet
+    }
   },
   {
     id: 2,
@@ -97,6 +113,16 @@ const slides: Slide[] = [
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [deviceIndex, setDeviceIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex === 0) {
+      const interval = setInterval(() => {
+        setDeviceIndex((prev) => (prev + 1) % deviceImages.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [currentIndex]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -113,7 +139,7 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative w-full h-screen bg-[#003B46] text-white overflow-hidden">
+    <section className="relative w-full h-screen bg-[#003B46] text-white overflow-hidden overflow-x-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
         <AnimatePresence initial={false}>
           <motion.div
@@ -129,14 +155,40 @@ export default function HeroCarousel() {
                 {slides[currentIndex].content}
               </div>
 
-              <div className={`w-full h-1/2 sm:h-screen lg:h-full relative ${slides[currentIndex].imageWidthClass}`}>
-                <Image
-                  src={slides[currentIndex].image}
-                  alt={slides[currentIndex].title}
-                  placeholder="blur"
-                  priority={currentIndex === 0}
-                  className="w-full h-full object-cover opacity-95"
-                />
+              <div className={`w-full h-screen lg:h-full relative ${slides[currentIndex].imageWidthClass}`}>
+                {currentIndex === 0 && slides[currentIndex].responsiveImages ? (
+                  <>
+                    <Image
+                      src={slides[currentIndex].responsiveImages.desktop}
+                      alt={slides[currentIndex].title}
+                      placeholder="blur"
+                      priority={true}
+                      className="w-full h-full object-contain opacity-95 hidden xl:block"
+                    />
+                    <Image
+                      src={slides[currentIndex].responsiveImages.mobile}
+                      alt={slides[currentIndex].title}
+                      placeholder="blur"
+                      priority={true}
+                      className="w-full h-full object-contain opacity-95 hidden md:block xl:hidden"
+                    />
+                    <Image
+                      src={slides[currentIndex].responsiveImages.mobile}
+                      alt={slides[currentIndex].title}
+                      placeholder="blur"
+                      priority={true}
+                      className="w-full h-full object-cover opacity-95 block md:hidden"
+                    />
+                  </>
+                ) : (
+                  <Image
+                    src={slides[currentIndex].image}
+                    alt={slides[currentIndex].title}
+                    placeholder="blur"
+                    priority={currentIndex === 0}
+                    className="w-full h-full object-cover opacity-95"
+                  />
+                )}
               </div>
             </div>
           </motion.div>
