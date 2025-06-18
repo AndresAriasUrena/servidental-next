@@ -50,6 +50,14 @@ export async function generateMetadata(
       siteName: 'ServiDental CR',
       locale: 'es_CR',
       type: 'website',
+      images: [
+        {
+          url: '/android-chrome-512x512.png',
+          width: 512,
+          height: 512,
+          alt: 'ServiDental CR Logo',
+        },
+      ],
     }
   }
 }

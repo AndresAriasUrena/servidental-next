@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     url: 'http://servidentalcr.com/',
     images: [
       {
-        url: '/favicon-48x48.png',
-        width: 48,
-        height: 48,
-        alt: 'Servidental Icon',
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: 'ServiDental CR Logo',
       },
     ],
     type: 'website',
