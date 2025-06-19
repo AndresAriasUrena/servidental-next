@@ -8,11 +8,11 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'ServiDental | Equipo Médico Dental',
-  description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
+  description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
   keywords: 'equipo médico dental, servicio técnico dental, Costa Rica, unidades dentales',
   openGraph: {
     title: 'ServidentalCR',
-    description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
+    description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
     url: 'http://servidentalcr.com/',
     images: [
       {
