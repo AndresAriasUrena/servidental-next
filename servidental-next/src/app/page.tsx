@@ -10,10 +10,10 @@ const Instagram = dynamic(() => import('@/components/home/instagram'));
 
 export const metadata: Metadata = {
   title: 'ServiDental | Equipo Médico Dental Costa Rica',
-  description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
+  description: 'Más de 18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
   openGraph: {
     title: 'ServiDental CR | Equipo Médico Dental',
-    description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
+    description: 'Más de 18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
     url: 'https://servidentalcr.com/',
     siteName: 'ServiDental CR',
     locale: 'es_CR',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ServiDental CR | Equipo Médico Dental',
-    description: 'Más de 16 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
+    description: 'Más de 18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
     images: ['/android-chrome-512x512.png'],
   },
 };
