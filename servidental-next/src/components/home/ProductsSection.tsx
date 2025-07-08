@@ -10,14 +10,6 @@ import assets from '@/assets'
 const categories = [
   {
     id: 1,
-    name: 'Raspador dental y pulidor de aire PT Master',
-    description: 'Pieza de mano de alto rendimiento',
-    image: assets.products.pulidoras.RaspadorDentalYpulidorDeAirePTMaster.default,
-    // href: '/products?category=Unidades+Dentales', // Cambiado
-    brand: assets.logos.brands.coxo
-  },
-  {
-    id: 2,
     name: 'Pulidora dental por aire CP-1',
     description: 'Pieza de mano de alto rendimiento',
     image: assets.products.pulidoras.PulidoraDentalPorAireCP.default,
@@ -25,7 +17,7 @@ const categories = [
     brand: assets.logos.brands.coxo
   },
   {
-    id: 3,
+    id: 2,
     name: 'Microarenador Standar Microblaster"',
     description: 'Rápido y fácil de usar',
     image: assets.products.pulidoras.MicroarenadorStandarMicroblaster.default,
@@ -33,7 +25,7 @@ const categories = [
     brand: assets.logos.brands.bioart
   },
   {
-    id: 4,
+    id: 3,
     name: 'Lavadora ultrasónica BioWhash',
     description: 'Optimiza y acelera el proceso de lavado',
     image: assets.products.lavadoraUltrasonido.LavadoraUltrasonicaBioWhash.default,
@@ -41,7 +33,7 @@ const categories = [
     brand: assets.logos.brands.bioart
   },
   {
-    id: 5,
+    id: 4,
     name: 'Carro-movil-multifuncional',
     description: 'Diseño minimalista',
     image: assets.products.Mobiliario.CarroMovilMultifuncional.default,
@@ -49,14 +41,21 @@ const categories = [
     brand: assets.logos.brands.siger//CAMBIAR ESTO!!!
   },
   {
-    id: 6,
+    id: 5,
     name: 'Escáner intraoral DL-300P, Coxo, Launca',
     description: 'Alámbrico',
     image: assets.products.scanner.EscanerIntraoralDL300PCoxoLaunca.default,
     // href: '/products?category=Scanner', // Cambiado
     brand: assets.logos.brands.coxo 
-  }
-] as const
+  },
+  {
+    id: 6,
+    name: "Motor de cirugía C-Puma-Master",
+    description: "Rotación precisa y estable",
+    image: assets.products.MotoresDeCirugias.MotorDeCirugiaCPumaMaster.default,
+    brand: assets.logos.brands.coxo 
+  },
+]
 
 // Duplicamos las categorías para el efecto infinito
 const extendedCategories = [...categories, ...categories, ...categories]
