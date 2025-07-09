@@ -10,11 +10,11 @@ import assets from '@/assets'
 const categories = [
   {
     id: 1,
-    name: 'Pulidora dental por aire CP-1',
-    description: 'Pieza de mano de alto rendimiento',
-    image: assets.products.pulidoras.PulidoraDentalPorAireCP.default,
-    // href: '/products?category=Equipo+de+Rayos+X', // Cambiado
-    brand: assets.logos.brands.coxo
+    name: 'Escáner intraoral DL-300P, Coxo, Launca',
+    description: 'Alámbrico',
+    image: assets.products.scanner.EscanerIntraoralDL300PCoxoLaunca.default,
+    // href: '/products?category=Scanner', // Cambiado
+    brand: assets.logos.brands.coxo 
   },
   {
     id: 2,
@@ -42,11 +42,11 @@ const categories = [
   },
   {
     id: 5,
-    name: 'Escáner intraoral DL-300P, Coxo, Launca',
-    description: 'Alámbrico',
-    image: assets.products.scanner.EscanerIntraoralDL300PCoxoLaunca.default,
-    // href: '/products?category=Scanner', // Cambiado
-    brand: assets.logos.brands.coxo 
+    name: 'Pulidora dental por aire CP-1',
+    description: 'Pieza de mano de alto rendimiento',
+    image: assets.products.pulidoras.PulidoraDentalPorAireCP.default,
+    // href: '/products?category=Equipo+de+Rayos+X', // Cambiado
+    brand: assets.logos.brands.coxo
   },
   {
     id: 6,
