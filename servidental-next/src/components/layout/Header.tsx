@@ -13,6 +13,7 @@ const navigation = [
   { name: 'NOSOTROS', href: '/about' },
   { name: 'EQUIPO MÉDICO', href: '/products' },
   { name: 'REPUESTOS', href: '/spare-parts' },
+  { name: 'BLOG', href: '/blog' },
   { name: 'NUESTROS SERVICIOS', href: '/#services' },
   { name: 'CONTACTO', href: '/contact' },
 ]
