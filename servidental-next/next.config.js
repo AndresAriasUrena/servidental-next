@@ -20,6 +20,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  env: {
+    WP_API_URL: 'https://wp.servidentalcr.com/wp-json/wp/v2',
+    CUSTOM_API_URL: 'https://wp.servidentalcr.com/wp-json/servidental/v1'
+  },
   webpack(config) {
     // Agregar regla para manejar archivos multimedia
     config.module.rules.push({
