@@ -1,3 +1,4 @@
+// src/components/blog/BlogSidebar.tsx
 'use client';
 
 import { useState } from 'react';
@@ -14,8 +15,8 @@ interface BlogSidebarProps {
 }
 
 export default function BlogSidebar({ 
-  categories, 
-  recentPosts, 
+  categories = [], 
+  recentPosts = [], 
   currentSearch = '',
   currentCategory 
 }: BlogSidebarProps) {
@@ -51,13 +52,64 @@ export default function BlogSidebar({
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return 'Fecha inválida';
+    }
+  };
+
+  // Ultra safe validation for recent posts
+  const getSafeRecentPosts = () => {
+    if (!Array.isArray(recentPosts)) {
+      console.warn('recentPosts is not an array:', recentPosts);
+      return [];
+    }
+
+    return recentPosts
+      .filter(post => {
+        // Ultra defensive checking
+        if (!post || typeof post !== 'object') return false;
+        if (!post.id || typeof post.id !== 'number') return false;
+        if (!post.slug || typeof post.slug !== 'string') return false;
+        if (!post.date || typeof post.date !== 'string') return false;
+        if (!post.title || typeof post.title !== 'object') return false;
+        if (!post.title.rendered || typeof post.title.rendered !== 'string') return false;
+        if (typeof post.reading_time !== 'number') return false;
+        
+        return true;
+      })
+      .slice(0, 5); // Limit to 5 posts
+  };
+
+  // Ultra safe validation for categories
+  const getSafeCategories = () => {
+    if (!Array.isArray(categories)) {
+      console.warn('categories is not an array:', categories);
+      return [];
+    }
+
+    return categories.filter(category => {
+      if (!category || typeof category !== 'object') return false;
+      if (!category.id || typeof category.id !== 'number') return false;
+      if (!category.name || typeof category.name !== 'string') return false;
+      if (!category.slug || typeof category.slug !== 'string') return false;
+      
+      return true;
     });
   };
+
+  const safeRecentPosts = getSafeRecentPosts();
+  const safeCategories = getSafeCategories();
+
+  // Al inicio del componente BlogSidebar, antes del return
+  console.log('Categories received:', categories);
+  console.log('Recent posts received:', recentPosts);
 
   return (
     <div className="space-y-8">
@@ -104,11 +156,11 @@ export default function BlogSidebar({
       </div>
 
       {/* Categories */}
-      {categories.length > 0 && (
+      {safeCategories.length > 0 && (
         <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Categorías</h3>
           <div className="space-y-2">
-            {categories.map((category) => (
+            {safeCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleCategoryClick(category.slug)}
@@ -124,7 +176,7 @@ export default function BlogSidebar({
                     ? 'bg-white/20 text-white'
                     : 'bg-gray-100 text-gray-500'
                 }`}>
-                  {category.count}
+                  {category.count || 0}
                 </span>
               </button>
             ))}
@@ -142,11 +194,11 @@ export default function BlogSidebar({
       )}
 
       {/* Recent Posts */}
-      {recentPosts.length > 0 && (
+      {safeRecentPosts.length > 0 && (
         <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Artículos Recientes</h3>
           <div className="space-y-4">
-            {recentPosts.map((post) => (
+            {safeRecentPosts.map((post) => (
               <article key={post.id} className="group">
                 <Link href={`/blog/${post.slug}`} className="block">
                   <div className="flex space-x-3">

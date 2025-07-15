@@ -26,3 +26,158 @@ body {
     @apply bg-white text-servi_green border border-servi_green px-4 py-2 rounded-md hover:bg-blue-50 transition-colors;
   }
 }
+/* 
+AGREGAR AL FINAL DE src/app/globals.css 
+Este CSS se aplica específicamente al contenido del blog de WordPress
+*/
+
+/* Blog Content Styling - Solución para imágenes centradas y espaciado */
+.prose img,
+.prose-lg img,
+[data-blog-content] img {
+  display: block !important;
+  margin: 2rem auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 0.75rem !important; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Espaciado mejorado entre párrafos */
+.prose p,
+.prose-lg p,
+[data-blog-content] p {
+  margin-bottom: 1.5rem !important;
+  line-height: 1.75 !important;
+  color: #4b5563 !important;
+}
+
+/* Espaciado extra antes y después de imágenes */
+.prose p + img,
+.prose-lg p + img,
+[data-blog-content] p + img {
+  margin-top: 2.5rem !important;
+  margin-bottom: 2.5rem !important;
+}
+
+.prose img + p,
+.prose-lg img + p,
+[data-blog-content] img + p {
+  margin-top: 2.5rem !important;
+}
+
+/* Headings styling */
+.prose h2,
+.prose-lg h2,
+[data-blog-content] h2 {
+  color: #256c68 !important; /* servi_dark */
+  font-size: 1.875rem !important; /* text-2xl */
+  font-weight: 700 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.25 !important;
+}
+
+.prose h3,
+.prose-lg h3,
+[data-blog-content] h3 {
+  color: #256c68 !important; /* servi_dark */
+  font-size: 1.5rem !important; /* text-xl */
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Lists styling */
+.prose ul,
+.prose-lg ul,
+[data-blog-content] ul {
+  margin: 1.5rem 0 !important;
+  padding-left: 1.5rem !important;
+}
+
+.prose ul li,
+.prose-lg ul li,
+[data-blog-content] ul li {
+  margin-bottom: 0.5rem !important;
+  color: #4b5563 !important;
+}
+
+.prose ul li::marker,
+.prose-lg ul li::marker,
+[data-blog-content] ul li::marker {
+  color: #037971 !important; /* servi_green */
+}
+
+/* Links styling */
+.prose a,
+.prose-lg a,
+[data-blog-content] a {
+  color: #037971 !important; /* servi_green */
+  text-decoration: underline !important;
+}
+
+.prose a:hover,
+.prose-lg a:hover,
+[data-blog-content] a:hover {
+  color: #256c68 !important; /* servi_dark */
+}
+
+/* Strong/Bold text */
+.prose strong,
+.prose-lg strong,
+[data-blog-content] strong {
+  color: #111827 !important;
+  font-weight: 600 !important;
+}
+
+/* Blockquotes */
+.prose blockquote,
+.prose-lg blockquote,
+[data-blog-content] blockquote {
+  border-left: 4px solid #037971 !important; /* servi_green */
+  background-color: #f3feff !important; /* servi_light */
+  padding: 1rem 1.5rem !important;
+  margin: 2rem 0 !important;
+  font-style: italic !important;
+  color: #4b5563 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .prose img,
+  .prose-lg img,
+  [data-blog-content] img {
+    margin: 1.5rem auto !important;
+    border-radius: 0.5rem !important; /* rounded-lg en mobile */
+  }
+  
+  .prose p + img,
+  .prose-lg p + img,
+  [data-blog-content] p + img,
+  .prose img + p,
+  .prose-lg img + p,
+  [data-blog-content] img + p {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+}
+/* Excluir CTA del styling de prose */
+.prose .bg-gradient-to-r,
+.prose-lg .bg-gradient-to-r,
+[data-blog-content] .bg-gradient-to-r {
+  color: inherit !important;
+}
+
+.prose .bg-gradient-to-r h3,
+.prose-lg .bg-gradient-to-r h3,
+[data-blog-content] .bg-gradient-to-r h3 {
+  color: white !important;
+}
+
+.prose .bg-gradient-to-r p,
+.prose-lg .bg-gradient-to-r p,
+[data-blog-content] .bg-gradient-to-r p {
+  color: white !important;
+  opacity: 0.9;
+}
