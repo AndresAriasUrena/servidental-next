@@ -89,7 +89,7 @@ export default function Footer() {
             className="col-span-1"
           >
             <h4 className="text-lg font-semibold mb-4">Certificaciones</h4>
-            <div className="relative w-32 h-16">
+            <div className="relative w-32 h-16 mb-4">
               <Image
                 src={assets.logos.main.pymeCostaRica}
                 alt="PYME Costa Rica"
@@ -98,6 +98,27 @@ export default function Footer() {
                 className="object-contain"
               />
             </div>
+            
+            {/* Enlaces Legales */}
+            <h4 className="text-lg font-semibold mb-4 mt-8">Legal</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link 
+                  href="/privacy-policy" 
+                  className="hover:text-white transition-colors"
+                >
+                  Políticas de Privacidad
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/terms-conditions" 
+                  className="hover:text-white transition-colors"
+                >
+                  Términos y Condiciones
+                </Link>
+              </li>
+            </ul>
           </motion.div>
 
           {/* Contacto */}
@@ -122,8 +143,13 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
-              Copyright © {new Date().getFullYear()} ServiDentalCR. Todos los derechos reservados.
+            <div className="text-gray-400 text-sm text-center md:text-left">
+              <p>Copyright © {new Date().getFullYear()} ServiDentalCR. Todos los derechos reservados.</p>
+              <p className="mt-1">
+                <Link href="/privacy-policy" className="hover:text-white transition-colors">Políticas de Privacidad</Link>
+                {' | '}
+                <Link href="/terms-conditions" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+              </p>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>Diseño y Desarrollo Web:</span>

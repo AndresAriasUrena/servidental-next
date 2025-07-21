@@ -226,7 +226,7 @@ class BlogService {
         // Return minimal working config
         const minimalConfig: BlogConfig = {
           site_name: 'Blog ServiDental',
-          site_description: 'Noticias y artículos sobre equipos médicos dentales',
+          site_description: 'Noticias, artículos y novedades',
           posts_per_page: 12,
           categories: [],
           recent_posts: []
@@ -319,7 +319,7 @@ class BlogService {
 
       return {
         site_name: 'Blog ServiDental',
-        site_description: 'Noticias y artículos sobre equipos médicos dentales',
+        site_description: 'Noticias, artículos y novedades',
         posts_per_page: 12,
         categories: categoriesResponse,
         recent_posts: recentPostsResponse.posts
@@ -327,7 +327,7 @@ class BlogService {
     } catch (error) {
       return {
         site_name: 'Blog ServiDental',
-        site_description: 'Noticias y artículos sobre equipos médicos dentales',
+        site_description: 'Noticias, artículos y novedades',
         posts_per_page: 12,
         categories: [],
         recent_posts: []

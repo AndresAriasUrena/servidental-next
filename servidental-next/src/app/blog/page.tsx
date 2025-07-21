@@ -4,7 +4,7 @@ import BlogClient from '@/components/blog/BlogClient';
 
 export const metadata: Metadata = {
   title: 'Blog | ServiDental',
-  description: 'Noticias y artículos sobre equipos médicos dentales de ServiDental CR',
+  description: 'Noticias, artículos y novedades',
 };
 
 // Loading component para el suspense

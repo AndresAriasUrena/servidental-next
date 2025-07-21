@@ -11,14 +11,10 @@ interface Service {
   description: string;
   image: StaticImageData;
   hasLink?: boolean;
+  linkUrl?: string;
 }
 
 const services: Service[] = [
-  {
-    title: 'Instalaciones',
-    description: 'El proceso de instalación es llevado a cabo por nuestro personal altamente calificado, siguiendo los más altos estándares de calidad.',
-    image: assets.services.instalaciones
-  },
   {
     title: 'Mantenimiento y servicio técnico',
     description: 'Contamos con planes de mantenimiento preventivo y correctivo, realizados por nuestro personal certificado acorde a los requerimientos del fabricante.',
@@ -26,9 +22,16 @@ const services: Service[] = [
     hasLink: true
   },
   {
-    title: 'Calibraciones',
-    description: 'Al ser distribuidores nacionales, contamos con líneas de comunicación directa con los fabricantes, manteniéndonos al día en las últimas actualizaciones de software.',
-    image: assets.services.calibraciones
+    title: 'Certificación de Rayos X',
+    description: 'Contamos con una profesional que está debidamente registrada ante el Ministerio de Salud para poder emitir una certificación basada en la verificación de parámetros para el buen funcionamiento de su equipo radiológico.',
+    image: assets.services.certificaciones,
+    hasLink: true,
+    linkUrl: '/x-ray-certification'
+  },
+  {
+    title: 'Instalaciones',
+    description: 'El proceso de instalación es llevado a cabo por nuestro personal altamente calificado, siguiendo los más altos estándares de calidad.',
+    image: assets.services.instalaciones
   },
   {
     title: 'Traslado de equipos',
@@ -36,10 +39,10 @@ const services: Service[] = [
     image: assets.services.traslados
   },
   {
-    title: 'Certificación de Rayos X',
-    description: 'Contamos con una profesional que está debidamente registrada ante el Ministerio de Salud para poder emitir una certificación basada en la verificación de parámetros para el buen funcionamiento de su equipo radiológico.',
-    image: assets.services.certificaciones
-  }
+    title: 'Calibraciones',
+    description: 'Al ser distribuidores nacionales, contamos con líneas de comunicación directa con los fabricantes, manteniéndonos al día en las últimas actualizaciones de software.',
+    image: assets.services.calibraciones
+  },
 ]
 
 export default function ServicesSection() {
@@ -91,11 +94,11 @@ export default function ServicesSection() {
                 </p>
                 {service.hasLink && (
                   <Link 
-                    href="/services" 
-                    className="inline-flex items-center text-servi_green hover:text-servi_dark font-medium transition-colors"
-                  >
-                    Ver más →
-                  </Link>
+                  href={service.linkUrl || '/services'} 
+                  className="inline-flex items-center text-servi_green hover:text-servi_dark font-medium transition-colors"
+                >
+                  Ver más →
+                </Link>
                 )}
               </div>
             </motion.div>

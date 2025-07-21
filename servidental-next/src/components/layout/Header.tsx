@@ -11,10 +11,10 @@ import assets from '@/assets'
 const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
-  { name: 'PRODUCTOS', href: '/products' },
+  { name: 'SERVICIOS', href: '/#services' },
+  { name: 'EQUIPOS', href: '/products' },
   { name: 'REPUESTOS', href: '/spare-parts' },
   { name: 'BLOG', href: '/blog' },
-  { name: 'SERVICIOS', href: '/#services' },
   { name: 'CONTACTO', href: '/contact' },
 ]
 

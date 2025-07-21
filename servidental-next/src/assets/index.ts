@@ -6,8 +6,8 @@ import Mantenimiento from './images/Mantenimiento.avif'
 import VentaDeEquipo from './images/Venta de equipo.avif'
 import Capacitaciones from './images/Capacitaciones.avif'
 import EquipoDeProfesionales from './images/Equipo de profesionales.avif'
-import Compu from './images/Compu.avif'
-import Celular from './images/Celular.avif'
+import Compu from './images/Tablet.avif'
+import Celular from './images/Tablet.avif'
 import Tablet from './images/Tablet.avif'
 
 // Logos principales

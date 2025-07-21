@@ -152,10 +152,10 @@ export default function BlogClient() {
                 Blog ServiDental
               </h1>
               <p className="text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto">
-                Noticias y artículos sobre equipos médicos dentales
+              Noticias, artículos y novedades
               </p>
               <div className="mt-8 text-lg text-gray-200">
-                18 años de experiencia compartiendo conocimiento dental
+              18 años compartiendo conocimiento, tecnología y respaldo.
               </div>
             </div>
           </div>
@@ -251,10 +251,10 @@ export default function BlogClient() {
               Blog ServiDental
             </h1>
             <p className="text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto">
-              {blogConfig?.site_description || 'Noticias y artículos sobre equipos médicos dentales'}
+              {blogConfig?.site_description || 'Noticias, artículos y novedades'}
             </p>
             <div className="mt-8 text-lg text-gray-200">
-              18 años de experiencia compartiendo conocimiento dental
+            18 años compartiendo conocimiento, tecnología y respaldo.
             </div>
           </div>
         </div>
