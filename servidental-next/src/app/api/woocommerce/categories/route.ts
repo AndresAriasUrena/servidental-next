@@ -1,64 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
-import https from 'https';
 
 async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams) {
-  return new Promise((resolve, reject) => {
-    const url = new URL(process.env.WOOCOMMERCE_URL!);
-    
+  try {
     const queryParams = new URLSearchParams({
       consumer_key: process.env.WOOCOMMERCE_CONSUMER_KEY!,
       consumer_secret: process.env.WOOCOMMERCE_CONSUMER_SECRET!,
       ...Object.fromEntries(params.entries())
     });
     
-    const apiPath = `/wp-json/wc/v3/${endpoint}?${queryParams.toString()}`;
+    const apiUrl = `${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/${endpoint}?${queryParams.toString()}`;
     
-    const options = {
-      hostname: url.hostname,
-      port: url.port || 443,
-      path: apiPath,
+    console.log('Making request to:', `${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/${endpoint}`);
+    
+    const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
-        'User-Agent': 'ServidentalCR-NextJS/1.0'
+        'User-Agent': 'ServidentalCR-NextJS/1.0',
+        'Accept': 'application/json'
       }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API Error ${response.status}: ${errorText}`);
+    }
+
+    const jsonData = await response.json();
+    const total = response.headers.get('x-wp-total');
+
+    return {
+      data: jsonData,
+      total: total ? parseInt(total) : jsonData.length,
+      headers: response.headers
     };
-    
-    const req = https.request(options, (res) => {
-      let data = '';
-      
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-      
-      res.on('end', () => {
-        try {
-          if (res.statusCode === 200) {
-            const jsonData = JSON.parse(data);
-            resolve({
-              data: jsonData,
-              total: res.headers['x-wp-total'] ? parseInt(res.headers['x-wp-total'] as string) : jsonData.length,
-              headers: res.headers
-            });
-          } else {
-            reject(new Error(`API Error ${res.statusCode}: ${data}`));
-          }
-        } catch (error) {
-          reject(new Error(`Parse Error: ${error}`));
-        }
-      });
-    });
-    
-    req.on('error', (error) => {
-      reject(new Error(`Request Error: ${error.message}`));
-    });
-    
-    req.setTimeout(10000, () => {
-      req.destroy();
-      reject(new Error('Request timeout'));
-    });
-    
-    req.end();
-  });
+  } catch (error) {
+    console.error('WooCommerce categories request failed:', error);
+    throw error;
+  }
 }
 
 export async function GET(request: NextRequest) {

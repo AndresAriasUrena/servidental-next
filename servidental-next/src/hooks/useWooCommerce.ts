@@ -8,7 +8,9 @@ export function useWooCommerce() {
   const [error, setError] = useState<string | null>(null);
 
   const makeRequest = useCallback(async (endpoint: string, params: URLSearchParams = new URLSearchParams()) => {
-    const url = `/api/woocommerce/${endpoint}?${params.toString()}`;
+    // Ensure trailing slash for Next.js API routes
+    const normalizedEndpoint = endpoint.endsWith('/') ? endpoint : `${endpoint}/`;
+    const url = `/api/woocommerce/${normalizedEndpoint}?${params.toString()}`;
     
     const response = await fetch(url, {
       method: 'GET',
@@ -98,11 +100,38 @@ export function useWooCommerce() {
     }
   }, [makeRequest]);
 
+  const fetchProductBySlug = useCallback(async (slug: string): Promise<WooCommerceProduct> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(`/api/woocommerce/products/slug/${slug}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Product not found: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Error fetching product';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return {
     loading,
     error,
     fetchProducts,
     fetchProduct,
+    fetchProductBySlug,
     fetchCategories,
     searchProducts
   };

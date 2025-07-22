@@ -32,7 +32,7 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
   const isOnSale = product.on_sale && salePrice > 0;
 
   return (
-    <Link href={`/products/${product.slug}`} className="group block">
+    <Link href={`/tienda/${product.slug}`} className="group block">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-50">

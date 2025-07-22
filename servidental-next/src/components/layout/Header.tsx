@@ -4,15 +4,18 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Facebook, Instagram, MessageCircle } from 'lucide-react'
+import { Facebook, Instagram, MessageCircle, ShoppingCart } from 'lucide-react'
 import { TbBrandYoutube } from "react-icons/tb"
 import assets from '@/assets'
+import MiniCart from '@/components/ecommerce/cart/MiniCart'
+import { useCart } from '@/hooks/useCart'
 
 const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
   { name: 'SERVICIOS', href: '/#services' },
   { name: 'EQUIPOS', href: '/products' },
+  { name: 'TIENDA', href: '/tienda' },
   { name: 'REPUESTOS', href: '/spare-parts' },
   { name: 'BLOG', href: '/blog' },
   { name: 'CONTACTO', href: '/contact' },
@@ -41,6 +44,8 @@ const socialLinks = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showMiniCart, setShowMiniCart] = useState(false)
+  const { totalQuantity } = useCart()
 
   return (
     <header className="bg-white fixed z-30 w-full shadow-sm">
@@ -87,8 +92,31 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="flex lg:hidden">
+        {/* Mobile cart and menu buttons */}
+        <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile Cart Button */}
+          <div className="relative">
+            <button
+              type="button"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50"
+              onClick={() => setShowMiniCart(!showMiniCart)}
+            >
+              <span className="sr-only">Abrir carrito</span>
+              <ShoppingCart className="h-6 w-6" aria-hidden="true" />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              )}
+            </button>
+            {showMiniCart && (
+              <div className="absolute right-0 top-12 z-50">
+                <MiniCart onClose={() => setShowMiniCart(false)} />
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50"
@@ -112,8 +140,31 @@ export default function Header() {
           ))}
         </div>
 
-        {/* Desktop CTA button */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        {/* Desktop Cart and CTA */}
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+          {/* Desktop Cart Button */}
+          <div className="relative">
+            <button
+              type="button"
+              className="relative p-2 text-gray-700 hover:text-servi_green transition-colors"
+              onClick={() => setShowMiniCart(!showMiniCart)}
+            >
+              <span className="sr-only">Abrir carrito</span>
+              <ShoppingCart className="h-6 w-6" />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              )}
+            </button>
+            {showMiniCart && (
+              <div className="absolute right-0 top-12 z-50">
+                <MiniCart onClose={() => setShowMiniCart(false)} />
+              </div>
+            )}
+          </div>
+
+          {/* WhatsApp CTA */}
           <Link
             href="https://api.whatsapp.com/send?phone=50687045556"
             target="_blank"

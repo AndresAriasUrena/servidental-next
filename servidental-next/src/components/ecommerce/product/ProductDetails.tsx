@@ -1,22 +1,76 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
-import { MinusIcon, PlusIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { useWooCommerce } from '@/hooks/useWooCommerce';
+import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
 
 interface ProductDetailsProps {
-  product: WooCommerceProduct;
+  slug: string;
 }
 
-export function ProductDetails({ product }: ProductDetailsProps) {
+function ProductDetailsSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-4">
+          <div className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="grid grid-cols-4 gap-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+        <div className="space-y-6">
+          <div className="h-8 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+          <div className="h-6 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ProductDetails({ slug }: ProductDetailsProps) {
+  const [product, setProduct] = useState<WooCommerceProduct | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart, isLoading } = useCart();
+  const { addToCart, isLoading: cartLoading } = useCart();
+  const { fetchProductBySlug } = useWooCommerce();
+
+  useEffect(() => {
+    async function loadProduct() {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Buscar producto por slug
+        const product = await fetchProductBySlug(slug);
+        setProduct(product);
+      } catch (err) {
+        console.error('Error loading product:', err);
+        setError('Producto no encontrado');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProduct();
+  }, [slug, fetchProductBySlug]);
 
   const handleAddToCart = async () => {
+    if (!product) return;
+    
     try {
       await addToCart(product, quantity);
     } catch (error) {
@@ -24,8 +78,43 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     }
   };
 
+  if (loading) {
+    return <ProductDetailsSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
+        <p className="text-gray-600 mb-8">{error}</p>
+        <a 
+          href="/tienda" 
+          className="bg-servi_green text-white px-6 py-3 rounded-md hover:bg-servi_dark transition-colors"
+        >
+          Volver a la tienda
+        </a>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Producto no encontrado</h1>
+        <p className="text-gray-600 mb-8">El producto que buscas no existe o ha sido removido.</p>
+        <a 
+          href="/tienda" 
+          className="bg-servi_green text-white px-6 py-3 rounded-md hover:bg-servi_dark transition-colors"
+        >
+          Volver a la tienda
+        </a>
+      </div>
+    );
+  }
+
   const price = parseFloat(product.price) || 0;
   const isOnSale = product.on_sale && parseFloat(product.sale_price) > 0;
+  const rating = parseFloat(product.average_rating) || 0;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -80,12 +169,33 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               {product.name}
             </h1>
             
-            {/* Categories */}
-            {product.categories && product.categories.length > 0 && (
-              <p className="text-sm text-gray-500">
-                Categoría: {product.categories.map(cat => cat.name).join(', ')}
-              </p>
-            )}
+            {/* Categories and Rating */}
+            <div className="flex items-center justify-between">
+              {product.categories && product.categories.length > 0 && (
+                <p className="text-sm text-gray-500">
+                  Categoría: {product.categories.map(cat => cat.name).join(', ')}
+                </p>
+              )}
+              
+              {/* Rating */}
+              {rating > 0 && (
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: 5 }).map((_, index) => {
+                    const isFilled = index < Math.floor(rating);
+                    const Icon = isFilled ? StarIconSolid : StarIcon;
+                    return (
+                      <Icon
+                        key={index}
+                        className={`w-4 h-4 ${isFilled ? 'text-yellow-400' : 'text-gray-300'}`}
+                      />
+                    );
+                  })}
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({product.rating_count} reseñas)
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Price */}
@@ -158,11 +268,11 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
               <button
                 onClick={handleAddToCart}
-                disabled={isLoading}
+                disabled={cartLoading}
                 className="w-full bg-servi_green text-white py-3 px-6 rounded-md hover:bg-servi_dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <ShoppingBagIcon className="w-5 h-5" />
-                {isLoading ? 'Agregando...' : `Agregar al carrito (${quantity})`}
+                {cartLoading ? 'Agregando...' : `Agregar al carrito (${quantity})`}
               </button>
             </div>
           )}
@@ -186,9 +296,23 @@ export function ProductDetails({ product }: ProductDetailsProps) {
             </div>
           )}
 
+          {/* Additional Product Info */}
+          <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <p className="text-sm text-gray-500">SKU</p>
+              <p className="font-medium text-gray-900">{product.sku || 'N/A'}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500">Peso</p>
+              <p className="font-medium text-gray-900">
+                {product.weight ? `${product.weight} kg` : 'N/A'}
+              </p>
+            </div>
+          </div>
+
           {/* Share Button */}
           <ShareButton 
-            url={`${window.location.origin}/products/${product.slug}`}
+            url={`${typeof window !== 'undefined' ? window.location.origin : ''}/tienda/${product.slug}`}
             title={product.name}
             description={product.short_description}
           />
@@ -209,3 +333,5 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     </div>
   );
 }
+
+export { ProductDetails };

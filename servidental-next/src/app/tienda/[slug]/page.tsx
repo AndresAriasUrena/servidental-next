@@ -9,15 +9,16 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps) {
-  // In a real implementation, you would fetch the product data here
+  const { slug } = await params;
+  
   return {
-    title: `Producto ${params.slug} | ServidentalCR`,
-    description: `Detalles del producto ${params.slug} - Equipo médico dental de calidad`,
-    keywords: `${params.slug}, equipo médico dental, servidental, costa rica`,
+    title: `Producto ${slug} | ServidentalCR`,
+    description: `Detalles del producto ${slug} - Equipo médico dental de calidad`,
+    keywords: `${slug}, equipo médico dental, servidental, costa rica`,
     openGraph: {
-      title: `Producto ${params.slug} | ServidentalCR`,
-      description: `Detalles del producto ${params.slug}`,
-      type: 'product'
+      title: `Producto ${slug} | ServidentalCR`,
+      description: `Detalles del producto ${slug}`,
+      type: 'website'
     }
   };
 }
@@ -57,11 +58,13 @@ function ProductDetailsSkeleton() {
   );
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  
   return (
     <div className="min-h-screen bg-white">
       <Suspense fallback={<ProductDetailsSkeleton />}>
-        <ProductDetails slug={params.slug} />
+        <ProductDetails slug={slug} />
       </Suspense>
     </div>
   );

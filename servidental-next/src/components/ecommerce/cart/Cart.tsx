@@ -19,7 +19,7 @@ export function Cart() {
           Agrega algunos productos para comenzar tu compra
         </p>
         <Link
-          href="/products"
+          href="/tienda"
           className="bg-servi_green text-white px-6 py-3 rounded-md hover:bg-servi_dark transition-colors"
         >
           Ver productos
@@ -70,7 +70,7 @@ export function Cart() {
               {/* Product Info */}
               <div className="flex-grow">
                 <h3 className="font-medium text-gray-900">
-                  <Link href={`/products/${item.slug}`} className="hover:text-servi_green">
+                  <Link href={`/tienda/${item.slug}`} className="hover:text-servi_green">
                     {item.name}
                   </Link>
                 </h3>
