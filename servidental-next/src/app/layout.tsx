@@ -52,7 +52,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <CartProvider>
           <Header />
-          <main className="min-h-screen pt-16">
+          <main className="pt-24 lg:pt-32">
             {children}
           </main>
           <Footer />

@@ -181,3 +181,43 @@ Este CSS se aplica específicamente al contenido del blog de WordPress
   color: white !important;
   opacity: 0.9;
 }
+/* Agregar al final de src/app/globals.css */
+
+/* Fixed Header Layout Utils */
+.header-offset {
+  padding-top: 6rem; /* 96px */
+}
+
+@media (min-width: 1024px) {
+  .header-offset {
+    padding-top: 8rem; /* 128px */
+  }
+}
+
+/* Alternative - using CSS custom properties for dynamic header height */
+:root {
+  --header-height-mobile: 6rem;
+  --header-height-desktop: 8rem;
+}
+
+.main-content {
+  padding-top: var(--header-height-mobile);
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    padding-top: var(--header-height-desktop);
+  }
+}
+
+/* Smooth scroll behavior for anchor links */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height-mobile);
+}
+
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: var(--header-height-desktop);
+  }
+}
