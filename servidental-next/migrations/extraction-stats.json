@@ -1,0 +1,235 @@
+{
+  "extractedAt": "2025-07-22T02:57:22.002Z",
+  "sourceFile": "/Users/andresarias/Documents/MDW/servidental/servidental-next/src/data/manual-products.ts",
+  "outputFile": "/Users/andresarias/Documents/MDW/servidental/servidental-next/migrations/extracted-products.json",
+  "statistics": {
+    "totalProducts": 99,
+    "categories": [
+      "Pulidores",
+      "Motores de implantes",
+      "Motores de cirugías",
+      "Motor NX-201N",
+      "Lavadoras ultrasónicas",
+      "Lámparas Dentales",
+      "Lámparas de Fotocurado",
+      "Fresadora",
+      "Esterilización",
+      "Mobiliario",
+      "Escáneres",
+      "Equipo de Rayos X",
+      "Pulverizador",
+      "Equipo portátil",
+      "Equipo para endodoncia",
+      "Compresores",
+      "Cámaras Intraorales",
+      "Bombas de vacío",
+      "Anestesia",
+      "Activador UV para implantes",
+      "Piezas de mano",
+      "Termoformadoras",
+      "Selladoras",
+      "Unidades Dentales",
+      "Lámparas de blanqueamiento",
+      "Láseres dentales",
+      "Electro bisturís"
+    ],
+    "brands": [
+      "COXO",
+      "BioArt",
+      "Micro NX",
+      "Siger",
+      "DOF",
+      "Sturdy",
+      "DenTech",
+      "Meyer",
+      "DentaFilm",
+      "TPC",
+      "epdent",
+      "mdmed",
+      "elec",
+      "whitebrand",
+      "Xpect Vision",
+      "dimed",
+      "fame",
+      "artelectron"
+    ],
+    "withImages": 99,
+    "withVideo": 38,
+    "active": 99
+  },
+  "sample": [
+    {
+      "id": "Pulidora-dental-por-aire-CP-1",
+      "slug": "Pulidora-dental-por-aire-CP-1",
+      "name": "Pulidora dental por aire CP-1",
+      "subtitle": "Pieza de mano de alto rendimiento",
+      "brand": {
+        "name": "COXO",
+        "logo": "assets/logos/brands/coxo"
+      },
+      "description": "",
+      "shortDescription": "",
+      "features": {
+        "unique": {
+          "title": "Características",
+          "items": [
+            "Presión de aire de entrada: 250-450 kPa",
+            "Presión de agua de entrada: 70-220 kPa",
+            "Flujo de agua: >30 ml/min",
+            "Calibre de boquilla para medidas de potencia: 0,7 mm",
+            "Calibre de boquilla para medidas de agua: 1,4 mm",
+            "Peso: 145 g"
+          ]
+        },
+        "general": {
+          "title": "",
+          "items": []
+        }
+      },
+      "images": [
+        {
+          "url": "assets/products/pulidoras/PulidoraDentalPorAireCP/default",
+          "alt": "Pulidora dental por aire CP-1",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/pulidoras/PulidoraDentalPorAireCP/PulidoraDentalPorAireCP_2",
+          "alt": "Pulidora dental por aire CP-1",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/pulidoras/PulidoraDentalPorAireCP/PulidoraDentalPorAireCP_3",
+          "alt": "Pulidora dental por aire CP-1",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/pulidoras/PulidoraDentalPorAireCP/PulidoraDentalPorAireCP_4",
+          "alt": "Pulidora dental por aire CP-1",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/pulidoras/PulidoraDentalPorAireCP/PulidoraDentalPorAireCP_5",
+          "alt": "Pulidora dental por aire CP-1",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        }
+      ],
+      "category": "Pulidores",
+      "isActive": true,
+      "createdAt": "2024-10-29T00:10:22.089Z",
+      "updatedAt": "2024-10-29T00:10:22.089Z",
+      "videoIframe": "<iframe width=\"100%;\" height=\"415\" src=\"https://www.youtube.com/embed/2QqAk6oi7kw?si=CuKVKqxwssbCCG2u\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>"
+    },
+    {
+      "id": "Microarenador-Standar-Microblaster",
+      "slug": "Microarenador-Standar-Microblaster",
+      "name": "Microarenador Standar Microblaster",
+      "subtitle": "Rápido y fácil de usar",
+      "brand": {
+        "name": "BioArt",
+        "logo": "assets/logos/brands/bioart"
+      },
+      "description": "",
+      "shortDescription": "",
+      "features": {
+        "unique": {
+          "title": "Características",
+          "items": [
+            "Rápido y fácil de usar",
+            "Tiene una punta de metal duro que promueve una mayor durabilidad y precisión al trabajar",
+            "Aplicaciones: micro retenciones en superficies dentales y piezas a cementar, eliminación de cemento, limpieza de brackets, limpieza o desengrase de metales o cerámicas cuando se utiliza la técnica de \"reparación cerámica intraoral\", chorreado oclusal para ajuste fino, reemplazando el uso de carbón, pruebas internas de ajuste y asentamiento de coronas, ajuste de contactos interproximales, limpieza de piezas fundidas, eliminación de oxidación",
+            "Disponibles en acople Borden o Midwest",
+            "Modo Estándar: Tiene 1 punta fija con un ángulo de 138º"
+          ]
+        },
+        "general": {
+          "title": "",
+          "items": []
+        }
+      },
+      "images": [
+        {
+          "url": "assets/products/pulidoras/MicroarenadorStandarMicroblaster/default",
+          "alt": "Microarenador Standar Microblaster",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/pulidoras/MicroarenadorStandarMicroblaster/MicroarenadorStandarMicroblaster_2",
+          "alt": "Microarenador Standar Microblaster",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        }
+      ],
+      "category": "Pulidores",
+      "isActive": true,
+      "createdAt": "2024-10-29T00:10:22.089Z",
+      "updatedAt": "2024-10-29T00:10:22.089Z",
+      "videoIframe": "<iframe width=\"100%;\" height=\"415\" src=\"https://www.youtube.com/embed/o-bGnZoX71w?si=3YKEWVQPSemVJI6h\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>"
+    },
+    {
+      "id": "Motor-de-implantes-ISE-270M",
+      "slug": "Motor-de-implantes-ISE-270M",
+      "name": "Motor de implantes ISE-270M",
+      "subtitle": "Potente motor óptico",
+      "brand": {
+        "name": "Micro NX",
+        "logo": "assets/logos/brands/micronx"
+      },
+      "description": "",
+      "shortDescription": "",
+      "features": {
+        "unique": {
+          "title": "Características",
+          "items": [
+            "Máx. 70N.cm",
+            "Función de límite de par",
+            "Potente motor óptico",
+            "Visualización del par y las RPM en tiempo real",
+            "Modos de programación",
+            "Función de memoria",
+            "Función de calibración automática",
+            "Función de corte de hilo",
+            "Corte de rosca"
+          ]
+        },
+        "general": {
+          "title": "",
+          "items": []
+        }
+      },
+      "images": [
+        {
+          "url": "assets/products/MotordeImplantes/MotorDeImplantesISE270M/default",
+          "alt": "Motor de implantes ISE-270M",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        },
+        {
+          "url": "assets/products/MotordeImplantes/MotorDeImplantesISE270M/MotorDeImplantesISE270M_2",
+          "alt": "Motor de implantes ISE-270M",
+          "width": 800,
+          "height": 600,
+          "isPrimary": true
+        }
+      ],
+      "category": "Motores de implantes",
+      "isActive": true,
+      "createdAt": "2024-10-29T00:10:22.089Z",
+      "updatedAt": "2024-10-29T00:10:22.089Z",
+      "videoIframe": "<iframe width=\"100%;\" height=\"415\" src=\"https://www.youtube.com/embed/C-F8sxdQsuo?si=k9zLMfsqUCBG0lJw\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>"
+    }
+  ]
+}
