@@ -1,10 +1,10 @@
 // src/components/layout/Header.tsx
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Facebook, Instagram, MessageCircle, ShoppingCart } from 'lucide-react'
+import { Facebook, Instagram, MessageCircle, ShoppingCart, CheckCircle } from 'lucide-react'
 import { TbBrandYoutube } from "react-icons/tb"
 import assets from '@/assets'
 import MiniCart from '@/components/ecommerce/cart/MiniCart'
@@ -45,10 +45,13 @@ const socialLinks = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showMiniCart, setShowMiniCart] = useState(false)
-  const { totalQuantity } = useCart()
+  const cartState = useCart()
+  const totalQuantity = cartState.cart.totalQuantity
+  const justAdded = false
 
   return (
     <header className="bg-white fixed z-30 w-full shadow-sm">
+
       {/* Top bar with social icons - hidden on mobile */}
       <div className="hidden lg:block bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,15 +101,18 @@ export default function Header() {
           <div className="relative">
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50"
+              className={`-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50 transition-all duration-200 ${justAdded ? 'animate-bounce' : ''}`}
               onClick={() => setShowMiniCart(!showMiniCart)}
             >
               <span className="sr-only">Abrir carrito</span>
               <ShoppingCart className="h-6 w-6" aria-hidden="true" />
               {totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className={`absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300 ${justAdded ? 'animate-pulse scale-125' : ''}`}>
                   {totalQuantity}
                 </span>
+              )}
+              {justAdded && (
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-servi_green/30 rounded-full animate-ping"></div>
               )}
             </button>
             {showMiniCart && (
@@ -146,15 +152,18 @@ export default function Header() {
           <div className="relative">
             <button
               type="button"
-              className="relative p-2 text-gray-700 hover:text-servi_green transition-colors"
+              className={`relative p-2 text-gray-700 hover:text-servi_green transition-all duration-200 ${justAdded ? 'animate-bounce' : ''}`}
               onClick={() => setShowMiniCart(!showMiniCart)}
             >
               <span className="sr-only">Abrir carrito</span>
               <ShoppingCart className="h-6 w-6" />
               {totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className={`absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300 ${justAdded ? 'animate-pulse scale-125' : ''}`}>
                   {totalQuantity}
                 </span>
+              )}
+              {justAdded && (
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-servi_green/30 rounded-full animate-ping"></div>
               )}
             </button>
             {showMiniCart && (

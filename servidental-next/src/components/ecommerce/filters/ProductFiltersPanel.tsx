@@ -61,7 +61,14 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
     onFiltersChange({});
   };
 
-  const hasActiveFilters = Object.keys(filters).length > 0;
+  const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock'];
+  const hasActiveFilters = relevantFilterKeys.some(key => {
+    const value = filters[key as keyof ProductFilters];
+    if (key === 'categories' && Array.isArray(value)) {
+      return value.length > 0;
+    }
+    return value !== undefined && value !== null && value !== '';
+  });
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border p-6 space-y-6 ${className}`}>

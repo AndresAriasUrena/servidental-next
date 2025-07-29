@@ -292,6 +292,10 @@ export interface ProductFilters {
   on_sale?: boolean;
   in_stock?: boolean;
   search?: string;
+  per_page?: number;
+  page?: number;
+  exclude?: number[];
+  status?: string;
 }
 
 // Para respuestas de API paginadas

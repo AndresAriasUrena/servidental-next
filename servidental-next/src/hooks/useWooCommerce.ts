@@ -26,17 +26,68 @@ export function useWooCommerce() {
     return await response.json();
   }, []);
 
+  const mapFiltersToWooCommerceParams = useCallback((filters: any) => {
+    const params: Record<string, string> = {};
+
+    if (filters.search) {
+      params.search = filters.search;
+    }
+
+    if (filters.categories && Array.isArray(filters.categories) && filters.categories.length > 0) {
+      params.category = filters.categories.join(',');
+    }
+
+    if (filters.price_min !== undefined) {
+      params.min_price = String(filters.price_min);
+    }
+
+    if (filters.price_max !== undefined) {
+      params.max_price = String(filters.price_max);
+    }
+
+    if (filters.on_sale) {
+      params.on_sale = 'true';
+    }
+
+    if (filters.in_stock) {
+      params.stock_status = 'instock';
+    }
+
+    if (filters.per_page) {
+      params.per_page = String(filters.per_page);
+    }
+
+    if (filters.page) {
+      params.page = String(filters.page);
+    }
+
+    if (filters.exclude && Array.isArray(filters.exclude)) {
+      params.exclude = filters.exclude.join(',');
+    }
+
+    if (filters.status) {
+      params.status = filters.status;
+    }
+
+    return params;
+  }, []);
+
   const fetchProducts = useCallback(async (params: any = {}): Promise<PaginatedResponse<WooCommerceProduct>> => {
     setLoading(true);
     setError(null);
     
     try {
       const queryParams = new URLSearchParams();
-      Object.entries(params).forEach(([key, value]) => {
+      
+      const mappedParams = mapFiltersToWooCommerceParams(params);
+      
+      Object.entries(mappedParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           queryParams.append(key, String(value));
         }
       });
+
+      console.log('Mapped WooCommerce params:', Object.fromEntries(queryParams.entries()));
 
       const response = await makeRequest('products', queryParams);
       
@@ -48,7 +99,7 @@ export function useWooCommerce() {
     } finally {
       setLoading(false);
     }
-  }, [makeRequest]);
+  }, [makeRequest, mapFiltersToWooCommerceParams]);
 
   const fetchProduct = useCallback(async (id: number): Promise<WooCommerceProduct> => {
     setLoading(true);

@@ -33,7 +33,7 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
 
   return (
     <Link href={`/tienda/${product.slug}`} className="group block">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden h-full">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-50">
           {product.images && product.images.length > 0 ? (
