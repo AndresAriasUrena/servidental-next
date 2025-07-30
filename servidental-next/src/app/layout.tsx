@@ -49,6 +49,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <script
+          src="https://sdk.onvopay.com/sdk.js"
+          defer
+        />
+      </head>
       <body className={inter.className}>
         <CartProvider>
           <Header />

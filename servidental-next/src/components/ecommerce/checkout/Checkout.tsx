@@ -3,17 +3,18 @@
 import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
+import OnvoPaymentSDK from './OnvoPaymentSDK';
 
 interface CheckoutFormData {
   billing: BillingAddress;
   shipping: ShippingAddress;
   payment_method: string;
   customer_note: string;
-  terms_accepted: boolean;
 }
 
-export function Checkout() {
+export default function Checkout() {
   const { cart, clearCart } = useCart();
+  const [showOnvoCheckout, setShowOnvoCheckout] = useState(false);
   const [formData, setFormData] = useState<CheckoutFormData>({
     billing: {
       first_name: '',
@@ -39,42 +40,17 @@ export function Checkout() {
       postcode: '',
       country: 'CR'
     },
-    payment_method: 'cod',
-    customer_note: '',
-    terms_accepted: false
+    payment_method: 'onvo',
+    customer_note: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [useShippingForBilling, setUseShippingForBilling] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.terms_accepted) {
-      alert('Debe aceptar los términos y condiciones');
-      return;
-    }
 
-    setIsSubmitting(true);
-    
-    try {
-      // Aquí iría la lógica para crear la orden en WooCommerce
-      console.log('Creating order with:', { formData, cart });
-      
-      // Simular procesamiento
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Limpiar carrito después de orden exitosa
-      clearCart();
-      
-      // Redirigir a página de éxito
-      window.location.href = '/checkout/success';
-      
-    } catch (error) {
-      console.error('Error creating order:', error);
-      alert('Error al procesar la orden. Inténtalo nuevamente.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    localStorage.setItem('checkout-form-data', JSON.stringify(formData));
+    setShowOnvoCheckout(true);
   };
 
   if (cart.items.length === 0) {
@@ -102,9 +78,7 @@ export function Checkout() {
       
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Billing & Shipping Info */}
           <div className="space-y-8">
-            {/* Billing Address */}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Información de facturación
@@ -167,22 +141,10 @@ export function Checkout() {
               </div>
             </div>
 
-            {/* Shipping Address */}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Dirección de envío
               </h2>
-              <div className="mb-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={useShippingForBilling}
-                    onChange={(e) => setUseShippingForBilling(e.target.checked)}
-                    className="mr-2"
-                  />
-                  Usar la misma dirección para facturación y envío
-                </label>
-              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
@@ -192,10 +154,7 @@ export function Checkout() {
                   value={formData.shipping.address_1}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    shipping: { ...prev.shipping, address_1: e.target.value },
-                    ...(useShippingForBilling && {
-                      billing: { ...prev.billing, address_1: e.target.value }
-                    })
+                    shipping: { ...prev.shipping, address_1: e.target.value }
                   }))}
                   className="border border-gray-300 rounded-md px-3 py-2 md:col-span-2"
                 />
@@ -205,10 +164,7 @@ export function Checkout() {
                   value={formData.shipping.address_2}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    shipping: { ...prev.shipping, address_2: e.target.value },
-                    ...(useShippingForBilling && {
-                      billing: { ...prev.billing, address_2: e.target.value }
-                    })
+                    shipping: { ...prev.shipping, address_2: e.target.value }
                   }))}
                   className="border border-gray-300 rounded-md px-3 py-2 md:col-span-2"
                 />
@@ -219,10 +175,7 @@ export function Checkout() {
                   value={formData.shipping.city}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    shipping: { ...prev.shipping, city: e.target.value },
-                    ...(useShippingForBilling && {
-                      billing: { ...prev.billing, city: e.target.value }
-                    })
+                    shipping: { ...prev.shipping, city: e.target.value }
                   }))}
                   className="border border-gray-300 rounded-md px-3 py-2"
                 />
@@ -233,10 +186,7 @@ export function Checkout() {
                   value={formData.shipping.state}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    shipping: { ...prev.shipping, state: e.target.value },
-                    ...(useShippingForBilling && {
-                      billing: { ...prev.billing, state: e.target.value }
-                    })
+                    shipping: { ...prev.shipping, state: e.target.value }
                   }))}
                   className="border border-gray-300 rounded-md px-3 py-2"
                 />
@@ -247,28 +197,24 @@ export function Checkout() {
                   value={formData.shipping.postcode}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    shipping: { ...prev.shipping, postcode: e.target.value },
-                    ...(useShippingForBilling && {
-                      billing: { ...prev.billing, postcode: e.target.value }
-                    })
+                    shipping: { ...prev.shipping, postcode: e.target.value }
                   }))}
                   className="border border-gray-300 rounded-md px-3 py-2 md:col-span-2"
                 />
               </div>
             </div>
 
-            {/* Payment Method */}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Método de pago
               </h2>
-              <div className="space-y-3">
-                <label className="flex items-center p-3 border border-gray-300 rounded-md">
+              <div className="p-3 border border-gray-300 rounded-md bg-gray-50">
+                <div className="flex items-center">
                   <input
                     type="radio"
                     name="payment_method"
-                    value="cod"
-                    checked={formData.payment_method === 'cod'}
+                    value="onvo"
+                    checked={formData.payment_method === 'onvo'}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
                       payment_method: e.target.value
@@ -276,31 +222,15 @@ export function Checkout() {
                     className="mr-3"
                   />
                   <div>
-                    <div className="font-medium">Contra entrega</div>
+                    <div className="font-medium">Tarjeta de crédito/débito (ONVO)</div>
                     <div className="text-sm text-gray-500">
-                      Paga en efectivo al recibir tu pedido
+                      Pago seguro con tarjeta a través de ONVO
                     </div>
                   </div>
-                </label>
-                <label className="flex items-center p-3 border border-gray-300 rounded-md opacity-50">
-                  <input
-                    type="radio"
-                    name="payment_method"
-                    value="card"
-                    disabled
-                    className="mr-3"
-                  />
-                  <div>
-                    <div className="font-medium">Tarjeta de crédito/débito</div>
-                    <div className="text-sm text-gray-500">
-                      Próximamente disponible
-                    </div>
-                  </div>
-                </label>
+                </div>
               </div>
             </div>
 
-            {/* Order Notes */}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Notas del pedido
@@ -318,7 +248,6 @@ export function Checkout() {
             </div>
           </div>
 
-          {/* Order Summary */}
           <div>
             <div className="bg-gray-50 rounded-lg p-6 sticky top-4">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -351,30 +280,9 @@ export function Checkout() {
                 </div>
               </div>
 
-              <div className="mt-6">
-                <label className="flex items-start">
-                  <input
-                    type="checkbox"
-                    required
-                    checked={formData.terms_accepted}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      terms_accepted: e.target.checked
-                    }))}
-                    className="mr-2 mt-1"
-                  />
-                  <span className="text-sm text-gray-600">
-                    He leído y acepto los{' '}
-                    <a href="/terms" className="text-servi_green hover:underline">
-                      términos y condiciones
-                    </a>
-                  </span>
-                </label>
-              </div>
-
               <button
                 type="submit"
-                disabled={isSubmitting || !formData.terms_accepted}
+                disabled={isSubmitting}
                 className="w-full mt-6 bg-servi_green text-white py-3 px-4 rounded-md hover:bg-servi_dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Procesando...' : 'Realizar pedido'}
@@ -383,6 +291,48 @@ export function Checkout() {
           </div>
         </div>
       </form>
+
+      {showOnvoCheckout && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-xl w-full p-6 relative">
+            <button
+              onClick={() => setShowOnvoCheckout(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <OnvoPaymentSDK
+              customerInfo={{
+                firstName: formData.billing.first_name,
+                lastName: formData.billing.last_name,
+                email: formData.billing.email,
+                phone: formData.billing.phone,
+                address: {
+                  line1: formData.shipping.address_1,
+                  line2: formData.shipping.address_2,
+                  city: formData.shipping.city,
+                  state: formData.shipping.state,
+                  postalCode: formData.shipping.postcode,
+                  country: formData.shipping.country,
+                },
+              }}
+              cart={{
+                items: cart.items.map(item => ({
+                  id: item.id,
+                  name: item.name,
+                  price: item.price,
+                  quantity: item.quantity,
+                  sku: item.sku,
+                })),
+                total: cart.total,
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
