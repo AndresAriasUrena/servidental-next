@@ -25,6 +25,7 @@ function ProductGrid({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [repuestosFilter, setRepuestosFilter] = useState<'all' | 'repuestos' | 'no_repuestos'>('all');
   
   const router = useRouter();
   const pathname = usePathname();
@@ -64,13 +65,15 @@ function ProductGrid({
 
   const getHasActiveFilters = () => {
     const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock'];
-    return relevantFilterKeys.some(key => {
+    const hasRegularFilters = relevantFilterKeys.some(key => {
       const value = filters[key as keyof ProductFilters];
       if (key === 'categories' && Array.isArray(value)) {
         return value.length > 0;
       }
       return value !== undefined && value !== null && value !== '';
     });
+    
+    return hasRegularFilters || repuestosFilter !== 'all';
   };
 
   const updateURL = (newFilters: ProductFilters, page: number = 1) => {
@@ -85,6 +88,7 @@ function ProductGrid({
     if (newFilters.on_sale) params.set('on_sale', 'true');
     if (newFilters.in_stock) params.set('in_stock', 'true');
     if (page > 1) params.set('page', String(page));
+    if (repuestosFilter !== 'all') params.set('repuestos', repuestosFilter);
     
     const newURL = params.toString() ? `${pathname}?${params.toString()}` : pathname;
     router.push(newURL, { scroll: false });
@@ -93,19 +97,49 @@ function ProductGrid({
   const loadProducts = async (filtersToUse: ProductFilters = filters, pageToUse: number = currentPage) => {
     setLoading(true);
     try {
+      // Aplicar filtros del backend primero
       const params = {
-        per_page: perPage,
-        page: pageToUse,
+        per_page: 100,
+        page: 1,
         ...filtersToUse,
-        ...(categoryId && { categories: [categoryId] }) // Si hay categoryId, lo incluimos
+        ...(categoryId && { categories: [categoryId] })
       };
       
-      console.log('Loading products with params:', params);
+      const firstResponse = await fetchProducts(params);
+      let allProducts = [...firstResponse.data];
+      const totalPages = firstResponse.total_pages;
       
-      const response = await fetchProducts(params);
-      setProducts(response.data);
-      setTotalPages(response.total_pages);
-      setTotal(response.total);
+      // Cargar páginas adicionales si hay más
+      for (let page = 2; page <= totalPages; page++) {
+        const additionalResponse = await fetchProducts({
+          ...params,
+          page: page
+        });
+        allProducts.push(...additionalResponse.data);
+      }
+      
+      console.log(`Total productos cargados: ${allProducts.length}`);
+      
+      // Aplicar filtros de repuestos en el frontend
+      let productsToShow = allProducts;
+      
+      if (repuestosFilter === 'repuestos') {
+        productsToShow = allProducts.filter(product => 
+          product.tags.some(tag => 
+            tag.name.toLowerCase().includes('repuesto')
+          )
+        );
+      } else if (repuestosFilter === 'no_repuestos') {
+        productsToShow = allProducts.filter(product => 
+          !product.tags.some(tag => 
+            tag.name.toLowerCase().includes('repuesto')
+          )
+        );
+      }
+      
+      setProducts(productsToShow);
+      setTotalPages(1); // Solo una página ya que filtramos en frontend
+      setTotal(productsToShow.length);
     } catch (error) {
       console.error('Error loading products:', error);
       setProducts([]);
@@ -116,7 +150,7 @@ function ProductGrid({
 
   useEffect(() => {
     loadProducts();
-  }, [filters, currentPage, categoryId]);
+  }, [filters, currentPage, categoryId, repuestosFilter]);
 
   useEffect(() => {
     const urlFilters = getFiltersFromURL();
@@ -127,6 +161,11 @@ function ProductGrid({
     setFilters(newFilters);
     setCurrentPage(1);
     updateURL(newFilters, 1);
+  };
+
+  const handleRepuestosFilterChange = (newRepuestosFilter: 'all' | 'repuestos' | 'no_repuestos') => {
+    setRepuestosFilter(newRepuestosFilter);
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -147,6 +186,42 @@ function ProductGrid({
         )}
         
         <div className="flex-1">
+          {/* Botones de filtro de repuestos */}
+          <div className="mb-6">
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => handleRepuestosFilterChange('all')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  repuestosFilter === 'all'
+                    ? 'bg-servi_green text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Todos los productos
+              </button>
+              <button
+                onClick={() => handleRepuestosFilterChange('repuestos')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  repuestosFilter === 'repuestos'
+                    ? 'bg-servi_green text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Solo repuestos
+              </button>
+              <button
+                onClick={() => handleRepuestosFilterChange('no_repuestos')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  repuestosFilter === 'no_repuestos'
+                    ? 'bg-servi_green text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Equipos principales
+              </button>
+            </div>
+          </div>
+
           {!loading && (
             <div className="mb-4 flex justify-between items-center">
               <p className="text-sm text-gray-600">
@@ -212,22 +287,34 @@ function ProductGrid({
                       Anterior
                     </button>
                     
-                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                      const page = i + 1;
-                      return (
-                        <button
-                          key={page}
-                          onClick={() => handlePageChange(page)}
-                          className={`px-3 py-2 text-sm font-medium rounded-md ${
-                            currentPage === page
-                              ? 'bg-servi_green text-white'
-                              : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    })}
+                    {(() => {
+                      const pages = [];
+                      const maxVisible = 5;
+                      let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+                      
+                      // Ajustar si estamos cerca del final
+                      if (endPage - startPage + 1 < maxVisible) {
+                        startPage = Math.max(1, endPage - maxVisible + 1);
+                      }
+                      
+                      for (let i = startPage; i <= endPage; i++) {
+                        pages.push(
+                          <button
+                            key={i}
+                            onClick={() => handlePageChange(i)}
+                            className={`px-3 py-2 text-sm font-medium rounded-md ${
+                              currentPage === i
+                                ? 'bg-servi_green text-white'
+                                : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                            }`}
+                          >
+                            {i}
+                          </button>
+                        );
+                      }
+                      return pages;
+                    })()}
                     
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
