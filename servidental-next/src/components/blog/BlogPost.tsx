@@ -3,7 +3,8 @@
 
 import Image from 'next/image';
 import { BlogPost as BlogPostType } from '@/types/blog';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import WordPressDirectIframe from './WordPressDirectIframe';
 
 interface BlogPostProps {
   post: BlogPostType;
@@ -11,6 +12,18 @@ interface BlogPostProps {
 
 export default function BlogPost({ post }: BlogPostProps) {
   const [readingProgress, setReadingProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si es mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -63,6 +76,18 @@ export default function BlogPost({ post }: BlogPostProps) {
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedTitle = encodeURIComponent(post.title.rendered.replace(/<[^>]*>/g, ''));
   const encodedSummary = encodeURIComponent(post.excerpt_plain || 'Artículo del blog de ServiDental sobre equipos médicos dentales.');
+
+  // Renderizar contenido para mobile con estilos responsivos
+  const mobileContent = useMemo(() => (
+    <div 
+      className="wordpress-mobile-content prose prose-lg max-w-none"
+      dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+    />
+  ), [post.content.rendered]);
+
+  const renderMobileContent = () => {
+    return mobileContent;
+  };
 
   return (
     <>
@@ -126,7 +151,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           </div>
           {/* Share Buttons */}
           <div className="flex items-center space-x-3">
-            <span className="text-sm text-gray-500">Compartir:</span>
+            <span className="text-sm text-gray-500 hidden lg:block">Compartir:</span>
             <div className="flex space-x-2">
               {/* WhatsApp */}
               <button 
@@ -173,33 +198,28 @@ export default function BlogPost({ post }: BlogPostProps) {
           </div>
         </div>
 
-        {/* Article Content with improved Tailwind Typography */}
-        <div 
-          className="
-            prose prose-lg max-w-none mb-12
-            prose-headings:text-servi_dark prose-headings:font-bold prose-headings:tracking-tight
-            prose-h1:text-3xl prose-h1:mb-6 prose-h1:mt-8
-            prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-8
-            prose-h3:text-xl prose-h3:mb-4 prose-h3:mt-6
-            prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-            prose-a:text-servi_green prose-a:no-underline hover:prose-a:text-servi_dark hover:prose-a:underline
-            prose-strong:text-gray-900 prose-strong:font-semibold
-            prose-ul:my-6 prose-ol:my-6
-            prose-li:mb-2 prose-li:text-gray-700
-            prose-blockquote:border-l-4 prose-blockquote:border-servi_green prose-blockquote:bg-servi_light prose-blockquote:pl-6 prose-blockquote:py-4 prose-blockquote:italic
-            prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto prose-img:my-8
-            prose-table:my-8
-            prose-thead:bg-servi_green
-            prose-th:text-white prose-th:font-semibold
-            prose-td:border prose-td:border-gray-300
-          "
-        >
-          <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+        {/* Article Content - Híbrido */}
+        <div className="mb-12">
+          {/* Desktop: Iframe de WordPress */}
+          <div className="hidden md:block">
+            <WordPressDirectIframe
+              postId={post.id}
+              title={post.title.rendered.replace(/<[^>]*>/g, '')}
+              content={post.content.rendered}
+              slug={post.slug}
+            />
+          </div>
+          
+          {/* Mobile: Contenido renderizado con estilos responsivos */}
+          <div className="md:hidden">
+            {renderMobileContent()}
+          </div>
         </div>
 
         {/* Author Bio */}
         {post.author_details.bio && (
-          <div className="border-t border-gray-200 pt-8 mt-8">
+          <div className="mb-8 p-6 bg-gray-50 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Sobre el autor</h3>
             <div className="flex items-start space-x-4">
               {post.author_details.avatar && (
                 <Image
@@ -211,29 +231,25 @@ export default function BlogPost({ post }: BlogPostProps) {
                 />
               )}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Sobre {post.author_details.name}
-                </h3>
-                <p className="text-gray-600">{post.author_details.bio}</p>
+                <p className="font-semibold text-gray-900 mb-2">{post.author_details.name}</p>
+                <p className="text-gray-600 leading-relaxed">{post.author_details.bio}</p>
               </div>
             </div>
           </div>
         )}
 
         {/* Contact CTA */}
-        <div className="mt-12 bg-gradient-to-r from-servi_green to-servi_dark rounded-xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-4">
-            ¿Necesitas ayuda con tus equipos dentales?
-          </h3>
-          <p className="text-lg mb-6 opacity-90">
-            Nuestros expertos están listos para brindarte el mejor servicio
-          </p>
-          <a
-            href="/contact"
-            className="inline-block bg-white text-servi_green px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Contáctanos
-          </a>
+        <div className="mb-8 p-6 bg-servi_green text-white rounded-lg">
+          <h3 className="text-xl font-semibold mb-3">¿Necesitas equipos dentales?</h3>
+          <p className="mb-4">Contáctanos para obtener los mejores precios y asesoría especializada en equipos dentales.</p>
+          <div className="flex flex-wrap gap-3">
+            <button className="px-6 py-2 bg-white text-servi_green font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+              Contactar ahora
+            </button>
+            <button className="px-6 py-2 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-servi_green transition-colors">
+              Ver catálogo
+            </button>
+          </div>
         </div>
       </article>
     </>
