@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: 'ServiDental | Equipo Médico Dental',
   description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
   keywords: 'equipo médico dental, servicio técnico dental, Costa Rica, unidades dentales',
+  metadataBase: new URL('http://servidentalcr.com'),
   openGraph: {
     title: 'ServidentalCR',
     description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
@@ -58,7 +59,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <CartProvider>
           <Header />
-          <main className="pt-24 lg:pt-32">
+          <main className="text-black pt-24 lg:pt-32">
             {children}
           </main>
           <Footer />

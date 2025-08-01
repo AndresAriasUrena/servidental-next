@@ -16,7 +16,6 @@ const navigation = [
   { name: 'SERVICIOS', href: '/#services' },
   { name: 'EQUIPOS', href: '/products' },
   { name: 'TIENDA', href: '/tienda' },
-  { name: 'REPUESTOS', href: '/spare-parts' },
   { name: 'BLOG', href: '/blog' },
   { name: 'CONTACTO', href: '/contact' },
 ]

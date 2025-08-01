@@ -25,7 +25,7 @@ export default function MiniCart({ onClose }: MiniCartProps) {
       />
       
       <div className="fixed inset-0 z-50 lg:absolute lg:inset-auto lg:right-0 lg:top-full lg:mt-3 lg:w-96">
-        <div className="h-full bg-white lg:rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom lg:slide-in-from-top-2 duration-200">
+        <div className="h-full bg-white lg:h-auto lg:max-h-[85vh] lg:rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom lg:slide-in-from-top-2 duration-200">
           <div className="bg-gradient-to-r from-servi_green to-servi_dark px-6 py-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-white">
@@ -45,7 +45,7 @@ export default function MiniCart({ onClose }: MiniCartProps) {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+          <div className="flex-1 overflow-y-auto max-h-[calc(85vh-180px)] lg:max-h-[60vh]">
             {cart.items.length === 0 ? (
               <div className="text-center py-12 px-6 lg:py-8">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">

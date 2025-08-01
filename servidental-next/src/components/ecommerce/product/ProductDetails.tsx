@@ -146,7 +146,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const rating = parseFloat(product.average_rating) || 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
+    <div className="text-black max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:h-[calc(100vh-120px)]">
         

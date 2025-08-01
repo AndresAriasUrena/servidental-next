@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import Cart from '@/components/ecommerce/cart/Cart';
+import { Cart } from '@/components/ecommerce/cart/Cart';
 
 export const metadata = {
   title: 'Carrito de Compras | ServidentalCR',
