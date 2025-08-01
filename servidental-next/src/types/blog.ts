@@ -33,6 +33,7 @@ export interface BlogPost {
   reading_time: number;
   link: string;
   status: string;
+  seo?: any; // Temporalmente any para simplificar
 }
 
 export interface BlogConfig {

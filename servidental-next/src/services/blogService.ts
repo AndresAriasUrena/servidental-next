@@ -143,7 +143,7 @@ class BlogService {
       const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0');
       const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1');
 
-      const formattedPosts: BlogPost[] = posts.map(this.formatPost.bind(this));
+      const formattedPosts: BlogPost[] = await Promise.all(posts.map(post => this.formatPost(post)));
 
       const result: BlogPostsResponse = {
         posts: formattedPosts,
@@ -188,7 +188,7 @@ class BlogService {
         return null;
       }
 
-      const post = this.formatPost(posts[0]);
+      const post = await this.formatPost(posts[0]);
       cache.set(cacheKey, post);
       return post;
     } catch (error) {
@@ -265,7 +265,7 @@ class BlogService {
     return this.fetchPosts({ search: query, page });
   }
 
-  private formatPost(post: any): BlogPost {
+  private async formatPost(post: any): Promise<BlogPost> {
     // Calculate reading time (assuming 200 words per minute)
     const wordCount = post.content?.rendered 
       ? post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length 
@@ -291,6 +291,9 @@ class BlogService {
       ? post.excerpt.rendered.replace(/<[^>]*>/g, '').trim()
       : '';
 
+    // Extract SEO data
+    const seoData = await this.extractSEOData(post);
+
     return {
       id: post.id,
       title: post.title || { rendered: '' },
@@ -306,7 +309,49 @@ class BlogService {
       tags: post.tags || [],
       reading_time: readingTime,
       link: post.link,
-      status: post.status
+      status: post.status,
+      seo: seoData
+    };
+  }
+
+  private async extractSEOData(post: any): Promise<any> {
+    try {
+      const slug = post.slug;
+      const wpUrl = `https://wp.servidentalcr.com/${slug}/`;
+      const rankmathUrl = `https://wp.servidentalcr.com/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(wpUrl)}`;
+      const response = await fetch(rankmathUrl);
+      const data = await response.json();
+      
+      if (data.success && data.head && !data.head.includes('Page Not Found')) {
+        const head = data.head;
+        
+        const ogTitleMatch = head.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']+)["']/i);
+        const title = ogTitleMatch ? ogTitleMatch[1] : '';
+        
+        const descMatch = head.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
+        const description = descMatch ? descMatch[1] : '';
+        
+        const schemaMatch = head.match(/"keywords":"([^"]+)"/i);
+        const keywords = schemaMatch ? schemaMatch[1] : '';
+        
+        const canonical = `https://servidentalcr.com/blog/${slug}`;
+        
+        return {
+          title,
+          description,
+          keywords,
+          canonical,
+        };
+      }
+    } catch (error) {
+      console.warn('Error obteniendo SEO de RankMath:', error);
+    }
+    
+    return {
+      title: post.title?.rendered || '',
+      description: post.excerpt_plain || '',
+      keywords: '',
+      canonical: `https://servidentalcr.com/blog/${post.slug}`,
     };
   }
 

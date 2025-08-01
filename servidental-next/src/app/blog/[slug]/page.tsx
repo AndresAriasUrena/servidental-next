@@ -1,31 +1,49 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BlogPostClient from '@/components/blog/BlogPostClient';
+import { blogService } from '@/services/blogService';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const cleanSlug = params.slug.replace(/-/g, ' ').replace(/\w\S*/g, (txt) => 
-    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  );
+  const { slug } = await params;
+  const post = await blogService.fetchPostBySlug(slug);
+  
+  if (!post) {
+    return {
+      title: 'Post no encontrado - Blog ServiDental',
+      description: 'El post solicitado no existe.',
+    };
+  }
 
   return {
-    title: `${cleanSlug} - Blog ServiDental`,
-    description: `Artículo sobre ${cleanSlug} en el blog de ServiDental. Equipos médicos dentales y servicios especializados.`,
-    keywords: `dental, equipos dentales, ${cleanSlug}, ServiDental, Costa Rica`,
+    title: post.seo?.title || post.title?.rendered || `${slug} - Blog ServiDental`,
+    description: post.seo?.description || post.excerpt_plain || '',
+    keywords: post.seo?.keywords || '',
+    alternates: {
+      canonical: post.seo?.canonical || `https://servidentalcr.com/blog/${slug}`,
+    },
     openGraph: {
-      title: `${cleanSlug} - Blog ServiDental`,
-      description: `Artículo sobre ${cleanSlug} en el blog de ServiDental.`,
+      title: post.seo?.title || post.title?.rendered || '',
+      description: post.seo?.description || post.excerpt_plain || '',
       type: 'article',
-      url: `https://servidentalcr.com/blog/${params.slug}`,
+      url: post.seo?.canonical || `https://servidentalcr.com/blog/${slug}`,
+      images: post.featured_image_url ? [post.featured_image_url] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.seo?.title || post.title?.rendered || '',
+      description: post.seo?.description || post.excerpt_plain || '',
+      images: post.featured_image_url ? [post.featured_image_url] : [],
     },
   };
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  return <BlogPostClient slug={params.slug} />;
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  return <BlogPostClient slug={slug} />;
 }
