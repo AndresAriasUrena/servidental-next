@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTilopayBearerToken, getTilopaySDKToken, validateTilopayConfig } from '@/lib/tilopay';
+import { getTilopaySDKToken, validateTilopayConfig } from '@/lib/tilopay';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,11 +8,8 @@ export async function POST(request: NextRequest) {
 
     console.log('🎫 Processing TiloPay SDK token request...');
 
-    // Step 1: Get Bearer token
-    const bearerToken = await getTilopayBearerToken();
-
-    // Step 2: Get SDK token using Bearer token
-    const sdkToken = await getTilopaySDKToken(bearerToken);
+    // Get SDK token directly (no Bearer needed for this endpoint)
+    const sdkToken = await getTilopaySDKToken();
 
     return NextResponse.json({
       success: true,

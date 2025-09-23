@@ -9,7 +9,7 @@ export const tilopayConfig = {
   apiPassword: process.env.TILOPAY_API_PASS!,
   redirectUrl: process.env.NEXT_PUBLIC_TILOPAY_REDIRECT!,
   language: process.env.NEXT_PUBLIC_TILOPAY_LANGUAGE || 'es',
-  currency: process.env.NEXT_PUBLIC_TILOPAY_CURRENCY || 'CRC',
+  currency: process.env.NEXT_PUBLIC_TILOPAY_CURRENCY || 'USD',
 };
 
 export const tilopayApi = axios.create({
@@ -20,10 +20,15 @@ export const tilopayApi = axios.create({
 });
 
 // TiloPay API Types
-export interface TilopayAuthRequest {
-  api_key: string;
-  api_user: string;
-  api_password: string;
+export interface TilopayLoginRequest {
+  apiuser: string;
+  password: string;
+}
+
+export interface TilopaySDKTokenRequest {
+  apiuser: string;
+  password: string;
+  key: string;
 }
 
 export interface TilopayAuthResponse {
@@ -92,57 +97,68 @@ export async function getTilopayBearerToken(): Promise<string> {
     console.log('🔑 Authenticating with TiloPay...');
     
     const response = await tilopayApi.post(tilopayConfig.loginUrl, {
-      api_key: tilopayConfig.apiKey,
-      api_user: tilopayConfig.apiUser,
-      api_password: tilopayConfig.apiPassword,
+      apiuser: tilopayConfig.apiUser,
+      password: tilopayConfig.apiPassword,
     });
 
-    if (!response.data?.access_token) {
-      throw new Error('No access token received from TiloPay');
+    if (!response.data) {
+      throw new Error('No response data received from TiloPay');
+    }
+
+    // TiloPay puede devolver "token", "access_token" o "accessToken"
+    const token = response.data.token || response.data.access_token || response.data.accessToken;
+    
+    if (!token) {
+      throw new Error('No token received from TiloPay login');
     }
 
     console.log('✅ TiloPay authentication successful');
-    return response.data.access_token;
+    return token;
   } catch (error) {
     console.error('❌ TiloPay Auth Error:', error);
     
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
-      const message = error.response?.data?.message || error.message;
-      throw new Error(`TiloPay Auth failed (${status}): ${message}`);
+      const data = error.response?.data;
+      console.error('TiloPay login response:', data);
+      throw new Error(`TiloPay Auth failed (${status}): ${JSON.stringify(data)}`);
     }
     
     throw new Error('Failed to authenticate with TiloPay');
   }
 }
 
-export async function getTilopaySDKToken(bearerToken: string): Promise<string> {
+export async function getTilopaySDKToken(): Promise<string> {
   try {
     console.log('🎫 Getting TiloPay SDK token...');
     
-    const response = await tilopayApi.post(
-      tilopayConfig.sdkTokenUrl,
-      {}, // Empty body as per TiloPay docs
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
-    );
+    const response = await tilopayApi.post(tilopayConfig.sdkTokenUrl, {
+      apiuser: tilopayConfig.apiUser,
+      password: tilopayConfig.apiPassword,
+      key: tilopayConfig.apiKey,
+    });
 
-    if (!response.data?.token) {
+    if (!response.data) {
+      throw new Error('No response data received from TiloPay SDK');
+    }
+
+    // TiloPay puede devolver "token", "sdk_token" o "access_token"
+    const token = response.data.token || response.data.sdk_token || response.data.access_token;
+    
+    if (!token) {
       throw new Error('No SDK token received from TiloPay');
     }
 
     console.log('✅ TiloPay SDK token obtained');
-    return response.data.token;
+    return token;
   } catch (error) {
     console.error('❌ TiloPay SDK Token Error:', error);
     
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
-      const message = error.response?.data?.message || error.message;
-      throw new Error(`TiloPay SDK Token failed (${status}): ${message}`);
+      const data = error.response?.data;
+      console.error('TiloPay loginSdk response:', data);
+      throw new Error(`TiloPay SDK Token failed (${status}): ${JSON.stringify(data)}`);
     }
     
     throw new Error('Failed to get SDK token from TiloPay');
