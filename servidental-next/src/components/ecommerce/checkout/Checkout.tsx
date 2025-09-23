@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
-import OnvoPaymentSDK from './OnvoPaymentSDK';
+import TilopayPaymentSDK from './TilopayPaymentSDK';
 
 interface CheckoutFormData {
   billing: BillingAddress;
@@ -14,7 +14,7 @@ interface CheckoutFormData {
 
 export default function Checkout() {
   const { cart, clearCart } = useCart();
-  const [showOnvoCheckout, setShowOnvoCheckout] = useState(false);
+  const [showTilopayCheckout, setShowTilopayCheckout] = useState(false);
   const [formData, setFormData] = useState<CheckoutFormData>({
     billing: {
       first_name: '',
@@ -40,7 +40,7 @@ export default function Checkout() {
       postcode: '',
       country: 'CR'
     },
-    payment_method: 'onvo',
+    payment_method: 'tilopay',
     customer_note: ''
   });
   
@@ -50,7 +50,7 @@ export default function Checkout() {
     e.preventDefault();
 
     localStorage.setItem('checkout-form-data', JSON.stringify(formData));
-    setShowOnvoCheckout(true);
+    setShowTilopayCheckout(true);
   };
 
   if (cart.items.length === 0) {
@@ -213,8 +213,8 @@ export default function Checkout() {
                   <input
                     type="radio"
                     name="payment_method"
-                    value="onvo"
-                    checked={formData.payment_method === 'onvo'}
+                    value="tilopay"
+                    checked={formData.payment_method === 'tilopay'}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
                       payment_method: e.target.value
@@ -222,9 +222,9 @@ export default function Checkout() {
                     className="mr-3"
                   />
                   <div>
-                    <div className="font-medium">Tarjeta de crédito/débito (ONVO)</div>
+                    <div className="font-medium">Tarjeta de crédito/débito (TiloPay)</div>
                     <div className="text-sm text-gray-500">
-                      Pago seguro con tarjeta a través de ONVO
+                      Pago seguro con tarjeta a través de TiloPay
                     </div>
                   </div>
                 </div>
@@ -292,11 +292,11 @@ export default function Checkout() {
         </div>
       </form>
 
-      {showOnvoCheckout && (
+      {showTilopayCheckout && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-xl w-full p-6 relative">
             <button
-              onClick={() => setShowOnvoCheckout(false)}
+              onClick={() => setShowTilopayCheckout(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -304,7 +304,7 @@ export default function Checkout() {
               </svg>
             </button>
             
-            <OnvoPaymentSDK
+            <TilopayPaymentSDK
               customerInfo={{
                 firstName: formData.billing.first_name,
                 lastName: formData.billing.last_name,
