@@ -20,41 +20,20 @@ export default function CheckoutSuccess() {
 
   useEffect(() => {
     const fetchPaymentData = async () => {
-      const paymentIntentId = searchParams.get('payment_intent');
-      const sessionId = searchParams.get('session_id');
+      const orderNumber = searchParams.get('order_number');
       const orderId = searchParams.get('order_id');
 
-      console.log('Parámetros de URL:', { paymentIntentId, sessionId, orderId });
+      console.log('Parámetros de URL:', { orderNumber, orderId });
 
-      if (paymentIntentId) {
-        try {
-          const response = await fetch(`/api/onvo/payment-intent?id=${paymentIntentId}`);
-          if (response.ok) {
-            const data = await response.json();
-            setPaymentData(data);
-          }
-        } catch (error) {
-          console.error('Error obteniendo datos del pago:', error);
-        }
-      }
-      
-      if (orderId) {
-        setPaymentData((prev: PaymentData | null) => ({
-          ...prev,
-          orderId: orderId,
-          id: paymentIntentId || `order_${orderId}`,
-          amount: prev?.amount || 0,
-          currency: prev?.currency || 'CRC',
+      // For TiloPay, we use order_number from our system
+      if (orderNumber || orderId) {
+        setPaymentData({
+          orderId: orderId || orderNumber || undefined,
+          id: orderNumber || `order_${orderId}`,
+          amount: 0, // We don't fetch amount from URL for security
+          currency: 'USD',
           status: 'succeeded'
-        }));
-      } else if (paymentIntentId && !orderId) {
-        setPaymentData((prev: PaymentData | null) => ({
-          ...prev,
-          id: paymentIntentId,
-          amount: prev?.amount || 0,
-          currency: prev?.currency || 'CRC',
-          status: 'succeeded'
-        }));
+        });
       }
 
       setLoading(false);
@@ -128,7 +107,7 @@ export default function CheckoutSuccess() {
               </div>
               <div className="flex justify-between">
                 <dt className="text-gray-600">Método de pago:</dt>
-                <dd className="font-medium text-gray-900">ONVO Pay</dd>
+                <dd className="font-medium text-gray-900">TiloPay</dd>
               </div>
             </dl>
             

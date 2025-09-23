@@ -7,7 +7,10 @@ export async function POST(request: NextRequest) {
       customerInfo,
       cartItems,
       total,
-      paymentIntentId,
+      paymentIntentId, // For ONVO compatibility (legacy)
+      paymentMethod,
+      tilopayOrderNumber,
+      tilopayData,
       billingAddress,
       shippingAddress
     } = body;
@@ -20,11 +23,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Determine payment method
+    const isTilopay = paymentMethod === 'TiloPay' || tilopayOrderNumber;
+    
     // Preparar datos para WooCommerce
     const orderData = {
-      payment_method: 'onvo_pay',
-      payment_method_title: 'ONVO Pay',
-      set_paid: true, // Marcar como pagado porque ya se procesó con ONVO
+      payment_method: isTilopay ? 'tilopay' : 'onvo_pay',
+      payment_method_title: isTilopay ? 'TiloPay' : 'ONVO Pay',
+      set_paid: true, // Marcar como pagado porque ya se procesó
       billing: {
         first_name: customerInfo.firstName || billingAddress?.first_name || '',
         last_name: customerInfo.lastName || billingAddress?.last_name || '',
@@ -60,7 +66,24 @@ export async function POST(request: NextRequest) {
           total: '0', // Por ahora gratis, puedes calcular según tu lógica
         },
       ],
-      meta_data: [
+      meta_data: isTilopay ? [
+        {
+          key: '_tilopay_order_number',
+          value: tilopayOrderNumber || '',
+        },
+        {
+          key: '_payment_via',
+          value: 'TiloPay',
+        },
+        {
+          key: '_transaction_id',
+          value: tilopayOrderNumber || '',
+        },
+        {
+          key: '_tilopay_callback_data',
+          value: JSON.stringify(tilopayData || {}),
+        },
+      ] : [
         {
           key: '_onvo_payment_intent_id',
           value: paymentIntentId || '',
