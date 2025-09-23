@@ -1,514 +1,294 @@
-# CLAUDE.md - ServidentalCR E-commerce Platform
+# CLAUDE.md
 
-This file provides comprehensive guidance to Claude Code when working with the ServidentalCR project - a complete dental equipment e-commerce platform.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-ServidentalCR is a **full-featured e-commerce platform** for dental medical equipment in Costa Rica, featuring:
+ServidentalCR is a Next.js 15 e-commerce platform for dental equipment in Costa Rica. This is a hybrid static/dynamic application with integrated e-commerce functionality, blog system, and payment processing.
 
-- **Complete product catalog** with 99+ dental equipment products
-- **WooCommerce e-commerce integration** with full online store functionality  
-- **Dynamic blog system** with WordPress headless CMS
-- **Product migration system** for database management
-- **Advanced contact forms** with EmailJS integration
-- **Professional showcase** of dental services
-- **Spanish language content** for Costa Rican market
-- **Responsive design** with Tailwind CSS custom theme
+**Key Features:**
+- Complete WooCommerce integration with 99+ migrated dental products
+- WordPress headless CMS for blog content
+- ONVO payment processing for Costa Rican market
+- Advanced cart/checkout system with state management
+- Product filtering, search, and categorization
+- Responsive design with Tailwind CSS
 
 ## Development Commands
 
 ```bash
-# Development server
-npm run dev
+# Development
+npm run dev                    # Start development server at localhost:3000
+npm run build                  # Build for production (hybrid static + dynamic)
+npm run start                  # Start production server
+npm run lint                   # ESLint code checking
 
-# Production build (hybrid - static + dynamic)
-npm run build
+# Product Management
+npm run parse-products         # Parse TypeScript products to JSON
 
-# Start production server
-npm run start
-
-# Linting and type checking
-npm run lint
-npm run typecheck
-
-# Product data management
-npm run parse-products
-
-# WooCommerce migrations
-node migrations/extract-products-improved.js          # Extract products to JSON
-node migrations/woocommerce-migration-fixed.js       # Migrate to WooCommerce
-node migrations/test-woocommerce-api.js              # Test API connection
+# WooCommerce Migration (Already completed - 99/99 products migrated)
+node migrations/extract-products-improved.js
+node migrations/woocommerce-migration-fixed.js
+node migrations/test-woocommerce-api.js
 ```
 
-## Architecture & Structure
+## Architecture Overview
 
-### Next.js 15 App Router Structure
-- `/src/app/` - App router pages and layouts with complete routing
-- `/src/components/` - Organized React components by feature
-  - `/blog/` - Blog system (BlogClient, BlogPost, BlogSidebar, etc.)
-  - `/products/` - Product system (ProductCard, ProductGallery, ProductInfo)
-  - `/ecommerce/` - **E-commerce components (ProductGrid, ProductCard, Cart, Checkout)**
-    - `/product/` - Product display and management components
-    - `/cart/` - Shopping cart and MiniCart components
-    - `/filters/` - Product filtering and search components
-    - `/checkout/` - Checkout process components
-    - `/ui/` - E-commerce specific UI components
-  - `/contact/` - Contact forms and communication
-  - `/layout/` - Navigation, header, footer components (with MiniCart integration)
-  - `/ui/` - Reusable UI components and utilities
-- `/src/data/` - Product data files (manual-products.ts, manual-SpareParts.ts)
-- `/src/types/` - TypeScript definitions (blog.ts, product.ts, etc.)
-- `/src/assets/` - Optimized static assets (600+ AVIF images)
-- `/src/services/` - API integration services
-  - `blogService.ts` - WordPress API integration
-- `/src/hooks/` - **Custom React hooks**
-  - `useWooCommerce.ts` - **WooCommerce API integration hook**
-  - `useCart.ts` - Shopping cart state management
-- `/src/utils/` - Helper utilities and functions
-- `/src/app/api/` - **Next.js API routes**
-  - `/woocommerce/` - **WooCommerce REST API proxy endpoints**
-    - `/products/` - Product listing and search
-    - `/products/slug/[slug]/` - Individual product by slug
-    - `/categories/` - Product categories
-- `/migrations/` - **WooCommerce migration system** (complete toolkit)
+### Core Architecture
+This is a **Next.js 15 App Router** application with:
+- **Hybrid rendering**: Static pages + dynamic e-commerce/blog content
+- **Multi-service integration**: WooCommerce, WordPress CMS, ONVO payments
+- **State management**: React Context for cart, local state for UI
+- **API proxy pattern**: Next.js API routes proxy external services
 
-### WooCommerce E-commerce Integration
+### Key Directory Structure
+```
+src/
+├── app/                     # Next.js 15 App Router
+│   ├── api/                 # API route handlers
+│   │   ├── woocommerce/     # WooCommerce REST API proxy
+│   │   └── onvo/            # ONVO payment API proxy
+│   ├── blog/                # Blog pages (WordPress CMS)
+│   ├── tienda/              # E-commerce store pages
+│   ├── carrito/             # Shopping cart page
+│   └── checkout/            # Payment success/cancel pages
+├── components/
+│   ├── ecommerce/           # E-commerce UI components
+│   │   ├── cart/            # Cart, MiniCart components
+│   │   ├── checkout/        # Checkout, ONVO payment integration
+│   │   ├── product/         # Product display components
+│   │   └── filters/         # Product filtering/search
+│   ├── blog/                # Blog components + WordPress iframe
+│   └── layout/              # Header (with MiniCart), Footer
+├── hooks/                   # Custom React hooks
+│   ├── useCart.ts          # Cart state management
+│   └── useWooCommerce.ts   # WooCommerce API integration
+├── lib/
+│   └── onvo.ts             # ONVO payment API client
+├── services/
+│   └── blogService.ts      # WordPress API integration
+└── types/
+    ├── woocommerce.ts      # WooCommerce type definitions
+    └── blog.ts             # Blog/WordPress types
+```
 
-**Migration System Status**: ✅ **COMPLETED** - July 22, 2025
-- **99 products** successfully migrated to WooCommerce
-- **27 categories** created and organized  
-- **18 brands** configured as product attributes
-- **100% success rate** in 96 seconds migration time
-- **Products live at**: https://wp.servidentalcr.com/tienda/
+### Integration Status
 
-### Key Components Architecture
+**WooCommerce Backend**: ✅ Completed (99 products migrated)
+**E-commerce Frontend**: ✅ Fully integrated
+**Payment Processing**: ✅ ONVO integration active
+**Blog System**: ✅ WordPress headless CMS
 
-#### E-commerce System
-- **WooCommerce Integration**: Full REST API v3 implementation
-- **Product Catalog**: 99+ dental equipment products with detailed specs
-- **Category System**: 27 organized product categories
-- **Brand Management**: 18 equipment brands as searchable attributes
-- **Stock Management**: Automatic inventory tracking
-- **Pricing System**: Dynamic pricing with regular/sale prices
-- **Header Integration**: MiniCart component with real-time cart updates
-- **Individual Product Pages**: Complete product details with ratings and social sharing
-- **Shopping Cart**: Full cart management system with checkout integration
-- **Product Search**: Advanced slug-based product search with fallback mechanisms
+**Store URL**: https://wp.servidentalcr.com/tienda/
 
-#### Blog System (WordPress Headless CMS)
-- **Backend**: WordPress at `wp.servidentalcr.com`
-- **API Integration**: Custom REST API endpoints with caching
-- **Content Management**: Rich text editor with media support
-- **SEO Optimization**: Dynamic metadata and Open Graph integration
-- **Social Sharing**: WhatsApp, Facebook, LinkedIn integration
+### System Integration Details
 
-#### Product Management System
-- **Data Structure**: TypeScript-defined product schemas
-- **Image Optimization**: AVIF format with lazy loading
-- **Video Integration**: YouTube iframe embedding
-- **Specifications**: Detailed technical specifications system
-- **Features**: Unique selling points and general features
+#### E-commerce Data Flow
+1. **Product Management**: WooCommerce backend stores 99 dental products (27 categories, 18 brands)
+2. **Frontend API**: Next.js API routes (`/api/woocommerce/*`) proxy WooCommerce REST API
+3. **State Management**: React Context manages cart state across components
+4. **Payment Flow**: Cart → Checkout → ONVO payment processor → Success/Cancel pages
 
-#### Contact & Communication
-- **EmailJS Integration**: Serverless email sending
-- **WhatsApp Integration**: Direct messaging system
-- **Contact Forms**: Multiple specialized contact forms
-- **Service Showcase**: Professional dental services presentation
+#### API Architecture
+```
+Frontend → Next.js API Routes → External Services
+         ↓
+      /api/woocommerce/*  → WooCommerce REST API
+      /api/onvo/*         → ONVO Payment API
+      Direct fetch        → WordPress REST API
+```
 
-### Data Management
+#### Key Components
+- **ProductGrid**: WooCommerce product display with filtering/search
+- **ProductDetails**: Individual product pages with cart integration
+- **MiniCart**: Header cart component with real-time quantity updates
+- **Checkout**: ONVO payment integration with customer data collection
+- **BlogPost**: WordPress content rendering with custom styling
+- **CartProvider**: React Context providing cart state management
 
-#### Products (99 items)
-- **Source**: `/src/data/manual-products.ts` (TypeScript definitions)
-- **Categories**: 27 dental equipment categories
-- **Brands**: 18 major dental equipment manufacturers
-- **Images**: 600+ optimized AVIF images
-- **Videos**: YouTube integration for product demonstrations
-- **Specifications**: Technical details and features
-- **Migration Status**: ✅ All migrated to WooCommerce
+### Data Sources & Management
 
-#### Blog Content
-- **Backend**: WordPress headless CMS
-- **API**: REST API with custom endpoints
-- **Caching**: In-memory cache with error handling fallbacks
-- **Content Types**: Posts, categories, featured images
-- **SEO**: Dynamic metadata generation
+**Primary Data Sources:**
+- **WooCommerce**: Live product catalog (99 products, 27 categories)
+- **WordPress**: Blog content via REST API (`/wp-json/wp/v2`)
+- **Local Assets**: 600+ AVIF optimized product images in `/src/assets/`
 
-#### Migration Data
-- **Extraction**: `migrations/extracted-products.json` (99 products)
-- **Logs**: `migrations/migration-log-fixed.json` (detailed process log)
-- **Statistics**: `migrations/extraction-stats.json` (analytics)
-- **Documentation**: Complete migration guides and reports
+**Data Flow:**
+1. **Products**: WooCommerce → API routes → React components
+2. **Blog**: WordPress → Direct fetch → React components (with caching)
+3. **Cart**: Local state → React Context → Checkout integration
+4. **Payments**: Cart data → ONVO API → Payment confirmation
 
-### Styling & Design
+### Styling Architecture
 
-#### Tailwind CSS Custom Theme
-- **Brand Colors**: 
-  - `servi_green`: Primary brand color
-  - `servi_dark`: Dark theme variant
-  - `servi_light`: Light accents
-- **Typography**: Professional medical/dental industry fonts
-- **Responsive Design**: Mobile-first approach with custom breakpoints
-- **Custom Components**: Reusable UI component library
+**Tailwind CSS** with custom theme:
+- Brand colors: `servi_green`, `servi_dark`, `servi_light`
+- Mobile-first responsive design
+- Custom components for e-commerce UI
 
-#### Content Styling
-- **WordPress Content**: Global CSS overrides for blog content
-- **Product Galleries**: Custom image carousel and zoom functionality
-- **Video Integration**: Responsive YouTube embed styling
-- **Form Styling**: Professional contact form appearance
+**Global CSS** (`/src/app/globals.css`):
+- WordPress content styling overrides
+- Product gallery and video integration styles
+- Custom checkout and payment form styling
 
-## Configuration & Environment
+## Environment Configuration
 
-### Next.js Configuration (next.config.js)
-- **Deployment Mode**: Hybrid (static pages + dynamic blog/e-commerce)
-- **Image Optimization**: Custom handling for AVIF and StaticImageData
-- **TypeScript**: Configured with strict typing
-- **Webpack**: Custom video file handling (mp4, webm)
-- **Environment Variables**: Organized configuration management
+### Required Environment Variables
 
-### Environment Variables (.env files)
-
-#### WordPress & Blog Integration
+**WooCommerce Integration:**
 ```bash
-# WordPress CMS Backend
+WOOCOMMERCE_URL=https://wp.servidentalcr.com
+WOOCOMMERCE_CONSUMER_KEY=ck_[your_key]
+WOOCOMMERCE_CONSUMER_SECRET=cs_[your_secret]
+```
+
+**ONVO Payment Processing:**
+```bash
+NEXT_PUBLIC_ONVO_PUBLISHABLE_KEY=onvo_test_[key]
+ONVO_SECRET_KEY=onvo_test_[secret]
+```
+
+**WordPress Blog Integration:**
+```bash
 WORDPRESS_API_URL=https://wp.servidentalcr.com/wp-json/wp/v2
 WORDPRESS_BASE_URL=https://wp.servidentalcr.com
 ```
 
-#### WooCommerce E-commerce Integration
+**EmailJS Contact Forms:**
 ```bash
-# WooCommerce Store
-WOOCOMMERCE_URL=https://wp.servidentalcr.com
-WOOCOMMERCE_CONSUMER_KEY=ck_[your_key]
-WOOCOMMERCE_CONSUMER_SECRET=cs_[your_secret]
-
-# Migration Configuration
-MIGRATION_DRY_RUN=false
-MIGRATION_BATCH_SIZE=5
-MIGRATION_DELAY=2000
-```
-
-#### Contact & Communication
-```bash
-# EmailJS Integration
 EMAILJS_SERVICE_ID=[service_id]
 EMAILJS_TEMPLATE_ID=[template_id]
 EMAILJS_USER_ID=[user_id]
 ```
 
-#### Payment Integration (Future)
-```bash
-# ONVO Pay (Costa Rica)
-NEXT_PUBLIC_ONVO_PUBLISHABLE_KEY=onvo_test_[key]
-ONVO_SECRET_KEY=onvo_test_[secret]
-```
+### Key Dependencies
 
-### Dependencies
+**Core Framework:**
+- `next`: 15.0.x (App Router)
+- `react`: 18.x
+- `typescript`: 5.x
 
-#### Production Dependencies
-```json
-{
-  "next": "15.0.x",
-  "react": "18.x",
-  "typescript": "5.x",
-  "tailwindcss": "3.x",
-  "woocommerce-api": "1.x", // E-commerce integration
-  "dotenv": "16.x" // Environment management
-}
-```
+**E-commerce & Payments:**
+- `@woocommerce/woocommerce-rest-api`: WooCommerce integration
+- `woocommerce-api`: Legacy API client
+- `axios`: HTTP client for ONVO and other APIs
 
-#### Migration & Development Tools
-- **WooCommerce API Client**: REST API integration
-- **Product Extraction Tools**: TypeScript to JSON conversion
-- **Testing Suite**: API connectivity and validation
-- **Logging System**: Detailed migration and error tracking
+**UI & Styling:**
+- `tailwindcss`: CSS framework
+- `@headlessui/react`: UI components
+- `@heroicons/react`: Icon library
+- `framer-motion`: Animations
+- `yet-another-react-lightbox`: Image galleries
 
-## WooCommerce Migration System
+**Communication:**
+- `@emailjs/browser`: Contact form integration
 
-### Migration Status: ✅ COMPLETED
-**Date**: July 22, 2025  
-**Result**: 99/99 products successfully migrated (100% success rate)  
-**Duration**: 96 seconds  
-**Products Live**: https://wp.servidentalcr.com/tienda/
+## Working with the E-commerce System
 
-### Migration Toolkit (`/migrations/`)
+### Product Management
+**Migration Completed**: 99 products successfully migrated to WooCommerce
+**Status**: All products live at https://wp.servidentalcr.com/tienda/
 
-#### Core Migration Scripts
-- `extract-products-improved.js` - ✅ Extracts TypeScript products to JSON
-- `woocommerce-migration-fixed.js` - ✅ Migrates products to WooCommerce
-- `test-woocommerce-api.js` - ✅ Tests API connectivity and permissions
+**Key Files:**
+- `/migrations/` - Complete migration toolkit (reference only)
+- `/src/types/woocommerce.ts` - Auto-generated TypeScript types from WooCommerce API
+- `/src/hooks/useWooCommerce.ts` - React hook for WooCommerce API integration
 
-#### Data Files
-- `extracted-products.json` - 99 products in WooCommerce-ready format
-- `migration-log-fixed.json` - Detailed migration process log
-- `extraction-stats.json` - Analytics and statistics
+### Payment Integration (ONVO)
+**Payment Flow:**
+1. Cart state managed by `useCart` hook
+2. Checkout component collects customer information
+3. ONVO API creates payment intent
+4. Customer redirected to ONVO payment page
+5. Success/cancel redirects handled by `/checkout/success` and `/checkout/cancel` pages
 
-#### Documentation
-- `README.md` - Complete migration guide
-- `MIGRATION_SUCCESS_REPORT.md` - Detailed success report
-- `MIGRATION_SUMMARY.md` - Executive summary
+**Key Files:**
+- `/src/lib/onvo.ts` - ONVO API client and type definitions
+- `/src/app/api/onvo/payment-intent/route.ts` - Payment intent creation endpoint
+- `/src/components/ecommerce/checkout/OnvoPaymentSDK.tsx` - Payment integration component
 
-#### Testing & Debugging Tools
-- `test-connection.js` - Basic connectivity testing
-- `debug-api.js` - Detailed API response debugging
-- Various diagnostic utilities
+### Blog System (WordPress Headless)
+**API**: WordPress REST API at `wp.servidentalcr.com/wp-json/wp/v2/`
+**Caching**: In-memory cache with 15-minute TTL
+**Components**: BlogPost, BlogClient, WordPressDirectIframe
 
-### Product Data Structure (WooCommerce)
+**Routes:**
+- `/blog` - Blog listing with pagination
+- `/blog/[slug]` - Individual blog posts
+- `/tienda` - Product store
+- `/tienda/[slug]` - Individual product pages
+- `/carrito` - Shopping cart
+- `/checkout/success` - Payment success
+- `/checkout/cancel` - Payment cancellation
 
-Each migrated product includes:
-- **Basic Info**: Name, slug, SKU, description
-- **Categorization**: Product category assignment
-- **Features**: HTML-formatted unique selling points
-- **Stock Management**: Inventory tracking enabled
-- **SEO**: Optimized titles and descriptions
-- **Metadata**: Original ID and migration timestamp
-- **Status**: Active/published state
-
-### Migration Process
-1. **Extract** products from TypeScript files
-2. **Transform** data to WooCommerce format
-3. **Create** categories and attributes
-4. **Upload** products in optimized batches
-5. **Verify** successful creation and indexing
-
-## Blog System Integration
-
-### WordPress Headless CMS
-- **Backend URL**: `wp.servidentalcr.com`
-- **API Endpoint**: `/wp-json/wp/v2/`
-- **Features**: Posts, categories, featured images, SEO
-- **Content Management**: WordPress admin interface
-
-### Frontend Integration
-- **Routes**: 
-  - `/blog` - Main blog page with pagination
-  - `/blog/[slug]` - Individual post pages
-  - `/tienda` - **Main e-commerce store page**
-  - `/tienda/[slug]` - **Individual product pages with full details**
-  - `/carrito` - **Shopping cart page**
-- **Components**: BlogClient, BlogPost, BlogSidebar, BlogCard
-- **E-commerce Components**: ProductGrid, ProductCard, ProductDetails, MiniCart, CartProvider
-- **Caching**: In-memory cache with 15-minute expiration
-- **SEO**: Dynamic metadata and social sharing for products and blog posts
-
-### Content Features
-- **Search**: Real-time blog post search
-- **Categories**: Organized content categorization  
-- **Pagination**: Optimized page loading
-- **Social Sharing**: WhatsApp, Facebook, LinkedIn
-- **Reading Progress**: Visual reading progress indicator
-- **Responsive Images**: Optimized image delivery
-
-## E-commerce Frontend Integration
-
-### **Integration Status**: ✅ **COMPLETED** - January 22, 2025
-
-The complete e-commerce frontend has been successfully integrated with the existing ServidentalCR website:
-
-#### Key Features Implemented
-- **✅ Header Integration**: MiniCart component with real-time cart quantity display
-- **✅ Store Page**: Complete product grid at `/tienda` with filtering and search
-- **✅ Product Pages**: Individual product details at `/tienda/[slug]` with full information
-- **✅ Shopping Cart**: Full cart management with add/remove/update functionality
-- **✅ API Integration**: Complete WooCommerce REST API v3 integration
-- **✅ Product Search**: Advanced slug-based product search with intelligent fallback
-- **✅ Responsive Design**: Mobile-optimized store experience
-
-#### Technical Implementation
-- **API Endpoints**: Next.js API routes proxy WooCommerce REST API
-- **State Management**: React Context API for cart state across application
-- **Product Loading**: Dynamic product loading with skeleton loading states
-- **Error Handling**: Graceful error handling with user-friendly messages
-- **URL Handling**: Trailing slash normalization for Next.js API routes
-- **Search Strategy**: Multi-tier search with exact slug matching and fallback search
-
-#### Fixed Issues
-- **API 500 Errors**: Resolved authentication and parameter formatting issues
-- **URL Redirects**: Fixed trailing slash issues causing frontend API failures
-- **Product Search**: Implemented proper slug-based product search with WooCommerce API
-- **Component Integration**: Successfully integrated e-commerce components with existing layout
-
-#### Navigation Updates
-- **Header**: Added "TIENDA" navigation link and MiniCart with quantity indicator
-- **Product Links**: All product cards link to `/tienda/[slug]` format
-- **Cart Links**: Updated cart navigation to `/carrito` route
-- **Breadcrumbs**: Proper navigation flow throughout e-commerce section
-
-#### Performance Optimizations
-- **Caching**: Implemented request caching for product data
-- **Loading States**: Skeleton loading for better user experience
-- **Error Boundaries**: Graceful error handling with fallback content
-- **API Optimization**: Batched requests and intelligent retry mechanisms
 
 ## Development Guidelines
 
-### Working with Products
-1. **Product Updates**: Modify `manual-products.ts` and re-run migration
-2. **New Products**: Add to TypeScript file, extract, and migrate
-3. **Images**: Store in `/src/assets/` with AVIF optimization
-4. **Categories**: Update both TypeScript types and WooCommerce
+### API Integration Patterns
+**WooCommerce**: Use Next.js API routes (`/api/woocommerce/*`) as proxy to avoid CORS issues
+**WordPress**: Direct fetch from frontend with caching in `blogService.ts`
+**ONVO**: Server-side API calls only (secret keys)
 
-### Working with Blog
-1. **Content Management**: Use WordPress admin at `wp.servidentalcr.com/wp-admin`
-2. **API Changes**: Update `blogService.ts` for new endpoints
-3. **Styling**: Modify global CSS for WordPress content styling
-4. **Caching**: Clear cache on significant blog updates
+### State Management Patterns
+**Cart State**: Use `CartProvider` context - available globally after wrapping in layout
+**Product Data**: Fetch via `useWooCommerce` hook with built-in caching
+**Form State**: Local component state for checkout/contact forms
 
-### Working with E-commerce
-1. **Product Management**: Use WooCommerce admin interface
-2. **Orders**: Process through WooCommerce dashboard
-3. **Inventory**: Automatic stock tracking enabled
-4. **Pricing**: Update via WooCommerce or re-run migration
+### Component Architecture
+**E-commerce Components**: Located in `/src/components/ecommerce/`
+- Follow existing patterns for product display
+- Use WooCommerce types from `/src/types/woocommerce.ts`
+- Implement loading states and error handling
 
-### Code Standards
-- **TypeScript**: Strict typing enabled, use existing type definitions
-- **Components**: Follow existing patterns for consistency
-- **Styling**: Use Tailwind classes with custom theme
-- **Images**: Prefer AVIF format, use Next.js Image component
-- **API Integration**: Implement proper error handling and caching
+**Styling**: Use Tailwind utility classes with custom theme colors
+**Images**: AVIF format preferred, use Next.js Image component
 
-### Security Practices
-- **Environment Variables**: Never commit credentials
-- **API Keys**: Use environment-specific keys
-- **Content Sanitization**: Sanitize user inputs
-- **HTTPS**: Enforce secure connections
-- **Error Handling**: Implement graceful degradation
+### Localization
+**Language**: Spanish (Costa Rica)
+**Currency**: Costa Rican Colón (₡) and USD ($)
+**Payment**: ONVO (Costa Rican payment processor)
+**Target Market**: Costa Rican dental professionals
 
-## Internationalization & Localization
+### Performance Considerations
+**Image Optimization**: AVIF format with lazy loading (600+ optimized product images)
+**Caching**: Blog content cached for 15 minutes, product data cached per request
+**Bundle Optimization**: Next.js automatic code splitting and optimization
 
-- **Language**: Spanish (Costa Rica)
-- **Currency**: Costa Rican Colón (₡) and USD ($)
-- **Market Focus**: Costa Rican dental professionals
-- **Age Restriction**: 18+ mentioned in metadata
-- **Cultural Considerations**: Professional medical industry standards
+### Testing Key Functionality
+**E-commerce Flow**: Product browsing → Add to cart → Checkout → ONVO payment
+**Blog System**: WordPress content loading and display
+**API Endpoints**: Test WooCommerce and ONVO integrations
+**Responsive Design**: Mobile cart and checkout functionality
 
-## Performance Optimizations
-
-### Image Optimization
-- **Format**: AVIF for modern browsers with WebP fallback
-- **Lazy Loading**: Implemented on all product images
-- **Responsive Images**: Multiple sizes for different viewports
-- **CDN Ready**: Optimized for content delivery networks
-
-### Caching Strategy
-- **Blog Content**: In-memory cache with automatic invalidation
-- **Product Data**: Static generation with incremental regeneration
-- **API Responses**: Cached responses with appropriate TTL
-- **Asset Optimization**: Minimized CSS/JS bundles
-
-### Database Optimization
-- **WooCommerce**: Optimized queries and indexing
-- **WordPress**: Cached database queries
-- **Migration**: Batch processing to prevent timeouts
-
-## Testing & Quality Assurance
-
-### Automated Testing
-- **API Testing**: WooCommerce REST API connectivity
-- **Migration Testing**: Dry-run mode for safe testing
-- **Product Validation**: Data integrity checks
-- **Performance Testing**: Load testing for high traffic
-
-### Manual Testing Checklist
-- [ ] All 99 products display correctly
-- [ ] Product categories filter properly
-- [ ] Blog posts load and display correctly
-- [ ] Contact forms submit successfully
-- [ ] WhatsApp integration works
-- [ ] Responsive design on all devices
-- [ ] SEO metadata generates correctly
-
-## Deployment & Production
-
-### Production Environment
-- **Hosting**: Next.js compatible hosting (Vercel recommended)
-- **Database**: WooCommerce MySQL database
-- **CDN**: Image and asset delivery optimization
-- **SSL**: HTTPS enforcement required
-
-### Deployment Process
-1. **Build**: `npm run build` for production bundle
-2. **Environment**: Set production environment variables
-3. **Database**: Ensure WooCommerce database is accessible
-4. **Assets**: Upload optimized images to CDN if applicable
-5. **Testing**: Verify all functionality in production
-6. **Monitoring**: Set up error tracking and analytics
-
-## Monitoring & Analytics
-
-### Performance Monitoring
-- **Core Web Vitals**: LCP, FID, CLS optimization
-- **Page Load Times**: Regular performance audits
-- **Database Performance**: Query optimization
-- **API Response Times**: Monitor WooCommerce API
-
-### Business Analytics
-- **E-commerce Tracking**: Sales, conversion rates, popular products
-- **Blog Analytics**: Most read posts, engagement metrics
-- **Contact Form Analytics**: Inquiry rates and sources
-- **SEO Performance**: Search rankings and organic traffic
-
-## Future Enhancements
-
-### Planned Features
-- [ ] **User Accounts**: Customer registration and login
-- [ ] **Order Management**: Full e-commerce checkout process
-- [ ] **Payment Integration**: ONVO Pay for Costa Rican payments
-- [ ] **Inventory Management**: Advanced stock tracking
-- [ ] **Product Reviews**: Customer review system
-- [ ] **Wishlist**: Customer product favorites
-- [ ] **Advanced Search**: Product filtering and search
-- [ ] **Email Marketing**: Newsletter and promotions
-
-### Technical Improvements
-- [ ] **PWA**: Progressive Web App functionality
-- [ ] **Mobile App**: React Native companion app
-- [ ] **API Expansion**: Custom endpoints for advanced features
-- [ ] **Machine Learning**: Product recommendations
-- [ ] **Advanced SEO**: Schema markup and rich snippets
-- [ ] **Multi-language**: English language support
-
-## Support & Maintenance
-
-### Regular Maintenance Tasks
-- **Product Updates**: Quarterly product catalog review
-- **Security Updates**: Monthly dependency updates
-- **Performance Audits**: Quarterly performance reviews
-- **Content Updates**: Regular blog content publishing
-- **Backup Verification**: Weekly backup testing
+### Deployment Notes
+**Platform**: Next.js compatible hosting (Vercel recommended)
+**Environment Variables**: Required for WooCommerce, ONVO, and WordPress integration
+**External Dependencies**: WooCommerce backend, WordPress CMS, ONVO payment processor
+**Build Command**: `npm run build` (hybrid static + dynamic)
 
 ### Troubleshooting Common Issues
-- **Migration Errors**: Check API credentials and connectivity
-- **Blog Loading Issues**: Verify WordPress backend status
-- **Product Display Problems**: Validate product data structure
-- **Contact Form Issues**: Verify EmailJS configuration
-- **Performance Issues**: Check image optimization and caching
 
-### Getting Help
-- **Documentation**: Refer to migration guides and API documentation
-- **Logs**: Check migration logs and error reports
-- **Testing Tools**: Use built-in diagnostic scripts
-- **WordPress Support**: Contact WordPress hosting provider
-- **WooCommerce Support**: Use WooCommerce community resources
+**API 500 Errors**: Check WooCommerce credentials and API endpoint URLs
+**Payment Failures**: Verify ONVO keys and webhook configurations
+**Blog Loading Issues**: Check WordPress backend status and API connectivity
+**Cart State Issues**: Ensure CartProvider wraps the application properly
+**Product Search**: Verify slug-based search implementation in WooCommerce API
+
+**Migration Scripts** (Reference only - migration completed):
+- All scripts in `/migrations/` directory for reference
+- 99/99 products successfully migrated
+- Do not re-run unless adding new products
+
+
 
 ---
 
-## Project Status Summary
+## Current Status
 
-**Current Status**: ✅ **PRODUCTION READY**  
-**Last Updated**: January 22, 2025  
-**Migration Status**: ✅ **COMPLETED** (99/99 products)  
-**Blog System**: ✅ **ACTIVE**  
-**E-commerce Backend**: ✅ **LIVE**  
-**E-commerce Frontend**: ✅ **FULLY INTEGRATED**  
+**Production Ready**: ✅ Full e-commerce platform with payment integration
+**Product Catalog**: 99 dental equipment products migrated and live
+**Payment Processing**: ONVO integration active for Costa Rican market
+**Blog System**: WordPress headless CMS integrated
+**Cart & Checkout**: Complete shopping experience implemented
 
-### Key Achievements
-- **Complete Product Migration**: 99 dental equipment products in WooCommerce
-- **Professional Blog**: WordPress CMS with optimized content delivery
-- **Full E-commerce Integration**: Complete online store with cart, checkout, and product management
-- **Header Integration**: MiniCart and navigation seamlessly integrated
-- **Advanced Product Search**: Intelligent slug-based search with fallback mechanisms
-- **Responsive Design**: Mobile-optimized user experience across all sections
-- **SEO Optimized**: Search engine friendly architecture for products and content
-- **Production Ready**: Scalable, maintainable codebase with comprehensive error handling
-
-**ServidentalCR represents a complete digital transformation from simple catalog to full-featured e-commerce platform with integrated shopping cart, individual product pages, and seamless user experience - ready for Costa Rican dental professionals.**
+The platform serves Costa Rican dental professionals with a complete digital e-commerce solution including product catalog, cart management, secure payment processing, and content management.
