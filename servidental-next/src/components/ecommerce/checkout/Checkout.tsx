@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
+import { formatPrice } from '@/utils/currency';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
 
 interface CheckoutFormData {
@@ -258,7 +259,7 @@ export default function Checkout() {
                 {cart.items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span>{item.name} x {item.quantity}</span>
-                    <span>₡{item.subtotal.toLocaleString()}</span>
+                    <span>{formatPrice(item.subtotal)}</span>
                   </div>
                 ))}
               </div>
@@ -266,7 +267,7 @@ export default function Checkout() {
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>₡{cart.total.toLocaleString()}</span>
+                  <span>{formatPrice(cart.total)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Envío</span>
@@ -275,7 +276,7 @@ export default function Checkout() {
                 <div className="border-t pt-2">
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span>₡{cart.total.toLocaleString()}</span>
+                    <span>{formatPrice(cart.total)}</span>
                   </div>
                 </div>
               </div>

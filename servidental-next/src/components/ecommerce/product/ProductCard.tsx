@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
+import { formatPrice, parsePrice, isOnSale } from '@/utils/currency';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 
 interface ProductCardProps {
@@ -26,10 +27,10 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
     }
   };
 
-  const price = parseFloat(product.price) || 0;
-  const regularPrice = parseFloat(product.regular_price) || 0;
-  const salePrice = parseFloat(product.sale_price) || 0;
-  const isOnSale = product.on_sale && salePrice > 0;
+  const price = parsePrice(product.price);
+  const regularPrice = parsePrice(product.regular_price);
+  const salePrice = parsePrice(product.sale_price);
+  const productOnSale = isOnSale(product.regular_price, product.sale_price);
 
   return (
     <Link href={`/tienda/${product.slug}`} className="group block">
@@ -51,7 +52,7 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
           )}
           
           {/* Sale Badge */}
-          {isOnSale && (
+          {productOnSale && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
               Oferta
             </div>
@@ -81,18 +82,18 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
           {/* Price */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-2">
-              {isOnSale ? (
+              {productOnSale ? (
                 <>
                   <span className="text-lg font-bold text-servi_green">
-                    ₡{salePrice.toLocaleString()}
+                    {formatPrice(salePrice)}
                   </span>
                   <span className="text-sm text-gray-500 line-through">
-                    ₡{regularPrice.toLocaleString()}
+                    {formatPrice(regularPrice)}
                   </span>
                 </>
               ) : price > 0 ? (
                 <span className="text-lg font-bold text-gray-900">
-                  ₡{price.toLocaleString()}
+                  {formatPrice(price)}
                 </span>
               ) : (
                 <span className="text-sm text-gray-500">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ProductFilters, WooCommerceCategory } from '@/types/woocommerce';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
+import { formatPriceRange, PRIMARY_CURRENCY } from '@/utils/currency';
 
 interface ProductFiltersPanelProps {
   filters: ProductFilters;
@@ -131,7 +132,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
       {/* Price Range */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">
-          Rango de precios (₡)
+          Rango de precios ({PRIMARY_CURRENCY.symbol})
         </label>
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -221,7 +222,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
             })}
             {(filters.price_min || filters.price_max) && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                ₡{filters.price_min || '0'} - ₡{filters.price_max || '∞'}
+                {formatPriceRange(filters.price_min, filters.price_max)}
                 <button
                   onClick={() => handlePriceChange('', '')}
                   className="ml-1 text-green-600 hover:text-green-800"

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
+import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
@@ -141,8 +142,10 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
     );
   }
 
-  const price = parseFloat(product.price) || 0;
-  const isOnSale = product.on_sale && parseFloat(product.sale_price) > 0;
+  const price = parsePrice(product.price);
+  const regularPrice = parsePrice(product.regular_price);
+  const salePrice = parsePrice(product.sale_price);
+  const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
 
   return (
@@ -259,13 +262,13 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 {/* Precio */}
-                {isOnSale ? (
+                {productOnSale ? (
                   <div className="flex items-center gap-2">
                     <span className="text-3xl font-bold text-servi_green">
-                      ₡{parseFloat(product.sale_price).toLocaleString()}
+                      {formatPrice(salePrice)}
                     </span>
                     <span className="text-lg text-gray-500 line-through">
-                      ₡{parseFloat(product.regular_price).toLocaleString()}
+                      {formatPrice(regularPrice)}
                     </span>
                     <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                       OFERTA
@@ -273,7 +276,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   </div>
                 ) : price > 0 ? (
                   <span className="text-3xl font-bold text-gray-900">
-                    ₡{price.toLocaleString()}
+                    {formatPrice(price)}
                   </span>
                 ) : (
                   <span className="text-xl text-gray-500">

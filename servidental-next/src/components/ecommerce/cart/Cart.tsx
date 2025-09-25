@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/hooks/useCart';
+import { formatPrice } from '@/utils/currency';
 import { XMarkIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 export function Cart() {
@@ -78,7 +79,7 @@ export function Cart() {
                   <p className="text-sm text-gray-500">SKU: {item.sku}</p>
                 )}
                 <p className="text-sm text-gray-600">
-                  ₡{item.price.toLocaleString()} c/u
+                  {formatPrice(item.price)} c/u
                 </p>
               </div>
 
@@ -104,7 +105,7 @@ export function Cart() {
               {/* Item Total */}
               <div className="text-right">
                 <p className="font-medium text-gray-900">
-                  ₡{item.subtotal.toLocaleString()}
+                  {formatPrice(item.subtotal)}
                 </p>
               </div>
 
@@ -130,7 +131,7 @@ export function Cart() {
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm">
                 <span>Subtotal ({cart.totalQuantity} artículos)</span>
-                <span>₡{cart.total.toLocaleString()}</span>
+                <span>{formatPrice(cart.total)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Envío</span>
@@ -139,7 +140,7 @@ export function Cart() {
               <div className="border-t pt-3">
                 <div className="flex justify-between font-medium text-lg">
                   <span>Total</span>
-                  <span>₡{cart.total.toLocaleString()}</span>
+                  <span>{formatPrice(cart.total)}</span>
                 </div>
               </div>
             </div>

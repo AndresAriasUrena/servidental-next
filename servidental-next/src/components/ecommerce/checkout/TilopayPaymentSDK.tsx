@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { CustomerInfo, CartItem, buildSDKConfig } from '@/lib/tilopay';
+import React, { useState, useEffect } from 'react';
+import { CustomerInfo, CartItem } from '@/lib/tilopay';
 
 interface TilopayPaymentSDKProps {
   customerInfo: CustomerInfo;
@@ -12,20 +12,10 @@ interface TilopayPaymentSDKProps {
   orderId?: string;
 }
 
-declare global {
-  interface Window {
-    TilopaySDK: any;
-    jQuery: any;
-    $: any;
-  }
-}
-
-export default function TilopayPaymentSDK({ customerInfo, cart, orderId }: TilopayPaymentSDKProps) {
+export default function TilopayPaymentSDK({ customerInfo, cart }: TilopayPaymentSDKProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sdkToken, setSdkToken] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string>('');
-  const tilopayContainerRef = useRef<HTMLDivElement>(null);
 
   // Generate order number on component mount
   useEffect(() => {
@@ -35,168 +25,207 @@ export default function TilopayPaymentSDK({ customerInfo, cart, orderId }: Tilop
     setOrderNumber(newOrderNumber);
   }, []);
 
-  const getSDKToken = async () => {
+  const initializeTilopaySDK = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      console.log('🎫 Requesting TiloPay SDK token...');
+      console.log('🚀 Initializing TiloPay SDK...');
       
-      const response = await fetch('/api/tilopay/sdk-token', {
+      // Wait for SDK to be fully loaded
+      await waitForTilopaySDK();
+      
+      console.log('📱 SDK verified, getting token...');
+      
+      // Get SDK token from backend
+      const tokenResponse = await fetch('/api/tilopay/sdk-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al obtener token del SDK');
+      if (!tokenResponse.ok) {
+        const errorText = await tokenResponse.text();
+        console.error('Token request failed:', errorText);
+        throw new Error('Failed to get TiloPay SDK token');
       }
 
-      const tokenData = await response.json();
-      console.log('✅ SDK token received');
-      setSdkToken(tokenData.token);
+      const tokenData = await tokenResponse.json();
+      
+      if (!tokenData.success || !tokenData.token) {
+        console.error('Invalid token response:', tokenData);
+        throw new Error('No valid SDK token received');
+      }
+      
+      console.log('✅ SDK Token received successfully');
+
+      const Tilopay = (window as any).Tilopay;
+      
+      console.log('🔧 Configuring TiloPay SDK with order:', orderNumber);
+      
+      // Configure SDK with complete settings
+      const sdkConfig = {
+        token: tokenData.token,
+        currency: 'USD',
+        language: 'es',
+        amount: cart.total,
+        billToEmail: customerInfo.email,
+        billToFirstName: customerInfo.firstName,
+        billToLastName: customerInfo.lastName,
+        orderNumber: orderNumber,
+        capture: 1, // Auto-capture
+        redirect: `${window.location.origin}/checkout/tilopay-callback`,
+        subscription: 0, // One-time payment
+      };
+      
+      console.log('SDK Config:', {
+        ...sdkConfig,
+        token: '***' // Hide token in logs
+      });
+      
+      Tilopay.init(sdkConfig);
+
+      console.log('🚀 Opening TiloPay checkout interface...');
+      Tilopay.open();
+      
+      // Don't set loading to false here - let the redirect handle it
       
     } catch (error) {
-      console.error('❌ SDK Token Error:', error);
-      setError(error instanceof Error ? error.message : 'Error al obtener token de pago');
-      setLoading(false);
+      console.error('❌ TiloPay SDK Error:', error);
+      
+      // If SDK is not available, try WooCommerce order creation
+      if (error instanceof Error && error.message === 'SDK_NOT_AVAILABLE') {
+        try {
+          console.log('🔄 Attempting WooCommerce order creation as fallback...');
+          await createWooCommerceOrder();
+          // Don't set loading to false here - redirect is happening
+        } catch (fallbackError) {
+          console.error('❌ WooCommerce order creation also failed:', fallbackError);
+          setError('No se pudo procesar el pago. Por favor intenta nuevamente o contacta soporte.');
+          setLoading(false);
+        }
+      } else {
+        setError(error instanceof Error ? error.message : 'Error al inicializar el pago');
+        setLoading(false);
+      }
     }
   };
 
-  const handlePaymentSuccess = async (data: any) => {
-    console.log('✅ TiloPay payment successful:', data);
-    
+  // Helper function to wait for TiloPay SDK to be available
+  const waitForTilopaySDK = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
+      const maxAttempts = 80; // 8 seconds with 100ms intervals
+      
+      const checkSDK = () => {
+        if (typeof window !== 'undefined' && ((window as any).Tilopay || (window as any).TiloPay)) {
+          console.log('✅ TiloPay SDK is ready');
+          resolve();
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(checkSDK, 100);
+        } else {
+          console.log('⚠️ TiloPay SDK not available, falling back to redirect approach...');
+          reject(new Error('SDK_NOT_AVAILABLE'));
+        }
+      };
+      
+      checkSDK();
+    });
+  };
+
+  // WooCommerce payment creation - Uses existing integrated system
+  const createWooCommerceOrder = async () => {
     try {
-      // Get stored form data
-      const formDataStr = localStorage.getItem('checkout-form-data');
-      let billingAddress = {};
-      let shippingAddress = {};
+      console.log('🔄 Creating WooCommerce order with TiloPay payment...');
       
-      if (formDataStr) {
-        const formData = JSON.parse(formDataStr);
-        billingAddress = formData.billing;
-        shippingAddress = formData.shipping;
-      }
-      
-      // Create WooCommerce order
       const orderResponse = await fetch('/api/woocommerce/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          customerInfo,
+          customerInfo: customerInfo,
           cartItems: cart.items,
           total: cart.total,
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
-          tilopayData: data,
-          billingAddress,
-          shippingAddress,
+          billingAddress: {
+            first_name: customerInfo.firstName,
+            last_name: customerInfo.lastName,
+            email: customerInfo.email,
+            phone: customerInfo.phone,
+            address_1: customerInfo.address?.line1 || '',
+            city: customerInfo.address?.city || '',
+            state: customerInfo.address?.state || '',
+            postcode: customerInfo.address?.postalCode || '',
+            country: customerInfo.address?.country || 'CR'
+          },
+          shippingAddress: {
+            first_name: customerInfo.firstName,
+            last_name: customerInfo.lastName,
+            address_1: customerInfo.address?.line1 || '',
+            city: customerInfo.address?.city || '',
+            state: customerInfo.address?.state || '',
+            postcode: customerInfo.address?.postalCode || '',
+            country: customerInfo.address?.country || 'CR'
+          }
         }),
       });
 
-      if (orderResponse.ok) {
-        const orderData = await orderResponse.json();
-        console.log('✅ WooCommerce order created:', orderData.order);
-        
-        // Clear cart and form data
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('cart');
-          localStorage.removeItem('servidental-cart');
-          localStorage.removeItem('checkout-form-data');
-        }
-        
-        // Redirect to success page
-        window.location.href = `/checkout/success?order_number=${orderNumber}&order_id=${orderData.order.id}`;
-      } else {
-        console.error('❌ Error creating WooCommerce order');
-        window.location.href = `/checkout/success?order_number=${orderNumber}`;
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to create WooCommerce order');
       }
-    } catch (error) {
-      console.error('❌ Error processing order:', error);
-      window.location.href = `/checkout/success?order_number=${orderNumber}`;
-    }
-  };
 
-  const handlePaymentError = (data: any) => {
-    console.error('❌ TiloPay payment error:', data);
-    const errorMessage = data?.message || data?.error || 'Error al procesar el pago. Por favor, intenta de nuevo.';
-    setError(errorMessage);
-    setLoading(false);
-  };
-
-  const handlePaymentCancel = () => {
-    console.log('⚠️ TiloPay payment cancelled');
-    window.location.href = `/checkout/cancel`;
-  };
-
-  useEffect(() => {
-    if (sdkToken && orderNumber && typeof window !== 'undefined') {
-      // Wait for both jQuery and TilopaySDK to be available
-      const initSDK = () => {
-        if (window.jQuery && window.TilopaySDK) {
-          try {
-            console.log('🚀 Initializing TiloPay SDK...');
-            
-            const sdkConfig = buildSDKConfig(
-              sdkToken,
-              cart.total,
-              customerInfo,
-              orderNumber
-            );
-
-            console.log('📋 TiloPay SDK config:', sdkConfig);
-
-            // Initialize TiloPay SDK
-            window.TilopaySDK.init({
-              ...sdkConfig,
-              onSuccess: handlePaymentSuccess,
-              onError: handlePaymentError,
-              onCancel: handlePaymentCancel,
-              container: '#tilopay-payment-container',
-            });
-
-            console.log('✅ TiloPay SDK initialized successfully');
-            setLoading(false);
-          } catch (error) {
-            console.error('❌ Error initializing TiloPay SDK:', error);
-            setError('Error al cargar el formulario de pago');
-            setLoading(false);
-          }
-        } else {
-          // SDK not ready, wait a bit more
-          setTimeout(initSDK, 100);
-        }
-      };
-
-      initSDK();
-    }
-  }, [sdkToken, orderNumber, cart.total]);
-
-  // Check for SDK availability
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      let attempts = 0;
-      const maxAttempts = 50;
+      const orderData = await orderResponse.json();
+      console.log('✅ WooCommerce order created:', orderData.order.id);
       
-      const waitForSDK = setInterval(() => {
-        attempts++;
-        
-        if (window.jQuery && window.TilopaySDK) {
-          clearInterval(waitForSDK);
-          console.log('✅ TiloPay SDK loaded correctly');
-        } else if (attempts >= maxAttempts) {
-          clearInterval(waitForSDK);
-          setError('No se pudo cargar el SDK de TiloPay. Por favor, recarga la página.');
-        }
-      }, 100);
+      // For headless architecture, create direct TiloPay payment link
+      const wooOrderId = orderData.order.id;
+      
+      console.log('🔗 Creating direct TiloPay payment for headless architecture...');
+      
+      // Create TiloPay payment directly via their API
+      const tilopayResponse = await fetch('/api/tilopay/create-headless-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: cart.total,
+          currency: 'USD',
+          orderNumber: orderNumber,
+          wooOrderId: wooOrderId,
+          customerInfo: customerInfo,
+          items: cart.items,
+        }),
+      });
 
-      return () => clearInterval(waitForSDK);
+      if (!tilopayResponse.ok) {
+        throw new Error('Failed to create TiloPay payment');
+      }
+
+      const tilopayData = await tilopayResponse.json();
+      
+      if (tilopayData.success && tilopayData.paymentUrl) {
+        console.log('✅ TiloPay payment created, redirecting to:', tilopayData.paymentUrl);
+        
+        // Clear cart before redirecting since order is created
+        localStorage.removeItem('servidental-cart');
+        
+        // Redirect to TiloPay payment page
+        window.location.href = tilopayData.paymentUrl;
+      } else {
+        throw new Error(tilopayData.error || 'No payment URL received from TiloPay');
+      }
+      
+    } catch (error) {
+      console.error('❌ WooCommerce order creation failed:', error);
+      throw error;
     }
-  }, []);
+  };
 
   return (
     <div className="space-y-4">
@@ -211,63 +240,54 @@ export default function TilopayPaymentSDK({ customerInfo, cart, orderId }: Tilop
         </div>
       )}
 
-      {!sdkToken ? (
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-lg font-semibold mb-4">Proceder al Pago</h3>
-          <div className="flex items-center mb-4">
-            <img 
-              src="https://tilopay.com/assets/img/logo.png" 
-              alt="TiloPay" 
-              className="h-8 mr-3"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-            <div>
-              <p className="text-sm text-gray-600">
-                Pago seguro con tarjeta de crédito o débito
-              </p>
-              <p className="text-xs text-gray-500">
-                Total: ${cart.total.toLocaleString()} USD
-              </p>
-            </div>
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <h3 className="text-lg font-semibold mb-4">Proceder al Pago</h3>
+        <div className="flex items-center mb-4">
+          <img 
+            src="https://tilopay.com/assets/img/logo.png" 
+            alt="TiloPay" 
+            className="h-8 mr-3"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <div>
+            <p className="text-sm text-gray-600">
+              Pago seguro con tarjeta de crédito o débito
+            </p>
+            <p className="text-xs text-gray-500">
+              Total: ${cart.total.toLocaleString()} USD
+            </p>
           </div>
-          <button
-            onClick={getSDKToken}
-            disabled={loading}
-            className="w-full bg-servi_green text-white py-3 px-4 rounded-md hover:bg-servi_dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-          >
-            {loading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                Preparando pago...
-              </>
-            ) : (
-              'Iniciar Pago con TiloPay'
-            )}
-          </button>
         </div>
-      ) : (
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-lg font-semibold mb-4">Información de Pago</h3>
-          
-          {loading && (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-servi_green border-t-transparent mx-auto"></div>
-              <p className="mt-4 text-gray-600">Cargando formulario de pago seguro...</p>
-              <p className="text-sm text-gray-500 mt-2">Orden: {orderNumber}</p>
-            </div>
+        
+        {loading && (
+          <div className="text-center py-4 mb-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-3 border-servi_green border-t-transparent mx-auto"></div>
+            <p className="mt-2 text-gray-600">Preparando pago seguro...</p>
+            <p className="text-sm text-gray-500">Orden: {orderNumber}</p>
+          </div>
+        )}
+        
+        <button
+          onClick={initializeTilopaySDK}
+          disabled={loading || !orderNumber}
+          className="w-full bg-servi_green text-white py-3 px-4 rounded-md hover:bg-servi_dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+        >
+          {loading ? (
+            <>
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
+              Procesando pedido...
+            </>
+          ) : (
+            'Procesar Pedido con TiloPay'
           )}
-          
-          {/* TiloPay SDK Container */}
-          <div 
-            id="tilopay-payment-container" 
-            ref={tilopayContainerRef}
-            style={{ display: loading ? 'none' : 'block' }}
-            className="min-h-[300px]"
-          ></div>
-        </div>
-      )}
+        </button>
+        
+        <p className="text-xs text-gray-500 mt-3 text-center">
+          Se creará tu pedido en nuestro sistema integrado con TiloPay
+        </p>
+      </div>
 
       {/* Security and payment info */}
       <div className="text-sm text-gray-500 space-y-2">

@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
+import { formatPrice } from '@/utils/currency';
 import { XMarkIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
 
 interface MiniCartProps {
@@ -88,7 +89,7 @@ export default function MiniCart({ onClose }: MiniCartProps) {
                             Cantidad: <span className="font-medium text-servi_green">{item.quantity}</span>
                           </div>
                           <div className="text-sm font-bold text-gray-900">
-                            ₡{item.subtotal.toLocaleString()}
+                            {formatPrice(item.subtotal)}
                           </div>
                         </div>
                       </div>
@@ -111,7 +112,7 @@ export default function MiniCart({ onClose }: MiniCartProps) {
               <div className="flex justify-between items-center mb-4">
                 <span className="text-lg font-semibold text-gray-900">Total:</span>
                 <span className="text-xl font-bold text-servi_green">
-                  ₡{cart.total.toLocaleString()}
+                  {formatPrice(cart.total)}
                 </span>
               </div>
               

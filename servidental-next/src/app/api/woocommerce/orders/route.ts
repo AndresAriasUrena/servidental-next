@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const orderData = {
       payment_method: isTilopay ? 'tilopay' : 'onvo_pay',
       payment_method_title: isTilopay ? 'TiloPay' : 'ONVO Pay',
-      set_paid: true, // Marcar como pagado porque ya se procesó
+      set_paid: paymentIntentId ? true : false, // Solo marcar como pagado si ONVO ya procesó el pago
       billing: {
         first_name: customerInfo.firstName || billingAddress?.first_name || '',
         last_name: customerInfo.lastName || billingAddress?.last_name || '',
@@ -145,6 +145,7 @@ export async function POST(request: NextRequest) {
         status: order.status,
         total: order.total,
         date_created: order.date_created,
+        order_key: order.order_key,
       },
     });
 
