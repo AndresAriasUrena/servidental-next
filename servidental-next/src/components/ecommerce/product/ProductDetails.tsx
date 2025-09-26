@@ -11,6 +11,19 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
 import { ProductCard } from './ProductCard';
 
+// Helper functions for media handling
+const getYouTubeVideoId = (url: string): string | null => {
+  if (!url) return null;
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+  return match ? match[1] : null;
+};
+
+const getMetaDataValue = (product: WooCommerceProduct, key: string): string | null => {
+  if (!product.meta_data) return null;
+  const metaItem = product.meta_data.find(item => item.key === key);
+  return metaItem?.value || null;
+};
+
 interface ProductDetailsProps {
   slug: string;
 }
@@ -44,7 +57,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<'overview' | 'description' | 'specs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'description' | 'specs' | 'media'>('overview');
   const [relatedProducts, setRelatedProducts] = useState<WooCommerceProduct[]>([]);
   const [loadingRelated, setLoadingRelated] = useState(false);
   const { addToCart, isLoading: cartLoading } = useCart();
@@ -242,7 +255,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
         </div>
 
         {/* COLUMNA DERECHA: INFO Y TABS */}
-        <div className="flex flex-col lg:overflow-hidden">
+        <div className="flex flex-col lg:h-full lg:max-h-screen">
           
           {/* Header Fijo */}
           <div className="space-y-4 pb-6 border-b border-gray-200">
@@ -390,10 +403,23 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   Especificaciones
                 </button>
               )}
+              {/* Tab Videos y Recursos - mostrar si hay videos o PDFs */}
+              {(getMetaDataValue(product, 'video_1_url') || getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
+                <button
+                  onClick={() => setActiveTab('media')}
+                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                    activeTab === 'media'
+                      ? 'border-servi_green text-servi_green'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  Videos y Recursos
+                </button>
+              )}
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto pr-2">
+            <div className="flex-1 overflow-y-auto pr-2 max-h-96">
               {activeTab === 'overview' && (
                 <div className="space-y-6">
                   {product.short_description && (
@@ -467,6 +493,111 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   ))}
                 </div>
               )}
+
+              {activeTab === 'media' && (
+                <div className="space-y-8">
+                  {/* Videos Section */}
+                  {(getMetaDataValue(product, 'video_1_url') || getMetaDataValue(product, 'video_2_url')) && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-10V7a3 3 0 11-6 0V4h6zM4 7v10a2 2 0 002 2h12a2 2 0 002-2V7M4 7l2-2h12l2 2" />
+                        </svg>
+                        Videos Demostrativos
+                      </h3>
+                      <div className="grid gap-6">
+                        {getMetaDataValue(product, 'video_1_url') && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                              <iframe
+                                src={`https://www.youtube.com/embed/${getYouTubeVideoId(getMetaDataValue(product, 'video_1_url') || '')}`}
+                                title="Video demostrativo del producto"
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        )}
+                        {getMetaDataValue(product, 'video_2_url') && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                              <iframe
+                                src={`https://www.youtube.com/embed/${getYouTubeVideoId(getMetaDataValue(product, 'video_2_url') || '')}`}
+                                title="Video demostrativo del producto #2"
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* PDFs Section */}
+                  {(getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Documentos y Recursos
+                      </h3>
+                      <div className="space-y-3">
+                        {getMetaDataValue(product, 'manual_pdf_url') && (
+                          <a
+                            href={getMetaDataValue(product, 'manual_pdf_url') || ''}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors group"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-900">Manual de Usuario</p>
+                                <p className="text-sm text-gray-600">Instrucciones detalladas de uso</p>
+                              </div>
+                            </div>
+                            <svg className="w-5 h-5 text-blue-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                        {getMetaDataValue(product, 'product_sheet_pdf_url') && (
+                          <a
+                            href={getMetaDataValue(product, 'product_sheet_pdf_url') || ''}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors group"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-900">Folleto del Equipo</p>
+                                <p className="text-sm text-gray-600">Especificaciones técnicas</p>
+                              </div>
+                            </div>
+                            <svg className="w-5 h-5 text-green-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
             </div>
           </div>
         </div>
