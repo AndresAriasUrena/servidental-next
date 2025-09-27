@@ -6,7 +6,10 @@ import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
-import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { getProductBrand } from '@/utils/woocommerce';
+import { getBrandLogo, getBrandLogoByProductName } from '@/utils/brandLogos';
+import { requiresQuote, sendQuoteToWhatsApp } from '@/utils/whatsapp';
+import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
 import { ProductCard } from './ProductCard';
@@ -22,6 +25,63 @@ const getMetaDataValue = (product: WooCommerceProduct, key: string): string | nu
   if (!product.meta_data) return null;
   const metaItem = product.meta_data.find(item => item.key === key);
   return metaItem?.value || null;
+};
+
+// Types for unified media gallery
+interface MediaItem {
+  type: 'image' | 'video';
+  src: string;
+  alt: string;
+  thumbnail?: string;
+  videoId?: string; // For YouTube videos
+}
+
+// Helper function to create unified media array
+const getUnifiedMediaItems = (product: WooCommerceProduct): MediaItem[] => {
+  const mediaItems: MediaItem[] = [];
+  
+  // Add product images first
+  if (product.images && product.images.length > 0) {
+    product.images.forEach(image => {
+      mediaItems.push({
+        type: 'image',
+        src: image.src,
+        alt: image.alt || product.name,
+        thumbnail: image.src
+      });
+    });
+  }
+  
+  // Add videos from custom fields
+  const video1Url = getMetaDataValue(product, 'video_1_url');
+  if (video1Url) {
+    const videoId = getYouTubeVideoId(video1Url);
+    if (videoId) {
+      mediaItems.push({
+        type: 'video',
+        src: video1Url,
+        alt: `Video demostrativo - ${product.name}`,
+        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+        videoId
+      });
+    }
+  }
+  
+  const video2Url = getMetaDataValue(product, 'video_2_url');
+  if (video2Url) {
+    const videoId = getYouTubeVideoId(video2Url);
+    if (videoId) {
+      mediaItems.push({
+        type: 'video',
+        src: video2Url,
+        alt: `Video demostrativo #2 - ${product.name}`,
+        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+        videoId
+      });
+    }
+  }
+  
+  return mediaItems;
 };
 
 interface ProductDetailsProps {
@@ -54,10 +114,8 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const [product, setProduct] = useState<WooCommerceProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<'overview' | 'description' | 'specs' | 'media'>('overview');
   const [relatedProducts, setRelatedProducts] = useState<WooCommerceProduct[]>([]);
   const [loadingRelated, setLoadingRelated] = useState(false);
   const { addToCart, isLoading: cartLoading } = useCart();
@@ -164,111 +222,177 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   return (
     <div className="text-black max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:h-[calc(100vh-120px)]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        {/* COLUMNA IZQUIERDA: IMÁGENES */}
+        {/* COLUMNA IZQUIERDA: GALERÍA MULTIMEDIA */}
         <div className="flex flex-col space-y-4">
-          {/* Imagen Principal */}
-          <div className="flex-1 bg-gray-50 rounded-2xl overflow-hidden relative group">
-            {product.images && product.images.length > 0 ? (
-              <Image
-                src={product.images[selectedImageIndex]?.src || product.images[0].src}
-                alt={product.images[selectedImageIndex]?.alt || product.name}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-                  <p>Sin imagen</p>
-                </div>
-              </div>
-            )}
+          {/* Imagen/Video Principal */}
+          <div className="aspect-square lg:aspect-[4/3] lg:max-h-[500px] bg-gray-50 rounded-2xl overflow-hidden relative group">
+            {(() => {
+              const mediaItems = getUnifiedMediaItems(product);
+              const currentMedia = mediaItems[selectedMediaIndex] || mediaItems[0];
+              
+              if (!currentMedia) {
+                return (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <div className="text-center">
+                      <div className="w-20 h-20 bg-gray-200 rounded-lg mx-auto mb-2"></div>
+                      <p>Sin contenido multimedia</p>
+                    </div>
+                  </div>
+                );
+              }
+              
+              if (currentMedia.type === 'video') {
+                return (
+                  <div className="w-full h-full bg-black rounded-2xl overflow-hidden">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${currentMedia.videoId}`}
+                      title={currentMedia.alt}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <Image
+                    src={currentMedia.src}
+                    alt={currentMedia.alt}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                );
+              }
+            })()}
           </div>
 
-          {/* Miniaturas con navegación */}
-          {product.images && product.images.length > 1 && (
-            <div className="relative">
-              {/* Botón Anterior */}
-              {thumbnailStartIndex > 0 && (
-                <button
-                  onClick={() => setThumbnailStartIndex(prev => Math.max(0, prev - 1))}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-8 h-8 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors z-10"
-                >
-                  <ChevronLeftIcon className="w-5 h-5 text-gray-600" />
-                </button>
-              )}
-
-              {/* Miniaturas visibles */}
-              <div className="grid grid-cols-5 gap-2">
-                {product.images.slice(thumbnailStartIndex, thumbnailStartIndex + 5).map((image, index) => (
-                  <button
-                    key={thumbnailStartIndex + index}
-                    onClick={() => setSelectedImageIndex(thumbnailStartIndex + index)}
-                    className={`aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:shadow-md ${
-                      selectedImageIndex === thumbnailStartIndex + index 
-                        ? 'border-servi_green shadow-md scale-105' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt || product.name}
-                      width={120}
-                      height={120}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-
-              {/* Botón Siguiente */}
-              {product.images.length > thumbnailStartIndex + 5 && (
-                <button
-                  onClick={() => setThumbnailStartIndex(prev => Math.min(product.images.length - 5, prev + 1))}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-8 h-8 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors z-10"
-                >
-                  <ChevronRightIcon className="w-5 h-5 text-gray-600" />
-                </button>
-              )}
-
-              {/* Indicador de posición */}
-              {product.images.length > 5 && (
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-1">
-                  {Array.from({ length: Math.ceil(product.images.length / 5) }).map((_, index) => (
+          {/* Miniaturas Multimedia en Grid */}
+          {(() => {
+            const mediaItems = getUnifiedMediaItems(product);
+            
+            if (mediaItems.length === 0) return null;
+            
+            return (
+              <div className="space-y-2">
+                <div className="grid grid-cols-6 gap-2">
+                  {mediaItems.map((media, index) => (
                     <button
                       key={index}
-                      onClick={() => setThumbnailStartIndex(index * 5)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        Math.floor(thumbnailStartIndex / 5) === index
-                          ? 'bg-servi_green'
-                          : 'bg-gray-300'
+                      onClick={() => setSelectedMediaIndex(index)}
+                      className={`aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:shadow-md relative ${
+                        selectedMediaIndex === index 
+                          ? 'border-servi_green shadow-md scale-105' 
+                          : 'border-gray-200 hover:border-gray-300'
                       }`}
-                    />
+                    >
+                      <Image
+                        src={media.thumbnail || media.src}
+                        alt={media.alt}
+                        width={120}
+                        height={120}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Video indicator */}
+                      {media.type === 'video' && (
+                        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                      )}
+                    </button>
                   ))}
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            );
+          })()}
         </div>
 
-        {/* COLUMNA DERECHA: INFO Y TABS */}
-        <div className="flex flex-col lg:h-full lg:max-h-screen">
+        {/* COLUMNA DERECHA: INFO */}
+        <div className="flex flex-col">
           
           {/* Header Fijo */}
           <div className="space-y-4 pb-6 border-b border-gray-200">
-            {/* Título y Categoría */}
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-2">
-                {product.name}
-              </h1>
-              {product.categories && product.categories.length > 0 && (
-                <p className="text-servi_green font-medium">
-                  {product.categories.map(cat => cat.name).join(' • ')}
-                </p>
-              )}
+            {/* Título, Categoría y Logo de Marca */}
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-2">
+                  {product.name}
+                </h1>
+                {product.categories && product.categories.length > 0 && (
+                  <p className="text-servi_green font-medium">
+                    {product.categories.map(cat => cat.name).join(' • ')}
+                  </p>
+                )}
+              </div>
+              
+              {/* Logo de Marca - Posicionado en esquina superior derecha */}
+              {(() => {
+                const brandName = getProductBrand(product);
+                let brandLogo = getBrandLogo(brandName);
+                let detectedBrand = brandName;
+                
+                // Fallback: try to detect brand by product name
+                if (!brandLogo) {
+                  brandLogo = getBrandLogoByProductName(product.name);
+                  if (brandLogo) {
+                    // Determine brand name from product name for this case
+                    const productNameLower = product.name.toLowerCase();
+                    if (productNameLower.includes('freedom')) {
+                      detectedBrand = 'DOF';
+                    } else if (productNameLower.includes('placas')) {
+                      detectedBrand = 'FAME';
+                    } else if (productNameLower.includes('pieza') && productNameLower.includes('mano')) {
+                      detectedBrand = 'COXO';
+                    }
+                  }
+                }
+                
+                // Debug temporal
+                if (process.env.NODE_ENV === 'development') {
+                  console.log('Brand Debug:', { 
+                    originalBrand: brandName,
+                    detectedBrand,
+                    brandLogo, 
+                    productName: product.name,
+                    attributes: product.attributes?.map(attr => ({ name: attr.name, options: attr.options }))
+                  });
+                }
+                
+                if (brandLogo && detectedBrand) {
+                  return (
+                    <div className="flex-shrink-0">
+                      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
+                        <Image
+                          src={brandLogo}
+                          alt={`Logo de ${detectedBrand}`}
+                          width={120}
+                          height={60}
+                          className="max-w-[120px] max-h-[60px] object-contain"
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // Debug fallback solo si no hay logo
+                if (process.env.NODE_ENV === 'development' && !brandLogo) {
+                  return (
+                    <div className="flex-shrink-0">
+                      <div className="bg-yellow-100 rounded-lg border border-yellow-300 p-2 text-xs">
+                        Original: {brandName || 'No brand'}<br/>
+                        Detected: {detectedBrand || 'None'}<br/>
+                        Logo: Not found
+                      </div>
+                    </div>
+                  );
+                }
+                
+                return null;
+              })()}
             </div>
 
             {/* Precio, Stock y Rating en una sola línea inteligente */}
@@ -335,151 +459,102 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             {/* Controles de Compra */}
             {product.stock_status === 'instock' && (
               <div className="flex items-center gap-4">
-                <div className="flex items-center">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 border border-gray-300 rounded-l-lg hover:bg-gray-50 flex items-center justify-center"
-                  >
-                    <MinusIcon className="w-4 h-4" />
-                  </button>
-                  <div className="w-16 h-10 border-t border-b border-gray-300 flex items-center justify-center font-medium">
-                    {quantity}
+                {!requiresQuote(product) && (
+                  <div className="flex items-center">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-10 h-10 border border-gray-300 rounded-l-lg hover:bg-gray-50 flex items-center justify-center"
+                    >
+                      <MinusIcon className="w-4 h-4" />
+                    </button>
+                    <div className="w-16 h-10 border-t border-b border-gray-300 flex items-center justify-center font-medium">
+                      {quantity}
+                    </div>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-10 h-10 border border-gray-300 rounded-r-lg hover:bg-gray-50 flex items-center justify-center"
+                    >
+                      <PlusIcon className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 border border-gray-300 rounded-r-lg hover:bg-gray-50 flex items-center justify-center"
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                  </button>
-                </div>
+                )}
 
-                <button
-                  onClick={handleAddToCart}
-                  disabled={cartLoading}
-                  className="flex-1 bg-servi_green text-white h-10 px-6 rounded-lg hover:bg-servi_dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium"
-                >
-                  <ShoppingBagIcon className="w-5 h-5" />
-                  {cartLoading ? 'Agregando...' : 'Agregar al Carrito'}
-                </button>
+                {requiresQuote(product) ? (
+                  <button
+                    onClick={() => sendQuoteToWhatsApp(product)}
+                    className="flex-1 bg-servi_green text-white h-10 px-6 rounded-lg hover:bg-servi_dark transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.703"/>
+                    </svg>
+                    Solicitar Cotización
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={cartLoading}
+                    className="flex-1 bg-servi_green text-white h-10 px-6 rounded-lg hover:bg-servi_dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium"
+                  >
+                    <ShoppingBagIcon className="w-5 h-5" />
+                    {cartLoading ? 'Agregando...' : 'Agregar al Carrito'}
+                  </button>
+                )}
               </div>
             )}
           </div>
 
-          {/* Tabs de Contenido */}
-          <div className="flex-1 flex flex-col pt-6">
-            {/* Tab Navigation */}
-            <div className="flex border-b border-gray-200 mb-4 -mx-1">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'overview'
-                    ? 'border-servi_green text-servi_green'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Resumen
-              </button>
-              {product.description && (
-                <button
-                  onClick={() => setActiveTab('description')}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === 'description'
-                      ? 'border-servi_green text-servi_green'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Descripción
-                </button>
+          {/* Información del Producto - Secuencial */}
+          <div className="flex-1 flex flex-col pt-6 space-y-8">
+            
+            {/* Resumen */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Resumen</h2>
+              
+              {product.short_description && (
+                <div className="prose prose-gray max-w-none">
+                  <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
+                </div>
               )}
+
+
+              <ShareButton 
+                url={`${typeof window !== 'undefined' ? window.location.origin : ''}/tienda/${product.slug}`}
+                title={product.name}
+                description={product.short_description}
+              />
+
               {product.attributes && product.attributes.length > 0 && (
-                <button
-                  onClick={() => setActiveTab('specs')}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === 'specs'
-                      ? 'border-servi_green text-servi_green'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Especificaciones
-                </button>
-              )}
-              {/* Tab Videos y Recursos - mostrar si hay videos o PDFs */}
-              {(getMetaDataValue(product, 'video_1_url') || getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
-                <button
-                  onClick={() => setActiveTab('media')}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === 'media'
-                      ? 'border-servi_green text-servi_green'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Videos y Recursos
-                </button>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900">Características principales:</h3>
+                  <div className="space-y-1">
+                    {product.attributes.slice(0, 3).map((attribute, index) => (
+                      <div key={index} className="flex justify-between text-sm">
+                        <span className="text-gray-600">{attribute.name}:</span>
+                        <span className="font-medium text-gray-900">
+                          {attribute.options.slice(0, 2).join(', ')}
+                          {attribute.options.length > 2 && '...'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
 
-            {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto pr-2 max-h-96">
-              {activeTab === 'overview' && (
-                <div className="space-y-6">
-                  {product.short_description && (
-                    <div className="prose prose-gray max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4 rounded-xl text-center">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">SKU</p>
-                      <p className="font-bold text-gray-900">{product.sku || 'N/A'}</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-xl text-center">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Peso</p>
-                      <p className="font-bold text-gray-900">
-                        {product.weight ? `${product.weight} kg` : 'N/A'}
-                      </p>
-                    </div>
-                      <ShareButton 
-            url={`${typeof window !== 'undefined' ? window.location.origin : ''}/tienda/${product.slug}`}
-            title={product.name}
-            description={product.short_description}
-          />
-                  </div>
-
-                  {product.attributes && product.attributes.length > 0 && (
-                    <div className="space-y-2">
-                      <h3 className="font-semibold text-gray-900">Características principales:</h3>
-                      <div className="space-y-1">
-                        {product.attributes.slice(0, 3).map((attribute, index) => (
-                          <div key={index} className="flex justify-between text-sm">
-                            <span className="text-gray-600">{attribute.name}:</span>
-                            <span className="font-medium text-gray-900">
-                              {attribute.options.slice(0, 2).join(', ')}
-                              {attribute.options.length > 2 && '...'}
-                            </span>
-                          </div>
-                        ))}
-                        {product.attributes.length > 3 && (
-                          <button
-                            onClick={() => setActiveTab('specs')}
-                            className="text-servi_green text-sm hover:underline"
-                          >
-                            Ver todas las especificaciones →
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === 'description' && product.description && (
-                <div className="prose prose-gray max-w-none max-h-96 overflow-y-auto pr-4">
+            {/* Descripción */}
+            {product.description && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Descripción</h2>
+                <div className="prose prose-gray max-w-none">
                   <div dangerouslySetInnerHTML={{ __html: product.description }} />
                 </div>
-              )}
+              </div>
+            )}
 
-              {activeTab === 'specs' && product.attributes && product.attributes.length > 0 && (
+            {/* Especificaciones */}
+            {product.attributes && product.attributes.length > 0 && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Especificaciones</h2>
                 <div className="space-y-4">
                   {product.attributes.map((attribute, index) => (
                     <div key={index} className="pb-3 border-b border-gray-100 last:border-b-0">
@@ -492,113 +567,69 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {activeTab === 'media' && (
-                <div className="space-y-8">
-                  {/* Videos Section */}
-                  {(getMetaDataValue(product, 'video_1_url') || getMetaDataValue(product, 'video_2_url')) && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-10V7a3 3 0 11-6 0V4h6zM4 7v10a2 2 0 002 2h12a2 2 0 002-2V7M4 7l2-2h12l2 2" />
-                        </svg>
-                        Videos Demostrativos
-                      </h3>
-                      <div className="grid gap-6">
-                        {getMetaDataValue(product, 'video_1_url') && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                              <iframe
-                                src={`https://www.youtube.com/embed/${getYouTubeVideoId(getMetaDataValue(product, 'video_1_url') || '')}`}
-                                title="Video demostrativo del producto"
-                                className="w-full h-full"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              />
-                            </div>
-                          </div>
-                        )}
-                        {getMetaDataValue(product, 'video_2_url') && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <div className="aspect-video bg-black rounded-lg overflow-hidden">
-                              <iframe
-                                src={`https://www.youtube.com/embed/${getYouTubeVideoId(getMetaDataValue(product, 'video_2_url') || '')}`}
-                                title="Video demostrativo del producto #2"
-                                className="w-full h-full"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              />
-                            </div>
-                          </div>
-                        )}
+            {/* Documentos y Recursos */}
+            {(getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Documentos y Recursos
+                </h2>
+                <div className="space-y-3">
+                  {getMetaDataValue(product, 'manual_pdf_url') && (
+                    <a
+                      href={getMetaDataValue(product, 'manual_pdf_url') || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Manual de Usuario</p>
+                          <p className="text-sm text-gray-600">Instrucciones detalladas de uso</p>
+                        </div>
                       </div>
-                    </div>
+                      <svg className="w-5 h-5 text-blue-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
                   )}
-
-                  {/* PDFs Section */}
-                  {(getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        Documentos y Recursos
-                      </h3>
-                      <div className="space-y-3">
-                        {getMetaDataValue(product, 'manual_pdf_url') && (
-                          <a
-                            href={getMetaDataValue(product, 'manual_pdf_url') || ''}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                              </div>
-                              <div>
-                                <p className="font-medium text-gray-900">Manual de Usuario</p>
-                                <p className="text-sm text-gray-600">Instrucciones detalladas de uso</p>
-                              </div>
-                            </div>
-                            <svg className="w-5 h-5 text-blue-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
-                        {getMetaDataValue(product, 'product_sheet_pdf_url') && (
-                          <a
-                            href={getMetaDataValue(product, 'product_sheet_pdf_url') || ''}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                              </div>
-                              <div>
-                                <p className="font-medium text-gray-900">Folleto del Equipo</p>
-                                <p className="text-sm text-gray-600">Especificaciones técnicas</p>
-                              </div>
-                            </div>
-                            <svg className="w-5 h-5 text-green-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
+                  {getMetaDataValue(product, 'product_sheet_pdf_url') && (
+                    <a
+                      href={getMetaDataValue(product, 'product_sheet_pdf_url') || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Folleto del Equipo</p>
+                          <p className="text-sm text-gray-600">Especificaciones técnicas</p>
+                        </div>
                       </div>
-                    </div>
+                      <svg className="w-5 h-5 text-green-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
                   )}
                 </div>
-              )}
+              </div>
+            )}
 
-            </div>
           </div>
         </div>
       </div>

@@ -43,16 +43,168 @@ export function getProductCategory(product: WooCommerceProduct): string {
   return product.categories?.[0]?.name || 'Sin categoría';
 }
 
+// Brand ID to name mapping (from WooCommerce taxonomy)
+// This should be the primary source of truth for brand detection
+const BRAND_ID_MAPPING: Record<string, string> = {
+  '55': 'SIGER',
+  '54': 'BIOART',
+  '97': 'COXO',
+  '88': 'DOF',      // Adding DOF mapping
+  '89': 'FAME',     // Adding FAME mapping  
+  '90': 'MEYER',    // Adding other brands as needed
+  '91': 'MICRO NX',
+  '92': 'TPC',
+  '93': 'XPECT VISION',
+  '94': 'DENTECH',
+  '95': 'DENTAFILM',
+  '96': 'LAUNCA',
+  '98': 'ELEC',
+  '99': 'EPDENT',
+  '100': 'MDMED',
+  '101': 'STURDY',
+  '102': 'ARTELECTRON',
+  '103': 'DIMED'
+};
+
 /**
- * Gets product brand from attributes
+ * Gets product brand from WooCommerce data with robust detection
+ * Priority: 1) Attributes, 2) Meta data, 3) Taxonomy mapping, 4) Product name fallback
  */
 export function getProductBrand(product: WooCommerceProduct): string {
-  const brandAttribute = product.attributes?.find(attr => 
-    attr.name.toLowerCase().includes('marca') || 
-    attr.name.toLowerCase().includes('brand')
-  );
+  // Enable debug logging in development
+  const debug = process.env.NODE_ENV === 'development';
   
-  return brandAttribute?.options?.[0] || '';
+  if (debug) {
+    console.log('🔍 Brand Detection for:', product.name);
+  }
+
+  // PRIORITY 1: Check product attributes for brand/marca
+  if (product.attributes?.length > 0) {
+    const brandAttribute = product.attributes.find(attr => {
+      const name = attr.name.toLowerCase();
+      return name.includes('marca') || name.includes('brand');
+    });
+    
+    if (brandAttribute?.options?.[0]) {
+      const brandValue = brandAttribute.options[0].trim();
+      
+      // Check if it's a brand ID that needs mapping
+      if (BRAND_ID_MAPPING[brandValue]) {
+        const mappedBrand = BRAND_ID_MAPPING[brandValue];
+        if (debug) console.log('✅ Found brand via attributes (ID mapped):', brandValue, '→', mappedBrand);
+        return mappedBrand;
+      }
+      
+      // Return the brand name directly if it's not an ID
+      if (brandValue && !brandValue.match(/^\d+$/)) {
+        if (debug) console.log('✅ Found brand via attributes:', brandValue);
+        return brandValue.toUpperCase();
+      }
+    }
+  }
+
+  // PRIORITY 2: Check meta_data for brand information
+  if (product.meta_data?.length > 0) {
+    // Look for various brand-related meta keys
+    const brandMetaKeys = [
+      'pa_marca', 'pa_brand', 'attribute_pa_marca', 'attribute_pa_brand',
+      '_product_brand', '_brand', 'marca', 'brand'
+    ];
+    
+    for (const key of brandMetaKeys) {
+      const metaItem = product.meta_data.find(meta => 
+        meta.key.toLowerCase() === key.toLowerCase()
+      );
+      
+      if (metaItem?.value) {
+        let brandValue = metaItem.value;
+        
+        // Handle various data formats
+        if (typeof brandValue === 'string') {
+          // Handle serialized PHP arrays
+          if (brandValue.startsWith('a:')) {
+            const match = brandValue.match(/s:\d+:"([^"]+)"/);
+            if (match) brandValue = match[1];
+          }
+          
+          brandValue = brandValue.toString().trim();
+          
+          // Check if it's a brand ID that needs mapping
+          if (BRAND_ID_MAPPING[brandValue]) {
+            const mappedBrand = BRAND_ID_MAPPING[brandValue];
+            if (debug) console.log('✅ Found brand via meta_data (ID mapped):', brandValue, '→', mappedBrand);
+            return mappedBrand;
+          }
+          
+          // Return direct brand name if it's not just a number
+          if (brandValue && !brandValue.match(/^\d+$/)) {
+            if (debug) console.log('✅ Found brand via meta_data:', brandValue);
+            return brandValue.toUpperCase();
+          }
+        }
+      }
+    }
+  }
+
+  // PRIORITY 3: Check for taxonomy term IDs in categories or other fields
+  // Sometimes brands are stored as taxonomy terms
+  if (product.meta_data?.length > 0) {
+    const taxonomyFields = product.meta_data.filter(meta => 
+      meta.key.includes('taxonomy') || 
+      meta.key.includes('term') ||
+      meta.key.startsWith('_')
+    );
+    
+    for (const field of taxonomyFields) {
+      if (field.value && typeof field.value === 'string') {
+        const termId = field.value.toString().trim();
+        if (BRAND_ID_MAPPING[termId]) {
+          const mappedBrand = BRAND_ID_MAPPING[termId];
+          if (debug) console.log('✅ Found brand via taxonomy:', termId, '→', mappedBrand);
+          return mappedBrand;
+        }
+      }
+    }
+  }
+
+  // PRIORITY 4: Product name pattern matching (last resort)
+  const productName = product.name.toLowerCase();
+  
+  // Known product name patterns to brand mapping
+  const namePatterns: Record<string, string> = {
+    'freedom': 'DOF',
+    'escaner intraoral freedom': 'DOF',
+    'escáner intraoral freedom': 'DOF',
+    'bioart': 'BIOART',
+    'termoformadora': 'BIOART',  // Based on your feedback
+    'siger': 'SIGER',
+    'coxo': 'COXO',
+    'pieza de mano': 'COXO',
+    'piezas de mano': 'COXO',
+    'meyer': 'MEYER',
+    'tomógrafo meyer': 'MEYER',
+    'tomografo meyer': 'MEYER',
+    'ss-x9010dpro': 'MEYER',
+    'x9010dpro': 'MEYER'
+  };
+  
+  for (const [pattern, brand] of Object.entries(namePatterns)) {
+    if (productName.includes(pattern)) {
+      if (debug) console.log('✅ Found brand via product name pattern:', pattern, '→', brand);
+      return brand;
+    }
+  }
+
+  if (debug) {
+    console.log('❌ No brand found for:', product.name);
+    console.log('Available attributes:', product.attributes?.map(attr => ({
+      name: attr.name,
+      options: attr.options
+    })));
+    console.log('Available meta keys:', product.meta_data?.map(meta => meta.key));
+  }
+  
+  return '';
 }
 
 /**
