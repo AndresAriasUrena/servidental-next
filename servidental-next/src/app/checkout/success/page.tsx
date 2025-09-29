@@ -8,7 +8,8 @@ export default function CheckoutSuccess() {
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   useEffect(() => {
-    const order = searchParams.get('orderNumber');
+    // Support both 'order' and 'orderNumber' parameters for compatibility
+    const order = searchParams.get('order') || searchParams.get('orderNumber');
     setOrderNumber(order);
     
     // Clear cart from localStorage on successful payment

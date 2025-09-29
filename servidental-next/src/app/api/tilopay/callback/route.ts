@@ -1,147 +1,212 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { parseTilopayCallback, isPaymentSuccessful } from '@/lib/tilopay';
+// /src/app/api/tilopay/callback/route.ts
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+// ——— Ajusta estas funciones a tu capa real de WooCommerce ———
+async function markWooOrderPaid(wooOrderId: number | string, payload: any) {
   try {
-    console.log('🔔 TiloPay callback received');
-
-    // Parse query parameters from the callback
-    const searchParams = request.nextUrl.searchParams;
-    const query: Record<string, string> = {};
+    console.log(`✅ Marking WooCommerce order ${wooOrderId} as paid...`);
     
-    for (const [key, value] of searchParams.entries()) {
-      query[key] = value;
-    }
-
-    console.log('📝 Callback query parameters:', query);
-
-    // Parse TiloPay callback parameters
-    const callbackParams = parseTilopayCallback(query);
-    console.log('📋 Parsed callback params:', callbackParams);
-
-    const { orderNumber, code, description, amount, currency, status } = callbackParams;
-
-    // Determine if payment was successful
-    const paymentSuccessful = isPaymentSuccessful(callbackParams);
-    console.log(`💳 Payment ${paymentSuccessful ? 'successful' : 'failed'} for order: ${orderNumber}`);
-
-    // Log the transaction for review
-    console.log('📊 Transaction details:', {
-      orderNumber,
-      code,
-      description,
-      amount,
-      currency,
-      status,
-      success: paymentSuccessful,
-      timestamp: new Date().toISOString(),
-    });
-
-    // TODO: Here you would typically:
-    // 1. Validate the callback authenticity (if TiloPay provides signature verification)
-    // 2. Update the order status in WooCommerce
-    // 3. Send confirmation emails
-    // 4. Log the transaction in your database
-
-    if (paymentSuccessful && orderNumber) {
-      try {
-        // TODO: Implement WooCommerce order update
-        console.log(`✅ Would update WooCommerce order ${orderNumber} to 'processing' status`);
-        
-        // For now, we'll just log the success
-        console.log('🎉 Payment confirmed - redirecting to success page');
-        
-        // Redirect to success page
-        const successUrl = new URL('/checkout/success', request.url);
-        successUrl.searchParams.set('orderNumber', orderNumber);
-        if (amount) successUrl.searchParams.set('amount', amount);
-        if (currency) successUrl.searchParams.set('currency', currency);
-        
-        return NextResponse.redirect(successUrl);
-        
-      } catch (updateError) {
-        console.error('❌ Failed to update order:', updateError);
-        
-        // Even if order update fails, redirect to success since payment was processed
-        const successUrl = new URL('/checkout/success', request.url);
-        successUrl.searchParams.set('orderNumber', orderNumber);
-        successUrl.searchParams.set('note', 'payment-confirmed-update-pending');
-        
-        return NextResponse.redirect(successUrl);
-      }
-    } else {
-      console.log('❌ Payment failed or cancelled - redirecting to failure page');
-      
-      // Redirect to failure page
-      const failureUrl = new URL('/checkout/failure', request.url);
-      if (orderNumber) failureUrl.searchParams.set('orderNumber', orderNumber);
-      failureUrl.searchParams.set('reason', description || 'Payment failed');
-      
-      return NextResponse.redirect(failureUrl);
-    }
-
-  } catch (error) {
-    console.error('❌ TiloPay Callback Error:', error);
-    
-    // Redirect to failure page with error info
-    const failureUrl = new URL('/checkout/failure', request.url);
-    failureUrl.searchParams.set('reason', 'callback-processing-error');
-    
-    return NextResponse.redirect(failureUrl);
-  }
-}
-
-// Also handle POST in case TiloPay sends POST callbacks
-export async function POST(request: NextRequest) {
-  try {
-    console.log('🔔 TiloPay callback received via POST');
-
-    // Get JSON body if available
-    let body = {};
-    try {
-      body = await request.json();
-      console.log('📝 Callback POST body:', body);
-    } catch (e) {
-      console.log('📝 No JSON body in POST callback');
-    }
-
-    // Also check query parameters
-    const searchParams = request.nextUrl.searchParams;
-    const query: Record<string, string> = {};
-    
-    for (const [key, value] of searchParams.entries()) {
-      query[key] = value;
-    }
-
-    // Combine body and query parameters
-    const allParams = { ...query, ...body };
-    console.log('📋 Combined callback data:', allParams);
-
-    // Parse and process the same as GET
-    const callbackParams = parseTilopayCallback(allParams);
-    const paymentSuccessful = isPaymentSuccessful(callbackParams);
-    
-    console.log(`💳 Payment ${paymentSuccessful ? 'successful' : 'failed'} for order: ${callbackParams.orderNumber}`);
-
-    // Return JSON response for POST callbacks
-    return NextResponse.json({
-      success: true,
-      message: 'Callback received',
-      paymentSuccessful,
-      orderNumber: callbackParams.orderNumber,
-      timestamp: new Date().toISOString(),
-    });
-
-  } catch (error) {
-    console.error('❌ TiloPay POST Callback Error:', error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Callback processing failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
+    const response = await fetch(`${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/orders/${wooOrderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${Buffer.from(`${process.env.WOOCOMMERCE_CONSUMER_KEY}:${process.env.WOOCOMMERCE_CONSUMER_SECRET}`).toString('base64')}`
       },
-      { status: 500 }
-    );
+      body: JSON.stringify({
+        status: 'processing',
+        meta_data: [
+          {
+            key: '_tilopay_order_id',
+            value: payload.tilopayOrderId || ''
+          },
+          {
+            key: '_tilopay_link_id', 
+            value: payload.tilopayLinkId || ''
+          },
+          {
+            key: '_tilopay_last4',
+            value: payload.last4 || ''
+          },
+          {
+            key: '_tilopay_card_brand',
+            value: payload.brand || ''
+          },
+          {
+            key: '_tilopay_order_hash',
+            value: payload.orderHash || ''
+          },
+          {
+            key: '_tilopay_callback_data',
+            value: JSON.stringify(payload)
+          },
+          {
+            key: '_payment_method_title',
+            value: 'TiloPay'
+          },
+          {
+            key: '_transaction_id',
+            value: payload.tilopayOrderId || payload.orderNumber
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Failed to update WooCommerce order ${wooOrderId}:`, errorText);
+      return false;
+    }
+
+    const updatedOrder = await response.json();
+    console.log(`✅ WooCommerce order ${wooOrderId} marked as processing:`, updatedOrder.id);
+    return true;
+  } catch (error) {
+    console.error(`❌ Error marking WooCommerce order ${wooOrderId} as paid:`, error);
+    return false;
   }
 }
+
+async function markWooOrderFailed(wooOrderId: number | string, reason: string, payload: any) {
+  try {
+    console.log(`❌ Marking WooCommerce order ${wooOrderId} as failed...`);
+    
+    const response = await fetch(`${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/orders/${wooOrderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${Buffer.from(`${process.env.WOOCOMMERCE_CONSUMER_KEY}:${process.env.WOOCOMMERCE_CONSUMER_SECRET}`).toString('base64')}`
+      },
+      body: JSON.stringify({
+        status: 'failed',
+        customer_note: `Pago TiloPay fallido: ${reason}`,
+        meta_data: [
+          {
+            key: '_tilopay_failure_reason',
+            value: reason
+          },
+          {
+            key: '_tilopay_callback_data',
+            value: JSON.stringify(payload)
+          },
+          {
+            key: '_payment_method_title',
+            value: 'TiloPay (Failed)'
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Failed to update WooCommerce order ${wooOrderId} as failed:`, errorText);
+      return false;
+    }
+
+    const updatedOrder = await response.json();
+    console.log(`❌ WooCommerce order ${wooOrderId} marked as failed:`, updatedOrder.id);
+    return true;
+  } catch (error) {
+    console.error(`❌ Error marking WooCommerce order ${wooOrderId} as failed:`, error);
+    return false;
+  }
+}
+
+// ——— Función para resolver wooOrderId por orderNumber ———
+async function resolveWooOrderId(orderNumber: string): Promise<string | null> {
+  try {
+    console.log(`🔍 Resolving WooCommerce order ID for orderNumber: ${orderNumber}`);
+    
+    // Buscar órdenes que tengan el orderNumber en metadata
+    const response = await fetch(`${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/orders?meta_key=_tilopay_order_number&meta_value=${orderNumber}&per_page=1`, {
+      headers: {
+        'Authorization': `Basic ${Buffer.from(`${process.env.WOOCOMMERCE_CONSUMER_KEY}:${process.env.WOOCOMMERCE_CONSUMER_SECRET}`).toString('base64')}`
+      }
+    });
+
+    if (!response.ok) {
+      console.error('❌ Failed to search WooCommerce orders');
+      return null;
+    }
+
+    const orders = await response.json();
+    if (orders && orders.length > 0) {
+      console.log(`✅ Found WooCommerce order: ${orders[0].id}`);
+      return orders[0].id.toString();
+    }
+
+    console.log(`⚠️ No WooCommerce order found for orderNumber: ${orderNumber}`);
+    return null;
+  } catch (error) {
+    console.error('❌ Error resolving WooCommerce order ID:', error);
+    return null;
+  }
+}
+
+// ——— (Opcional pero recomendado) Verificación server-to-server ———
+async function verifyWithTilopay(_tilopayOrderId?: string, _orderHash?: string) {
+  // TODO: Hacer fetch a la API de TiloPay con Bearer token y confirmar estado real.
+  // Esto requiere endpoint específico de TiloPay que no está documentado en el ejemplo
+  // return { ok: true/false, raw: {...} }
+  console.log('🔍 TiloPay server-to-server verification not implemented yet');
+  return { ok: true, raw: null };
+}
+
+export async function GET(req: Request) {
+  try {
+    console.log('🔔 TiloPay callback GET received');
+    const { searchParams } = new URL(req.url);
+
+    // Parámetros típicos que TiloPay envía (pueden variar por cuenta/versión)
+    const code = searchParams.get('code');                    // "200" éxito, otros = fallo/cancel
+    const description = searchParams.get('description');      // texto de respuesta
+    const orderNumber = searchParams.get('orderNumber');      // tu reference
+    const tilopayOrderId = searchParams.get('tilopayOrderId');
+    const tilopayLinkId = searchParams.get('tilopayLinkId');
+    const last4 = searchParams.get('last4CreditCardNumber');
+    const brand = searchParams.get('creditCardBrand');
+    const orderHash = searchParams.get('orderHash');
+
+    console.log('📝 TiloPay callback parameters:', {
+      code, description, orderNumber, tilopayOrderId, tilopayLinkId, last4, brand, orderHash
+    });
+
+    if (!orderNumber) {
+      console.error('❌ Missing orderNumber in callback');
+      return NextResponse.redirect(new URL(`/checkout/failure?reason=${encodeURIComponent('missing_order_number')}`, req.url));
+    }
+
+    // Resolver wooOrderId por orderNumber
+    const wooOrderId = await resolveWooOrderId(orderNumber);
+    if (!wooOrderId) {
+      console.error(`❌ Could not resolve WooCommerce order for orderNumber: ${orderNumber}`);
+      return NextResponse.redirect(new URL(`/checkout/failure?order=${encodeURIComponent(orderNumber)}&reason=${encodeURIComponent('order_not_found')}`, req.url));
+    }
+
+    const payload = {
+      code, description, orderNumber, tilopayOrderId, tilopayLinkId, last4, brand, orderHash, wooOrderId
+    };
+
+    // Doble chequeo recomendado
+    const verification = await verifyWithTilopay(tilopayOrderId || undefined, orderHash || undefined);
+    const successByCode = code === '200';
+    const success = successByCode && verification.ok;
+
+    console.log(`💳 Payment result: code=${code}, success=${success}, verification=${verification.ok}`);
+
+    if (success) {
+      console.log('✅ Payment successful - updating order and redirecting to success');
+      await markWooOrderPaid(wooOrderId, payload);
+      return NextResponse.redirect(new URL(`/checkout/success?order=${encodeURIComponent(orderNumber)}`, req.url));
+    } else {
+      console.log('❌ Payment failed - updating order and redirecting to failure');
+      await markWooOrderFailed(wooOrderId, description || 'Pago no confirmado', payload);
+      return NextResponse.redirect(new URL(`/checkout/failure?order=${encodeURIComponent(orderNumber)}&reason=${encodeURIComponent(description || 'unknown')}`, req.url));
+    }
+  } catch (err: any) {
+    console.error('❌ TiloPay callback error:', err);
+    // Fallback en caso de error inesperado
+    return NextResponse.redirect(new URL(`/checkout/failure?reason=${encodeURIComponent(err?.message || 'callback_error')}`, req.url));
+  }
+}
+
+export const dynamic = 'force-dynamic';
