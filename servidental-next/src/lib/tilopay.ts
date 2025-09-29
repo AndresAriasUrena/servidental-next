@@ -1,292 +1,233 @@
-import axios from 'axios';
+/**
+ * TiloPay Payment Link Integration
+ * Supports Payment Link flow: login → createLinkPayment → redirect
+ */
 
+// TiloPay Configuration
 export const tilopayConfig = {
-  environment: process.env.TILOPAY_ENV || 'PROD',
-  loginUrl: process.env.TILOPAY_LOGIN_URL || 'https://app.tilopay.com/api/v1/login',
-  sdkTokenUrl: process.env.TILOPAY_GET_TOKEN_SDK_URL || 'https://app.tilopay.com/api/v1/loginSdk',
-  paymentUrl: process.env.TILOPAY_PAYMENT_URL || 'https://app.tilopay.com/api/v1/payments',
-  apiKey: process.env.TILOPAY_API_KEY!,
+  apiBase: process.env.TILOPAY_API_BASE || 'https://app.tilopay.com',
+  authPath: process.env.TILOPAY_AUTH_PATH || '/api/v1/login',
+  paymentPath: process.env.TILOPAY_PAYMENT_PATH || '/api/v1/createLinkPayment',
   apiUser: process.env.TILOPAY_API_USER!,
   apiPassword: process.env.TILOPAY_API_PASS!,
-  redirectUrl: process.env.NEXT_PUBLIC_TILOPAY_REDIRECT!,
-  language: process.env.NEXT_PUBLIC_TILOPAY_LANGUAGE || 'es',
-  currency: process.env.NEXT_PUBLIC_TILOPAY_CURRENCY || 'USD',
-  productionTest: process.env.TILOPAY_PRODUCTION_TEST === 'true',
+  apiKey: process.env.TILOPAY_API_KEY!,
+  callbackUrl: process.env.TILOPAY_CALLBACK_URL || 'http://localhost:3000/api/tilopay/callback',
+  amountUnit: process.env.TILOPAY_AMOUNT_UNIT || 'decimal',
 };
 
-export const tilopayApi = axios.create({
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-});
-
-// TiloPay API Types
-export interface TilopayLoginRequest {
-  apiuser: string;
-  password: string;
-}
-
-export interface TilopaySDKTokenRequest {
-  apiuser: string;
-  password: string;
-  key: string;
-}
-
+// Types
 export interface TilopayAuthResponse {
   access_token: string;
-  token_type: string;
-  expires_in: number;
-}
-
-export interface TilopaySDKTokenResponse {
-  token: string;
+  token_type?: string;
   expires_in?: number;
 }
 
-export interface TilopaySDKInitConfig {
-  token: string;
+export interface TilopayCreatePaymentRequest {
+  key: string;
+  amount: string;
   currency: string;
-  language: string;
-  amount: number;
-  billToEmail: string;
-  billToFirstName: string;
-  billToLastName: string;
-  orderNumber: string;
-  capture: number;
-  redirect: string;
-  subscription: number;
+  reference: string;
+  type: number;
+  description: string;
+  client: string;
+  callback_url: string;
 }
 
-export interface TilopayWebhookPayload {
-  orderNumber: string;
-  transactionId: string;
-  status: 'approved' | 'pending' | 'rejected' | 'failed';
-  amount: number;
-  currency: string;
-  paymentMethod: string;
-  timestamp: string;
-  reference?: string;
+export interface TilopayCreatePaymentResponse {
+  success: boolean;
+  data?: {
+    url: string;
+    reference: string;
+    id?: string;
+  };
+  message?: string;
+  error?: string;
 }
 
-// Customer Info (compatible with existing structure)
-export interface CustomerInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: {
-    line1: string;
-    line2?: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
+export interface CreatePaymentInput {
+  amount: number;
+  currency: string;
+  orderNumber: string;
+  customerInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
   };
 }
 
-export interface CartItem {
-  id: number | string;
-  name: string;
-  price: number;
-  quantity: number;
-  sku?: string;
-}
-
-// Core API Functions
-export async function getTilopayBearerToken(): Promise<string> {
-  try {
-    console.log('🔑 Authenticating with TiloPay...');
-    
-    // Try multiple authentication formats that TiloPay might accept
-    const authAttempts = [
-      // Format 1: api_key, api_user, api_password
-      {
-        api_key: tilopayConfig.apiKey,
-        api_user: tilopayConfig.apiUser,
-        api_password: tilopayConfig.apiPassword,
-      },
-      // Format 2: key, user, password
-      {
-        key: tilopayConfig.apiKey,
-        user: tilopayConfig.apiUser,
-        password: tilopayConfig.apiPassword,
-      },
-      // Format 3: apikey, apiuser, apipassword
-      {
-        apikey: tilopayConfig.apiKey,
-        apiuser: tilopayConfig.apiUser,
-        apipassword: tilopayConfig.apiPassword,
-      },
-      // Format 4: Just username and password (original format)
-      {
-        apiuser: tilopayConfig.apiUser,
-        password: tilopayConfig.apiPassword,
-      }
-    ];
-
-    let lastError: any = null;
-    
-    for (let i = 0; i < authAttempts.length; i++) {
-      try {
-        console.log(`🔄 Trying auth format ${i + 1}...`);
-        
-        const response = await tilopayApi.post(tilopayConfig.loginUrl, authAttempts[i]);
-
-        if (response.data) {
-          // TiloPay puede devolver "token", "access_token" o "accessToken"
-          const token = response.data.token || response.data.access_token || response.data.accessToken;
-          
-          if (token) {
-            console.log(`✅ TiloPay authentication successful with format ${i + 1}`);
-            return token;
-          }
-        }
-      } catch (error) {
-        lastError = error;
-        console.log(`❌ Auth format ${i + 1} failed, trying next...`);
+// Utility function to redact secrets in logs
+function redactSecrets(obj: any): any {
+  const redacted = { ...obj };
+  const secretKeys = ['access_token', 'token', 'password', 'key', 'apiPassword', 'apiKey'];
+  
+  for (const key in redacted) {
+    if (secretKeys.some(secretKey => key.toLowerCase().includes(secretKey.toLowerCase()))) {
+      if (typeof redacted[key] === 'string' && redacted[key].length > 8) {
+        redacted[key] = `${redacted[key].substring(0, 4)}...${redacted[key].substring(redacted[key].length - 4)}`;
+      } else {
+        redacted[key] = '***';
       }
     }
-    
-    throw lastError;
-  } catch (error) {
-    console.error('❌ TiloPay Auth Error:', error);
-    
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      const data = error.response?.data;
-      console.error('TiloPay login response:', data);
-      throw new Error(`TiloPay Auth failed (${status}): ${error.message}`);
-    }
-    
-    throw new Error('Failed to authenticate with TiloPay');
   }
+  
+  return redacted;
 }
 
-export async function getTilopaySDKToken(): Promise<string> {
+/**
+ * Get access token from TiloPay
+ * POST https://app.tilopay.com/api/v1/login
+ */
+export async function getAccessToken(): Promise<string> {
   try {
-    console.log('🎫 Getting TiloPay SDK token...');
+    console.log('🔑 Getting TiloPay access token...');
     
-    // Try multiple formats for SDK token (same approach as auth)
-    const sdkAttempts = [
-      // Format 1: api_key, api_user, api_password
-      {
-        api_key: tilopayConfig.apiKey,
-        api_user: tilopayConfig.apiUser,
-        api_password: tilopayConfig.apiPassword,
-      },
-      // Format 2: key, user, password
-      {
-        key: tilopayConfig.apiKey,
-        user: tilopayConfig.apiUser,
-        password: tilopayConfig.apiPassword,
-      },
-      // Format 3: apikey, apiuser, apipassword
-      {
-        apikey: tilopayConfig.apiKey,
-        apiuser: tilopayConfig.apiUser,
-        apipassword: tilopayConfig.apiPassword,
-      },
-      // Format 4: Just username and password (this worked for auth)
-      {
-        apiuser: tilopayConfig.apiUser,
-        password: tilopayConfig.apiPassword,
-      }
-    ];
+    const authUrl = `${tilopayConfig.apiBase}${tilopayConfig.authPath}`;
+    const authPayload = {
+      apiuser: tilopayConfig.apiUser,
+      password: tilopayConfig.apiPassword,
+    };
 
-    let lastError: any = null;
-    
-    for (let i = 0; i < sdkAttempts.length; i++) {
-      try {
-        console.log(`🔄 Trying SDK token format ${i + 1}...`);
-        
-        const response = await tilopayApi.post(tilopayConfig.sdkTokenUrl, sdkAttempts[i]);
+    console.log('📡 Auth request to:', authUrl);
+    console.log('📡 Auth payload:', redactSecrets(authPayload));
 
-        if (response.data) {
-          // TiloPay puede devolver "token", "sdk_token" o "access_token"
-          const token = response.data.token || response.data.sdk_token || response.data.access_token;
-          
-          if (token) {
-            console.log(`✅ TiloPay SDK token obtained with format ${i + 1}`);
-            return token;
-          }
-        }
-      } catch (error) {
-        lastError = error;
-        console.log(`❌ SDK format ${i + 1} failed, trying next...`);
-      }
+    const response = await fetch(authUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(authPayload),
+    });
+
+    console.log('📡 Auth response status:', response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Auth error response:', errorText);
+      throw new Error(`Authentication failed (${response.status}): ${errorText}`);
     }
-    
-    throw lastError;
-  } catch (error) {
-    console.error('❌ TiloPay SDK Token Error:', error);
-    
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      const data = error.response?.data;
-      console.error('TiloPay loginSdk response:', data);
-      throw new Error(`TiloPay SDK Token failed (${status}): ${error.message}`);
+
+    const data: TilopayAuthResponse = await response.json();
+    console.log('📡 Auth response data:', redactSecrets(data));
+
+    if (!data.access_token) {
+      throw new Error('No access_token in response');
     }
-    
-    throw new Error('Failed to get SDK token from TiloPay');
-  }
-}
 
-// Server-to-Server Verification Function
-export async function verifyTilopayTransaction(
-  bearerToken: string,
-  orderNumber: string
-): Promise<any> {
-  try {
-    console.log(`🔍 Verifying transaction for order: ${orderNumber}`);
-    
-    // Note: Replace with actual verification endpoint when available
-    // This is a placeholder for S2S verification
-    const response = await tilopayApi.get(
-      `/orders/${orderNumber}`, // Adjust endpoint as per TiloPay docs
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      }
-    );
+    console.log('✅ TiloPay access token obtained');
+    return data.access_token;
 
-    return response.data;
   } catch (error) {
-    console.error('❌ TiloPay verification error:', error);
+    console.error('❌ Failed to get TiloPay access token:', error);
     throw error;
   }
 }
 
-// Helper Functions
-export function mapTilopayStatusToWooCommerce(status: string): string {
-  const statusMap: Record<string, string> = {
-    approved: 'processing', // Payment successful
-    pending: 'on-hold',     // Awaiting confirmation (3DS, bank transfer)
-    rejected: 'failed',     // Payment rejected
-    failed: 'failed',       // Payment failed
-  };
+/**
+ * Create payment link with TiloPay
+ * POST https://app.tilopay.com/api/v1/createLinkPayment
+ */
+export async function createPayment(input: CreatePaymentInput): Promise<TilopayCreatePaymentResponse> {
+  try {
+    console.log('💳 Creating TiloPay payment link...');
+    
+    // Step 1: Get access token
+    const accessToken = await getAccessToken();
+    
+    // Step 2: Format amount as decimal string
+    const formattedAmount = input.amount.toFixed(2);
+    
+    // Step 3: Prepare payment payload
+    const paymentUrl = `${tilopayConfig.apiBase}${tilopayConfig.paymentPath}`;
+    const paymentPayload: TilopayCreatePaymentRequest = {
+      key: tilopayConfig.apiKey,
+      amount: formattedAmount,
+      currency: input.currency,
+      reference: input.orderNumber,
+      type: 1, // Payment link type
+      description: `Orden ${input.orderNumber}`,
+      client: `${input.customerInfo.firstName} ${input.customerInfo.lastName}`,
+      callback_url: tilopayConfig.callbackUrl,
+    };
 
-  return statusMap[status.toLowerCase()] || 'pending';
+    console.log('📡 Payment request to:', paymentUrl);
+    console.log('📡 Payment payload:', redactSecrets(paymentPayload));
+
+    const response = await fetch(paymentUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(paymentPayload),
+    });
+
+    console.log('📡 Payment response status:', response.status);
+
+    const responseText = await response.text();
+    console.log('📡 Payment response text:', responseText);
+
+    if (!response.ok) {
+      console.error('❌ Payment error response:', responseText);
+      return {
+        success: false,
+        error: `Payment creation failed (${response.status}): ${responseText}`,
+      };
+    }
+
+    // Try to parse as JSON
+    let data;
+    try {
+      data = JSON.parse(responseText);
+      console.log('📡 Payment response data:', redactSecrets(data));
+    } catch (parseError) {
+      console.error('❌ Failed to parse payment response as JSON:', parseError);
+      return {
+        success: false,
+        error: 'Invalid JSON response from TiloPay',
+      };
+    }
+
+    // Extract payment URL from response
+    const paymentUrl_redirect = data?.url || data?.data?.url || data?.paymentUrl;
+    
+    if (!paymentUrl_redirect) {
+      console.error('❌ No payment URL in response:', data);
+      return {
+        success: false,
+        error: 'No payment URL returned from TiloPay',
+        message: JSON.stringify(data),
+      };
+    }
+
+    console.log('✅ TiloPay payment link created successfully');
+    return {
+      success: true,
+      data: {
+        url: paymentUrl_redirect,
+        reference: input.orderNumber,
+        id: data?.id || data?.data?.id,
+      },
+    };
+
+  } catch (error) {
+    console.error('❌ Failed to create TiloPay payment:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error creating payment',
+    };
+  }
 }
 
-export function formatAmountForTilopay(amount: number): number {
-  // TiloPay expects amount as number with 2 decimals
-  return Math.round(amount * 100) / 100;
-}
-
-export function generateOrderNumber(prefix: string = 'SRV'): string {
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return `${prefix}-${timestamp}-${random}`;
-}
-
+/**
+ * Validate TiloPay configuration
+ */
 export function validateTilopayConfig(): void {
   const required = [
+    'TILOPAY_API_USER',
+    'TILOPAY_API_PASS', 
     'TILOPAY_API_KEY',
-    'TILOPAY_API_USER', 
-    'TILOPAY_API_PASS',
-    'NEXT_PUBLIC_TILOPAY_REDIRECT'
   ];
 
   const missing = required.filter(key => !process.env[key]);
@@ -294,26 +235,67 @@ export function validateTilopayConfig(): void {
   if (missing.length > 0) {
     throw new Error(`Missing TiloPay environment variables: ${missing.join(', ')}`);
   }
+
+  console.log('✅ TiloPay configuration is valid');
 }
 
-// SDK Configuration Builder
-export function buildSDKConfig(
-  token: string,
-  amount: number,
-  customer: CustomerInfo,
-  orderNumber: string
-): TilopaySDKInitConfig {
+/**
+ * Generate unique order number
+ */
+export function generateOrderNumber(prefix: string = 'SRV'): string {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${prefix}-${timestamp}-${random}`;
+}
+
+/**
+ * Parse TiloPay callback parameters
+ */
+export interface TilopayCallbackParams {
+  code?: string;
+  description?: string;
+  reference?: string;
+  orderNumber?: string;
+  amount?: string;
+  currency?: string;
+  status?: string;
+  transactionId?: string;
+}
+
+export function parseTilopayCallback(query: Record<string, string | string[]>): TilopayCallbackParams {
+  // Convert query parameters to strings
+  const params: Record<string, string> = {};
+  for (const [key, value] of Object.entries(query)) {
+    params[key] = Array.isArray(value) ? value[0] : value;
+  }
+
   return {
-    token,
-    currency: tilopayConfig.currency,
-    language: tilopayConfig.language,
-    amount: formatAmountForTilopay(amount),
-    billToEmail: customer.email,
-    billToFirstName: customer.firstName,
-    billToLastName: customer.lastName,
-    orderNumber,
-    capture: 1, // Auto-capture
-    redirect: tilopayConfig.redirectUrl,
-    subscription: 0, // One-time payment
+    code: params.code,
+    description: params.description,
+    reference: params.reference,
+    orderNumber: params.orderNumber || params.reference,
+    amount: params.amount,
+    currency: params.currency,
+    status: params.status,
+    transactionId: params.transactionId || params.transaction_id,
   };
+}
+
+/**
+ * Determine if payment was successful based on callback
+ */
+export function isPaymentSuccessful(params: TilopayCallbackParams): boolean {
+  // TiloPay success codes - adjust based on documentation
+  const successCodes = ['00', '0', 'success', 'approved', 'completed'];
+  const successStatuses = ['success', 'approved', 'completed', 'paid'];
+  
+  if (params.code && successCodes.includes(params.code.toLowerCase())) {
+    return true;
+  }
+  
+  if (params.status && successStatuses.includes(params.status.toLowerCase())) {
+    return true;
+  }
+  
+  return false;
 }
