@@ -71,11 +71,12 @@ const BRAND_ID_MAPPING: Record<string, string> = {
  * Priority: 1) Attributes, 2) Meta data, 3) Taxonomy mapping, 4) Product name fallback
  */
 export function getProductBrand(product: WooCommerceProduct): string {
-  // Enable debug logging in development
-  const debug = process.env.NODE_ENV === 'development';
+  // Enable debug logging in development AND for specific products
+  const debug = process.env.NODE_ENV === 'development' || product.name.toLowerCase().includes('freedom') || product.name.toLowerCase().includes('dof');
   
   if (debug) {
     console.log('🔍 Brand Detection for:', product.name);
+    console.log('🔍 Product ID:', product.id);
   }
 
   // PRIORITY 1: Check product attributes for brand/marca
@@ -175,17 +176,30 @@ export function getProductBrand(product: WooCommerceProduct): string {
     'freedom': 'DOF',
     'escaner intraoral freedom': 'DOF',
     'escáner intraoral freedom': 'DOF',
+    'fresadora': 'DOF',           // Milling machines are DOF brand
+    'fresadora dental': 'DOF',
+    'craft pro': 'DOF',          // Specific DOF milling machine model
     'bioart': 'BIOART',
     'termoformadora': 'BIOART',  // Based on your feedback
+    'articulador': 'BIOART',     // Articulators typically BIOART
     'siger': 'SIGER',
     'coxo': 'COXO',
     'pieza de mano': 'COXO',
     'piezas de mano': 'COXO',
+    'contra ángulo': 'COXO',     // Contra angle handpieces
+    'contraángulo': 'COXO',
+    'turbina': 'COXO',           // Turbines
     'meyer': 'MEYER',
     'tomógrafo meyer': 'MEYER',
     'tomografo meyer': 'MEYER',
     'ss-x9010dpro': 'MEYER',
-    'x9010dpro': 'MEYER'
+    'x9010dpro': 'MEYER',
+    'rayos x': 'MEYER',          // X-ray equipment
+    'sensor': 'FAME',            // Sensors often FAME brand
+    'placa': 'FAME',             // Plates for imaging
+    'escáner de placas': 'FAME', // Plate scanners
+    'micro motor': 'MICRO NX',   // Micro motors
+    'micromotor': 'MICRO NX'
   };
   
   for (const [pattern, brand] of Object.entries(namePatterns)) {

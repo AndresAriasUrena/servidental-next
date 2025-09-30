@@ -44,22 +44,32 @@ const BRAND_LOGOS: Record<string, string> = {
  * @returns The logo path or null if not found
  */
 export function getBrandLogo(brandName: string): string | null {
-  if (!brandName) return null;
+  if (!brandName) {
+    console.log('🔍 getBrandLogo: No brand name provided');
+    return null;
+  }
   
   // Normalize brand name for lookup
   const normalizedBrand = brandName.toLowerCase().trim();
   
+  console.log(`🔍 getBrandLogo: Looking for logo for brand "${brandName}" (normalized: "${normalizedBrand}")`);
+  
   // Direct match
   if (BRAND_LOGOS[normalizedBrand]) {
+    console.log(`✅ getBrandLogo: Found direct match for "${normalizedBrand}" -> ${BRAND_LOGOS[normalizedBrand]}`);
     return BRAND_LOGOS[normalizedBrand];
   }
   
   // Try partial matches for compound brand names
   for (const [key, logo] of Object.entries(BRAND_LOGOS)) {
     if (normalizedBrand.includes(key) || key.includes(normalizedBrand)) {
+      console.log(`✅ getBrandLogo: Found partial match "${key}" for "${normalizedBrand}" -> ${logo}`);
       return logo;
     }
   }
+  
+  console.log(`❌ getBrandLogo: No logo found for "${brandName}" (normalized: "${normalizedBrand}")`);
+  console.log('🔍 Available brand keys:', Object.keys(BRAND_LOGOS));
   
   return null;
 }

@@ -185,7 +185,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
               })}
               className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
             />
-            <span className="text-sm text-gray-700">En stock</span>
+            <span className="text-sm text-gray-700">Entrega Inmediata</span>
           </label>
         </div>
       </div>

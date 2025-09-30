@@ -69,10 +69,52 @@ export function generateQuoteMessage(product: WooCommerceProduct): string {
 }
 
 /**
+ * Generates enhanced WhatsApp message for product quotation with customer info
+ */
+export function generateQuoteMessageWithCustomerInfo(
+  product: WooCommerceProduct, 
+  fullName: string, 
+  email: string
+): string {
+  const productUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/tienda/${product.slug}`;
+  
+  let message = `¡Hola! Me interesa solicitar una cotización para el siguiente producto:\n\n`;
+  message += `    📦 ${product.name}\n`;
+  message += `    📋 SKU: ${product.sku || product.name}\n`;
+  message += `    🔗 Enlace: ${productUrl}\n\n`;
+  message += `    Mi nombre completo es ${fullName}\n`;
+  message += `    Mi correo electrónico es ${email}\n\n`;
+  message += `    Por favor, envíenme información sobre:\n`;
+  message += `    * Precio actualizado\n`;
+  message += `    * Disponibilidad\n`;
+  message += `    * Tiempos de entrega\n`;
+  message += `    * Condiciones de pago\n\n`;
+  message += `    ¡Gracias!`;
+  
+  return message;
+}
+
+/**
  * Opens WhatsApp with pre-filled quotation message
  */
 export function sendQuoteToWhatsApp(product: WooCommerceProduct): void {
   const message = generateQuoteMessage(product);
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+  
+  // Open WhatsApp in new tab/window
+  window.open(whatsappUrl, '_blank');
+}
+
+/**
+ * Opens WhatsApp with enhanced quotation message including customer info
+ */
+export function sendQuoteToWhatsAppWithCustomerInfo(
+  product: WooCommerceProduct, 
+  fullName: string, 
+  email: string
+): void {
+  const message = generateQuoteMessageWithCustomerInfo(product, fullName, email);
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
   
