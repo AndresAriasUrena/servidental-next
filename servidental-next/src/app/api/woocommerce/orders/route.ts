@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
       tilopayOrderNumber,
       tilopayData,
       billingAddress,
-      shippingAddress
+      shippingAddress,
+      customer_note // Add customer notes support
     } = body;
 
     // Validaciones
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
       payment_method: isTilopay ? 'tilopay' : 'onvo_pay',
       payment_method_title: isTilopay ? 'TiloPay' : 'ONVO Pay',
       set_paid: paymentIntentId ? true : false, // Solo marcar como pagado si ONVO ya procesó el pago
+      customer_note: customer_note || '', // Add customer notes to WooCommerce order
       billing: {
         first_name: customerInfo.firstName || billingAddress?.first_name || '',
         last_name: customerInfo.lastName || billingAddress?.last_name || '',

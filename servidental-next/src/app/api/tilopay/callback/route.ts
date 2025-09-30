@@ -188,7 +188,8 @@ export async function GET(req: Request) {
 
     // Doble chequeo recomendado
     const verification = await verifyWithTilopay(tilopayOrderId || undefined, orderHash || undefined);
-    const successByCode = code === '200';
+    // TiloPay success codes: '1' = approved, '200' = success (depends on configuration)
+    const successByCode = code === '1' || code === '200';
     const success = successByCode && verification.ok;
 
     console.log(`💳 Payment result: code=${code}, success=${success}, verification=${verification.ok}`);

@@ -48,6 +48,19 @@ export default function Header() {
   const totalQuantity = cartState.cart.totalQuantity
   const justAdded = false
 
+  // Listen for custom event to open mini cart
+  useEffect(() => {
+    const handleOpenMiniCart = () => {
+      setShowMiniCart(true);
+    };
+
+    window.addEventListener('openMiniCart', handleOpenMiniCart);
+    
+    return () => {
+      window.removeEventListener('openMiniCart', handleOpenMiniCart);
+    };
+  }, []);
+
   return (
     <header className="bg-white fixed z-30 w-full shadow-sm">
 

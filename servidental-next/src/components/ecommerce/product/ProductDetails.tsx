@@ -174,6 +174,8 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
     
     try {
       await addToCart(product, quantity);
+      // Emit custom event to open mini cart
+      window.dispatchEvent(new CustomEvent('openMiniCart'));
     } catch (error) {
       console.error('Error adding to cart:', error);
     }

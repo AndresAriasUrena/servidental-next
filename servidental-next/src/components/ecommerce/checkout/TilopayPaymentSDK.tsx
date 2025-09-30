@@ -54,7 +54,19 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     try {
       console.log('🚀 Starting TiloPay Payment Link flow...');
       
-      // Step 1: Create WooCommerce order first (optional but recommended)
+      // Step 1: Get customer notes from localStorage
+      const checkoutFormData = localStorage.getItem('checkout-form-data');
+      let customerNote = '';
+      if (checkoutFormData) {
+        try {
+          const formData = JSON.parse(checkoutFormData);
+          customerNote = formData.customer_note || '';
+        } catch (e) {
+          console.log('Could not parse checkout form data from localStorage');
+        }
+      }
+
+      // Step 2: Create WooCommerce order first (optional but recommended)
       console.log('📦 Creating WooCommerce order...');
       
       const orderResponse = await fetch('/api/woocommerce/orders', {
@@ -68,6 +80,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           total: cart.total,
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
+          customer_note: customerNote, // Include customer notes
           billingAddress: {
             first_name: customerInfo.firstName,
             last_name: customerInfo.lastName,
