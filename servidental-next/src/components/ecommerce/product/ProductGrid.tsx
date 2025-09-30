@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { WooCommerceProduct, ProductFilters } from '@/types/woocommerce';
 import { ProductCard } from './ProductCard';
@@ -12,13 +12,15 @@ interface ProductGridProps {
   showFilters?: boolean;
   perPage?: number;
   categoryId?: number;
+  instanceKey?: string;
 }
 
 function ProductGrid({ 
   initialProducts = [], 
   showFilters = true, 
   perPage = 12,
-  categoryId 
+  categoryId,
+  instanceKey = 'shop'
 }: ProductGridProps) {
   const [products, setProducts] = useState<WooCommerceProduct[]>(initialProducts);
   const [loading, setLoading] = useState(false);
@@ -62,6 +64,9 @@ function ProductGrid({
   };
 
   const [filters, setFilters] = useState<ProductFilters>(getFiltersFromURL);
+  const didInit = useRef(false);
+  const fromUI = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const getHasActiveFilters = () => {
     const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock'];
@@ -94,7 +99,7 @@ function ProductGrid({
     router.push(newURL, { scroll: false });
   };
 
-  const loadProducts = async (filtersToUse: ProductFilters = filters, pageToUse: number = currentPage) => {
+  const loadProducts = async (filtersToUse: ProductFilters = filters, pageToUse: number = currentPage, signal?: AbortSignal) => {
     setLoading(true);
     try {
       // Aplicar filtros del backend primero
@@ -106,11 +111,14 @@ function ProductGrid({
       };
       
       const firstResponse = await fetchProducts(params);
+      if (signal?.aborted) return;
+      
       let allProducts = [...firstResponse.data];
       const totalPages = firstResponse.total_pages;
       
       // Cargar páginas adicionales si hay más
       for (let page = 2; page <= totalPages; page++) {
+        if (signal?.aborted) return;
         const additionalResponse = await fetchProducts({
           ...params,
           page: page
@@ -118,6 +126,7 @@ function ProductGrid({
         allProducts.push(...additionalResponse.data);
       }
       
+      if (signal?.aborted) return;
       console.log(`Total productos cargados: ${allProducts.length}`);
       
       // Aplicar filtros de repuestos en el frontend
@@ -137,27 +146,72 @@ function ProductGrid({
         );
       }
       
-      setProducts(productsToShow);
-      setTotalPages(1); // Solo una página ya que filtramos en frontend
-      setTotal(productsToShow.length);
+      if (!signal?.aborted) {
+        setProducts(productsToShow);
+        setTotalPages(1); // Solo una página ya que filtramos en frontend
+        setTotal(productsToShow.length);
+      }
     } catch (error) {
-      console.error('Error loading products:', error);
-      setProducts([]);
+      if ((error as Error)?.name !== 'AbortError') {
+        console.error('Error loading products:', error);
+        if (!signal?.aborted) {
+          setProducts([]);
+        }
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
   };
 
+  // 1) Hidratar desde URL SOLO al montar
   useEffect(() => {
-    loadProducts();
-  }, [filters, currentPage, categoryId, repuestosFilter]);
+    if (didInit.current) return;
+    didInit.current = true;
+    const urlFilters = getFiltersFromURL();
+    setFilters(urlFilters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // 2) Si cambia la URL por navegación (no por UI), re-hidratar
   useEffect(() => {
+    if (!didInit.current) return;
+    if (fromUI.current) { 
+      fromUI.current = false; 
+      return; 
+    }
     const urlFilters = getFiltersFromURL();
     setFilters(urlFilters);
   }, [searchParams]);
 
+  // 3) Cargar productos al cambiar filtros, con cancelación
+  useEffect(() => {
+    // Cancelar carga anterior
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+    
+    (async () => {
+      try {
+        await loadProducts(filters, currentPage, abortController.signal);
+      } catch (error) {
+        if ((error as Error)?.name !== 'AbortError') {
+          console.error('loadProducts error:', error);
+        }
+      }
+    })();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [filters, currentPage, categoryId, repuestosFilter]);
+
   const handleFiltersChange = (newFilters: ProductFilters) => {
+    fromUI.current = true;
     setFilters(newFilters);
     setCurrentPage(1);
     updateURL(newFilters, 1);
@@ -172,6 +226,17 @@ function ProductGrid({
     setCurrentPage(page);
     updateURL(filters, page);
   };
+
+  // De-duplicación de productos por ID
+  const productsUnique = useMemo(() => {
+    const map = new Map<string | number, WooCommerceProduct>();
+    for (const p of products) {
+      if (!map.has(p.id)) {
+        map.set(p.id, p);
+      }
+    }
+    return Array.from(map.values());
+  }, [products]);
 
   return (
     <div className="w-full">
@@ -225,7 +290,7 @@ function ProductGrid({
           {!loading && (
             <div className="mb-4 flex justify-between items-center">
               <p className="text-sm text-gray-600">
-                Mostrando {products.length} de {total} productos
+                Mostrando {productsUnique.length} de {total} productos
                 {getHasActiveFilters() && ' (filtrados)'}
               </p>
               {getHasActiveFilters() && (
@@ -252,12 +317,12 @@ function ProductGrid({
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                {productsUnique.map((product) => (
+                  <ProductCard key={`${instanceKey}-${product.id}`} product={product} />
                 ))}
               </div>
               
-              {products.length === 0 && !loading && (
+              {productsUnique.length === 0 && !loading && (
                 <div className="text-center py-12">
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
                     No se encontraron productos

@@ -43,7 +43,7 @@ export default function TiendaPage() {
         </div>
 
         <Suspense fallback={<ProductGridSkeleton />}>
-          <ProductGrid />
+          <ProductGrid instanceKey="shop" />
         </Suspense>
       </div>
     </div>
