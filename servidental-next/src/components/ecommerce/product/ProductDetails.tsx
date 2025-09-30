@@ -662,9 +662,9 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.slice(0, 4).map((relatedProduct) => (
+              {relatedProducts.slice(0, 4).map((relatedProduct, index) => (
                 <ProductCard
-                  key={relatedProduct.id}
+                  key={`related-${relatedProduct.id}-${index}`}
                   product={relatedProduct}
                   showAddToCart={true}
                 />
