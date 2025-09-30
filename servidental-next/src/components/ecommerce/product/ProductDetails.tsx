@@ -192,6 +192,13 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
     sendQuoteToWhatsAppWithCustomerInfo(product, fullName, email);
   };
 
+  // Check if product has 'timbre' tag
+  const hasTimbreTag = (product: WooCommerceProduct): boolean => {
+    return product.tags?.some(tag => 
+      tag.name.toLowerCase().includes('timbre')
+    ) || false;
+  };
+
   if (loading) {
     return <ProductDetailsSkeleton />;
   }
@@ -432,6 +439,18 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   <span className="text-xl text-gray-500">
                     Consultar precio
                   </span>
+                )}
+
+                {/* Timbre Note */}
+                {hasTimbreTag(product) && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-blue-800 text-sm font-medium">
+                        Incluye timbre odontológico
+                      </span>
+                    </div>
+                  </div>
                 )}
 
                 {/* Stock */}
