@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ProductFilters, WooCommerceCategory } from '@/types/woocommerce';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPriceRange, PRIMARY_CURRENCY } from '@/utils/currency';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ProductFiltersPanelProps {
   filters: ProductFilters;
@@ -15,6 +16,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
   const { fetchCategories } = useWooCommerce();
   const [categories, setCategories] = useState<WooCommerceCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [categoriesExpanded, setCategoriesExpanded] = useState(true); // Siempre abierto por defecto
 
   useEffect(() => {
     async function loadCategories() {
@@ -101,31 +103,43 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
 
       {/* Categories */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Categorías
-        </label>
-        {loading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-6 bg-gray-200 rounded animate-pulse"></div>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {categories.map((category) => (
-              <label key={category.id} className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={(filters.categories || []).includes(category.id)}
-                  onChange={() => handleCategoryChange(category.id)}
-                  className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
-                />
-                <span className="text-sm text-gray-700">
-                  {category.name} ({category.count})
-                </span>
-              </label>
-            ))}
-          </div>
+        <button
+          onClick={() => setCategoriesExpanded(!categoriesExpanded)}
+          className="flex items-center justify-between w-full text-sm font-medium text-gray-700 mb-3"
+        >
+          <span>Categorías</span>
+          {categoriesExpanded ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
+        </button>
+        {categoriesExpanded && (
+          <>
+            {loading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-6 bg-gray-200 rounded animate-pulse"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {categories.map((category) => (
+                  <label key={category.id} className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={(filters.categories || []).includes(category.id)}
+                      onChange={() => handleCategoryChange(category.id)}
+                      className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
+                    />
+                    <span className="text-sm text-gray-700">
+                      {category.name} ({category.count})
+                    </span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 

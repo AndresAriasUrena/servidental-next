@@ -30,14 +30,14 @@ function ProductGridSkeleton() {
 
 export default function TiendaPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-servi_dark mb-4">
+        <div className="text-center mb-6 lg:mb-12">
+          <h1 className="text-2xl lg:text-4xl font-bold text-servi_dark mb-2 lg:mb-4">
             Tienda ServidentalCR
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Descubre nuestro catálogo completo de equipos médicos dentales de 
+          <p className="text-sm lg:text-lg text-gray-600 max-w-2xl mx-auto hidden lg:block">
+            Descubre nuestro catálogo completo de equipos médicos dentales de
             alta calidad. Con 18 años de experiencia en Costa Rica.
           </p>
         </div>

@@ -6,6 +6,7 @@ import { WooCommerceProduct, ProductFilters } from '@/types/woocommerce';
 import { ProductCard } from './ProductCard';
 import { ProductFiltersPanel } from '../filters/ProductFiltersPanel';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
+import { SlidersHorizontal, Search, X } from 'lucide-react';
 
 interface ProductGridProps {
   initialProducts?: WooCommerceProduct[];
@@ -28,7 +29,9 @@ function ProductGrid({
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [repuestosFilter, setRepuestosFilter] = useState<'all' | 'repuestos' | 'no_repuestos'>('all');
-  
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -215,6 +218,15 @@ function ProductGrid({
     setFilters(newFilters);
     setCurrentPage(1);
     updateURL(newFilters, 1);
+    setShowMobileFilters(false); // Cerrar modal de filtros en mobile
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleFiltersChange({
+      ...filters,
+      search: searchInput || undefined
+    });
   };
 
   const handleRepuestosFilterChange = (newRepuestosFilter: 'all' | 'repuestos' | 'no_repuestos') => {
@@ -238,12 +250,76 @@ function ProductGrid({
     return Array.from(map.values());
   }, [products]);
 
+  // Sincronizar searchInput con filters.search
+  useEffect(() => {
+    setSearchInput(filters.search || '');
+  }, [filters.search]);
+
   return (
     <div className="w-full">
+      {/* Barra de búsqueda estilo Amazon - Móvil */}
+      <div className="lg:hidden mb-4">
+        <form onSubmit={handleSearchSubmit} className="flex gap-2">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Buscar productos..."
+              className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-servi_green focus:border-transparent"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 top-0 h-full px-4 bg-servi_green text-white rounded-r-lg hover:bg-servi_dark transition-colors"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+          </div>
+        </form>
+
+        {/* Botón de filtros móvil */}
+        <div className="flex gap-2 mt-3">
+          <button
+            onClick={() => setShowMobileFilters(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            <span className="text-sm font-medium">Filtros</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Modal de filtros para móvil */}
+      {showMobileFilters && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black bg-opacity-50"
+            onClick={() => setShowMobileFilters(false)}
+          />
+          <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b px-4 py-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Filtros</h2>
+              <button
+                onClick={() => setShowMobileFilters(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4">
+              <ProductFiltersPanel
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col lg:flex-row gap-8">
         {showFilters && (
-          <div className="w-full lg:w-1/4">
-            <ProductFiltersPanel 
+          <div className="hidden lg:block w-full lg:w-1/4">
+            <ProductFiltersPanel
               filters={filters}
               onFiltersChange={handleFiltersChange}
             />
@@ -305,7 +381,7 @@ function ProductGrid({
           )}
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6">
               {Array.from({ length: perPage }).map((_, index) => (
                 <div key={index} className="animate-pulse">
                   <div className="bg-gray-200 aspect-square rounded-lg mb-4"></div>
@@ -316,7 +392,7 @@ function ProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6">
                 {productsUnique.map((product) => (
                   <ProductCard key={`${instanceKey}-${product.id}`} product={product} />
                 ))}
