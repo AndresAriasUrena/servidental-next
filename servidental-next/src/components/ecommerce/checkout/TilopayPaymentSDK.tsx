@@ -54,13 +54,22 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     try {
       console.log('🚀 Starting TiloPay Payment Link flow...');
       
-      // Step 1: Get customer notes from localStorage
+      // Step 1: Get comprehensive checkout data from localStorage
       const checkoutFormData = localStorage.getItem('checkout-form-data');
       let customerNote = '';
+      let personalInfo = null;
+      let shippingOption = 'messenger';
+      let shippingOtherDetails = '';
+      let contactData = null;
+      
       if (checkoutFormData) {
         try {
           const formData = JSON.parse(checkoutFormData);
           customerNote = formData.customer_note || '';
+          personalInfo = formData.personal_info || null;
+          shippingOption = formData.shipping_option || 'messenger';
+          shippingOtherDetails = formData.shipping_other_details || '';
+          contactData = formData.contact_data || null;
         } catch (e) {
           console.log('Could not parse checkout form data from localStorage');
         }
@@ -81,6 +90,10 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
           customer_note: customerNote, // Include customer notes
+          personal_info: personalInfo, // Include all new structured data
+          shipping_option: shippingOption, // Include shipping preference
+          shipping_other_details: shippingOtherDetails, // Include custom shipping details
+          contact_data: contactData, // Include optional contact data
           billingAddress: {
             first_name: customerInfo.firstName,
             last_name: customerInfo.lastName,

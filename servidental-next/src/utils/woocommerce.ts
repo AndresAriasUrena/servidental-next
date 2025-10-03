@@ -45,25 +45,35 @@ export function getProductCategory(product: WooCommerceProduct): string {
 
 // Brand ID to name mapping (from WooCommerce taxonomy)
 // This should be the primary source of truth for brand detection
+// Brand ID to name mapping (from WooCommerce RankMath SEO brand taxonomy)  
+// This is the primary source of truth for brand detection
 const BRAND_ID_MAPPING: Record<string, string> = {
-  '55': 'SIGER',
-  '54': 'BIOART',
-  '97': 'COXO',
-  '88': 'DOF',      // Adding DOF mapping
-  '89': 'FAME',     // Adding FAME mapping  
-  '90': 'MEYER',    // Adding other brands as needed
-  '91': 'MICRO NX',
-  '92': 'TPC',
-  '93': 'XPECT VISION',
-  '94': 'DENTECH',
-  '95': 'DENTAFILM',
-  '96': 'LAUNCA',
-  '98': 'ELEC',
-  '99': 'EPDENT',
-  '100': 'MDMED',
-  '101': 'STURDY',
-  '102': 'ARTELECTRON',
-  '103': 'DIMED'
+  // CORRECTED mapping based on actual WooCommerce data
+  '54': 'DOF',           // DOF - Fresadoras, Hornos, Escáneres Freedom
+  '55': 'SIGER',         // SIGER - 31 products  
+  '97': 'COXO',          // Coxo - 35 products
+  '96': 'BIOART',        // BIOART - Termoformadoras, Lavadoras, etc. (ID 96, not 88!)
+  '89': 'FAME',          // Fame Technology - 1 product
+  '90': 'MEYER',         // Meyer - 2 products
+  '91': 'MICRO NX',      // Micro NX - 6 products
+  '92': 'TPC',           // TPC - 14 products
+  '93': 'XPECT VISION',  // Xpect Vision - 5 products
+  '94': 'DENTECH',       // Den Tech - 4 products
+  '95': 'DENTAFILM',     // Denta Film - 1 product
+  '88': 'DOF_ALT',       // Alternative DOF ID (if used)
+  '98': 'ELEC',          // Elec - 0 products
+  '99': 'EPDENT',        // EpDent - 3 products
+  '100': 'MDMED',        // MDMED - 1 product
+  '101': 'STURDY',       // Sturdy - 16 products
+  '102': 'ARTELECTRON',  // Not visible in image
+  '103': 'DIMED',        // Dimed - 1 product
+  '104': 'SERVIDENTAL',  // Internal brand for accessories
+  '0': '',               // Empty brand ID means no brand
+  
+  // Additional brands visible in your WooCommerce interface
+  // (Need to verify exact IDs for these)
+  'ba-international': 'BA INTERNATIONAL',  // BA International - 2 products
+  'art-electron': 'ART ELECTRON'           // ART Electron - 1 product
 };
 
 /**
@@ -72,12 +82,14 @@ const BRAND_ID_MAPPING: Record<string, string> = {
  */
 export function getProductBrand(product: WooCommerceProduct): string {
   // Enable debug logging in development AND for specific products
-  const debug = process.env.NODE_ENV === 'development' || product.name.toLowerCase().includes('freedom') || product.name.toLowerCase().includes('dof');
+  const debug = process.env.NODE_ENV === 'development' || product.name.toLowerCase().includes('freedom') || product.name.toLowerCase().includes('dof') || product.name.toLowerCase().includes('fresadora') || product.name.toLowerCase().includes('horno');
   
   if (debug) {
     console.log('🔍 Brand Detection for:', product.name);
     console.log('🔍 Product ID:', product.id);
   }
+
+  const productName = product.name.toLowerCase();
 
   // PRIORITY 1: Check product attributes for brand/marca
   if (product.attributes?.length > 0) {
@@ -104,12 +116,14 @@ export function getProductBrand(product: WooCommerceProduct): string {
     }
   }
 
+
   // PRIORITY 2: Check meta_data for brand information
   if (product.meta_data?.length > 0) {
     // Look for various brand-related meta keys
     const brandMetaKeys = [
       'pa_marca', 'pa_brand', 'attribute_pa_marca', 'attribute_pa_brand',
-      '_product_brand', '_brand', 'marca', 'brand'
+      '_product_brand', '_brand', 'marca', 'brand',
+      'rank_math_primary_product_brand'  // RankMath SEO plugin brand field
     ];
     
     for (const key of brandMetaKeys) {
@@ -169,37 +183,11 @@ export function getProductBrand(product: WooCommerceProduct): string {
   }
 
   // PRIORITY 4: Product name pattern matching (last resort)
-  const productName = product.name.toLowerCase();
+  // productName already declared above
   
-  // Known product name patterns to brand mapping
+  // Minimal fallback patterns - only for products that genuinely have no brand data
   const namePatterns: Record<string, string> = {
-    'freedom': 'DOF',
-    'escaner intraoral freedom': 'DOF',
-    'escáner intraoral freedom': 'DOF',
-    'fresadora': 'DOF',           // Milling machines are DOF brand
-    'fresadora dental': 'DOF',
-    'craft pro': 'DOF',          // Specific DOF milling machine model
-    'bioart': 'BIOART',
-    'termoformadora': 'BIOART',  // Based on your feedback
-    'articulador': 'BIOART',     // Articulators typically BIOART
-    'siger': 'SIGER',
-    'coxo': 'COXO',
-    'pieza de mano': 'COXO',
-    'piezas de mano': 'COXO',
-    'contra ángulo': 'COXO',     // Contra angle handpieces
-    'contraángulo': 'COXO',
-    'turbina': 'COXO',           // Turbines
-    'meyer': 'MEYER',
-    'tomógrafo meyer': 'MEYER',
-    'tomografo meyer': 'MEYER',
-    'ss-x9010dpro': 'MEYER',
-    'x9010dpro': 'MEYER',
-    'rayos x': 'MEYER',          // X-ray equipment
-    'sensor': 'FAME',            // Sensors often FAME brand
-    'placa': 'FAME',             // Plates for imaging
-    'escáner de placas': 'FAME', // Plate scanners
-    'micro motor': 'MICRO NX',   // Micro motors
-    'micromotor': 'MICRO NX'
+    // Only keep if absolutely necessary
   };
   
   for (const [pattern, brand] of Object.entries(namePatterns)) {

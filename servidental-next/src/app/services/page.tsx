@@ -253,8 +253,9 @@ export default function ServicesPage() {
                     <p className="font-semibold text-gray-800 mb-2">• Valor del servicio</p>
                     <p className="pl-4">
                       La visita técnica tiene un costo base de <span className="font-bold text-servi_green">
-                      ₡32.000</span>. A este monto se sumará el valor de los repuestos utilizados 
-                      o de los procesos realizados, según su magnitud.
+                      ₡35.000 + IVA</span>. A este monto se sumará el valor de los repuestos utilizados, 
+                      procesos realizados y aplica para el <strong>Área Metropolitana</strong>. Se aplicará un costo 
+                      adicional según la distancia de traslado del profesional.
                     </p>
                   </div>
 

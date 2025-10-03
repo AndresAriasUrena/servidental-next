@@ -187,7 +187,7 @@ export default function Header() {
 
           {/* WhatsApp CTA */}
           <Link
-            href="https://api.whatsapp.com/send?phone=50687045556"
+            href="https://api.whatsapp.com/send?phone=50621016114"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-servi_green text-white px-4 py-2 rounded-lg hover:bg-servi_dark transition-colors font-medium text-sm"
@@ -247,7 +247,7 @@ export default function Header() {
               {/* Mobile CTA and social */}
               <div className="py-6 space-y-4">
                 <Link
-                  href="https://api.whatsapp.com/send?phone=50687045556"
+                  href="https://api.whatsapp.com/send?phone=50621016114"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full bg-servi_green text-white px-4 py-3 rounded-lg hover:bg-servi_dark transition-colors font-medium"

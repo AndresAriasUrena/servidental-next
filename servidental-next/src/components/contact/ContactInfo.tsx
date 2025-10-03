@@ -101,7 +101,7 @@ export default function ContactInfo() {
           </a>
 
           <a
-            href="https://api.whatsapp.com/send?phone=50687045556"
+            href="https://api.whatsapp.com/send?phone=50621016114"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-green-500 transition-colors"
@@ -120,7 +120,7 @@ export default function ContactInfo() {
            <TbBrandWaze className="h-7 w-7"/>
           </a>
           <a
-            href="https://api.whatsapp.com/send?phone=50687045556"
+            href="https://api.whatsapp.com/send?phone=50621016114"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-purple-500 transition-colors"

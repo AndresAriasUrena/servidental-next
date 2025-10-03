@@ -56,7 +56,7 @@ export default function ContactPage() {
       {/* WhatsApp CTA */}
       <section className="fixed bottom-4 right-4 z-50">
         <a
-          href="https://api.whatsapp.com/send?phone=50687045556"
+          href="https://api.whatsapp.com/send?phone=50621016114"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors shadow-lg"
