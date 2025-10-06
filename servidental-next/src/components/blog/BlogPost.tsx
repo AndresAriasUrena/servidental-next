@@ -74,7 +74,7 @@ export default function BlogPost({ post }: BlogPostProps) {
         />
       </div>
 
-      <article className="max-w-none" data-blog-content>
+      <article className="max-w-none wp-block-content" data-blog-content>
         {/* Featured Image */}
         {post.featured_image_url && (
           <div className="relative h-96 mb-8 rounded-xl overflow-hidden">

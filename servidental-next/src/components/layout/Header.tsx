@@ -151,7 +151,7 @@ export default function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green"
+              className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green no-underline"
             >
               {item.name}
             </Link>
@@ -236,7 +236,7 @@ export default function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors"
+                    className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}

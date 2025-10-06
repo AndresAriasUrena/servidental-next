@@ -1,0 +1,236 @@
+/**
+ * WordPress Gutenberg Block Styles
+ * Ensures proper full-width display of blog content without scroll constraints
+ */
+
+/* Base content wrapper - NO max-width or overflow constraints */
+.wp-block-content,
+.entry-content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Gutenberg figure/image handling */
+.wp-block-image,
+.wp-block-media-text,
+.wp-block-gallery {
+  margin: 1.5rem 0;
+}
+
+.wp-block-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Alignment classes for images and blocks */
+.aligncenter {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
+}
+
+.alignleft {
+  float: left;
+  margin: 0.5rem 1rem 0.5rem 0;
+}
+
+.alignright {
+  float: right;
+  margin: 0.5rem 0 0.5rem 1rem;
+}
+
+/* Wide and Full width blocks */
+.alignwide {
+  max-width: min(1200px, 95vw);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.alignfull {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Gutenberg columns */
+.wp-block-columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .wp-block-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wp-block-columns.has-3-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.wp-block-column {
+  min-width: 0;
+  flex: 1;
+}
+
+/* Responsive images */
+.size-full,
+.size-large,
+.size-medium {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Block quotes */
+.wp-block-quote {
+  border-left: 4px solid #059669; /* servi_green */
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+/* Tables */
+.wp-block-table {
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.wp-block-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Ensure embedded content is responsive */
+.wp-block-embed,
+.wp-block-embed__wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.wp-block-embed iframe,
+.wp-block-embed__wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cover blocks */
+.wp-block-cover {
+  position: relative;
+  min-height: 430px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button blocks */
+.wp-block-button__link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+/* Lists */
+.wp-block-list {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.wp-block-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Separator */
+.wp-block-separator {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+/* Spacer */
+.wp-block-spacer {
+  clear: both;
+}
+
+/* Code blocks */
+.wp-block-code {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+/* Pre-formatted text */
+.wp-block-preformatted {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+/* Pullquote */
+.wp-block-pullquote {
+  margin: 2rem 0;
+  padding: 2rem;
+  border-top: 4px solid #059669;
+  border-bottom: 4px solid #059669;
+}
+
+/* Verse */
+.wp-block-verse {
+  font-family: inherit;
+  white-space: pre-wrap;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.375rem;
+}
+
+/* Audio/Video */
+.wp-block-audio,
+.wp-block-video {
+  margin: 1.5rem 0;
+}
+
+.wp-block-audio audio,
+.wp-block-video video {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* File block */
+.wp-block-file {
+  margin: 1rem 0;
+}
+
+.wp-block-file__button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #059669;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+
+.wp-block-file__button:hover {
+  background: #047857;
+}

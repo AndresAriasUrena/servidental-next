@@ -6,8 +6,20 @@ import {
   BlogCategory 
 } from '@/types/blog';
 
-const WP_API_BASE = 'https://wp.servidentalcr.com/wp-json/wp/v2';
-const CUSTOM_API_BASE = 'https://wp.servidentalcr.com/wp-json/servidental/v1';
+// Use local API proxy to avoid CORS issues
+// For server-side rendering, we need absolute URLs
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    // Client-side: use relative URLs
+    return '';
+  }
+  // Server-side: use absolute URL
+  return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
+};
+
+const WP_POSTS_API = `${getBaseUrl()}/api/wordpress/posts`;
+const WP_BLOG_CONFIG_API = `${getBaseUrl()}/api/wordpress/blog-config`;
+const WP_CATEGORIES_API = `${getBaseUrl()}/api/wordpress/categories`;
 
 // Development mode check
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -122,13 +134,12 @@ class BlogService {
         searchParams.append('search', search);
       }
 
-      const url = `${WP_API_BASE}/posts?${searchParams}`;
+      const url = `${WP_POSTS_API}?${searchParams}`;
       const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        mode: 'cors',
         cache: 'no-cache'
       });
 
@@ -181,7 +192,7 @@ class BlogService {
     if (cached) return cached;
 
     try {
-      const url = `${WP_API_BASE}/posts?slug=${slug}&_embed=true&status=publish`;
+      const url = `${WP_POSTS_API}?slug=${slug}&_embed=true&status=publish`;
       const posts: any[] = await this.fetchWithErrorHandling(url);
 
       if (posts.length === 0) {
@@ -204,7 +215,7 @@ class BlogService {
 
     try {
       // Try custom API first
-      const config = await this.fetchWithErrorHandling<BlogConfig>(`${CUSTOM_API_BASE}/blog-config`);
+      const config = await this.fetchWithErrorHandling<BlogConfig>(WP_BLOG_CONFIG_API);
       
       if (!config) {
         throw new Error('Empty config response');
@@ -244,7 +255,7 @@ class BlogService {
     if (cached) return cached;
 
     try {
-      const categories: any[] = await this.fetchWithErrorHandling(`${WP_API_BASE}/categories`);
+      const categories: any[] = await this.fetchWithErrorHandling(WP_CATEGORIES_API);
       
       const formattedCategories: BlogCategory[] = categories.map(cat => ({
         id: cat.id,

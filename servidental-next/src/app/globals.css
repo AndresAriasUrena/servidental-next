@@ -3,6 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* WordPress Gutenberg block styles for full-width content */
+@import '../styles/wp-gutenberg.css';
+
+/* Reset link styles globally - prevent blue color and underline */
+@layer base {
+  a {
+    @apply no-underline;
+    color: inherit;
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
