@@ -1,17 +1,8 @@
-import { Suspense } from 'react';
-import Checkout from '@/components/ecommerce/checkout/Checkout';
+'use client';
 
-export const metadata = {
-  title: 'Checkout | ServidentalCR - Finalizar Compra',
-  description: 'Finaliza tu compra de equipos médicos dentales de forma segura',
-  keywords: 'checkout, pago, comprar, servidental, costa rica',
-  openGraph: {
-    title: 'Checkout | ServidentalCR',
-    description: 'Finaliza tu compra de forma segura',
-    url: 'http://servidentalcr.com/checkout',
-    type: 'website'
-  }
-};
+import { Suspense } from 'react';
+import Script from 'next/script';
+import Checkout from '@/components/ecommerce/checkout/Checkout';
 
 function CheckoutSkeleton() {
   return (
@@ -102,12 +93,30 @@ function CheckoutSkeleton() {
 
 export default function CheckoutPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="py-8">
-        <Suspense fallback={<CheckoutSkeleton />}>
-          <Checkout />
-        </Suspense>
+    <>
+      {/* jQuery requerido por TiloPay SDK */}
+      <Script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossOrigin="anonymous"
+        strategy="beforeInteractive"
+      />
+
+      {/* TiloPay SDK - URL correcta oficial */}
+      <Script
+        src="https://app.tilopay.com/sdk/v1/sdk.min.js"
+        strategy="afterInteractive"
+        onLoad={() => console.log('✅ TiloPay SDK cargado correctamente')}
+        onError={(e) => console.error('❌ Error al cargar TiloPay SDK:', e)}
+      />
+
+      <div className="min-h-screen bg-gray-50">
+        <div className="py-8">
+          <Suspense fallback={<CheckoutSkeleton />}>
+            <Checkout />
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

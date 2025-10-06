@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import BlogPostClient from '@/components/blog/BlogPostClient';
-import { blogService } from '@/services/blogService';
+import BlogPostServer from '@/components/blog/BlogPostServer';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -9,10 +8,34 @@ interface BlogPostPageProps {
   }>;
 }
 
+// Fetch post en server component
+async function getPostBySlug(slug: string) {
+  try {
+    const WP_URL = process.env.WOOCOMMERCE_URL || process.env.WORDPRESS_BASE_URL || 'https://wp.servidentalcr.com';
+    const url = `${WP_URL}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed=true&status=publish`;
+
+    const res = await fetch(url, {
+      next: { revalidate: 60 }, // Cache 60 segundos
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('WordPress API error:', res.status, text);
+      return null;
+    }
+
+    const posts = await res.json();
+    return posts && posts.length > 0 ? posts[0] : null;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+}
+
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await blogService.fetchPostBySlug(slug);
-  
+  const post = await getPostBySlug(slug);
+
   if (!post) {
     return {
       title: 'Post no encontrado - Blog ServiDental',
@@ -20,30 +43,42 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const title = post.title?.rendered || `${slug} - Blog ServiDental`;
+  const description = post.excerpt?.rendered?.replace(/<[^>]*>/g, '').trim() || '';
+  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+
   return {
-    title: post.seo?.title || post.title?.rendered || `${slug} - Blog ServiDental`,
-    description: post.seo?.description || post.excerpt_plain || '',
-    keywords: post.seo?.keywords || '',
+    title,
+    description,
     alternates: {
-      canonical: post.seo?.canonical || `https://servidentalcr.com/blog/${slug}`,
+      canonical: `https://servidentalcr.com/blog/${slug}`,
     },
     openGraph: {
-      title: post.seo?.title || post.title?.rendered || '',
-      description: post.seo?.description || post.excerpt_plain || '',
+      title,
+      description,
       type: 'article',
-      url: post.seo?.canonical || `https://servidentalcr.com/blog/${slug}`,
-      images: post.featured_image_url ? [post.featured_image_url] : [],
+      url: `https://servidentalcr.com/blog/${slug}`,
+      images: featuredImage ? [featuredImage] : [],
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.seo?.title || post.title?.rendered || '',
-      description: post.seo?.description || post.excerpt_plain || '',
-      images: post.featured_image_url ? [post.featured_image_url] : [],
+      title,
+      description,
+      images: featuredImage ? [featuredImage] : [],
     },
   };
 }
 
+// Deshabilitar cache estático en preview/dev
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  return <BlogPostClient slug={slug} />;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return <BlogPostServer post={post} />;
 }

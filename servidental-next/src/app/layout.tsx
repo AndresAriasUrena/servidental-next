@@ -50,68 +50,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <head>
-        {/* jQuery required by TiloPay SDK */}
-        <script
-          src="https://code.jquery.com/jquery-3.6.0.min.js"
-          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-          crossOrigin="anonymous"
-        />
-        {/* TiloPay SDK - Try multiple possible URLs */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Try multiple TiloPay SDK URLs
-              const sdkUrls = [
-                'https://app.tilopay.com/sdk/v1/tilopay.min.js',
-                'https://tilopay.com/sdk/v1/tilopay.min.js',
-                'https://js.tilopay.com/v1/tilopay.min.js',
-                'https://cdn.tilopay.com/v1/tilopay.min.js',
-                'https://sdk.tilopay.com/v1/tilopay.min.js',
-                'https://app.tilopay.com/js/sdk.min.js',
-                'https://tilopay.com/js/sdk.min.js'
-              ];
-              
-              let sdkLoaded = false;
-              let currentIndex = 0;
-              
-              function loadTilopaySDK() {
-                if (sdkLoaded || currentIndex >= sdkUrls.length) return;
-                
-                const script = document.createElement('script');
-                script.src = sdkUrls[currentIndex];
-                script.defer = true;
-                
-                script.onload = function() {
-                  if (window.Tilopay || window.TiloPay) {
-                    console.log('✅ TiloPay SDK loaded successfully from:', sdkUrls[currentIndex]);
-                    sdkLoaded = true;
-                    // Normalize window object
-                    if (window.TiloPay && !window.Tilopay) {
-                      window.Tilopay = window.TiloPay;
-                    }
-                  }
-                };
-                
-                script.onerror = function() {
-                  console.log('❌ Failed to load SDK from:', sdkUrls[currentIndex]);
-                  currentIndex++;
-                  setTimeout(loadTilopaySDK, 100);
-                };
-                
-                document.head.appendChild(script);
-              }
-              
-              // Start loading when DOM is ready
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', loadTilopaySDK);
-              } else {
-                loadTilopaySDK();
-              }
-            `
-          }}
-        />
-      </head>
       <body className={inter.className}>
         <CartProvider>
           <Header />

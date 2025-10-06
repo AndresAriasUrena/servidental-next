@@ -1,28 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Validar variables de entorno
+const WP_URL = process.env.WOOCOMMERCE_URL;
+const WC_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY;
+const WC_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
+
 async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams) {
+  // Validar credenciales
+  if (!WP_URL || !WC_KEY || !WC_SECRET) {
+    throw new Error('Missing WooCommerce configuration. Check env vars: WOOCOMMERCE_URL, WOOCOMMERCE_CONSUMER_KEY, WOOCOMMERCE_CONSUMER_SECRET');
+  }
+
   try {
     const queryParams = new URLSearchParams({
-      consumer_key: process.env.WOOCOMMERCE_CONSUMER_KEY!,
-      consumer_secret: process.env.WOOCOMMERCE_CONSUMER_SECRET!,
+      consumer_key: WC_KEY,
+      consumer_secret: WC_SECRET,
       ...Object.fromEntries(params.entries())
     });
-    
-    const apiUrl = `${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/${endpoint}?${queryParams.toString()}`;
-    
-    console.log('Making request to:', `${process.env.WOOCOMMERCE_URL}/wp-json/wc/v3/${endpoint}`);
-    
+
+    const apiUrl = `${WP_URL}/wp-json/wc/v3/${endpoint}?${queryParams.toString()}`;
+
+    console.log('[WooCommerce API] Request to:', `${WP_URL}/wp-json/wc/v3/${endpoint}`);
+
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
-      }
+      },
+      // Timeout de 10 segundos
+      signal: AbortSignal.timeout(10000)
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`API Error ${response.status}: ${errorText}`);
+      console.error(`[WooCommerce API] Upstream error ${response.status}:`, errorText);
+      throw new Error(`Upstream WooCommerce API returned ${response.status}: ${errorText}`);
     }
 
     const jsonData = await response.json();
@@ -36,7 +49,7 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
       headers: response.headers
     };
   } catch (error) {
-    console.error('WooCommerce request failed:', error);
+    console.error('[WooCommerce API] Request failed:', error);
     throw error;
   }
 }
@@ -44,14 +57,13 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
-    // Log para debugging
-    console.log('API Request params:', Object.fromEntries(searchParams.entries()));
-    
+
+    console.log('[WooCommerce API] Products request params:', Object.fromEntries(searchParams.entries()));
+
     const response = await makeWooCommerceRequest('products', searchParams) as any;
-    
-    console.log(`Found ${response.data.length} products, total: ${response.total}`);
-    
+
+    console.log(`[WooCommerce API] Success: ${response.data.length} products, total: ${response.total}`);
+
     return NextResponse.json({
       data: response.data,
       total: response.total,
@@ -59,13 +71,27 @@ export async function GET(request: NextRequest) {
       current_page: parseInt(searchParams.get('page') || '1'),
       per_page: parseInt(searchParams.get('per_page') || '12')
     });
-    
+
   } catch (error) {
-    console.error('WooCommerce API Error:', error);
+    console.error('[WooCommerce API] Error in GET /api/woocommerce/products:', error);
+
+    // Retornar 502 Bad Gateway si el problema es con el upstream
+    if (error instanceof Error && error.message.includes('Upstream')) {
+      return NextResponse.json(
+        {
+          error: 'WooCommerce API error',
+          detail: error.message,
+          upstream: true
+        },
+        { status: 502 }
+      );
+    }
+
+    // Retornar 500 para otros errores
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch products',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        detail: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
