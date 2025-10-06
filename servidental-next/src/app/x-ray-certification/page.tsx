@@ -75,12 +75,19 @@ export default function XRayCertificationPage() {
                 <div className="space-y-3 text-gray-600">
                   <p className="flex items-start">
                     <span className="text-servi_green mr-2">•</span>
-                    El procedimiento se coordina con la Ingeniera Malena Orozco, 
+                    El procedimiento se coordina con la Ingeniera Malena Orozco,
                     y dura aproximadamente 1 hora.
                   </p>
                   <p className="flex items-start">
                     <span className="text-servi_green mr-2">•</span>
-                    Si el equipo es aprobado, se emite un certificado que se envía vía 
+                    Se debe disponer de un espacio cerrado, sin tránsito de personas,
+                    que permita a la encargada realizar la toma de datos de forma adecuada,
+                    evitando interrupciones y sin afectar a terceros por la radiación emitida
+                    durante el procedimiento.
+                  </p>
+                  <p className="flex items-start">
+                    <span className="text-servi_green mr-2">•</span>
+                    Si el equipo es aprobado, se emite un certificado que se envía vía
                     correo electrónico dentro de 2 días hábiles.
                   </p>
                 </div>
