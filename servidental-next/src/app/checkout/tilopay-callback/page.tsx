@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export default function TilopayCallback() {
+function TilopayCallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -165,5 +165,23 @@ export default function TilopayCallback() {
         </>
       )}
     </div>
+  );
+}
+
+export default function TilopayCallback() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-3 border-servi_green border-t-transparent mx-auto mb-4"></div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Procesando pago...
+        </h1>
+        <p className="text-gray-600">
+          Cargando información del pago...
+        </p>
+      </div>
+    }>
+      <TilopayCallbackContent />
+    </Suspense>
   );
 }
