@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { XCircleIcon, ArrowLeftIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 
-export default function CheckoutFailurePage() {
+function FailureContent() {
   const searchParams = useSearchParams();
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [reason, setReason] = useState<string | null>(null);
@@ -14,7 +14,7 @@ export default function CheckoutFailurePage() {
     // Support both 'order' and 'orderNumber' parameters for compatibility
     const order = searchParams.get('order') || searchParams.get('orderNumber');
     const failureReason = searchParams.get('reason');
-    
+
     setOrderNumber(order);
     setReason(failureReason);
   }, [searchParams]);
@@ -223,5 +223,20 @@ export default function CheckoutFailurePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutFailure() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-servi_green mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <FailureContent />
+    </Suspense>
   );
 }
