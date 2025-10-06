@@ -259,7 +259,7 @@ useEffect(() => {
 
         <div className="mt-24 text-center">
           <Link
-            href="/products"
+            href="/tienda"
             className="inline-block bg-servi_green text-white px-8 py-3 rounded-md hover:bg-servi_dark transition-colors"
           >
             Ver catálogo completo

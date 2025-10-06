@@ -14,13 +14,18 @@ const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
   { name: 'SERVICIOS', href: '/#services' },
-  { name: 'EQUIPOS', href: '/products' },
   { name: 'TIENDA', href: '/tienda' },
   { name: 'BLOG', href: '/blog' },
   { name: 'CONTACTO', href: '/contact' },
 ]
 
 const socialLinks = [
+  {
+    name: 'WhatsApp',
+    href: 'https://api.whatsapp.com/send?phone=50621016114',
+    icon: MessageCircle,
+    color: 'text-green-500 hover:text-green-600'
+  },
   {
     name: 'Instagram',
     href: 'https://www.instagram.com/servidentalcr/?hl=es-la',
@@ -185,15 +190,13 @@ export default function Header() {
             )}
           </div>
 
-          {/* WhatsApp CTA */}
+          {/* Ver tienda CTA */}
           <Link
-            href="https://api.whatsapp.com/send?phone=50621016114"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/tienda"
             className="inline-flex items-center gap-2 bg-servi_green text-white px-4 py-2 rounded-lg hover:bg-servi_dark transition-colors font-medium text-sm"
           >
-            <MessageCircle className="w-4 h-4" />
-            WhatsApp
+            <ShoppingCart className="w-4 h-4" />
+            Ver tienda
           </Link>
         </div>
       </nav>
@@ -247,14 +250,12 @@ export default function Header() {
               {/* Mobile CTA and social */}
               <div className="py-6 space-y-4">
                 <Link
-                  href="https://api.whatsapp.com/send?phone=50621016114"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/tienda"
                   className="flex items-center justify-center gap-2 w-full bg-servi_green text-white px-4 py-3 rounded-lg hover:bg-servi_dark transition-colors font-medium"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <MessageCircle className="w-5 h-5" />
-                  Contactar por WhatsApp
+                  <ShoppingCart className="w-5 h-5" />
+                  Ver tienda
                 </Link>
 
                 {/* Mobile social links */}

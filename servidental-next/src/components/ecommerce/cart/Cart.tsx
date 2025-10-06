@@ -151,9 +151,9 @@ export function Cart() {
             >
               Proceder al checkout
             </Link>
-            
+
             <Link
-              href="/products"
+              href="/tienda"
               className="w-full text-center text-servi_green hover:text-servi_dark mt-4 block"
             >
               Continuar comprando

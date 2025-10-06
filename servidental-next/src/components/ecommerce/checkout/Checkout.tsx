@@ -241,7 +241,7 @@ export default function Checkout() {
           Agrega algunos productos antes de proceder al checkout
         </p>
         <a
-          href="/products"
+          href="/tienda"
           className="bg-servi_green text-white px-6 py-3 rounded-md hover:bg-servi_dark transition-colors"
         >
           Ver productos
