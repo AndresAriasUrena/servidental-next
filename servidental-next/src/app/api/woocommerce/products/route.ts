@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBrandMap } from '@/server/brands';
 import { sanitizeProductHtml, normalizeDescription } from '@/server/sanitize';
+import { extractResourcesFromMeta } from '@/server/productResources';
 import type { WooCommerceProduct, PrimaryBrand } from '@/types/woocommerce';
 
 // Validar variables de entorno
@@ -134,12 +135,17 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
       const short_description = sanitizeProductHtml(product.short_description || '');
       const description = sanitizeProductHtml(normalizeDescription(product.description || ''));
 
+      // Extraer recursos desde meta_data
+      const meta = Array.isArray(product.meta_data) ? product.meta_data : [];
+      const resources = extractResourcesFromMeta(meta);
+
       if (!firstBrand) {
         console.log(`[Products API] ⚠️  Product ${product.id} (${product.name}) has no brands`);
         return {
           ...product,
           short_description,
-          description
+          description,
+          resources
         };
       }
 
@@ -152,6 +158,7 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
           ...product,
           short_description,
           description,
+          resources,
           primaryBrand: {
             id: firstBrand.id,
             name: firstBrand.name,
@@ -177,6 +184,7 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
         ...product,
         short_description,
         description,
+        resources,
         primaryBrand
       };
     });

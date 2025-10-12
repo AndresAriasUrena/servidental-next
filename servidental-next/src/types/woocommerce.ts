@@ -80,6 +80,7 @@ export interface WooCommerceProduct {
   // Campos extendidos por nuestra API
   brands?: ProductBrand[]; // Del WooCommerce REST API
   primaryBrand?: PrimaryBrand; // Inyectado por nuestra API con logo resuelto
+  resources?: ProductResource[]; // Recursos extraídos de meta_data (PDFs, videos, links)
 }
 
 // Brand info del producto (viene de WC REST API)
@@ -95,6 +96,17 @@ export interface PrimaryBrand {
   name: string;
   slug: string;
   logoUrl: string | null;
+}
+
+// Product Resource extraído de meta_data
+// Solo se extraen PDFs específicos: manual_pdf_url y product_sheet_pdf_url
+export interface ProductResource {
+  id: string;
+  title: string;
+  url: string;          // enlace de vista/apertura
+  downloadUrl?: string; // si aplica (Drive PDF con descarga directa)
+  kind: 'pdf';
+  mime: 'application/pdf';
 }
 
 export interface ProductDimensions {

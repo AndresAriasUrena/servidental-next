@@ -12,6 +12,7 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
 import { ProductCard } from './ProductCard';
 import { QuoteFormModal } from '../quote/QuoteFormModal';
+import { ProductTabs } from './ProductTabs';
 
 // Helper functions for media handling
 const getYouTubeVideoId = (url: string): string | null => {
@@ -528,15 +529,11 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
               )}
             </div>
 
-            {/* Descripción */}
-            {product.description && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Descripción</h2>
-                <div className="prose prose-slate max-w-none product-description">
-                  <div dangerouslySetInnerHTML={{ __html: product.description }} />
-                </div>
-              </div>
-            )}
+            {/* Tabs: Descripción y Recursos */}
+            <ProductTabs
+              descriptionHtml={product.description || ''}
+              resources={product.resources || []}
+            />
 
             {/* Especificaciones */}
             {product.attributes && product.attributes.length > 0 && (
@@ -553,66 +550,6 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                       </div>
                     </div>
                   ))}
-                </div>
-              </div>
-            )}
-
-            {/* Documentos y Recursos */}
-            {(getMetaDataValue(product, 'manual_pdf_url') || getMetaDataValue(product, 'product_sheet_pdf_url')) && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  Documentos y Recursos
-                </h2>
-                <div className="space-y-3">
-                  {getMetaDataValue(product, 'manual_pdf_url') && (
-                    <a
-                      href={getMetaDataValue(product, 'manual_pdf_url') || ''}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Manual de Usuario</p>
-                          <p className="text-sm text-gray-600">Instrucciones detalladas de uso</p>
-                        </div>
-                      </div>
-                      <svg className="w-5 h-5 text-blue-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  )}
-                  {getMetaDataValue(product, 'product_sheet_pdf_url') && (
-                    <a
-                      href={getMetaDataValue(product, 'product_sheet_pdf_url') || ''}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Folleto del Equipo</p>
-                          <p className="text-sm text-gray-600">Especificaciones técnicas</p>
-                        </div>
-                      </div>
-                      <svg className="w-5 h-5 text-green-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  )}
                 </div>
               </div>
             )}
