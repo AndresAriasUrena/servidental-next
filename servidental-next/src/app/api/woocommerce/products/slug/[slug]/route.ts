@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getBrandMap } from '@/server/brands';
+import type { WooCommerceProduct, PrimaryBrand } from '@/types/woocommerce';
 
 async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams = new URLSearchParams()) {
   try {
@@ -29,6 +31,54 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams 
   } catch (error) {
     console.error('WooCommerce product by slug request failed:', error);
     throw error;
+  }
+}
+
+/**
+ * Inyectar primaryBrand en un producto
+ */
+async function injectPrimaryBrand(product: WooCommerceProduct): Promise<WooCommerceProduct> {
+  try {
+    const brandMap = await getBrandMap();
+
+    const firstBrand = product.brands?.[0];
+
+    if (!firstBrand) {
+      console.log(`[Product By Slug API] ⚠️  Product ${product.id} (${product.name}) has no brands`);
+      return product;
+    }
+
+    const brandMeta = brandMap.get(firstBrand.id);
+
+    if (!brandMeta) {
+      console.log(`[Product By Slug API] ⚠️  Brand ${firstBrand.id} (${firstBrand.name}) not found in brand map`);
+      return {
+        ...product,
+        primaryBrand: {
+          id: firstBrand.id,
+          name: firstBrand.name,
+          slug: firstBrand.slug,
+          logoUrl: null
+        }
+      };
+    }
+
+    const primaryBrand: PrimaryBrand = {
+      id: firstBrand.id,
+      name: firstBrand.name,
+      slug: firstBrand.slug,
+      logoUrl: brandMeta.imageSrc || null
+    };
+
+    console.log(`[Product By Slug API] ✅ primaryBrand set for "${firstBrand.slug}" (id ${firstBrand.id})`);
+
+    return {
+      ...product,
+      primaryBrand
+    };
+  } catch (error) {
+    console.error('[Product By Slug API] Error injecting primaryBrand:', error);
+    return product;
   }
 }
 
@@ -70,7 +120,9 @@ export async function GET(
 
 
     if (products && products.length > 0) {
-      return NextResponse.json(products[0]);
+      // Inyectar primaryBrand antes de retornar
+      const productWithBrand = await injectPrimaryBrand(products[0]);
+      return NextResponse.json(productWithBrand);
     } else {
 
       return NextResponse.json(
