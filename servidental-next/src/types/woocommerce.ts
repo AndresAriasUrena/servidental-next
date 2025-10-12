@@ -77,6 +77,24 @@ export interface WooCommerceProduct {
   meta_data: MetaData[];
   stock_status: 'instock' | 'outofstock' | 'onbackorder';
   has_options: boolean;
+  // Campos extendidos por nuestra API
+  brands?: ProductBrand[]; // Del WooCommerce REST API
+  primaryBrand?: PrimaryBrand; // Inyectado por nuestra API con logo resuelto
+}
+
+// Brand info del producto (viene de WC REST API)
+export interface ProductBrand {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+// Primary Brand inyectado por nuestra API con logo
+export interface PrimaryBrand {
+  id: number;
+  name: string;
+  slug: string;
+  logoUrl: string | null;
 }
 
 export interface ProductDimensions {

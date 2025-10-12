@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getBrandMap } from '@/server/brands';
+import type { WooCommerceProduct, PrimaryBrand } from '@/types/woocommerce';
 
 // Validar variables de entorno
 const WP_URL = process.env.WOOCOMMERCE_URL;
@@ -8,11 +10,6 @@ const WC_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
 // ============================================
 // CACHE PARA MAPEO SLUG → ID DE MARCAS
 // ============================================
-interface BrandMapping {
-  slug: string;
-  id: number;
-}
-
 let brandSlugToIdCache: Map<string, number> | null = null;
 let brandCacheTimestamp = 0;
 const BRAND_CACHE_TTL = 10 * 60 * 1000; // 10 minutos
@@ -38,7 +35,8 @@ async function resolveBrandSlugToId(slug: string): Promise<number | null> {
       headers: {
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
-      }
+      },
+      next: { revalidate: 0 }
     });
 
     if (!response.ok) {
@@ -88,8 +86,8 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
       },
-      // Timeout de 30 segundos
-      signal: AbortSignal.timeout(30000)
+      signal: AbortSignal.timeout(30000),
+      next: { revalidate: 0 }
     });
 
     if (!response.ok) {
@@ -111,6 +109,72 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
   } catch (error) {
     console.error('[WooCommerce API] Request failed:', error);
     throw error;
+  }
+}
+
+/**
+ * Inyectar primaryBrand en cada producto
+ * Toma la primera marca del array brands[] si existe
+ */
+async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCommerceProduct[]> {
+  try {
+    // Obtener el mapa de marcas con logos
+    const brandMap = await getBrandMap();
+
+    console.log(`[Products API] Injecting primaryBrand for ${products.length} products...`);
+
+    let brandsSet = 0;
+
+    const enrichedProducts = products.map((product) => {
+      // Tomar la primera marca del array brands[] si existe
+      const firstBrand = product.brands?.[0];
+
+      if (!firstBrand) {
+        console.log(`[Products API] ⚠️  Product ${product.id} (${product.name}) has no brands`);
+        return product;
+      }
+
+      // Buscar metadata de la marca en el mapa
+      const brandMeta = brandMap.get(firstBrand.id);
+
+      if (!brandMeta) {
+        console.log(`[Products API] ⚠️  Brand ${firstBrand.id} (${firstBrand.name}) not found in brand map`);
+        return {
+          ...product,
+          primaryBrand: {
+            id: firstBrand.id,
+            name: firstBrand.name,
+            slug: firstBrand.slug,
+            logoUrl: null
+          }
+        };
+      }
+
+      // Inyectar primaryBrand con logo
+      brandsSet++;
+
+      const primaryBrand: PrimaryBrand = {
+        id: firstBrand.id,
+        name: firstBrand.name,
+        slug: firstBrand.slug,
+        logoUrl: brandMeta.imageSrc || null
+      };
+
+      console.log(`[Products API] brand "${firstBrand.slug}" -> id ${firstBrand.id}; primaryBrand set`);
+
+      return {
+        ...product,
+        primaryBrand
+      };
+    });
+
+    console.log(`[Products API] ✅ primaryBrand set on ${brandsSet}/${products.length} products`);
+
+    return enrichedProducts;
+  } catch (error) {
+    console.error('[Products API] Error injecting primaryBrand:', error);
+    // En caso de error, devolver productos sin modificar
+    return products;
   }
 }
 
@@ -160,8 +224,13 @@ export async function GET(request: NextRequest) {
 
     console.log(`[WooCommerce API] Success: ${response.data.length} products, total: ${response.total}`);
 
+    // ============================================
+    // INYECTAR PRIMARY BRAND CON LOGO
+    // ============================================
+    const productsWithBrand = await injectPrimaryBrand(response.data);
+
     return NextResponse.json({
-      data: response.data,
+      data: productsWithBrand,
       total: response.total,
       total_pages: response.totalPages,
       current_page: parseInt(searchParams.get('page') || '1'),

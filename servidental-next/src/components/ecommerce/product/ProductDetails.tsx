@@ -6,8 +6,6 @@ import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
-import { getProductBrand } from '@/utils/woocommerce';
-import { getBrandLogo, getBrandLogoByProductName } from '@/utils/brandLogos';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -350,69 +348,19 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
               </div>
               
               {/* Logo de Marca - Posicionado en esquina superior derecha */}
-              {(() => {
-                const brandName = getProductBrand(product);
-                let brandLogo = getBrandLogo(brandName);
-                let detectedBrand = brandName;
-                
-                // Fallback: try to detect brand by product name
-                if (!brandLogo) {
-                  brandLogo = getBrandLogoByProductName(product.name);
-                  if (brandLogo) {
-                    // Determine brand name from product name for this case
-                    const productNameLower = product.name.toLowerCase();
-                    if (productNameLower.includes('freedom')) {
-                      detectedBrand = 'DOF';
-                    } else if (productNameLower.includes('placas')) {
-                      detectedBrand = 'FAME';
-                    } else if (productNameLower.includes('pieza') && productNameLower.includes('mano')) {
-                      detectedBrand = 'COXO';
-                    }
-                  }
-                }
-                
-                // Debug temporal
-                if (process.env.NODE_ENV === 'development') {
-                  console.log('Brand Debug:', { 
-                    originalBrand: brandName,
-                    detectedBrand,
-                    brandLogo, 
-                    productName: product.name,
-                    attributes: product.attributes?.map(attr => ({ name: attr.name, options: attr.options }))
-                  });
-                }
-                
-                if (brandLogo && detectedBrand) {
-                  return (
-                    <div className="flex-shrink-0">
-                      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
-                        <Image
-                          src={brandLogo}
-                          alt={`Logo de ${detectedBrand}`}
-                          width={120}
-                          height={60}
-                          className="max-w-[120px] max-h-[60px] object-contain"
-                        />
-                      </div>
-                    </div>
-                  );
-                }
-                
-                // Debug fallback solo si no hay logo
-                if (process.env.NODE_ENV === 'development' && !brandLogo) {
-                  return (
-                    <div className="flex-shrink-0">
-                      <div className="bg-yellow-100 rounded-lg border border-yellow-300 p-2 text-xs">
-                        Original: {brandName || 'No brand'}<br/>
-                        Detected: {detectedBrand || 'None'}<br/>
-                        Logo: Not found
-                      </div>
-                    </div>
-                  );
-                }
-                
-                return null;
-              })()}
+              {product.primaryBrand?.logoUrl && (
+                <div className="flex-shrink-0">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
+                    <Image
+                      src={product.primaryBrand.logoUrl}
+                      alt={`${product.primaryBrand.name} logo`}
+                      width={120}
+                      height={60}
+                      className="max-w-[120px] max-h-[60px] object-contain"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Precio, Stock y Rating en una sola línea inteligente */}

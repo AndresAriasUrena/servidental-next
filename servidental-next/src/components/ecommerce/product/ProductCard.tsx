@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { formatPrice, parsePrice, isOnSale } from '@/utils/currency';
-import { getProductBrand } from '@/utils/woocommerce';
-import { getBrandLogo } from '@/utils/brandLogos';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { QuoteFormModal } from '@/components/ecommerce/quote/QuoteFormModal';
@@ -73,48 +71,21 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
               Oferta
             </div>
           )}
-          
+
           {/* Brand Logo */}
-          {(() => {
-            const brandName = getProductBrand(product);
-            const brandLogo = getBrandLogo(brandName);
-            
-            // Debug logging for specific products
-            if (product.name.toLowerCase().includes('freedom') || product.name.toLowerCase().includes('dof') || brandName) {
-              console.log(`🏷️ ProductCard Brand Debug for "${product.name}":`, {
-                productId: product.id,
-                detectedBrand: brandName,
-                foundLogo: brandLogo,
-                productOnSale: productOnSale
-              });
-            }
-            
-            if (brandLogo && brandName && !productOnSale) {
-              return (
-                <div className="absolute top-2 right-2 z-10">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-md p-1 shadow-sm">
-                    <Image
-                      src={brandLogo}
-                      alt={`Logo de ${brandName}`}
-                      width={40}
-                      height={20}
-                      className="max-w-[40px] max-h-[20px] object-contain"
-                      onError={(e) => {
-                        console.error(`❌ Brand logo failed to load for ${brandName}:`, brandLogo);
-                        console.error('Image error event:', e);
-                      }}
-                      onLoad={() => {
-                        console.log(`✅ Brand logo loaded successfully for ${brandName}:`, brandLogo);
-                      }}
-                    />
-                  </div>
-                </div>
-              );
-            }
-            
-            
-            return null;
-          })()}
+          {product.primaryBrand?.logoUrl && !productOnSale && (
+            <div className="absolute top-2 right-2 z-10">
+              <div className="bg-white/90 backdrop-blur-sm rounded-md p-1 shadow-sm">
+                <Image
+                  src={product.primaryBrand.logoUrl}
+                  alt={`${product.primaryBrand.name} logo`}
+                  width={40}
+                  height={20}
+                  className="max-w-[40px] max-h-[20px] object-contain"
+                />
+              </div>
+            </div>
+          )}
           
         </div>
 

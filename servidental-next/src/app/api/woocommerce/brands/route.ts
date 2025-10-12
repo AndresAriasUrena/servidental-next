@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchAllBrandsWithMeta, getBrandById } from '@/server/brands';
 
 // ============================================
-// CACHE EN MEMORIA
+// CACHE EN MEMORIA PARA COUNTS
 // ============================================
 interface CacheEntry<T> {
   data: T;
@@ -29,36 +30,25 @@ function setCache<T>(key: string, data: T): void {
 }
 
 // ============================================
-// VALIDACIÓN DE ENV
+// ENV VALIDATION
 // ============================================
 const WP_URL = process.env.WOOCOMMERCE_URL;
 const WC_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY;
 const WC_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
 
-if (!WP_URL || !WC_KEY || !WC_SECRET) {
-  console.error('❌ Missing WooCommerce environment variables');
-}
-
 // ============================================
 // TIPOS
 // ============================================
-interface WordPressBrand {
-  id: number;
-  name: string;
-  slug: string;
-  description?: string;
-  count?: number; // Este viene en 0 desde WP, lo recalcularemos
-}
-
-interface BrandWithRealCount {
+interface BrandWithCountAndLogo {
   id: number;
   name: string;
   slug: string;
   count: number;
+  logoUrl: string | null; // URL del logo o null
 }
 
 // ============================================
-// POOL DE CONCURRENCIA AD HOC
+// POOL DE CONCURRENCIA
 // ============================================
 async function runWithConcurrencyLimit<T>(
   tasks: (() => Promise<T>)[],
@@ -93,43 +83,8 @@ async function runWithConcurrencyLimit<T>(
 }
 
 // ============================================
-// FUNCIONES AUXILIARES
+// CONTEO REAL POR MARCA
 // ============================================
-
-/**
- * Obtener todas las marcas desde la taxonomía product_brand de WordPress
- */
-async function fetchBrandsFromWordPress(): Promise<WordPressBrand[]> {
-  if (!WP_URL) throw new Error('WOOCOMMERCE_URL not configured');
-
-  const url = `${WP_URL}/wp-json/wp/v2/product_brand?per_page=100`;
-
-  console.log('[Brands API] Fetching brands from WordPress taxonomy...');
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'User-Agent': 'ServidentalCR-NextJS/1.0',
-      'Accept': 'application/json'
-    },
-    signal: AbortSignal.timeout(30000)
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`WordPress API returned ${response.status}: ${errorText}`);
-  }
-
-  const brands: WordPressBrand[] = await response.json();
-  console.log(`[Brands API] ✅ Fetched ${brands.length} brands from WordPress`);
-
-  return brands;
-}
-
-/**
- * Obtener el conteo real de productos para una marca específica
- * usando el endpoint de WooCommerce con product_brand={id}
- */
 async function fetchRealCountForBrand(brandId: number): Promise<number> {
   if (!WP_URL || !WC_KEY || !WC_SECRET) {
     console.error(`[Brands API] Missing credentials for brand ${brandId}`);
@@ -140,7 +95,7 @@ async function fetchRealCountForBrand(brandId: number): Promise<number> {
     const params = new URLSearchParams({
       consumer_key: WC_KEY,
       consumer_secret: WC_SECRET,
-      brand: brandId.toString(), // ✅ CORRECTO: usar 'brand' no 'product_brand'
+      brand: brandId.toString(),
       per_page: '1'
     });
 
@@ -152,7 +107,8 @@ async function fetchRealCountForBrand(brandId: number): Promise<number> {
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
       },
-      signal: AbortSignal.timeout(30000)
+      signal: AbortSignal.timeout(30000),
+      next: { revalidate: 0 }
     });
 
     if (!response.ok) {
@@ -160,46 +116,15 @@ async function fetchRealCountForBrand(brandId: number): Promise<number> {
       return 0;
     }
 
-    // Leer el header x-wp-total que contiene el conteo real
     const totalHeader = response.headers.get('x-wp-total');
     const count = totalHeader ? Number(totalHeader) : 0;
 
-    console.log(`[Brands API] Brand ${brandId}: count = ${count}`);
     return count;
 
   } catch (error) {
     console.error(`[Brands API] Error fetching count for brand ${brandId}:`, error);
     return 0;
   }
-}
-
-/**
- * Calcular conteos reales para todas las marcas con concurrencia limitada
- */
-async function enrichBrandsWithRealCounts(
-  brands: WordPressBrand[]
-): Promise<BrandWithRealCount[]> {
-  console.log(`[Brands API] Calculating real counts for ${brands.length} brands...`);
-
-  // Crear tareas para cada marca
-  const tasks = brands.map((brand) => async (): Promise<BrandWithRealCount> => {
-    const count = await fetchRealCountForBrand(brand.id);
-    return {
-      id: brand.id,
-      name: brand.name,
-      slug: brand.slug,
-      count
-    };
-  });
-
-  // Ejecutar con límite de concurrencia de 8
-  const brandsWithCounts = await runWithConcurrencyLimit(tasks, 8);
-
-  // Ordenar por nombre
-  brandsWithCounts.sort((a, b) => a.name.localeCompare(b.name));
-
-  console.log('[Brands API] ✅ Real counts calculated successfully');
-  return brandsWithCounts;
 }
 
 // ============================================
@@ -221,11 +146,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Intentar obtener del cache
-    const CACHE_KEY = 'brands:counts:v1';
-    const cached = getCached<BrandWithRealCount[]>(CACHE_KEY);
+    const CACHE_KEY = 'brands:with-counts-and-logos:v1';
+    const cached = getCached<BrandWithCountAndLogo[]>(CACHE_KEY);
 
     if (cached) {
       console.log('[Brands API] ✅ Serving from cache');
+      const withLogo = cached.filter((b) => b.logoUrl !== null).length;
+      console.log(`[Brands API] ${withLogo}/${cached.length} brands with logos (cached)`);
+
       return NextResponse.json({
         data: cached,
         total: cached.length,
@@ -236,29 +164,54 @@ export async function GET(request: NextRequest) {
     // No hay cache, calcular
     console.log('[Brands API] Cache miss, fetching fresh data...');
 
-    // 1. Obtener marcas desde WordPress
-    const wordpressBrands = await fetchBrandsFromWordPress();
+    // 1. Obtener marcas con metadata y logos (desde server/brands.ts)
+    const brandsWithMeta = await fetchAllBrandsWithMeta();
 
-    if (wordpressBrands.length === 0) {
-      console.log('[Brands API] ⚠️  No brands found in WordPress taxonomy product_brand');
+    if (brandsWithMeta.length === 0) {
+      console.log('[Brands API] ⚠️  No brands found');
       return NextResponse.json({
         data: [],
         total: 0,
-        message: 'No brands found in product_brand taxonomy'
+        message: 'No brands found'
       });
     }
 
-    // 2. Calcular conteos reales desde WooCommerce
-    const brandsWithCounts = await enrichBrandsWithRealCounts(wordpressBrands);
+    // 2. Calcular conteos reales en paralelo
+    console.log(`[Brands API] Calculating real counts for ${brandsWithMeta.length} brands...`);
 
-    // 3. Guardar en cache
-    setCache(CACHE_KEY, brandsWithCounts);
+    const tasks = brandsWithMeta.map((brand) => async (): Promise<BrandWithCountAndLogo> => {
+      const count = await fetchRealCountForBrand(brand.id);
+      return {
+        id: brand.id,
+        name: brand.name,
+        slug: brand.slug,
+        count,
+        logoUrl: brand.imageSrc || null // imageSrc viene de server/brands.ts
+      };
+    });
 
-    console.log(`[Brands API] ✅ Success: ${brandsWithCounts.length} brands with real counts`);
+    const brandsWithCountsAndLogos = await runWithConcurrencyLimit(tasks, 8);
+
+    // Ordenar por nombre
+    brandsWithCountsAndLogos.sort((a, b) => a.name.localeCompare(b.name));
+
+    // 3. Estadísticas
+    const withLogo = brandsWithCountsAndLogos.filter((b) => b.logoUrl !== null).length;
+    const total = brandsWithCountsAndLogos.length;
+    console.log(`[Brands API] ✅ Success: ${total} brands, logoOK=${withLogo}/${total}`);
+
+    // Listar marcas sin logo
+    const withoutLogo = brandsWithCountsAndLogos.filter((b) => b.logoUrl === null);
+    if (withoutLogo.length > 0) {
+      console.log('[Brands API] ⚠️  Brands without logo:', withoutLogo.map(b => b.slug).join(', '));
+    }
+
+    // 4. Guardar en cache
+    setCache(CACHE_KEY, brandsWithCountsAndLogos);
 
     return NextResponse.json({
-      data: brandsWithCounts,
-      total: brandsWithCounts.length,
+      data: brandsWithCountsAndLogos,
+      total: brandsWithCountsAndLogos.length,
       cached: false
     });
 
@@ -285,13 +238,25 @@ export async function GET(request: NextRequest) {
  */
 export async function resolveBrandSlugToId(slug: string): Promise<number | null> {
   try {
-    const CACHE_KEY = 'brands:counts:v1';
-    let brands = getCached<BrandWithRealCount[]>(CACHE_KEY);
+    const CACHE_KEY = 'brands:with-counts-and-logos:v1';
+    let brands = getCached<BrandWithCountAndLogo[]>(CACHE_KEY);
 
     // Si no hay cache, forzar recarga
     if (!brands) {
-      const wordpressBrands = await fetchBrandsFromWordPress();
-      brands = await enrichBrandsWithRealCounts(wordpressBrands);
+      const brandsWithMeta = await fetchAllBrandsWithMeta();
+
+      const tasks = brandsWithMeta.map((brand) => async (): Promise<BrandWithCountAndLogo> => {
+        const count = await fetchRealCountForBrand(brand.id);
+        return {
+          id: brand.id,
+          name: brand.name,
+          slug: brand.slug,
+          count,
+          logoUrl: brand.imageSrc || null
+        };
+      });
+
+      brands = await runWithConcurrencyLimit(tasks, 8);
       setCache(CACHE_KEY, brands);
     }
 
