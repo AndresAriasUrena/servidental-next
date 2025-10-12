@@ -494,14 +494,13 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
           {/* Información del Producto - Secuencial */}
           <div className="flex-1 flex flex-col pt-6 space-y-8">
             
-            {/* Resumen */}
+            {/* Descripción Corta como Lead */}
             <div className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Resumen</h2>
-              
               {product.short_description && (
-                <div className="prose prose-gray max-w-none">
-                  <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
-                </div>
+                <div
+                  className="text-base md:text-lg leading-relaxed font-medium mb-4 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: product.short_description }}
+                />
               )}
 
 
@@ -533,7 +532,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             {product.description && (
               <div className="space-y-4">
                 <h2 className="text-xl font-bold text-gray-900 border-b border-gray-200 pb-2">Descripción</h2>
-                <div className="prose prose-gray max-w-none">
+                <div className="prose prose-slate max-w-none product-description">
                   <div dangerouslySetInnerHTML={{ __html: product.description }} />
                 </div>
               </div>

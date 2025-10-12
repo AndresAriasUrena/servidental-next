@@ -475,3 +475,65 @@ body {
     @apply w-full text-center;
   }
 }
+
+/* ===================================
+   PRODUCT DESCRIPTION STYLES
+   =================================== */
+
+/* Estilos para descripciones de productos con HTML sanitizado */
+.product-description {
+  @apply text-gray-700 leading-relaxed;
+}
+
+/* Convertir <p><strong>...</strong></p> en subtítulos visuales */
+.product-description p > strong:first-child:last-child {
+  display: block;
+  font-weight: 700;
+  font-size: 1.125rem; /* text-lg */
+  @apply text-gray-900;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Listas bonitas en descripciones de productos */
+.product-description ul {
+  @apply list-disc pl-6 my-4 space-y-2;
+}
+
+.product-description ol {
+  @apply list-decimal pl-6 my-4 space-y-2;
+}
+
+.product-description li {
+  @apply text-gray-700 leading-relaxed;
+}
+
+/* Párrafos regulares */
+.product-description p {
+  @apply mb-4 text-gray-700 leading-relaxed;
+}
+
+/* Enlaces en descripciones */
+.product-description a {
+  @apply text-servi_green hover:text-servi_dark underline;
+}
+
+/* Énfasis y negritas normales dentro de párrafos */
+.product-description strong,
+.product-description b {
+  @apply font-semibold text-gray-900;
+}
+
+.product-description em,
+.product-description i {
+  @apply italic;
+}
+
+/* Encabezados h3 y h4 si los hay */
+.product-description h3 {
+  @apply text-xl font-bold text-gray-900 mt-6 mb-3;
+}
+
+.product-description h4 {
+  @apply text-lg font-bold text-gray-900 mt-4 mb-2;
+}

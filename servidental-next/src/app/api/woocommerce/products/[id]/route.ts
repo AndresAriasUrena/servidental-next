@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import https from 'https';
+import { sanitizeProductHtml, normalizeDescription } from '@/server/sanitize';
 
 async function makeWooCommerceRequest(endpoint: string) {
   return new Promise((resolve, reject) => {
@@ -64,10 +65,17 @@ export async function GET(
     const { id: productId } = await params;
     
     console.log('Fetching product ID:', productId);
-    
-    const product = await makeWooCommerceRequest(`products/${productId}`);
-    
-    return NextResponse.json(product);
+
+    const product = await makeWooCommerceRequest(`products/${productId}`) as any;
+
+    // Sanitizar descripciones HTML
+    const sanitizedProduct = {
+      ...product,
+      short_description: sanitizeProductHtml(product.short_description || ''),
+      description: sanitizeProductHtml(normalizeDescription(product.description || ''))
+    };
+
+    return NextResponse.json(sanitizedProduct);
     
   } catch (error) {
     console.error('WooCommerce API Error:', error);

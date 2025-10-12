@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBrandMap } from '@/server/brands';
+import { sanitizeProductHtml, normalizeDescription } from '@/server/sanitize';
 import type { WooCommerceProduct, PrimaryBrand } from '@/types/woocommerce';
 
 // Validar variables de entorno
@@ -129,9 +130,17 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
       // Tomar la primera marca del array brands[] si existe
       const firstBrand = product.brands?.[0];
 
+      // Sanitizar descripciones HTML
+      const short_description = sanitizeProductHtml(product.short_description || '');
+      const description = sanitizeProductHtml(normalizeDescription(product.description || ''));
+
       if (!firstBrand) {
         console.log(`[Products API] ⚠️  Product ${product.id} (${product.name}) has no brands`);
-        return product;
+        return {
+          ...product,
+          short_description,
+          description
+        };
       }
 
       // Buscar metadata de la marca en el mapa
@@ -141,6 +150,8 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
         console.log(`[Products API] ⚠️  Brand ${firstBrand.id} (${firstBrand.name}) not found in brand map`);
         return {
           ...product,
+          short_description,
+          description,
           primaryBrand: {
             id: firstBrand.id,
             name: firstBrand.name,
@@ -164,6 +175,8 @@ async function injectPrimaryBrand(products: WooCommerceProduct[]): Promise<WooCo
 
       return {
         ...product,
+        short_description,
+        description,
         primaryBrand
       };
     });

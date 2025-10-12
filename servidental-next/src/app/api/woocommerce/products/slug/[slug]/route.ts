@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBrandMap } from '@/server/brands';
+import { sanitizeProductHtml, normalizeDescription } from '@/server/sanitize';
 import type { WooCommerceProduct, PrimaryBrand } from '@/types/woocommerce';
 
 async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams = new URLSearchParams()) {
@@ -43,9 +44,17 @@ async function injectPrimaryBrand(product: WooCommerceProduct): Promise<WooComme
 
     const firstBrand = product.brands?.[0];
 
+    // Sanitizar descripciones HTML
+    const short_description = sanitizeProductHtml(product.short_description || '');
+    const description = sanitizeProductHtml(normalizeDescription(product.description || ''));
+
     if (!firstBrand) {
       console.log(`[Product By Slug API] ⚠️  Product ${product.id} (${product.name}) has no brands`);
-      return product;
+      return {
+        ...product,
+        short_description,
+        description
+      };
     }
 
     const brandMeta = brandMap.get(firstBrand.id);
@@ -54,6 +63,8 @@ async function injectPrimaryBrand(product: WooCommerceProduct): Promise<WooComme
       console.log(`[Product By Slug API] ⚠️  Brand ${firstBrand.id} (${firstBrand.name}) not found in brand map`);
       return {
         ...product,
+        short_description,
+        description,
         primaryBrand: {
           id: firstBrand.id,
           name: firstBrand.name,
@@ -74,6 +85,8 @@ async function injectPrimaryBrand(product: WooCommerceProduct): Promise<WooComme
 
     return {
       ...product,
+      short_description,
+      description,
       primaryBrand
     };
   } catch (error) {
