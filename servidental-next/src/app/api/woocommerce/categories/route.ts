@@ -28,8 +28,8 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
       },
-      // Timeout de 10 segundos
-      signal: AbortSignal.timeout(10000)
+      // Timeout de 30 segundos
+      signal: AbortSignal.timeout(30000)
     });
 
     if (!response.ok) {

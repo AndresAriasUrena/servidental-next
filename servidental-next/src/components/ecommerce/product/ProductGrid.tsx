@@ -39,30 +39,39 @@ function ProductGrid({
 
   const getFiltersFromURL = (): ProductFilters => {
     const filters: ProductFilters = {};
-    
+
     const search = searchParams.get('search');
     if (search) filters.search = search;
-    
+
     const categoriesParam = searchParams.get('categories');
     if (categoriesParam) {
       filters.categories = categoriesParam.split(',').map(Number).filter(Boolean);
     }
-    
+
+    // ============================================
+    // SOPORTE PARA FILTRO DE MARCA DESDE URL
+    // Usado por la página /tienda/marca/[slug]
+    // ============================================
+    const brandSlug = searchParams.get('brand') || pathname.match(/\/marca\/([^\/]+)/)?.[1];
+    if (brandSlug) {
+      filters.brands = [brandSlug];
+    }
+
     const priceMin = searchParams.get('price_min');
     if (priceMin) filters.price_min = parseFloat(priceMin);
-    
+
     const priceMax = searchParams.get('price_max');
     if (priceMax) filters.price_max = parseFloat(priceMax);
-    
+
     const onSale = searchParams.get('on_sale');
     if (onSale === 'true') filters.on_sale = true;
-    
+
     const inStock = searchParams.get('in_stock');
     if (inStock === 'true') filters.in_stock = true;
-    
+
     const page = searchParams.get('page');
     if (page) setCurrentPage(parseInt(page));
-    
+
     return filters;
   };
 
@@ -134,20 +143,26 @@ function ProductGrid({
       
       // Aplicar filtros de repuestos en el frontend
       let productsToShow = allProducts;
-      
+
       if (repuestosFilter === 'repuestos') {
-        productsToShow = allProducts.filter(product => 
-          product.tags.some(tag => 
+        productsToShow = allProducts.filter(product =>
+          product.tags.some(tag =>
             tag.name.toLowerCase().includes('repuesto')
           )
         );
       } else if (repuestosFilter === 'no_repuestos') {
-        productsToShow = allProducts.filter(product => 
-          !product.tags.some(tag => 
+        productsToShow = allProducts.filter(product =>
+          !product.tags.some(tag =>
             tag.name.toLowerCase().includes('repuesto')
           )
         );
       }
+
+      // ============================================
+      // NOTA: El filtro de marcas ya NO se aplica en el frontend
+      // El backend (products API) resuelve brandSlug → brandId
+      // y filtra directamente con product_brand={id}
+      // ============================================
       
       if (!signal?.aborted) {
         setProducts(productsToShow);
@@ -341,16 +356,6 @@ function ProductGrid({
                 Todos los productos
               </button>
               <button
-                onClick={() => handleRepuestosFilterChange('repuestos')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  repuestosFilter === 'repuestos'
-                    ? 'bg-servi_green text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Solo repuestos
-              </button>
-              <button
                 onClick={() => handleRepuestosFilterChange('no_repuestos')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   repuestosFilter === 'no_repuestos'
@@ -359,6 +364,16 @@ function ProductGrid({
                 }`}
               >
                 Equipos principales
+              </button>
+              <button
+                onClick={() => handleRepuestosFilterChange('repuestos')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  repuestosFilter === 'repuestos'
+                    ? 'bg-servi_green text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Solo repuestos
               </button>
             </div>
           </div>

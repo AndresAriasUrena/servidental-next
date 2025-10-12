@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ProductFilters, WooCommerceCategory } from '@/types/woocommerce';
+import { ProductFilters, WooCommerceCategory, WooCommerceBrand } from '@/types/woocommerce';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPriceRange, PRIMARY_CURRENCY } from '@/utils/currency';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -13,10 +13,13 @@ interface ProductFiltersPanelProps {
 }
 
 export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }: ProductFiltersPanelProps) {
-  const { fetchCategories } = useWooCommerce();
+  const { fetchCategories, fetchBrands } = useWooCommerce();
   const [categories, setCategories] = useState<WooCommerceCategory[]>([]);
+  const [brands, setBrands] = useState<WooCommerceBrand[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categoriesExpanded, setCategoriesExpanded] = useState(true); // Siempre abierto por defecto
+  const [brandsLoading, setBrandsLoading] = useState(true);
+  const [categoriesExpanded, setCategoriesExpanded] = useState(true);
+  const [brandsExpanded, setBrandsExpanded] = useState(true);
 
   useEffect(() => {
     async function loadCategories() {
@@ -29,19 +32,46 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
         setLoading(false);
       }
     }
-    
+
     loadCategories();
   }, [fetchCategories]);
+
+  useEffect(() => {
+    async function loadBrands() {
+      try {
+        const response = await fetchBrands();
+        setBrands(response.data || []);
+      } catch (error) {
+        console.error('Error loading brands:', error);
+      } finally {
+        setBrandsLoading(false);
+      }
+    }
+
+    loadBrands();
+  }, [fetchBrands]);
 
   const handleCategoryChange = (categoryId: number) => {
     const currentCategories = filters.categories || [];
     const updatedCategories = currentCategories.includes(categoryId)
       ? currentCategories.filter(id => id !== categoryId)
       : [...currentCategories, categoryId];
-    
+
     onFiltersChange({
       ...filters,
       categories: updatedCategories
+    });
+  };
+
+  const handleBrandChange = (brandSlug: string) => {
+    const currentBrands = filters.brands || [];
+    const updatedBrands = currentBrands.includes(brandSlug)
+      ? currentBrands.filter(slug => slug !== brandSlug)
+      : [...currentBrands, brandSlug];
+
+    onFiltersChange({
+      ...filters,
+      brands: updatedBrands
     });
   };
 
@@ -64,10 +94,10 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
     onFiltersChange({});
   };
 
-  const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock'];
+  const relevantFilterKeys = ['search', 'categories', 'brands', 'price_min', 'price_max', 'on_sale', 'in_stock'];
   const hasActiveFilters = relevantFilterKeys.some(key => {
     const value = filters[key as keyof ProductFilters];
-    if (key === 'categories' && Array.isArray(value)) {
+    if ((key === 'categories' || key === 'brands') && Array.isArray(value)) {
       return value.length > 0;
     }
     return value !== undefined && value !== null && value !== '';
@@ -134,6 +164,48 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
                     />
                     <span className="text-sm text-gray-700">
                       {category.name} ({category.count})
+                    </span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Brands */}
+      <div>
+        <button
+          onClick={() => setBrandsExpanded(!brandsExpanded)}
+          className="flex items-center justify-between w-full text-sm font-medium text-gray-700 mb-3"
+        >
+          <span>Marcas</span>
+          {brandsExpanded ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
+        </button>
+        {brandsExpanded && (
+          <>
+            {brandsLoading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-6 bg-gray-200 rounded animate-pulse"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {brands.map((brand) => (
+                  <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={(filters.brands || []).includes(brand.slug)}
+                      onChange={() => handleBrandChange(brand.slug)}
+                      className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
+                    />
+                    <span className="text-sm text-gray-700">
+                      {brand.name} ({brand.count})
                     </span>
                   </label>
                 ))}
@@ -228,6 +300,20 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
                   <button
                     onClick={() => handleCategoryChange(categoryId)}
                     className="ml-1 text-blue-600 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              ) : null;
+            })}
+            {filters.brands?.map(brandSlug => {
+              const brand = brands.find(b => b.slug === brandSlug);
+              return brand ? (
+                <span key={brandSlug} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
+                  {brand.name}
+                  <button
+                    onClick={() => handleBrandChange(brandSlug)}
+                    className="ml-1 text-purple-600 hover:text-purple-800"
                   >
                     ×
                   </button>

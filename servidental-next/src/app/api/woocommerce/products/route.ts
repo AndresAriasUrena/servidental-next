@@ -5,6 +5,66 @@ const WP_URL = process.env.WOOCOMMERCE_URL;
 const WC_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY;
 const WC_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
 
+// ============================================
+// CACHE PARA MAPEO SLUG → ID DE MARCAS
+// ============================================
+interface BrandMapping {
+  slug: string;
+  id: number;
+}
+
+let brandSlugToIdCache: Map<string, number> | null = null;
+let brandCacheTimestamp = 0;
+const BRAND_CACHE_TTL = 10 * 60 * 1000; // 10 minutos
+
+/**
+ * Resolver slug de marca a ID consultando nuestra API interna de marcas
+ */
+async function resolveBrandSlugToId(slug: string): Promise<number | null> {
+  try {
+    // Verificar si el cache está vigente
+    const now = Date.now();
+    if (brandSlugToIdCache && (now - brandCacheTimestamp) < BRAND_CACHE_TTL) {
+      return brandSlugToIdCache.get(slug) || null;
+    }
+
+    // Cache expirado o inexistente, recargar
+    console.log('[Products API] Reloading brand slug→id mappings...');
+
+    // Llamar a nuestra API interna de marcas
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/woocommerce/brands`, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'ServidentalCR-NextJS/1.0',
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('[Products API] Failed to fetch brands for slug resolution');
+      return null;
+    }
+
+    const result = await response.json();
+    const brands = result.data || [];
+
+    // Construir el mapa slug → id
+    brandSlugToIdCache = new Map();
+    brands.forEach((brand: any) => {
+      brandSlugToIdCache!.set(brand.slug, brand.id);
+    });
+
+    brandCacheTimestamp = now;
+    console.log(`[Products API] ✅ Brand mappings loaded: ${brandSlugToIdCache.size} brands`);
+
+    return brandSlugToIdCache.get(slug) || null;
+  } catch (error) {
+    console.error('[Products API] Error resolving brand slug to ID:', error);
+    return null;
+  }
+}
+
 async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams) {
   // Validar credenciales
   if (!WP_URL || !WC_KEY || !WC_SECRET) {
@@ -28,8 +88,8 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
         'User-Agent': 'ServidentalCR-NextJS/1.0',
         'Accept': 'application/json'
       },
-      // Timeout de 10 segundos
-      signal: AbortSignal.timeout(10000)
+      // Timeout de 30 segundos
+      signal: AbortSignal.timeout(30000)
     });
 
     if (!response.ok) {
@@ -60,6 +120,42 @@ export async function GET(request: NextRequest) {
 
     console.log('[WooCommerce API] Products request params:', Object.fromEntries(searchParams.entries()));
 
+    // ============================================
+    // RESOLUCIÓN DE BRAND SLUG → ID
+    // ============================================
+    const brandSlug = searchParams.get('brand');
+
+    if (brandSlug) {
+      console.log(`[Products API] Resolving brand slug: ${brandSlug}`);
+
+      const brandId = await resolveBrandSlugToId(brandSlug);
+
+      if (brandId === null) {
+        console.warn(`[Products API] Brand slug "${brandSlug}" not found`);
+        // Retornar resultado vacío en lugar de error 404
+        return NextResponse.json({
+          data: [],
+          total: 0,
+          total_pages: 0,
+          current_page: 1,
+          per_page: parseInt(searchParams.get('per_page') || '12'),
+          message: `Brand "${brandSlug}" not found`
+        });
+      }
+
+      console.log(`[Products API] ✅ Brand "${brandSlug}" resolved to ID: ${brandId}`);
+
+      // Remover el parámetro 'brand' (slug) y agregar 'brand' (id)
+      // IMPORTANTE: WooCommerce usa 'brand' (no 'product_brand')
+      searchParams.delete('brand');
+      searchParams.set('brand', brandId.toString());
+
+      console.log(`[Products API] 🔍 Final params before WooCommerce:`, Object.fromEntries(searchParams.entries()));
+    }
+
+    // ============================================
+    // LLAMADA A WOOCOMMERCE
+    // ============================================
     const response = await makeWooCommerceRequest('products', searchParams) as any;
 
     console.log(`[WooCommerce API] Success: ${response.data.length} products, total: ${response.total}`);

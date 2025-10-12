@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import ProductGrid from '@/components/ecommerce/product/ProductGrid';
+import StoreBenefitsBanner from '@/components/ecommerce/ui/StoreBenefitsBanner';
 
 export const metadata = {
   title: 'Tienda | ServidentalCR - Equipo Médico Dental',
@@ -41,6 +42,8 @@ export default function TiendaPage() {
             alta calidad. Con 18 años de experiencia en Costa Rica.
           </p>
         </div>
+
+        <StoreBenefitsBanner />
 
         <Suspense fallback={<ProductGridSkeleton />}>
           <ProductGrid instanceKey="shop" />

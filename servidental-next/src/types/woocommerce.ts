@@ -164,6 +164,19 @@ export interface WooCommerceAttribute {
 }
 
 // ============================================
+// BRAND TYPES (Product Attribute Terms)
+// ============================================
+
+export interface WooCommerceBrand {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  menu_order: number;
+  count: number;
+}
+
+// ============================================
 // ORDER TYPES
 // ============================================
 
@@ -286,6 +299,7 @@ export interface Cart {
 // Para filtros de productos
 export interface ProductFilters {
   categories?: number[];
+  brands?: string[]; // Slugs de marcas
   attributes?: { [key: string]: string[] };
   price_min?: number;
   price_max?: number;

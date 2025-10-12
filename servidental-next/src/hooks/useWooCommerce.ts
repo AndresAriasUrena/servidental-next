@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { WooCommerceProduct, WooCommerceCategory, PaginatedResponse } from '@/types/woocommerce';
+import { WooCommerceProduct, WooCommerceCategory, WooCommerceBrand, PaginatedResponse } from '@/types/woocommerce';
 
 export function useWooCommerce() {
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,16 @@ export function useWooCommerce() {
 
     if (filters.categories && Array.isArray(filters.categories) && filters.categories.length > 0) {
       params.category = filters.categories.join(',');
+    }
+
+    // ============================================
+    // FILTRO DE MARCAS: Pasar slug al backend
+    // El backend resolverá slug → id y usará product_brand={id}
+    // ============================================
+    if (filters.brands && Array.isArray(filters.brands) && filters.brands.length > 0) {
+      // Por ahora solo soportamos una marca a la vez
+      // Si hay múltiples, usar la primera
+      params.brand = filters.brands[0];
     }
 
     if (filters.price_min !== undefined) {
@@ -120,13 +130,37 @@ export function useWooCommerce() {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const queryParams = new URLSearchParams({ per_page: '100' });
       const response = await makeRequest('categories', queryParams);
       return response;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error fetching categories';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [makeRequest]);
+
+  /**
+   * Obtener marcas con conteos reales desde la API
+   * NO recalcular conteos en el cliente - vienen listos desde el backend
+   */
+  const fetchBrands = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Llamar directamente sin parámetros - el backend maneja el per_page
+      const response = await makeRequest('brands', new URLSearchParams());
+
+      // La API ya devuelve { data: [...], total: N, cached: boolean }
+      // Los conteos (count) ya están calculados correctamente
+      return response;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Error fetching brands';
       setError(errorMessage);
       throw err;
     } finally {
@@ -184,6 +218,7 @@ export function useWooCommerce() {
     fetchProduct,
     fetchProductBySlug,
     fetchCategories,
+    fetchBrands,
     searchProducts
   };
 }
