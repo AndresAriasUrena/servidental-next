@@ -198,10 +198,10 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full overflow-x-hidden">
       {/* Resumen */}
       {summary.count > 0 && (
-        <div className="bg-gray-50 rounded-lg p-6">
+        <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
           <div className="flex items-center gap-6">
             <div className="text-center">
               <div className="text-4xl font-bold text-gray-900">{summary.average.toFixed(1)}</div>
@@ -237,27 +237,27 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       {reviews.length > 0 && (
         <div className="space-y-6">
           {reviews.map((review) => (
-            <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
-              <div className="flex items-start gap-4">
+            <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0 w-full">
+              <div className="flex items-start gap-3 sm:gap-4">
                 {/* Avatar */}
                 <div className="flex-shrink-0">
                   {review.reviewerAvatarUrl ? (
                     <img
                       src={review.reviewerAvatarUrl}
                       alt={review.reviewer}
-                      className="w-12 h-12 rounded-full"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-servi_green text-white flex items-center justify-center font-semibold">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-servi_green text-white flex items-center justify-center font-semibold text-sm">
                       {getInitials(review.reviewer)}
                     </div>
                   )}
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 overflow-hidden">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-gray-900">{review.reviewer}</span>
+                    <span className="font-semibold text-gray-900 break-words">{review.reviewer}</span>
                     {review.verified && (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         Compra verificada
@@ -265,12 +265,12 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 mt-1">
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
                     {renderStars(review.rating, 'sm')}
                     <span className="text-sm text-gray-500">{formatDate(review.date)}</span>
                   </div>
 
-                  <div className="mt-3 text-gray-700 whitespace-pre-wrap">{review.review}</div>
+                  <div className="mt-3 text-gray-700 whitespace-pre-wrap break-words overflow-wrap-anywhere">{review.review}</div>
                 </div>
               </div>
             </div>
@@ -292,8 +292,8 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       )}
 
       {/* Formulario */}
-      <div className="border-t border-gray-200 pt-8">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">Escribe tu valoración</h3>
+      <div className="border-t border-gray-200 pt-8 w-full">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Escribe tu valoración</h3>
 
         {submitSuccess && (
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
@@ -319,7 +319,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
             autoComplete="off"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <input
               type="text"
               placeholder="Nombre *"
@@ -327,7 +327,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
               maxLength={100}
               value={formData.name}
               onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-              className="border border-gray-300 rounded-md px-3 py-2"
+              className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
 
             <input
@@ -336,7 +336,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
               required
               value={formData.email}
               onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-              className="border border-gray-300 rounded-md px-3 py-2"
+              className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
 

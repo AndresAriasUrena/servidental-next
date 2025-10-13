@@ -15,6 +15,7 @@ import { ShareButton } from '../ui/ShareButton';
 import { ProductCard } from './ProductCard';
 import { QuoteFormModal } from '../quote/QuoteFormModal';
 import { ProductTabs } from './ProductTabs';
+import TrustBadges from '@/components/common/TrustBadges';
 
 // Helper functions for media handling
 const getYouTubeVideoId = (url: string): string | null => {
@@ -587,6 +588,9 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                 </div>
               )}
             </div>
+
+            {/* Trust Badges */}
+            <TrustBadges variant="pdp" />
           </div>
 
           {/* Información del Producto - Secuencial */}

@@ -22,13 +22,13 @@ export function ProductTabs({ descriptionHtml, resources, productId, reviewCount
   const hasResources = resources && resources.length > 0;
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       {/* Tab Headers - Sticky */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
-        <div className="flex gap-1">
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 overflow-x-auto">
+        <div className="flex gap-1 min-w-max">
           <button
             onClick={() => setActiveTab('description')}
-            className={`flex-1 px-6 py-3 font-medium text-sm transition-all ${
+            className={`flex-1 min-w-fit px-3 sm:px-6 py-3 font-medium text-xs sm:text-sm transition-all whitespace-nowrap ${
               activeTab === 'description'
                 ? 'text-servi_green border-b-2 border-servi_green bg-servi_light/30'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -40,19 +40,20 @@ export function ProductTabs({ descriptionHtml, resources, productId, reviewCount
           {hasResources && (
             <button
               onClick={() => setActiveTab('resources')}
-              className={`flex-1 px-6 py-3 font-medium text-sm transition-all ${
+              className={`flex-1 min-w-fit px-3 sm:px-6 py-3 font-medium text-xs sm:text-sm transition-all whitespace-nowrap ${
                 activeTab === 'resources'
                   ? 'text-servi_green border-b-2 border-servi_green bg-servi_light/30'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
-              Documentos y Recursos ({resources.length})
+              <span className="hidden sm:inline">Documentos y Recursos ({resources.length})</span>
+              <span className="sm:hidden">Docs ({resources.length})</span>
             </button>
           )}
 
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`flex-1 px-6 py-3 font-medium text-sm transition-all ${
+            className={`flex-1 min-w-fit px-3 sm:px-6 py-3 font-medium text-xs sm:text-sm transition-all whitespace-nowrap ${
               activeTab === 'reviews'
                 ? 'text-servi_green border-b-2 border-servi_green bg-servi_light/30'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'

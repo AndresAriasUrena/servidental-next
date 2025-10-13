@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart } from '@/hooks/useCart';
 import { formatPrice } from '@/utils/currency';
 import { XMarkIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import TrustBadges from '@/components/common/TrustBadges';
 
 export function Cart() {
   const { cart, updateQuantity, removeFromCart, clearCart, isLoading } = useCart();
@@ -184,6 +185,9 @@ export function Cart() {
             >
               Continuar comprando
             </Link>
+
+            {/* Trust Badges */}
+            <TrustBadges variant="cart" />
           </div>
         </div>
       </div>

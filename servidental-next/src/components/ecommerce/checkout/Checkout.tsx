@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
 import { formatPrice } from '@/utils/currency';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
+import TrustBadges from '@/components/common/TrustBadges';
 
 // Costa Rica geographic data
 const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
@@ -748,6 +749,9 @@ export default function Checkout() {
               >
                 {isSubmitting ? 'Procesando...' : 'Realizar pedido'}
               </button>
+
+              {/* Trust Badges */}
+              <TrustBadges variant="checkout" />
 
               {/* Información importante */}
               <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
