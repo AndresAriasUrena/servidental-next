@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/hooks/useCart';
@@ -9,6 +9,7 @@ import { XMarkIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 export function Cart() {
   const { cart, updateQuantity, removeFromCart, clearCart, isLoading } = useCart();
+  const [quantityError, setQuantityError] = useState<{ [key: number]: string }>({});
 
   if (cart.items.length === 0) {
     return (
@@ -84,22 +85,47 @@ export function Cart() {
               </div>
 
               {/* Quantity Controls */}
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  disabled={isLoading}
-                  className="p-1 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                >
-                  <MinusIcon className="w-4 h-4" />
-                </button>
-                <span className="w-8 text-center">{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  disabled={isLoading}
-                  className="p-1 rounded-md hover:bg-gray-100 disabled:opacity-50"
-                >
-                  <PlusIcon className="w-4 h-4" />
-                </button>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => {
+                      updateQuantity(item.id, item.quantity - 1);
+                      setQuantityError(prev => {
+                        const newErrors = { ...prev };
+                        delete newErrors[item.id];
+                        return newErrors;
+                      });
+                    }}
+                    disabled={isLoading}
+                    className="p-1 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                  >
+                    <MinusIcon className="w-4 h-4" />
+                  </button>
+                  <span className="w-8 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => {
+                      const result = updateQuantity(item.id, item.quantity + 1);
+                      if (!result.success && result.error) {
+                        setQuantityError(prev => ({ ...prev, [item.id]: result.error || '' }));
+                      } else {
+                        setQuantityError(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors[item.id];
+                          return newErrors;
+                        });
+                      }
+                    }}
+                    disabled={isLoading}
+                    className="p-1 rounded-md hover:bg-gray-100 disabled:opacity-50"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                  </button>
+                </div>
+                {quantityError[item.id] && (
+                  <span className="text-xs text-red-600 mt-1">
+                    Cantidad máxima
+                  </span>
+                )}
               </div>
 
               {/* Item Total */}

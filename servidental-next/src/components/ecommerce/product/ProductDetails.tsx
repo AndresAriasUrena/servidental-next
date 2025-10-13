@@ -7,6 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
+import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { ShareButton } from '../ui/ShareButton';
@@ -119,7 +120,8 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const [relatedProducts, setRelatedProducts] = useState<WooCommerceProduct[]>([]);
   const [loadingRelated, setLoadingRelated] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const { addToCart, isLoading: cartLoading } = useCart();
+  const [stockError, setStockError] = useState<string | null>(null);
+  const { addToCart, isLoading: cartLoading, getCartQuantity } = useCart();
   const { fetchProductBySlug, fetchProducts } = useWooCommerce();
 
   useEffect(() => {
@@ -172,14 +174,47 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
 
   const handleAddToCart = async () => {
     if (!product) return;
-    
+
+    setStockError(null);
+
     try {
-      await addToCart(product, quantity);
-      // Emit custom event to open mini cart
-      window.dispatchEvent(new CustomEvent('openMiniCart'));
+      const result = await addToCart(product, quantity);
+      if (result.success) {
+        // Reset quantity and emit custom event to open mini cart
+        setQuantity(1);
+        window.dispatchEvent(new CustomEvent('openMiniCart'));
+      } else {
+        // Show generic error message
+        setStockError(result.error || 'No se pudo agregar al carrito');
+      }
     } catch (error) {
       console.error('Error adding to cart:', error);
+      setStockError('Error al agregar al carrito');
     }
+  };
+
+  // Calculate max quantity based on stock and current cart
+  const getMaxQuantityForSelector = (): number => {
+    if (!product) return 99;
+    const currentCartQty = getCartQuantity(product.id);
+    return getMaxPurchasable(product, currentCartQty);
+  };
+
+  // Handle quantity increase with stock validation
+  const handleIncreaseQuantity = () => {
+    const maxQty = getMaxQuantityForSelector();
+    if (quantity < maxQty) {
+      setQuantity(quantity + 1);
+      setStockError(null);
+    } else {
+      setStockError('Cantidad máxima alcanzada');
+    }
+  };
+
+  // Handle quantity decrease
+  const handleDecreaseQuantity = () => {
+    setQuantity(Math.max(1, quantity - 1));
+    setStockError(null);
   };
 
   const handleQuoteRequest = () => {
@@ -438,26 +473,29 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             </div>
 
             {/* Controles de Compra */}
-            <div className="flex items-center gap-4">
-              {!requiresQuote(product) && product.stock_status === 'instock' && (
-                  <div className="flex items-center">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 border border-gray-300 rounded-l-lg hover:bg-gray-50 flex items-center justify-center"
-                    >
-                      <MinusIcon className="w-4 h-4" />
-                    </button>
-                    <div className="w-16 h-10 border-t border-b border-gray-300 flex items-center justify-center font-medium">
-                      {quantity}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-4">
+                {!requiresQuote(product) && product.stock_status === 'instock' && (
+                    <div className="flex items-center">
+                      <button
+                        onClick={handleDecreaseQuantity}
+                        disabled={quantity <= 1}
+                        className="w-10 h-10 border border-gray-300 rounded-l-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                      >
+                        <MinusIcon className="w-4 h-4" />
+                      </button>
+                      <div className="w-16 h-10 border-t border-b border-gray-300 flex items-center justify-center font-medium">
+                        {quantity}
+                      </div>
+                      <button
+                        onClick={handleIncreaseQuantity}
+                        disabled={quantity >= getMaxQuantityForSelector()}
+                        className="w-10 h-10 border border-gray-300 rounded-r-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+                      >
+                        <PlusIcon className="w-4 h-4" />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-10 h-10 border border-gray-300 rounded-r-lg hover:bg-gray-50 flex items-center justify-center"
-                    >
-                      <PlusIcon className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+                  )}
 
                 {requiresQuote(product) ? (
                   <button
@@ -489,6 +527,14 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                     Solicitar Cotización
                   </button>
                 )}
+              </div>
+
+              {/* Stock Error Message */}
+              {stockError && (
+                <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                  {stockError}
+                </div>
+              )}
             </div>
           </div>
 
