@@ -7,14 +7,17 @@ import {
   ArrowDownTrayIcon,
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
+import { ProductReviews } from './ProductReviews';
 
 interface ProductTabsProps {
   descriptionHtml: string;
   resources: ProductResource[];
+  productId: number;
+  reviewCount: number;
 }
 
-export function ProductTabs({ descriptionHtml, resources }: ProductTabsProps) {
-  const [activeTab, setActiveTab] = useState<'description' | 'resources'>('description');
+export function ProductTabs({ descriptionHtml, resources, productId, reviewCount }: ProductTabsProps) {
+  const [activeTab, setActiveTab] = useState<'description' | 'resources' | 'reviews'>('description');
 
   const hasResources = resources && resources.length > 0;
 
@@ -46,6 +49,17 @@ export function ProductTabs({ descriptionHtml, resources }: ProductTabsProps) {
               Documentos y Recursos ({resources.length})
             </button>
           )}
+
+          <button
+            onClick={() => setActiveTab('reviews')}
+            className={`flex-1 px-6 py-3 font-medium text-sm transition-all ${
+              activeTab === 'reviews'
+                ? 'text-servi_green border-b-2 border-servi_green bg-servi_light/30'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            }`}
+          >
+            Valoraciones ({reviewCount})
+          </button>
         </div>
       </div>
 
@@ -69,6 +83,10 @@ export function ProductTabs({ descriptionHtml, resources }: ProductTabsProps) {
               ))}
             </div>
           </div>
+        )}
+
+        {activeTab === 'reviews' && (
+          <ProductReviews productId={productId} />
         )}
       </div>
     </div>

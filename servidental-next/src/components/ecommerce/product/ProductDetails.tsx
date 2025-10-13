@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
 import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
@@ -273,8 +274,58 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
 
+  // Generate JSON-LD for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.images?.[0]?.src ?? '',
+    // Quita etiquetas HTML para no romper el JSON-LD
+    description: (product.short_description || product.description || '').replace(/<[^>]+>/g, ''),
+    sku: product.sku ?? '',
+    brand: {
+      '@type': 'Brand',
+      name: product.primaryBrand?.name || product.brands?.[0]?.name || 'ServiDental',
+    },
+    ...(product.rating_count && Number(rating) > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Number(rating).toFixed(1),
+            reviewCount: product.rating_count,
+          },
+        }
+      : {}),
+    ...(Number(price) > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            url: `https://servidentalcr.com/tienda/${product.slug}`,
+            priceCurrency: 'USD',
+            price: Number(price).toFixed(2),
+            availability:
+              product.stock_status === 'instock'
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+          },
+        }
+      : {}),
+  } as const;
+
   return (
-    <div className="text-black max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
+    <>
+      {/* JSON-LD for SEO */}
+      <Script
+        id={`jsonld-product-${product.id}`}
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          // Escapa "<" para no romper el HTML
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+
+      <div className="text-black max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
@@ -579,6 +630,8 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             <ProductTabs
               descriptionHtml={product.description || ''}
               resources={product.resources || []}
+              productId={product.id}
+              reviewCount={product.rating_count || 0}
             />
 
             {/* Especificaciones */}
@@ -663,6 +716,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
         />
       )}
     </div>
+    </>
   );
 }
 
