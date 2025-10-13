@@ -258,7 +258,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
               })}
               className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
             />
-            <span className="text-sm text-gray-700">En oferta</span>
+            <span className="text-sm text-gray-700">Black November</span>
           </label>
           
           <label className="flex items-center space-x-2 cursor-pointer">
