@@ -17,6 +17,7 @@ export default function TrustBadges({ variant = "pdp" }: { variant?: Variant }) 
   const wrap = variant === "footer" ? "justify-start" : variant === "checkout" ? "justify-start" : "justify-center";
   const tone = variant === "footer" ? "opacity-70 hover:opacity-100" : "opacity-80 hover:opacity-100";
   const gap = "gap-4 sm:gap-5";
+  const badgeBackground = variant === "footer" ? "bg-white rounded px-2 py-1" : "";
 
   return (
     <div
@@ -25,7 +26,7 @@ export default function TrustBadges({ variant = "pdp" }: { variant?: Variant }) 
     >
       <div className={`flex flex-wrap ${wrap} ${gap} ${tone} transition-opacity duration-200`}>
         {BADGES.map(b => (
-          <div key={b.key} className="flex items-center" title={b.label}>
+          <div key={b.key} className={`flex items-center ${badgeBackground}`} title={b.label}>
             <Image
               src={b.src}
               alt={b.label}
