@@ -142,18 +142,28 @@ function ProductGrid({
       
       if (signal?.aborted) return;
       console.log(`Total productos cargados: ${allProducts.length}`);
-      
-      // Aplicar filtros de repuestos en el frontend
+
+      // Aplicar filtros en el frontend
       let productsToShow = allProducts;
 
+      // Filtro de Black November (etiqueta "noviembre")
+      if (filtersToUse.on_sale) {
+        productsToShow = productsToShow.filter(product =>
+          product.tags?.some(tag =>
+            tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
+          )
+        );
+      }
+
+      // Filtro de repuestos
       if (repuestosFilter === 'repuestos') {
-        productsToShow = allProducts.filter(product =>
+        productsToShow = productsToShow.filter(product =>
           product.tags.some(tag =>
             tag.name.toLowerCase().includes('repuesto')
           )
         );
       } else if (repuestosFilter === 'no_repuestos') {
-        productsToShow = allProducts.filter(product =>
+        productsToShow = productsToShow.filter(product =>
           !product.tags.some(tag =>
             tag.name.toLowerCase().includes('repuesto')
           )

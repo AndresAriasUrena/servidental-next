@@ -106,6 +106,9 @@ const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
   }
 };
 
+// Constante configurable para costo de envío fuera GAM
+const SHIPPING_COST_OUTSIDE_GAM = 9;
+
 interface CheckoutFormData {
   billing: BillingAddress;
   shipping: ShippingAddress;
@@ -131,7 +134,7 @@ interface CheckoutFormData {
       other_details: string;
     };
   };
-  shipping_option: 'messenger' | 'pickup' | 'other';
+  shipping_option: 'messenger' | 'pickup' | 'other' | 'gam_free' | 'outside_gam';
   shipping_other_details: string;
   // Nuevos campos de datos de contacto opcionales
   contact_data: {
@@ -141,9 +144,25 @@ interface CheckoutFormData {
   };
 }
 
+/**
+ * Helper para detectar si un producto es equipo (no repuesto)
+ * Considera repuesto si tiene tag "repuesto" o "repuestos" (case-insensitive)
+ * Todo lo demás se considera equipo
+ */
+const isEquipment = (product: any): boolean => {
+  const hasRepuestoTag = product.tags?.some(
+    (tag: any) => tag.name?.toLowerCase().includes('repuesto')
+  );
+  return !hasRepuestoTag;
+};
+
 export default function Checkout() {
   const { cart } = useCart();
   const [showTilopayCheckout, setShowTilopayCheckout] = useState(false);
+
+  // Detectar si el carrito tiene equipos (al menos 1)
+  const hasEquipment = cart.items.some(item => isEquipment(item));
+
   const [formData, setFormData] = useState<CheckoutFormData>({
     billing: {
       first_name: '',
@@ -191,7 +210,7 @@ export default function Checkout() {
         other_details: ''
       }
     },
-    shipping_option: 'messenger',
+    shipping_option: hasEquipment ? 'gam_free' : 'messenger', // Default basado en tipo de carrito
     shipping_other_details: '',
     contact_data: {
       name: '',
@@ -225,7 +244,9 @@ export default function Checkout() {
   };
 
   const getShippingCost = () => {
-    return formData.shipping_option === 'messenger' ? 9 : 0;
+    if (formData.shipping_option === 'outside_gam') return SHIPPING_COST_OUTSIDE_GAM;
+    if (formData.shipping_option === 'messenger') return SHIPPING_COST_OUTSIDE_GAM;
+    return 0; // gam_free, pickup, other = sin costo
   };
 
   const getTotalWithShipping = () => {
@@ -572,83 +593,193 @@ export default function Checkout() {
                 Opciones de envío
               </h2>
               <div className="space-y-4">
-                <div className="border border-gray-300 rounded-md p-4">
-                  <label className="flex items-start space-x-3">
-                    <input
-                      type="radio"
-                      name="shipping_option"
-                      value="messenger"
-                      checked={formData.shipping_option === 'messenger'}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        shipping_option: e.target.value as 'messenger' | 'pickup' | 'other'
-                      }))}
-                      className="mt-1"
-                    />
-                    <div>
-                      <div className="font-medium">Envío por mensajería</div>
-                      <div className="text-sm text-gray-500">
-                        Con un costo adicional de $9 (tarifa estandarizada)
-                      </div>
-                    </div>
-                  </label>
-                </div>
-
-                <div className="border border-gray-300 rounded-md p-4">
-                  <label className="flex items-start space-x-3">
-                    <input
-                      type="radio"
-                      name="shipping_option"
-                      value="pickup"
-                      checked={formData.shipping_option === 'pickup'}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        shipping_option: e.target.value as 'messenger' | 'pickup' | 'other'
-                      }))}
-                      className="mt-1"
-                    />
-                    <div>
-                      <div className="font-medium">Retiro en instalaciones</div>
-                      <div className="text-sm text-gray-500">
-                        Sin costo adicional, en nuestro showroom de San Pedro
-                      </div>
-                    </div>
-                  </label>
-                </div>
-
-                <div className="border border-gray-300 rounded-md p-4">
-                  <label className="flex items-start space-x-3">
-                    <input
-                      type="radio"
-                      name="shipping_option"
-                      value="other"
-                      checked={formData.shipping_option === 'other'}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        shipping_option: e.target.value as 'messenger' | 'pickup' | 'other'
-                      }))}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">Otro</div>
-                      <div className="text-sm text-gray-500 mb-2">
-                        Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente)
-                      </div>
-                      {formData.shipping_option === 'other' && (
-                        <textarea
-                          placeholder="Describa su preferencia de envío..."
-                          rows={3}
-                          value={formData.shipping_other_details}
+                {hasEquipment ? (
+                  // Opciones cuando hay equipos en el carrito
+                  <>
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="gam_free"
+                          checked={formData.shipping_option === 'gam_free'}
                           onChange={(e) => setFormData(prev => ({
                             ...prev,
-                            shipping_other_details: e.target.value
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
                           }))}
-                          className="w-full border border-gray-300 rounded-md px-3 py-2"
+                          className="mt-1"
                         />
-                      )}
+                        <div>
+                          <div className="font-medium">Envío dentro del Área Metropolitana</div>
+                          <div className="text-sm text-gray-500">
+                            Gratuito
+                          </div>
+                        </div>
+                      </label>
                     </div>
-                  </label>
-                </div>
+
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="outside_gam"
+                          checked={formData.shipping_option === 'outside_gam'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div>
+                          <div className="font-medium">Envío fuera del Área Metropolitana</div>
+                          <div className="text-sm text-gray-500">
+                            Con un costo adicional de $9 (tarifa estandarizada)
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="pickup"
+                          checked={formData.shipping_option === 'pickup'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div>
+                          <div className="font-medium">Retiro en instalaciones</div>
+                          <div className="text-sm text-gray-500">
+                            Sin costo adicional, en nuestro showroom de San Pedro
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="other"
+                          checked={formData.shipping_option === 'other'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium">Otro</div>
+                          <div className="text-sm text-gray-500 mb-2">
+                            Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente)
+                          </div>
+                          {formData.shipping_option === 'other' && (
+                            <textarea
+                              placeholder="Describa su preferencia de envío... *"
+                              rows={3}
+                              required
+                              value={formData.shipping_other_details}
+                              onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                shipping_other_details: e.target.value
+                              }))}
+                              className="w-full border border-gray-300 rounded-md px-3 py-2"
+                            />
+                          )}
+                        </div>
+                      </label>
+                    </div>
+                  </>
+                ) : (
+                  // Opciones cuando solo hay repuestos en el carrito
+                  <>
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="messenger"
+                          checked={formData.shipping_option === 'messenger'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div>
+                          <div className="font-medium">Envío por mensajería</div>
+                          <div className="text-sm text-gray-500">
+                            Con un costo adicional de $9 (tarifa estandarizada)
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="pickup"
+                          checked={formData.shipping_option === 'pickup'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div>
+                          <div className="font-medium">Retiro en instalaciones</div>
+                          <div className="text-sm text-gray-500">
+                            Sin costo adicional, en nuestro showroom de San Pedro
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div className="border border-gray-300 rounded-md p-4">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="radio"
+                          name="shipping_option"
+                          value="other"
+                          checked={formData.shipping_option === 'other'}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
+                          }))}
+                          className="mt-1"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium">Otro</div>
+                          <div className="text-sm text-gray-500 mb-2">
+                            Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente)
+                          </div>
+                          {formData.shipping_option === 'other' && (
+                            <textarea
+                              placeholder="Describa su preferencia de envío... *"
+                              rows={3}
+                              required
+                              value={formData.shipping_other_details}
+                              onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                shipping_other_details: e.target.value
+                              }))}
+                              className="w-full border border-gray-300 rounded-md px-3 py-2"
+                            />
+                          )}
+                        </div>
+                      </label>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -721,8 +852,12 @@ export default function Checkout() {
                 <div className="flex justify-between">
                   <span>Envío</span>
                   <span>
-                    {formData.shipping_option === 'messenger' 
-                      ? '$9' 
+                    {formData.shipping_option === 'gam_free'
+                      ? 'Gratis'
+                      : formData.shipping_option === 'outside_gam'
+                      ? '$9'
+                      : formData.shipping_option === 'messenger'
+                      ? '$9'
                       : formData.shipping_option === 'pickup'
                       ? 'Gratis'
                       : 'Por coordinar'
@@ -733,7 +868,7 @@ export default function Checkout() {
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
                     <span>
-                      {formData.shipping_option === 'messenger' 
+                      {getShippingCost() > 0
                         ? formatPrice(getTotalWithShipping())
                         : formatPrice(cart.total)
                       }
@@ -802,7 +937,7 @@ export default function Checkout() {
                   quantity: item.quantity,
                   sku: item.sku,
                 })),
-                total: formData.shipping_option === 'messenger' ? getTotalWithShipping() : cart.total,
+                total: getShippingCost() > 0 ? getTotalWithShipping() : cart.total,
               }}
             />
           </div>

@@ -8,7 +8,7 @@ export default function StoreBenefitsBanner() {
     },
     {
       icon: TruckIcon,
-      text: 'Envío gratuito dentro del GAM',
+      text: 'Envío gratuito dentro del Área Metropolitana',
     },
     {
       icon: WrenchScrewdriverIcon,
@@ -26,9 +26,9 @@ export default function StoreBenefitsBanner() {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-2"
+              className="flex flex-row items-center justify-center gap-3 sm:gap-2"
             >
-              <benefit.icon className="h-10 w-10 sm:h-8 sm:w-8 text-servi_green flex-shrink-0" />
+              <benefit.icon className="h-8 w-8 text-servi_green flex-shrink-0" />
               <span className="text-gray-700 text-center sm:text-left text-sm sm:text-base">
                 {benefit.text}
               </span>

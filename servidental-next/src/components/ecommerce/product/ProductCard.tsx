@@ -45,6 +45,11 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
   const salePrice = parsePrice(product.sale_price);
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
 
+  // Detectar si el producto tiene la etiqueta "noviembre" (Black November)
+  const hasBlackNovemberTag = product.tags?.some(
+    tag => tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
+  );
+
   return (
     <>
       <Link href={`/tienda/${product.slug}`} className="group block h-full">
@@ -64,7 +69,14 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
               <div className="text-gray-400">Sin imagen</div>
             </div>
           )}
-          
+
+          {/* Black November Badge (esquina superior izquierda) */}
+          {hasBlackNovemberTag && (
+            <div className="absolute top-2 left-2 bg-black text-white text-xs font-semibold px-2.5 py-1 rounded uppercase z-10">
+              DESCUENTO
+            </div>
+          )}
+
           {/* Sale Badge */}
           {productOnSale && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
@@ -86,7 +98,7 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
               </div>
             </div>
           )}
-          
+
         </div>
 
         {/* Product Info */}
