@@ -8,7 +8,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ProductFiltersPanelProps {
   filters: ProductFilters;
-  onFiltersChange: (filters: ProductFilters) => void;
+  onFiltersChange: (filters: ProductFilters, shouldCloseMobile?: boolean) => void;
   className?: string;
 }
 
@@ -20,6 +20,16 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
   const [brandsLoading, setBrandsLoading] = useState(true);
   const [categoriesExpanded, setCategoriesExpanded] = useState(true);
   const [brandsExpanded, setBrandsExpanded] = useState(true);
+
+  // Estado local para inputs de precio (evita cerrar modal en mobile al escribir)
+  const [priceMinInput, setPriceMinInput] = useState(String(filters.price_min || ''));
+  const [priceMaxInput, setPriceMaxInput] = useState(String(filters.price_max || ''));
+
+  // Sincronizar estado local con filtros externos
+  useEffect(() => {
+    setPriceMinInput(String(filters.price_min || ''));
+    setPriceMaxInput(String(filters.price_max || ''));
+  }, [filters.price_min, filters.price_max]);
 
   useEffect(() => {
     async function loadCategories() {
@@ -75,12 +85,18 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
     });
   };
 
-  const handlePriceChange = (min: string, max: string) => {
+  const applyPriceFilter = () => {
     onFiltersChange({
       ...filters,
-      price_min: min ? parseFloat(min) : undefined,
-      price_max: max ? parseFloat(max) : undefined
-    });
+      price_min: priceMinInput ? parseFloat(priceMinInput) : undefined,
+      price_max: priceMaxInput ? parseFloat(priceMaxInput) : undefined
+    }, false); // No cerrar modal en mobile
+  };
+
+  const handlePriceKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      applyPriceFilter();
+    }
   };
 
   const handleSearchChange = (search: string) => {
@@ -220,13 +236,15 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
         <label className="block text-sm font-medium text-gray-700 mb-3">
           Rango de precios ({PRIMARY_CURRENCY.symbol})
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mb-2">
           <div>
             <input
               type="number"
               placeholder="Mínimo"
-              value={filters.price_min || ''}
-              onChange={(e) => handlePriceChange(e.target.value, String(filters.price_max || ''))}
+              value={priceMinInput}
+              onChange={(e) => setPriceMinInput(e.target.value)}
+              onBlur={applyPriceFilter}
+              onKeyDown={handlePriceKeyDown}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-servi_green focus:border-transparent text-sm"
             />
           </div>
@@ -234,12 +252,20 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
             <input
               type="number"
               placeholder="Máximo"
-              value={filters.price_max || ''}
-              onChange={(e) => handlePriceChange(String(filters.price_min || ''), e.target.value)}
+              value={priceMaxInput}
+              onChange={(e) => setPriceMaxInput(e.target.value)}
+              onBlur={applyPriceFilter}
+              onKeyDown={handlePriceKeyDown}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-servi_green focus:border-transparent text-sm"
             />
           </div>
         </div>
+        <button
+          onClick={applyPriceFilter}
+          className="w-full px-3 py-2 text-sm bg-servi_green text-white rounded-md hover:bg-servi_dark transition-colors"
+        >
+          Aplicar rango
+        </button>
       </div>
 
       {/* Special Filters */}
@@ -324,7 +350,15 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                 {formatPriceRange(filters.price_min, filters.price_max)}
                 <button
-                  onClick={() => handlePriceChange('', '')}
+                  onClick={() => {
+                    setPriceMinInput('');
+                    setPriceMaxInput('');
+                    onFiltersChange({
+                      ...filters,
+                      price_min: undefined,
+                      price_max: undefined
+                    }, false);
+                  }}
                   className="ml-1 text-green-600 hover:text-green-800"
                 >
                   ×

@@ -16,14 +16,16 @@ interface ProductGridProps {
   instanceKey?: string;
 }
 
-function ProductGrid({ 
-  initialProducts = [], 
-  showFilters = true, 
+function ProductGrid({
+  initialProducts = [],
+  showFilters = true,
   perPage = 12,
   categoryId,
   instanceKey = 'shop'
 }: ProductGridProps) {
   const [products, setProducts] = useState<WooCommerceProduct[]>(initialProducts);
+  const [allProducts, setAllProducts] = useState<WooCommerceProduct[]>([]); // Todos los productos cargados
+  const [displayedCount, setDisplayedCount] = useState(6); // Cantidad visible inicial
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -163,9 +165,11 @@ function ProductGrid({
       // El backend (products API) resuelve brandSlug → brandId
       // y filtra directamente con product_brand={id}
       // ============================================
-      
+
       if (!signal?.aborted) {
-        setProducts(productsToShow);
+        setAllProducts(productsToShow); // Guardar todos los productos
+        setProducts(productsToShow.slice(0, 6)); // Mostrar solo los primeros 6 inicialmente
+        setDisplayedCount(6); // Resetear contador
         setTotalPages(1); // Solo una página ya que filtramos en frontend
         setTotal(productsToShow.length);
       }
@@ -209,10 +213,10 @@ function ProductGrid({
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
-    
+
     (async () => {
       try {
         await loadProducts(filters, currentPage, abortController.signal);
@@ -228,12 +232,31 @@ function ProductGrid({
     };
   }, [filters, currentPage, categoryId, repuestosFilter]);
 
-  const handleFiltersChange = (newFilters: ProductFilters) => {
+  // 4) Cargar progresivamente más productos (lazy loading incremental)
+  useEffect(() => {
+    if (displayedCount >= allProducts.length) {
+      // Ya mostramos todos los productos
+      return;
+    }
+
+    // Cargar 6 productos más cada 300ms
+    const timer = setTimeout(() => {
+      const nextCount = Math.min(displayedCount + 6, allProducts.length);
+      setProducts(allProducts.slice(0, nextCount));
+      setDisplayedCount(nextCount);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [displayedCount, allProducts]);
+
+  const handleFiltersChange = (newFilters: ProductFilters, shouldCloseMobile: boolean = false) => {
     fromUI.current = true;
     setFilters(newFilters);
     setCurrentPage(1);
     updateURL(newFilters, 1);
-    setShowMobileFilters(false); // Cerrar modal de filtros en mobile
+    if (shouldCloseMobile) {
+      setShowMobileFilters(false); // Cerrar modal de filtros en mobile solo cuando se especifica
+    }
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -383,6 +406,11 @@ function ProductGrid({
               <p className="text-sm text-gray-600">
                 Mostrando {productsUnique.length} de {total} productos
                 {getHasActiveFilters() && ' (filtrados)'}
+                {displayedCount < allProducts.length && (
+                  <span className="ml-2 text-servi_green animate-pulse">
+                    • Cargando más...
+                  </span>
+                )}
               </p>
               {getHasActiveFilters() && (
                 <button
