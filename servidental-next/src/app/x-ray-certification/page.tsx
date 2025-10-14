@@ -75,12 +75,19 @@ export default function XRayCertificationPage() {
                 <div className="space-y-3 text-gray-600">
                   <p className="flex items-start">
                     <span className="text-servi_green mr-2">•</span>
-                    El procedimiento se coordina con la Ingeniera Malena Orozco, 
+                    El procedimiento se coordina con la Ingeniera Malena Orozco,
                     y dura aproximadamente 1 hora.
                   </p>
                   <p className="flex items-start">
                     <span className="text-servi_green mr-2">•</span>
-                    Si el equipo es aprobado, se emite un certificado que se envía vía 
+                    Se debe disponer de un espacio cerrado, sin tránsito de personas,
+                    que permita a la encargada realizar la toma de datos de forma adecuada,
+                    evitando interrupciones y sin afectar a terceros por la radiación emitida
+                    durante el procedimiento.
+                  </p>
+                  <p className="flex items-start">
+                    <span className="text-servi_green mr-2">•</span>
+                    Si el equipo es aprobado, se emite un certificado que se envía vía
                     correo electrónico dentro de 2 días hábiles.
                   </p>
                 </div>
@@ -90,12 +97,12 @@ export default function XRayCertificationPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <PriceCard
                   title="Rayos X Portátil"
-                  price="₡49,400"
+                  price="₡56,500"
                   icon={<DollarSign className="w-6 h-6" />}
                 />
                 <PriceCard
                   title="Rayos X de Pared"
-                  price="₡54,600"
+                  price="₡62,150"
                   icon={<DollarSign className="w-6 h-6" />}
                 />
               </div>
@@ -128,18 +135,24 @@ export default function XRayCertificationPage() {
                       <DollarSign className="w-5 h-5 mr-2 text-servi_green" />
                       Valor del servicio
                     </h3>
-                    <p className="text-gray-600 pl-7">Valor según el tipo de equipo:</p>
+                    <p className="text-gray-600 pl-7">Valor base según el tipo de equipo (IVA incluido):</p>
                     <ul className="pl-7 mt-2 space-y-1 text-gray-600">
-                      <li>• Rayos X portátil: <span className="font-bold text-servi_green">₡49,400</span></li>
-                      <li>• Rayos X de pared: <span className="font-bold text-servi_green">₡54,600</span></li>
+                      <li>• Rayos X portátil: <span className="font-bold text-servi_green">₡56,500</span></li>
+                      <li>• Rayos X de pared: <span className="font-bold text-servi_green">₡62,150</span></li>
                     </ul>
+                    <div className="pl-7 mt-3 p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg">
+                      <p className="text-amber-800 text-sm">
+                        <span className="font-semibold">Nota importante:</span> Los precios mostrados son tarifas base dentro del <strong>Área Metropolitana</strong>. 
+                        Se aplicará un costo adicional variable según la distancia de traslado del profesional certificador.
+                      </p>
+                    </div>
                   </div>
 
                   {/* Payment Method */}
                   <div>
                     <h3 className="font-semibold text-gray-800 mb-2">Forma de pago</h3>
                     <p className="text-gray-600 mb-3">
-                      Una vez finalizado el servicio, se debe realizar la cancelación del mismo.
+                      Una vez agendado el servicio, se debe realizar la cancelación del mismo.
                     </p>
                     <div className="bg-gray-100 p-4 rounded-lg space-y-2">
                       <p className="font-medium">
