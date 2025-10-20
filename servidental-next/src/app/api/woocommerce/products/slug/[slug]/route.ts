@@ -118,7 +118,8 @@ export async function GET(
     while (page <= maxPages && !foundProduct) {
       const searchParams = new URLSearchParams({
         per_page: '100',
-        page: page.toString()
+        page: page.toString(),
+        status: 'publish'  // Solo productos publicados
       });
 
       const pageProducts = await makeWooCommerceRequest('products', searchParams) as any[];

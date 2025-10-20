@@ -104,13 +104,13 @@ interface ResourceCardProps {
 function ResourceCard({ resource }: ResourceCardProps) {
   const { title, url, downloadUrl } = resource;
 
-  // Siempre es PDF (rojo)
+  // Colores de marca ServiDental
   const colors = {
-    bg: 'bg-red-50',
-    border: 'border-red-200',
-    iconBg: 'bg-red-500',
-    hover: 'hover:bg-red-100',
-    textColor: 'text-red-700'
+    bg: 'bg-servi_light/50',
+    border: 'border-servi_green/30',
+    iconBg: 'bg-servi_green',
+    hover: 'hover:bg-servi_light/70',
+    textColor: 'text-servi_dark'
   };
 
   // Obtener dominio de la URL para mostrar

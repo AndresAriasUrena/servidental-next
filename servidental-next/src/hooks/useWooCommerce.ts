@@ -85,12 +85,17 @@ export function useWooCommerce() {
   const fetchProducts = useCallback(async (params: any = {}): Promise<PaginatedResponse<WooCommerceProduct>> => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const queryParams = new URLSearchParams();
-      
+
       const mappedParams = mapFiltersToWooCommerceParams(params);
-      
+
+      // Asegurar que status=publish esté por defecto si no se especifica
+      if (!mappedParams.status) {
+        mappedParams.status = 'publish';
+      }
+
       Object.entries(mappedParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           queryParams.append(key, String(value));
@@ -100,7 +105,7 @@ export function useWooCommerce() {
       console.log('Mapped WooCommerce params:', Object.fromEntries(queryParams.entries()));
 
       const response = await makeRequest('products', queryParams);
-      
+
       return response;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error fetching products';
@@ -171,9 +176,12 @@ export function useWooCommerce() {
   const searchProducts = useCallback(async (query: string): Promise<WooCommerceProduct[]> => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const queryParams = new URLSearchParams({ search: query });
+      const queryParams = new URLSearchParams({
+        search: query,
+        status: 'publish'  // Solo productos publicados
+      });
       const response = await makeRequest('products', queryParams);
       return response.data;
     } catch (err) {

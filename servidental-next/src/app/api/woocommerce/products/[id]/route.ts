@@ -68,6 +68,18 @@ export async function GET(
 
     const product = await makeWooCommerceRequest(`products/${productId}`) as any;
 
+    // Verificar que el producto esté publicado
+    if (product.status !== 'publish') {
+      console.log(`Product ${productId} has status "${product.status}" - returning 404`);
+      return NextResponse.json(
+        {
+          error: 'Product not found',
+          message: 'Este producto no está disponible públicamente'
+        },
+        { status: 404 }
+      );
+    }
+
     // Sanitizar descripciones HTML
     const sanitizedProduct = {
       ...product,

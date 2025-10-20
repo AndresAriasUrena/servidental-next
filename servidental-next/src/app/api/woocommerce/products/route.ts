@@ -131,6 +131,11 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
   }
 
   try {
+    // Agregar filtro status=publish por defecto si no se especifica
+    if (!params.has('status')) {
+      params.set('status', 'publish');
+    }
+
     const queryParams = new URLSearchParams({
       consumer_key: WC_KEY,
       consumer_secret: WC_SECRET,
