@@ -39,8 +39,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Hero />
       <BlackNovemberBanner />
+      <Hero />
       <ProductsSection />
       <YouTubeVideoSection />
       <ServicesSection />

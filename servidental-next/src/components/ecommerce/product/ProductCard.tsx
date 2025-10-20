@@ -73,9 +73,9 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
           {/* Black November Badge (esquina superior izquierda) */}
           {hasBlackNovemberTag && (
             <div className="absolute top-2 left-2 z-10">
-              <div className="bg-gradient-to-r from-gray-900 to-black text-yellow-400 text-xs font-black px-3 py-1.5 rounded-md shadow-lg border border-yellow-400/30 uppercase flex items-center gap-1">
-                <span className="inline-block w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
-                Black November
+              <div className="bg-gradient-to-r from-gray-900 to-black text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border uppercase flex items-center gap-1">
+                <span className="inline-block w-1.5 h-1.5 bg-slate-400 rounded-full animate-pulse"></span>
+                Descuento
               </div>
             </div>
           )}
