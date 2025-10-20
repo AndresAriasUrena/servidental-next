@@ -55,9 +55,15 @@ export function useWooCommerce() {
       params.max_price = String(filters.price_max);
     }
 
-    if (filters.on_sale) {
-      params.on_sale = 'true';
-    }
+    // ============================================
+    // FILTRO BLACK NOVEMBER (on_sale):
+    // NO enviar al backend - se filtra en frontend por etiqueta "noviembre"
+    // El parámetro on_sale de WooCommerce busca productos en descuento,
+    // no productos con etiqueta específica
+    // ============================================
+    // if (filters.on_sale) {
+    //   params.on_sale = 'true';
+    // }
 
     if (filters.in_stock) {
       params.stock_status = 'instock';
@@ -181,6 +187,7 @@ export function useWooCommerce() {
       const queryParams = new URLSearchParams({
         search: query,
         status: 'publish'  // Solo productos publicados
+        // NOTA: No incluir on_sale aquí - se filtra en frontend
       });
       const response = await makeRequest('products', queryParams);
       return response.data;
