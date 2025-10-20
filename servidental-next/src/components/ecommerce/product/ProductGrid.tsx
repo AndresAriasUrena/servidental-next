@@ -148,11 +148,33 @@ function ProductGrid({
 
       // Filtro de Black November (etiqueta "noviembre")
       if (filtersToUse.on_sale) {
-        productsToShow = productsToShow.filter(product =>
-          product.tags?.some(tag =>
+        console.log('[Black November Filter] Filtrando productos con etiqueta "noviembre"...');
+        console.log(`[Black November Filter] Total productos antes del filtro: ${productsToShow.length}`);
+
+        // Debug: Mostrar todas las etiquetas únicas en los productos
+        const allTags = new Set<string>();
+        productsToShow.forEach(product => {
+          product.tags?.forEach(tag => {
+            allTags.add(`${tag.name} (slug: ${tag.slug})`);
+          });
+        });
+        console.log(`[Black November Filter] Todas las etiquetas encontradas:`, Array.from(allTags));
+
+        // Filtrar productos con etiqueta "noviembre"
+        const productsWithNoviembre = productsToShow.filter(product => {
+          const hasNoviembre = product.tags?.some(tag =>
             tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
-          )
-        );
+          );
+
+          if (hasNoviembre) {
+            console.log(`[Black November Filter] ✅ Producto "${product.name}" tiene etiqueta noviembre:`, product.tags);
+          }
+
+          return hasNoviembre;
+        });
+
+        console.log(`[Black November Filter] Productos con etiqueta "noviembre": ${productsWithNoviembre.length}`);
+        productsToShow = productsWithNoviembre;
       }
 
       // Filtro de repuestos
