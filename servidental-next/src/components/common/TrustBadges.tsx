@@ -13,9 +13,9 @@ const BADGES = [
 ];
 
 export default function TrustBadges({ variant = "pdp" }: { variant?: Variant }) {
-  const size = variant === "footer" ? 22 : 26;
+  const size = variant === "footer" ? 32 : 36;
   const wrap = variant === "footer" ? "justify-start" : variant === "checkout" ? "justify-start" : "justify-center";
-  const tone = variant === "footer" ? "opacity-70 hover:opacity-100" : "opacity-80 hover:opacity-100";
+  const tone = "opacity-100"; // Opacidad 100% para footer y checkout
   const gap = "gap-4 sm:gap-5";
   const badgeBackground = variant === "footer" ? "bg-white rounded px-2 py-1" : "";
 
@@ -32,7 +32,7 @@ export default function TrustBadges({ variant = "pdp" }: { variant?: Variant }) 
               alt={b.label}
               width={Math.round(size * 2.2)}
               height={size}
-              className={`${variant === "footer" ? "h-[22px]" : "h-[26px]"} w-auto`}
+              className={`${variant === "footer" ? "h-[32px]" : "h-[36px]"} w-auto`}
               loading="lazy"
             />
           </div>
