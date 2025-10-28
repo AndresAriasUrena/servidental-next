@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import ProductGrid from '@/components/ecommerce/product/ProductGrid';
 import StoreBenefitsBanner from '@/components/ecommerce/ui/StoreBenefitsBanner';
+import BlackNovemberBanner from '@/components/home/BlackNovemberBanner';
 
 export const metadata = {
   title: 'Tienda | ServidentalCR - Equipo Médico Dental',
@@ -32,6 +33,7 @@ function ProductGridSkeleton() {
 export default function TiendaPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
+      <BlackNovemberBanner />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 lg:mb-12">
           <h1 className="text-2xl lg:text-4xl font-bold text-servi_dark mb-2 lg:mb-4">

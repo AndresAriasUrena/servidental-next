@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import BlogClient from '@/components/blog/BlogClient';
+import BlackNovemberBanner from '@/components/home/BlackNovemberBanner';
 
 export const metadata: Metadata = {
   title: 'Blog | ServiDental',
@@ -36,8 +37,11 @@ function BlogLoading() {
 
 export default function BlogPage() {
   return (
-    <Suspense fallback={<BlogLoading />}>
-      <BlogClient />
-    </Suspense>
+    <>
+      <BlackNovemberBanner />
+      <Suspense fallback={<BlogLoading />}>
+        <BlogClient />
+      </Suspense>
+    </>
   );
 }

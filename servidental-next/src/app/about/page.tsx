@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import assets from '@/assets'
 import { ValuesSection } from './ValuesSection'
+import BlackNovemberBanner from '@/components/home/BlackNovemberBanner'
 export const metadata: Metadata = {
   title: '¿Quiénes Somos? | ServiDental',
   description: 'Expertos en equipamiento dental desde 2007, brindando soluciones técnicas y mantenimiento especializado para clínicas dentales en Costa Rica.',
@@ -37,6 +38,7 @@ const products = [
 export default function AboutPage() {
   return (
     <main>
+      <BlackNovemberBanner />
       {/* Hero Section */}
       <section className="bg-nosotros_bg bg-cover bg-center bg-no-repeat text-white pb-20 pt-40 md:pt-[27rem]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
