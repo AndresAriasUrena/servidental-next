@@ -55,7 +55,7 @@ export default function RootLayout({
         <CartProvider>
           <Header />
           <BlackNovemberBanner />
-          <main className="text-black pt-24 lg:pt-32">
+          <main className="text-black pt-40 lg:pt-48">
             {children}
           </main>
           <Footer />
