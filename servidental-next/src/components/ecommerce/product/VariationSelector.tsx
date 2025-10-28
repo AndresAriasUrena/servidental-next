@@ -159,14 +159,20 @@ export default function VariationSelector({
               className={`text-sm font-medium ${
                 selectedVariation.stock_status === 'instock'
                   ? 'text-green-600'
-                  : 'text-red-600'
+                  : 'text-orange-600'
               }`}
             >
               {selectedVariation.stock_status === 'instock'
-                ? `${selectedVariation.stock_quantity || 'En stock'}`
-                : 'Agotado'}
+                ? 'Entrega Inmediata'
+                : 'Contra Pedido'}
             </span>
           </div>
+          {selectedVariation.stock_status === 'instock' && selectedVariation.stock_quantity && (
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Stock:</span>
+              <span className="text-sm text-gray-900">{selectedVariation.stock_quantity} disponibles</span>
+            </div>
+          )}
         </div>
       )}
     </div>
