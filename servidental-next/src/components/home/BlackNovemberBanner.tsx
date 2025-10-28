@@ -27,7 +27,7 @@ export default function BlackNovemberBanner() {
   }, [messages.length]);
 
   return (
-    <div className="sticky top-[72px] lg:top-[88px] z-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+    <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
       {/* Fondo con patrón */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
