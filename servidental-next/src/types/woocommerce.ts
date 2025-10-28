@@ -154,6 +154,59 @@ export interface MetaData {
 }
 
 // ============================================
+// PRODUCT VARIATION TYPES
+// ============================================
+
+export interface ProductVariation {
+  id: number;
+  date_created: string;
+  date_created_gmt: string;
+  date_modified: string;
+  date_modified_gmt: string;
+  description: string;
+  permalink: string;
+  sku: string;
+  price: string;
+  regular_price: string;
+  sale_price: string;
+  date_on_sale_from: string | null;
+  date_on_sale_from_gmt: string | null;
+  date_on_sale_to: string | null;
+  date_on_sale_to_gmt: string | null;
+  on_sale: boolean;
+  status: 'publish' | 'private' | 'pending';
+  purchasable: boolean;
+  virtual: boolean;
+  downloadable: boolean;
+  downloads: any[];
+  download_limit: number;
+  download_expiry: number;
+  tax_status: 'taxable' | 'shipping' | 'none';
+  tax_class: string;
+  manage_stock: boolean;
+  stock_quantity: number | null;
+  stock_status: 'instock' | 'outofstock' | 'onbackorder';
+  backorders: 'no' | 'notify' | 'yes';
+  backorders_allowed: boolean;
+  backordered: boolean;
+  low_stock_amount: number | null;
+  weight: string;
+  dimensions: ProductDimensions;
+  shipping_class: string;
+  shipping_class_id: number;
+  image: ProductImage | null;
+  attributes: VariationAttribute[];
+  menu_order: number;
+  meta_data: MetaData[];
+}
+
+export interface VariationAttribute {
+  id: number;
+  name: string;
+  option: string;
+}
+
+// ============================================
 // CATEGORY TYPES
 // ============================================
 
@@ -317,6 +370,8 @@ export interface CartItem {
   slug: string;
   sku?: string;
   subtotal: number;
+  variationId?: number;
+  variationAttributes?: VariationAttribute[];
 }
 
 export interface Cart {
@@ -365,16 +420,26 @@ export interface ServidentalProduct extends WooCommerceProduct {
 // ============================================
 
 // Función para convertir producto WooCommerce a formato del carrito
-export function productToCartItem(product: WooCommerceProduct, quantity: number = 1): CartItem {
+export function productToCartItem(
+  product: WooCommerceProduct,
+  quantity: number = 1,
+  variation?: ProductVariation
+): CartItem {
+  // If variation is provided, use variation data
+  const itemData = variation || product;
+  const price = parseFloat(itemData.price) || 0;
+
   return {
     id: product.id,
     name: product.name,
-    price: parseFloat(product.price) || 0,
+    price,
     quantity,
-    image: product.images[0]?.src || '',
+    image: variation?.image?.src || product.images[0]?.src || '',
     slug: product.slug,
-    sku: product.sku,
-    subtotal: (parseFloat(product.price) || 0) * quantity
+    sku: variation?.sku || product.sku,
+    subtotal: price * quantity,
+    variationId: variation?.id,
+    variationAttributes: variation?.attributes
   };
 }
 

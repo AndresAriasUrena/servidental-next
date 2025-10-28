@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
-import { WooCommerceProduct } from '@/types/woocommerce';
+import { WooCommerceProduct, ProductVariation } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
@@ -16,6 +16,7 @@ import { ProductCard } from './ProductCard';
 import { QuoteFormModal } from '../quote/QuoteFormModal';
 import { ProductTabs } from './ProductTabs';
 import TrustBadges from '@/components/common/TrustBadges';
+import VariationSelector from './VariationSelector';
 
 // Helper functions for media handling
 const getYouTubeVideoId = (url: string): string | null => {
@@ -123,6 +124,9 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const [loadingRelated, setLoadingRelated] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [stockError, setStockError] = useState<string | null>(null);
+  const [variations, setVariations] = useState<ProductVariation[]>([]);
+  const [selectedVariation, setSelectedVariation] = useState<ProductVariation | null>(null);
+  const [loadingVariations, setLoadingVariations] = useState(false);
   const { addToCart, isLoading: cartLoading, getCartQuantity } = useCart();
   const { fetchProductBySlug, fetchProducts } = useWooCommerce();
 
@@ -130,7 +134,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
     async function loadProduct() {
       setLoading(true);
       setError(null);
-      
+
       try {
         const product = await fetchProductBySlug(slug);
         setProduct(product);
@@ -144,6 +148,36 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
 
     loadProduct();
   }, [slug, fetchProductBySlug]);
+
+  // Load variations for variable products
+  useEffect(() => {
+    async function loadVariations() {
+      if (!product || product.type !== 'variable') {
+        setVariations([]);
+        setSelectedVariation(null);
+        return;
+      }
+
+      setLoadingVariations(true);
+      try {
+        const response = await fetch(`/api/woocommerce/products/${product.id}/variations`);
+        if (response.ok) {
+          const data = await response.json();
+          setVariations(data);
+        } else {
+          console.error('Failed to load variations');
+          setVariations([]);
+        }
+      } catch (err) {
+        console.error('Error loading variations:', err);
+        setVariations([]);
+      } finally {
+        setLoadingVariations(false);
+      }
+    }
+
+    loadVariations();
+  }, [product]);
 
   useEffect(() => {
     async function loadRelatedProducts() {
@@ -177,13 +211,20 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const handleAddToCart = async () => {
     if (!product) return;
 
+    // Validate variation selection for variable products
+    if (product.type === 'variable' && !selectedVariation) {
+      setStockError('Por favor selecciona todas las opciones del producto');
+      return;
+    }
+
     setStockError(null);
 
     try {
-      const result = await addToCart(product, quantity);
+      const result = await addToCart(product, quantity, selectedVariation || undefined);
       if (result.success) {
         // Reset quantity and emit custom event to open mini cart
         setQuantity(1);
+        setSelectedVariation(null);
         window.dispatchEvent(new CustomEvent('openMiniCart'));
       } else {
         // Show generic error message
@@ -523,6 +564,24 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                 </div>
               )}
             </div>
+
+            {/* Product Variations */}
+            {product.type === 'variable' && variations.length > 0 && (
+              <div className="border-t pt-6">
+                {loadingVariations ? (
+                  <div className="space-y-2">
+                    <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                ) : (
+                  <VariationSelector
+                    product={product}
+                    variations={variations}
+                    onVariationChange={setSelectedVariation}
+                  />
+                )}
+              </div>
+            )}
 
             {/* Controles de Compra */}
             <div className="flex flex-col gap-2">

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { WooCommerceProduct, Cart, CartItem, productToCartItem } from '@/types/woocommerce';
+import { WooCommerceProduct, Cart, CartItem, productToCartItem, ProductVariation } from '@/types/woocommerce';
 import { canAddToCart, validateQuantity, getStockErrorMessage } from '@/utils/stock';
 
 const CartContext = createContext<{
   cart: Cart;
-  addToCart: (product: WooCommerceProduct, quantity: number) => Promise<{ success: boolean; error?: string }>;
+  addToCart: (product: WooCommerceProduct, quantity: number, variation?: ProductVariation) => Promise<{ success: boolean; error?: string }>;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => { success: boolean; error?: string };
   clearCart: () => void;
@@ -58,21 +58,44 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return item ? item.quantity : 0;
   }, [cart.items]);
 
-  const addToCart = useCallback(async (product: WooCommerceProduct, quantity: number = 1): Promise<{ success: boolean; error?: string }> => {
+  const addToCart = useCallback(async (
+    product: WooCommerceProduct,
+    quantity: number = 1,
+    variation?: ProductVariation
+  ): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true);
 
     try {
+      // Use variation data for stock validation if available
+      const itemForValidation = variation || product;
+
       // Obtener cantidad actual en el carrito
-      const currentCartQty = getCartQuantity(product.id);
+      // For variations, check both product ID and variation ID
+      const cartKey = variation ? `${product.id}-${variation.id}` : `${product.id}`;
+      const currentCartQty = cart.items
+        .filter(item => {
+          if (variation) {
+            return item.id === product.id && item.variationId === variation.id;
+          }
+          return item.id === product.id && !item.variationId;
+        })
+        .reduce((sum, item) => sum + item.quantity, 0);
 
       // Validar si se puede agregar la cantidad solicitada
-      if (!canAddToCart(product, quantity, currentCartQty)) {
+      if (!canAddToCart(itemForValidation, quantity, currentCartQty)) {
         const error = getStockErrorMessage(true);
         return { success: false, error };
       }
 
       setCart(currentCart => {
-        const existingItemIndex = currentCart.items.findIndex(item => item.id === product.id);
+        // Find existing item (consider variation ID if present)
+        const existingItemIndex = currentCart.items.findIndex(item => {
+          if (variation) {
+            return item.id === product.id && item.variationId === variation.id;
+          }
+          return item.id === product.id && !item.variationId;
+        });
+
         let newItems: CartItem[];
 
         if (existingItemIndex >= 0) {
@@ -85,7 +108,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           );
         } else {
           // Add new item
-          const newItem = productToCartItem(product, quantity);
+          const newItem = productToCartItem(product, quantity, variation);
           newItems = [...currentCart.items, newItem];
         }
 
@@ -99,7 +122,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [calculateCartTotals, getCartQuantity]);
+  }, [calculateCartTotals, cart.items]);
 
   const removeFromCart = useCallback((productId: number) => {
     setCart(currentCart => {
