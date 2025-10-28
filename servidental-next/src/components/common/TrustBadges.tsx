@@ -4,12 +4,11 @@ import Image from "next/image";
 type Variant = "pdp" | "cart" | "checkout" | "footer";
 
 const BADGES = [
-  { key: "correos", label: "Correos de Costa Rica", src: "/badges/correos-cr.svg", group: "shipping" },
-  { key: "sinpe", label: "SINPE Móvil", src: "/badges/sinpe-movil.svg", group: "payments" },
-  { key: "tasa0", label: "Tasa 0 BAC", src: "/badges/tasa0-bac.svg", group: "financing" },
-  { key: "visa", label: "Visa", src: "/badges/visa.svg", group: "payments" },
-  { key: "mc", label: "Mastercard", src: "/badges/mastercard.svg", group: "payments" },
-  { key: "amex", label: "American Express", src: "/badges/amex.svg", group: "payments" },
+  { key: "visa", label: "Visa", src: "/badges/visa.png", group: "payments" },
+  { key: "mc", label: "Mastercard", src: "/badges/mastercard.png", group: "payments" },
+  { key: "amex", label: "American Express", src: "/badges/amex.png", group: "payments" },
+  { key: "tasa0", label: "Tasa 0", src: "/badges/tasa0.png", group: "financing" },
+  { key: "minicuotas", label: "Minicuotas", src: "/badges/minicuotas.png", group: "financing" },
 ];
 
 export default function TrustBadges({ variant = "pdp" }: { variant?: Variant }) {

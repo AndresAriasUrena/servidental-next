@@ -4,7 +4,102 @@ import { useState, useEffect } from 'react';
 import { ProductFilters, WooCommerceCategory, WooCommerceBrand } from '@/types/woocommerce';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPriceRange, PRIMARY_CURRENCY } from '@/utils/currency';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
+
+// Interfaz para categoría con subcategorías
+interface CategoryWithChildren extends WooCommerceCategory {
+  children: CategoryWithChildren[];
+}
+
+// Función para organizar categorías en árbol jerárquico
+function buildCategoryTree(categories: WooCommerceCategory[]): CategoryWithChildren[] {
+  const categoryMap = new Map<number, CategoryWithChildren>();
+  const rootCategories: CategoryWithChildren[] = [];
+
+  // Inicializar todas las categorías con array de children vacío
+  categories.forEach(cat => {
+    categoryMap.set(cat.id, { ...cat, children: [] });
+  });
+
+  // Construir el árbol
+  categories.forEach(cat => {
+    const category = categoryMap.get(cat.id)!;
+
+    if (cat.parent === 0) {
+      // Es una categoría raíz
+      rootCategories.push(category);
+    } else {
+      // Es una subcategoría, agregarla al padre
+      const parent = categoryMap.get(cat.parent);
+      if (parent) {
+        parent.children.push(category);
+      }
+    }
+  });
+
+  return rootCategories;
+}
+
+// Componente para renderizar una categoría con sus subcategorías
+interface CategoryItemProps {
+  category: CategoryWithChildren;
+  selectedCategories: number[];
+  onCategoryChange: (categoryId: number) => void;
+  level?: number;
+}
+
+function CategoryItem({ category, selectedCategories, onCategoryChange, level = 0 }: CategoryItemProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const hasChildren = category.children.length > 0;
+  const isChecked = selectedCategories.includes(category.id);
+
+  return (
+    <div className="space-y-2">
+      <div className={`flex items-center space-x-2 ${level > 0 ? 'ml-4' : ''}`}>
+        {hasChildren && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-0.5 hover:bg-gray-100 rounded transition-colors"
+            aria-label={isExpanded ? 'Contraer' : 'Expandir'}
+          >
+            {isExpanded ? (
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-gray-500" />
+            )}
+          </button>
+        )}
+        {!hasChildren && <div className="w-5" />}
+
+        <label className="flex items-center space-x-2 cursor-pointer flex-1">
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={() => onCategoryChange(category.id)}
+            className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
+          />
+          <span className={`text-sm text-gray-700 ${level > 0 ? 'font-normal' : 'font-medium'}`}>
+            {category.name} ({category.count})
+          </span>
+        </label>
+      </div>
+
+      {hasChildren && isExpanded && (
+        <div className="space-y-2">
+          {category.children.map((child) => (
+            <CategoryItem
+              key={child.id}
+              category={child}
+              selectedCategories={selectedCategories}
+              onCategoryChange={onCategoryChange}
+              level={level + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ProductFiltersPanelProps {
   filters: ProductFilters;
@@ -169,19 +264,14 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
                 ))}
               </div>
             ) : (
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {categories.map((category) => (
-                  <label key={category.id} className="flex items-center space-x-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={(filters.categories || []).includes(category.id)}
-                      onChange={() => handleCategoryChange(category.id)}
-                      className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
-                    />
-                    <span className="text-sm text-gray-700">
-                      {category.name} ({category.count})
-                    </span>
-                  </label>
+              <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+                {buildCategoryTree(categories).map((category) => (
+                  <CategoryItem
+                    key={category.id}
+                    category={category}
+                    selectedCategories={filters.categories || []}
+                    onCategoryChange={handleCategoryChange}
+                  />
                 ))}
               </div>
             )}
