@@ -26,6 +26,7 @@ export default function VariationSelector({
   const variableAttributes = product.attributes.filter(attr => attr.variation);
 
   // Get available options for each attribute based on current selection
+  // Only show options that have in-stock variations
   const getAvailableOptions = (attributeName: string): string[] => {
     const attribute = product.attributes.find(
       attr => attr.name === attributeName
@@ -38,29 +39,31 @@ export default function VariationSelector({
       ([key]) => key !== attributeName
     );
 
-    if (otherSelectedAttrs.length === 0) {
-      // No other attributes selected, show all options
-      return attribute.options;
+    let compatibleVariations = variations;
+
+    // If other attributes are selected, filter by them
+    if (otherSelectedAttrs.length > 0) {
+      compatibleVariations = variations.filter(variation => {
+        return otherSelectedAttrs.every(([attrName, attrValue]) => {
+          const varAttr = variation.attributes.find(
+            va => va.name === attrName
+          );
+          return varAttr && varAttr.option === attrValue;
+        });
+      });
     }
 
-    // Filter variations that match other selected attributes
-    const compatibleVariations = variations.filter(variation => {
-      return otherSelectedAttrs.every(([attrName, attrValue]) => {
-        const varAttr = variation.attributes.find(
-          va => va.name === attrName
-        );
-        return varAttr && varAttr.option === attrValue;
-      });
-    });
-
-    // Get unique options from compatible variations
+    // Only include options from in-stock variations
     const availableOptions = new Set<string>();
     compatibleVariations.forEach(variation => {
-      const varAttr = variation.attributes.find(
-        va => va.name === attributeName
-      );
-      if (varAttr) {
-        availableOptions.add(varAttr.option);
+      // Only add if variation is in stock
+      if (variation.stock_status === 'instock') {
+        const varAttr = variation.attributes.find(
+          va => va.name === attributeName
+        );
+        if (varAttr) {
+          availableOptions.add(varAttr.option);
+        }
       }
     });
 
@@ -167,12 +170,6 @@ export default function VariationSelector({
                 : 'Contra Pedido'}
             </span>
           </div>
-          {selectedVariation.stock_status === 'instock' && selectedVariation.stock_quantity && (
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Stock:</span>
-              <span className="text-sm text-gray-900">{selectedVariation.stock_quantity} disponibles</span>
-            </div>
-          )}
         </div>
       )}
     </div>
