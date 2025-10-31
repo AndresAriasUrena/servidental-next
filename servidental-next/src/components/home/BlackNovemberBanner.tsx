@@ -13,7 +13,7 @@ export default function BlackNovemberBanner() {
 
   const messages = [
     '¡Black November en ServiDental! Hasta 10% de descuento en equipos dentales',
-    'Ofertas exclusivas en escáneres, motores, rayos, compresores y más',
+    'Ofertas exclusivas en escáneres, motores, rayos X, compresores y más',
     'Financiamiento disponible - Hasta 6 meses sin intereses Tasa 0 con el BAC',
     '¡No se pierda las mejores ofertas del año en equipo dental!'
   ];

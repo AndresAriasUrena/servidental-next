@@ -244,9 +244,9 @@ export default function Checkout() {
   };
 
   const getShippingCost = () => {
-    if (formData.shipping_option === 'outside_gam') return SHIPPING_COST_OUTSIDE_GAM;
-    if (formData.shipping_option === 'messenger') return SHIPPING_COST_OUTSIDE_GAM;
-    return 0; // gam_free, pickup, other = sin costo
+    // Todos los envíos son gratis o se coordinan después
+    // No se cobra ningún costo adicional en el checkout
+    return 0;
   };
 
   const getTotalWithShipping = () => {
@@ -612,7 +612,7 @@ export default function Checkout() {
                         <div>
                           <div className="font-medium">Envío dentro del Área Metropolitana</div>
                           <div className="text-sm text-gray-500">
-                            Gratuito
+                            Gratuito. Disponible para entregas por mensajería.
                           </div>
                         </div>
                       </label>
@@ -632,9 +632,10 @@ export default function Checkout() {
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">Envío fuera del Área Metropolitana</div>
+                          <div className="font-medium">Encomienda, envío o instalación fuera del Área Metropolitana</div>
                           <div className="text-sm text-gray-500">
-                            Con un costo adicional de $9 (tarifa estandarizada)
+                            El costo se calcula según la ubicación y el tipo de servicio requerido.<br />
+                            Debe ser cancelado adicionalmente una vez analizados los datos de entrega o instalación.
                           </div>
                         </div>
                       </label>
@@ -654,9 +655,10 @@ export default function Checkout() {
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">Retiro en instalaciones</div>
+                          <div className="font-medium">Retiro en showroom</div>
                           <div className="text-sm text-gray-500">
-                            Sin costo adicional, en nuestro showroom de San Pedro
+                            Sin costo adicional.<br />
+                            Puede retirar su pedido en nuestro showroom ubicado en San Pedro de Montes de Oca.
                           </div>
                         </div>
                       </label>
@@ -714,9 +716,9 @@ export default function Checkout() {
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">Envío por mensajería</div>
+                          <div className="font-medium">Envío dentro del Área Metropolitana</div>
                           <div className="text-sm text-gray-500">
-                            Con un costo adicional de $9 (tarifa estandarizada)
+                            Gratuito. Disponible para entregas por mensajería.
                           </div>
                         </div>
                       </label>
@@ -736,9 +738,10 @@ export default function Checkout() {
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">Retiro en instalaciones</div>
+                          <div className="font-medium">Retiro en showroom</div>
                           <div className="text-sm text-gray-500">
-                            Sin costo adicional, en nuestro showroom de San Pedro
+                            Sin costo adicional.<br />
+                            Puede retirar su pedido en nuestro showroom ubicado en San Pedro de Montes de Oca.
                           </div>
                         </div>
                       </label>
@@ -780,6 +783,16 @@ export default function Checkout() {
                     </div>
                   </>
                 )}
+
+                {/* Mensaje informativo */}
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md flex items-start gap-3">
+                  <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-sm text-blue-800">
+                    <strong>Nota:</strong> Nos aseguramos de ofrecer la mejor opción de envío según su ubicación para garantizar un servicio rápido y seguro.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -855,9 +868,9 @@ export default function Checkout() {
                     {formData.shipping_option === 'gam_free'
                       ? 'Gratis'
                       : formData.shipping_option === 'outside_gam'
-                      ? '$9'
+                      ? 'Por coordinar'
                       : formData.shipping_option === 'messenger'
-                      ? '$9'
+                      ? 'Gratis'
                       : formData.shipping_option === 'pickup'
                       ? 'Gratis'
                       : 'Por coordinar'
