@@ -244,8 +244,17 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   };
 
   // Calculate max quantity based on stock and current cart
+  // For variable products, use the selected variation's stock
   const getMaxQuantityForSelector = (): number => {
     if (!product) return 99;
+
+    // For variable products, use selected variation's stock if available
+    if (product.type === 'variable' && selectedVariation) {
+      const currentCartQty = getCartQuantity(product.id);
+      return getMaxPurchasable(selectedVariation, currentCartQty);
+    }
+
+    // For simple products, use product stock
     const currentCartQty = getCartQuantity(product.id);
     return getMaxPurchasable(product, currentCartQty);
   };
