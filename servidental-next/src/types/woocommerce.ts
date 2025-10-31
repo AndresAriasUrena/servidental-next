@@ -372,6 +372,7 @@ export interface CartItem {
   subtotal: number;
   variationId?: number;
   variationAttributes?: VariationAttribute[];
+  tags?: ProductTag[]; // Tags del producto para lógica de envío
 }
 
 export interface Cart {
@@ -439,7 +440,8 @@ export function productToCartItem(
     sku: variation?.sku || product.sku,
     subtotal: price * quantity,
     variationId: variation?.id,
-    variationAttributes: variation?.attributes
+    variationAttributes: variation?.attributes,
+    tags: product.tags // Include product tags for shipping logic
   };
 }
 

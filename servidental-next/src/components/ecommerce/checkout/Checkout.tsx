@@ -106,9 +106,6 @@ const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
   }
 };
 
-// Constante configurable para costo de envío fuera GAM
-const SHIPPING_COST_OUTSIDE_GAM = 9;
-
 interface CheckoutFormData {
   billing: BillingAddress;
   shipping: ShippingAddress;
@@ -145,23 +142,21 @@ interface CheckoutFormData {
 }
 
 /**
- * Helper para detectar si un producto es equipo (no repuesto)
- * Considera repuesto si tiene tag "repuesto" o "repuestos" (case-insensitive)
- * Todo lo demás se considera equipo
+ * Helper para detectar si un producto tiene la etiqueta 'envio'
+ * Los productos con esta etiqueta califican para envío gratis en GAM
  */
-const isEquipment = (product: any): boolean => {
-  const hasRepuestoTag = product.tags?.some(
-    (tag: any) => tag.name?.toLowerCase().includes('repuesto')
-  );
-  return !hasRepuestoTag;
+const hasShippingTag = (product: any): boolean => {
+  return product.tags?.some(
+    (tag: any) => tag.slug?.toLowerCase() === 'envio' || tag.name?.toLowerCase() === 'envio'
+  ) || false;
 };
 
 export default function Checkout() {
   const { cart } = useCart();
   const [showTilopayCheckout, setShowTilopayCheckout] = useState(false);
 
-  // Detectar si el carrito tiene equipos (al menos 1)
-  const hasEquipment = cart.items.some(item => isEquipment(item));
+  // Detectar si el carrito tiene al menos un producto con etiqueta 'envio'
+  const hasProductsWithShipping = cart.items.some(item => hasShippingTag(item));
 
   const [formData, setFormData] = useState<CheckoutFormData>({
     billing: {
@@ -210,7 +205,7 @@ export default function Checkout() {
         other_details: ''
       }
     },
-    shipping_option: hasEquipment ? 'gam_free' : 'messenger', // Default basado en tipo de carrito
+    shipping_option: hasProductsWithShipping ? 'gam_free' : 'outside_gam', // Default: gratis si tiene tag 'envio'
     shipping_other_details: '',
     contact_data: {
       name: '',
@@ -593,8 +588,8 @@ export default function Checkout() {
                 Opciones de envío
               </h2>
               <div className="space-y-4">
-                {hasEquipment ? (
-                  // Opciones cuando hay equipos en el carrito
+                {hasProductsWithShipping ? (
+                  // Opciones cuando hay productos con etiqueta 'envio' en el carrito
                   <>
                     <div className="border border-gray-300 rounded-md p-4">
                       <label className="flex items-start space-x-3">
@@ -700,15 +695,15 @@ export default function Checkout() {
                     </div>
                   </>
                 ) : (
-                  // Opciones cuando solo hay repuestos en el carrito
+                  // Opciones cuando NO hay productos con etiqueta 'envio'
                   <>
                     <div className="border border-gray-300 rounded-md p-4">
                       <label className="flex items-start space-x-3">
                         <input
                           type="radio"
                           name="shipping_option"
-                          value="messenger"
-                          checked={formData.shipping_option === 'messenger'}
+                          value="outside_gam"
+                          checked={formData.shipping_option === 'outside_gam'}
                           onChange={(e) => setFormData(prev => ({
                             ...prev,
                             shipping_option: e.target.value as CheckoutFormData['shipping_option']
@@ -716,9 +711,10 @@ export default function Checkout() {
                           className="mt-1"
                         />
                         <div>
-                          <div className="font-medium">Envío dentro del Área Metropolitana</div>
+                          <div className="font-medium">Encomienda o envío</div>
                           <div className="text-sm text-gray-500">
-                            Gratuito. Disponible para entregas por mensajería.
+                            El costo se calcula según la ubicación y el tipo de servicio requerido.<br />
+                            Debe ser cancelado adicionalmente una vez analizados los datos de entrega.
                           </div>
                         </div>
                       </label>
