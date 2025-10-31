@@ -25,6 +25,13 @@ const getYouTubeVideoId = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+// Helper to check if product is a compressor (requires special delivery time)
+const isCompressor = (product: WooCommerceProduct): boolean => {
+  return product.categories?.some(cat =>
+    cat.name.toLowerCase().includes('compresor')
+  ) || false;
+};
+
 const getMetaDataValue = (product: WooCommerceProduct, key: string): string | null => {
   if (!product.meta_data) return null;
   const metaItem = product.meta_data.find(item => item.key === key);
@@ -538,7 +545,9 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   <span className={`text-sm font-medium ${
                     product.stock_status === 'instock' ? 'text-green-600' : 'text-red-600'
                   }`}>
-                    {product.stock_status === 'instock' ? 'Entrega Inmediata' : 'Contra Pedido'}
+                    {product.stock_status === 'instock'
+                      ? (isCompressor(product) ? 'Entrega en 30 días' : 'Entrega Inmediata')
+                      : 'Contra Pedido'}
                   </span>
                 </div>
               </div>

@@ -14,6 +14,13 @@ interface SelectedAttributes {
   [key: string]: string;
 }
 
+// Helper to check if product is a compressor (requires special delivery time)
+const isCompressor = (product: WooCommerceProduct): boolean => {
+  return product.categories?.some(cat =>
+    cat.name.toLowerCase().includes('compresor')
+  ) || false;
+};
+
 export default function VariationSelector({
   product,
   variations,
@@ -166,7 +173,7 @@ export default function VariationSelector({
               }`}
             >
               {selectedVariation.stock_status === 'instock'
-                ? 'Entrega Inmediata'
+                ? (isCompressor(product) ? 'Entrega en 30 días' : 'Entrega Inmediata')
                 : 'Contra Pedido'}
             </span>
           </div>
