@@ -270,36 +270,57 @@ export async function GET(request: NextRequest) {
     console.log('[WooCommerce API] Products request params:', Object.fromEntries(searchParams.entries()));
 
     // ============================================
-    // RESOLUCIÓN DE BRAND SLUG → ID
+    // RESOLUCIÓN DE BRAND SLUG(S) → ID(S)
+    // Soporte para múltiples marcas separadas por coma
     // ============================================
-    const brandSlug = searchParams.get('brand');
+    const brandParam = searchParams.get('brand');
 
-    if (brandSlug) {
-      console.log(`[Products API] Resolving brand slug: ${brandSlug}`);
+    if (brandParam) {
+      const brandSlugs = brandParam.split(',').map(s => s.trim()).filter(Boolean);
 
-      const brandId = await resolveBrandSlugToId(brandSlug);
+      if (brandSlugs.length > 0) {
+        console.log(`[Products API] Resolving ${brandSlugs.length} brand slug(s):`, brandSlugs);
 
-      if (brandId === null) {
-        console.warn(`[Products API] Brand slug "${brandSlug}" not found`);
-        // Retornar resultado vacío en lugar de error 404
-        return NextResponse.json({
-          data: [],
-          total: 0,
-          total_pages: 0,
-          current_page: 1,
-          per_page: parseInt(searchParams.get('per_page') || '12'),
-          message: `Brand "${brandSlug}" not found`
-        });
+        const brandIds: number[] = [];
+        const notFoundSlugs: string[] = [];
+
+        // Resolver cada slug a su ID
+        for (const slug of brandSlugs) {
+          const brandId = await resolveBrandSlugToId(slug);
+
+          if (brandId !== null) {
+            brandIds.push(brandId);
+            console.log(`[Products API] ✅ Brand "${slug}" resolved to ID: ${brandId}`);
+          } else {
+            notFoundSlugs.push(slug);
+            console.warn(`[Products API] ⚠️  Brand slug "${slug}" not found`);
+          }
+        }
+
+        // Si ninguna marca fue encontrada, retornar resultado vacío
+        if (brandIds.length === 0) {
+          console.warn(`[Products API] No valid brands found from: ${brandSlugs.join(', ')}`);
+          return NextResponse.json({
+            data: [],
+            total: 0,
+            total_pages: 0,
+            current_page: 1,
+            per_page: parseInt(searchParams.get('per_page') || '12'),
+            message: `Brands not found: ${notFoundSlugs.join(', ')}`
+          });
+        }
+
+        // Remover el parámetro 'brand' (slugs) y agregar 'brand' (ids)
+        // WooCommerce acepta múltiples IDs separados por coma
+        searchParams.delete('brand');
+        searchParams.set('brand', brandIds.join(','));
+
+        console.log(`[Products API] ✅ Resolved ${brandIds.length} brand(s):`, brandIds);
+        if (notFoundSlugs.length > 0) {
+          console.log(`[Products API] ⚠️  ${notFoundSlugs.length} brand(s) not found:`, notFoundSlugs);
+        }
+        console.log(`[Products API] 🔍 Final params before WooCommerce:`, Object.fromEntries(searchParams.entries()));
       }
-
-      console.log(`[Products API] ✅ Brand "${brandSlug}" resolved to ID: ${brandId}`);
-
-      // Remover el parámetro 'brand' (slug) y agregar 'brand' (id)
-      // IMPORTANTE: WooCommerce usa 'brand' (no 'product_brand')
-      searchParams.delete('brand');
-      searchParams.set('brand', brandId.toString());
-
-      console.log(`[Products API] 🔍 Final params before WooCommerce:`, Object.fromEntries(searchParams.entries()));
     }
 
     // ============================================

@@ -38,13 +38,12 @@ export function useWooCommerce() {
     }
 
     // ============================================
-    // FILTRO DE MARCAS: Pasar slug al backend
-    // El backend resolverá slug → id y usará product_brand={id}
+    // FILTRO DE MARCAS: Pasar slugs al backend
+    // El backend resolverá slugs → ids y usará brand={id1,id2,...}
+    // Soporte para múltiples marcas separadas por coma
     // ============================================
     if (filters.brands && Array.isArray(filters.brands) && filters.brands.length > 0) {
-      // Por ahora solo soportamos una marca a la vez
-      // Si hay múltiples, usar la primera
-      params.brand = filters.brands[0];
+      params.brand = filters.brands.join(',');
     }
 
     if (filters.price_min !== undefined) {
