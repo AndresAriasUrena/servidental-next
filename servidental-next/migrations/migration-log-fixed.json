@@ -1,0 +1,175 @@
+{
+  "startTime": "2025-07-22T03:17:56.344Z",
+  "totalProducts": 99,
+  "processedProducts": 99,
+  "createdProducts": 99,
+  "skippedProducts": 0,
+  "errors": [
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Anestesia",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:17:56.925Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Bombas de vacío",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:17:57.651Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Activador UV para implantes",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:17:58.372Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Compresores",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:17:59.125Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Equipo de Rayos X",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:17:59.851Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Esterilización",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:00.608Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Fresadora",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:01.329Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Lámparas Dentales",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:02.080Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Lámparas de Fotocurado",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:03.173Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Cámaras Intraorales",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:03.943Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Lámparas de blanqueamiento",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:04.710Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Piezas de mano",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:05.461Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Escáneres",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:06.207Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Selladoras",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:06.955Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Termoformadoras",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:07.673Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Motores de implantes",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:08.413Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Motores de cirugías",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:09.154Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Lavadoras ultrasónicas",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:09.902Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Pulidores",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:10.618Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Motor NX-201N",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:11.352Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Unidades Dentales",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:12.081Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Mobiliario",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:12.817Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Pulverizador",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:13.542Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Equipo portátil",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:14.329Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Equipo para endodoncia",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:15.062Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Láseres dentales",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:15.800Z"
+    },
+    {
+      "type": "CATEGORY_ERROR",
+      "category": "Electro bisturís",
+      "error": "API Error (400): Un término con el nombre dado ya existe en este nivel.",
+      "timestamp": "2025-07-22T03:18:16.552Z"
+    }
+  ],
+  "createdCategories": [],
+  "createdBrands": [],
+  "endTime": "2025-07-22T03:19:32.557Z",
+  "duration": 96213
+}

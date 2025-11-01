@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import ContactForm from '@/components/contact/ContactForm'
 import ContactInfo from '@/components/contact/ContactInfo'
 import Map from '@/components/contact/Map'
+import BlackNovemberBanner from '@/components/home/BlackNovemberBanner'
 
 export const metadata: Metadata = {
   title: 'Contáctenos | ServiDental',
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main>
+      <BlackNovemberBanner />
       {/* Hero Section */}
       <section className="bg-contacto_bg bg-cover bg-center bg-no-repeat text-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +58,7 @@ export default function ContactPage() {
       {/* WhatsApp CTA */}
       <section className="fixed bottom-4 right-4 z-50">
         <a
-          href="https://api.whatsapp.com/send?phone=50687045556"
+          href="https://api.whatsapp.com/send?phone=50621016114"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors shadow-lg"

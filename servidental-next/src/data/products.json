@@ -1,0 +1,947 @@
+{
+  "categories": [
+    "Anestesia",
+    "Bombas de vacío",
+    "Activador UV para implantes",
+    "Compresores",
+    "Equipo de Rayos X",
+    "Esterilización",
+    "Fresadora",
+    "Lámparas Dentales",
+    "Lámparas de Fotocurado",
+    "Cámaras Intraorales",
+    "Lámparas de blanqueamiento",
+    "Piezas de mano",
+    "Escáneres",
+    "Selladoras",
+    "Termoformadoras",
+    "Motores de implantes",
+    "Motores de cirugías",
+    "Lavadoras ultrasónicas",
+    "Pulidores",
+    "Motor NX-201N",
+    "Unidades Dentales",
+    "Mobiliario",
+    "Pulverizador",
+    "Equipo portátil",
+    "Equipo para endodoncia",
+    "Láseres dentales",
+    "Electro bisturís"
+  ],
+  "brands": [
+    "BioArt",
+    "COXO",
+    "DOF",
+    "Meyer",
+    "Micro NX",
+    "Siger",
+    "Sturdy",
+    "TPC",
+    "Xpect Vision",
+    "elec",
+    "DenTech",
+    "DentaFilm",
+    "epdent",
+    "mdmed",
+    "launca",
+    "dimed",
+    "artelectron",
+    "fame",
+    "whitebrand"
+  ],
+  "products": [
+    {
+      "id": "Pulidora-dental-por-aire-CP-1",
+      "slug": "Pulidora-dental-por-aire-CP-1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.032Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Microarenador-Standar-Microblaster",
+      "slug": "Microarenador-Standar-Microblaster",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-de-implantes-ISE-270M",
+      "slug": "Motor-de-implantes-ISE-270M",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-de-implantes-C-SAILOR-S1",
+      "slug": "Motor-de-implantes-C-SAILOR-S1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-de-implantes-C-SAILOR-PRO",
+      "slug": "Motor-de-implantes-C-SAILOR-PRO",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-electrico-de-cirugia",
+      "slug": "Motor-electrico-de-cirugia",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-de-cirugia-C-Puma-Master",
+      "slug": "Motor-de-cirugia-C-Puma-Master",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Motor-NX-201N",
+      "slug": "Motor-NX-201N",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Lavadora-ultrasonica-BioWhash",
+      "slug": "Lavadora-ultrasonica-BioWhash",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Lampara-de-cirugia-L500",
+      "slug": "Lampara-de-cirugia-L500",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Lampara-Dental-v1",
+      "slug": "Lampara-Dental-v1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Lampara-Dental-v2",
+      "slug": "Lampara-Dental-v2",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "Lampara-Dental-v5",
+      "slug": "Lampara-Dental-v5",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.033Z",
+      "updatedAt": "2025-07-22T02:32:07.033Z"
+    },
+    {
+      "id": "lampara-fotocurado-caries",
+      "slug": "lampara-fotocurado-caries",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "NANO-DB686",
+      "slug": "NANO-DB686",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Swift-DB686",
+      "slug": "Swift-DB686",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Fresadora-dental-Craft-5x",
+      "slug": "Fresadora-dental-Craft-5x",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Fresadora-dental-Craft-Dry",
+      "slug": "Fresadora-dental-Craft-Dry",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "SA-260MB-Super-deluxe-automatico-clase-B",
+      "slug": "SA-260MB-Super-deluxe-automatico-clase-B",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "SA-232X-Semi-automatico-clase-S",
+      "slug": "SA-232X-Semi-automatico-clase-S",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "SA-232-Manual-clase-N",
+      "slug": "SA-232-Manual-clase-N",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Carro-movil-multifuncional",
+      "slug": "Carro-movil-multifuncional",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Carrito-movil-T3-3",
+      "slug": "Carrito-movil-T3-3",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Carrito-movil-K1",
+      "slug": "Carrito-movil-K1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Armario-G14-1",
+      "slug": "Armario-G14-1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Armario-G16",
+      "slug": "Armario-G16",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Escaner-Intraoral-DL-300P-Coxo-Launca",
+      "slug": "Escaner-Intraoral-DL-300P-Coxo-Launca",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Escaner-para-laboratorio-dental-Edge-HD-DOF",
+      "slug": "Escaner-para-laboratorio-dental-Edge-HD-DOF",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Escaner-intraoral-Freedom-I-DOF",
+      "slug": "Escaner-intraoral-Freedom-I-DOF",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Escaner-intraoral-Meyer",
+      "slug": "Escaner-intraoral-Meyer",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Escaner-de-placas-para-imagenes-dentales",
+      "slug": "Escaner-de-placas-para-imagenes-dentales",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Pulverizador-ultrasonico-CK-C-para-desinfeccion",
+      "slug": "Pulverizador-ultrasonico-CK-C-para-desinfeccion",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Pulverizador-ultrasonico-CK-A-para-desinfeccion",
+      "slug": "Pulverizador-ultrasonico-CK-A-para-desinfeccion",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Sistema-dental-portatil",
+      "slug": "Sistema-dental-portatil",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "CarroMedicoMovilMirage",
+      "slug": "Carro-Medico-Movil-Mirage",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Silla-dental-portatil",
+      "slug": "Silla-dental-portatil",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "UC-One",
+      "slug": "UC-One",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.034Z",
+      "updatedAt": "2025-07-22T02:32:07.034Z"
+    },
+    {
+      "id": "Succion-EP",
+      "slug": "Succion-EP",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "GP-Cut-Fit",
+      "slug": "GP-Cut-Fit",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Cortadora-UC",
+      "slug": "Cortadora-UC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "C-SMART-I-PILOT-con-localizador-de-apice",
+      "slug": "C-SMART-I-PILOT-con-localizador-de-apice",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "C-Explorer",
+      "slug": "C-Explorer",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-704-4HP-220vAC",
+      "slug": "DC-704-4HP-220vAC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-703D-3HP-con-secado",
+      "slug": "DC-703D-3HP-con-secado",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-703-3HP-110vAC",
+      "slug": "DC-703-3HP-110vAC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-702-2HP-con-secado",
+      "slug": "DC-702-2HP-con-secado",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-702-2HP-110vAC",
+      "slug": "DC-702-2HP-110vAC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "DC-701-1HP-110vAC",
+      "slug": "DC-701-1HP-110vAC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Monitor-y-camara",
+      "slug": "Monitor-y-camara",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Monitor-camara-y-PC",
+      "slug": "Monitor-camara-y-PC",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Bomba-de-vacio-VC10-seca",
+      "slug": "Bomba-de-vacio-VC10-seca",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Bomba-de-vacio-ANYVAC-30-humeda",
+      "slug": "Bomba-de-vacio-ANYVAC-30-humeda",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Jeringa-de-anestesia-dental-inteligente",
+      "slug": "Jeringa-de-anestesia-dental-inteligente",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Activador-UV-para-implantes",
+      "slug": "Activador-UV-para-implantes",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Pieza-de-mano-pediatrica",
+      "slug": "Pieza-de-mano-pediatrica",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Pieza-de-mano-de-alta-velocidad-H75-TP2",
+      "slug": "Pieza-de-mano-de-alta-velocidad-H75-TP2",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Pieza-de-mano-de-alta-velocidad",
+      "slug": "Pieza-de-mano-de-alta-velocidad",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "SA-100L",
+      "slug": "SA-100L",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "S-2C",
+      "slug": "S-2C",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235-S2-A",
+      "slug": "CX235-S2-A",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235-S2",
+      "slug": "CX235-S2",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "SG200L",
+      "slug": "SG200L",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235C6",
+      "slug": "CX235C6",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235-C1-4",
+      "slug": "CX235-C1-4",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235-C1-2",
+      "slug": "CX235-C1-2",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX235-C1-1",
+      "slug": "CX235-C1-1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CA-100L",
+      "slug": "CA-100L",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "C7-5",
+      "slug": "C7-5",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "C5-1M",
+      "slug": "C5-1M",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "C-1C",
+      "slug": "C-1C",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "BA250LT-1-5",
+      "slug": "BA250LT-1-5",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "BA45LS-1-1",
+      "slug": "BA45LS-1-1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Pieza-de-mano-dental-super-torque",
+      "slug": "Pieza-de-mano-dental-super-torque",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Kit-de-piezas-de-mano-de-baja-velocidad",
+      "slug": "Kit-de-piezas-de-mano-de-baja-velocidad",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Kit-de-piezas-de-mano-de-baja-velocidad2",
+      "slug": "Kit-de-piezas-de-mano-de-baja-velocidad2",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "CX207-F-H65",
+      "slug": "CX207-F-H65",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "plast-press",
+      "slug": "plast-press",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "plastvac-p7-analogo",
+      "slug": "plastvac-p7-analogo",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "plastvac-p7-digital",
+      "slug": "plastvac-p7-digital",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "selladora-X330",
+      "slug": "selladora-X330",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Selladora-Smart-127V",
+      "slug": "Selladora-Smart-127V",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "Selladora-Biostamp-127V",
+      "slug": "Selladora-Biostamp-127V",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "unidad-dental-serie-S30",
+      "slug": "unidad-dental-serie-S30",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.035Z",
+      "updatedAt": "2025-07-22T02:32:07.035Z"
+    },
+    {
+      "id": "unidad-dental-serie-S30-carrito",
+      "slug": "unidad-dental-serie-S30-carrito",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "unidad-dental-u100",
+      "slug": "unidad-dental-u100",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "unidad-dental-v6000",
+      "slug": "unidad-dental-v6000",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Banquetas",
+      "slug": "Banquetas",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "rayos-x-portatil-xv-beam-1000",
+      "slug": "rayos-x-portatil-xv-beam-1000",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Tomografo-Meyer-SS-X9010Dpro-3DE",
+      "slug": "Tomografo-Meyer-SS-X9010Dpro-3DE",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "SensorDental",
+      "slug": "SensorDental",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Sensor-de-rayos-X-intraoral-digital",
+      "slug": "Sensor-de-rayos-X-intraoral-digital",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "rayos-x-portatil",
+      "slug": "rayos-x-portatil",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "ChalecoPlomadoSinCuello",
+      "slug": "ChalecoPlomadoSinCuello",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "BolsoParaRayosXportatil",
+      "slug": "Bolso-Para-RayosX-portatil",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "scaner-de-modelos-Freedom-X5",
+      "slug": "Escaner-de-modelos-Freedom-X5",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Lampara-de-blanqueamiento-LED-Advance-2505",
+      "slug": "Lampara-de-blanqueamiento-LED-Advance-2505",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Laser-de-diodo-dental-Berylas-II",
+      "slug": "Laser-de-diodo-dental-Berylas-II",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Maquina-de-succion-movil",
+      "slug": "Maquina-de-succion-movil",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    },
+    {
+      "id": "Electro-bisturi-Electron-ART-E1",
+      "slug": "Electro-bisturi-Electron-ART-E1",
+      "features": {},
+      "specifications": [],
+      "images": [],
+      "createdAt": "2025-07-22T02:32:07.036Z",
+      "updatedAt": "2025-07-22T02:32:07.036Z"
+    }
+  ],
+  "extractedAt": "2025-07-22T02:32:07.036Z",
+  "totalProducts": 99
+}

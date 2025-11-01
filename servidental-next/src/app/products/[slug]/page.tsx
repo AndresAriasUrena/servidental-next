@@ -86,13 +86,13 @@ function ProductContent({ product }: { product: NonNullable<typeof products[numb
               Productos relacionados
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {product.relatedProducts.map((relatedProductId) => {
+              {product.relatedProducts.map((relatedProductId, index) => {
                 const relatedProduct = products.find((p) => p.id === relatedProductId)
                 if (!relatedProduct) return null
 
                 return (
                   <Link
-                    key={relatedProduct.id}
+                    key={`related-products-${relatedProduct.id}-${index}`}
                     href={`/products/${relatedProduct.slug}`}
                     className="group"
                   >

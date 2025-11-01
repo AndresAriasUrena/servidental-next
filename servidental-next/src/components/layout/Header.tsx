@@ -1,24 +1,31 @@
 // src/components/layout/Header.tsx
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Facebook, Instagram, MessageCircle } from 'lucide-react'
+import { Facebook, Instagram, MessageCircle, ShoppingCart, CheckCircle } from 'lucide-react'
 import { TbBrandYoutube } from "react-icons/tb"
 import assets from '@/assets'
+import MiniCart from '@/components/ecommerce/cart/MiniCart'
+import { useCart } from '@/hooks/useCart'
 
 const navigation = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
   { name: 'SERVICIOS', href: '/#services' },
-  { name: 'EQUIPOS', href: '/products' },
-  { name: 'REPUESTOS', href: '/spare-parts' },
+  { name: 'TIENDA', href: '/tienda' },
   { name: 'BLOG', href: '/blog' },
   { name: 'CONTACTO', href: '/contact' },
 ]
 
 const socialLinks = [
+  {
+    name: 'WhatsApp',
+    href: 'https://api.whatsapp.com/send?phone=50621016114',
+    icon: MessageCircle,
+    color: 'text-green-500 hover:text-green-600'
+  },
   {
     name: 'Instagram',
     href: 'https://www.instagram.com/servidentalcr/?hl=es-la',
@@ -41,9 +48,27 @@ const socialLinks = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showMiniCart, setShowMiniCart] = useState(false)
+  const cartState = useCart()
+  const totalQuantity = cartState.cart.totalQuantity
+  const justAdded = false
+
+  // Listen for custom event to open mini cart
+  useEffect(() => {
+    const handleOpenMiniCart = () => {
+      setShowMiniCart(true);
+    };
+
+    window.addEventListener('openMiniCart', handleOpenMiniCart);
+    
+    return () => {
+      window.removeEventListener('openMiniCart', handleOpenMiniCart);
+    };
+  }, []);
 
   return (
     <header className="bg-white fixed z-30 w-full shadow-sm">
+
       {/* Top bar with social icons - hidden on mobile */}
       <div className="hidden lg:block bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,8 +112,34 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="flex lg:hidden">
+        {/* Mobile cart and menu buttons */}
+        <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile Cart Button */}
+          <div className="relative">
+            <button
+              type="button"
+              className={`-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50 transition-all duration-200 ${justAdded ? 'animate-bounce' : ''}`}
+              onClick={() => setShowMiniCart(!showMiniCart)}
+            >
+              <span className="sr-only">Abrir carrito</span>
+              <ShoppingCart className="h-6 w-6" aria-hidden="true" />
+              {totalQuantity > 0 && (
+                <span className={`absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300 ${justAdded ? 'animate-pulse scale-125' : ''}`}>
+                  {totalQuantity}
+                </span>
+              )}
+              {justAdded && (
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-servi_green/30 rounded-full animate-ping"></div>
+              )}
+            </button>
+            {showMiniCart && (
+              <div className="absolute right-0 top-12 z-50">
+                <MiniCart onClose={() => setShowMiniCart(false)} />
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-servi_green hover:bg-gray-50"
@@ -105,23 +156,47 @@ export default function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green"
+              className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green no-underline"
             >
               {item.name}
             </Link>
           ))}
         </div>
 
-        {/* Desktop CTA button */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        {/* Desktop Cart and CTA */}
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+          {/* Desktop Cart Button */}
+          <div className="relative">
+            <button
+              type="button"
+              className={`relative p-2 text-gray-700 hover:text-servi_green transition-all duration-200 ${justAdded ? 'animate-bounce' : ''}`}
+              onClick={() => setShowMiniCart(!showMiniCart)}
+            >
+              <span className="sr-only">Abrir carrito</span>
+              <ShoppingCart className="h-6 w-6" />
+              {totalQuantity > 0 && (
+                <span className={`absolute -top-1 -right-1 bg-servi_green text-white text-xs rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300 ${justAdded ? 'animate-pulse scale-125' : ''}`}>
+                  {totalQuantity}
+                </span>
+              )}
+              {justAdded && (
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-servi_green/30 rounded-full animate-ping"></div>
+              )}
+            </button>
+            {showMiniCart && (
+              <div className="absolute right-0 top-12 z-50">
+                <MiniCart onClose={() => setShowMiniCart(false)} />
+              </div>
+            )}
+          </div>
+
+          {/* Ver tienda CTA */}
           <Link
-            href="https://api.whatsapp.com/send?phone=50687045556"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/tienda"
             className="inline-flex items-center gap-2 bg-servi_green text-white px-4 py-2 rounded-lg hover:bg-servi_dark transition-colors font-medium text-sm"
           >
-            <MessageCircle className="w-4 h-4" />
-            WhatsApp
+            <ShoppingCart className="w-4 h-4" />
+            Ver tienda
           </Link>
         </div>
       </nav>
@@ -164,7 +239,7 @@ export default function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors"
+                    className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
@@ -175,14 +250,12 @@ export default function Header() {
               {/* Mobile CTA and social */}
               <div className="py-6 space-y-4">
                 <Link
-                  href="https://api.whatsapp.com/send?phone=50687045556"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/tienda"
                   className="flex items-center justify-center gap-2 w-full bg-servi_green text-white px-4 py-3 rounded-lg hover:bg-servi_dark transition-colors font-medium"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <MessageCircle className="w-5 h-5" />
-                  Contactar por WhatsApp
+                  <ShoppingCart className="w-5 h-5" />
+                  Ver tienda
                 </Link>
 
                 {/* Mobile social links */}

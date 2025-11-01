@@ -37,7 +37,7 @@ const slides: Slide[] = [
       <div className="flex flex-col z-10 p-6 text-white bg-vertical_gradient md:bg-horizontal_gradient rounded-2xl 
                       lg:ml-8 lg:mr-[-40%] text-center lg:text-left lg:mt-[40%]">
         <h2 className="text-2xl md:text-4xl lg:text-4xl font-semibold leading-relaxed">
-          Equipo de ingenieros y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo
+          Equipo de ingenieros en electromedicina y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo.
         </h2>
         <div className="mt-6 lg:mt-8 px-6 lg:px-0 lg:ml-[25%] lg:w-[75%] flex justify-center">
           <CTAButtons className="lg:justify-center" />

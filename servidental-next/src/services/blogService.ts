@@ -6,8 +6,20 @@ import {
   BlogCategory 
 } from '@/types/blog';
 
-const WP_API_BASE = 'https://wp.servidentalcr.com/wp-json/wp/v2';
-const CUSTOM_API_BASE = 'https://wp.servidentalcr.com/wp-json/servidental/v1';
+// Use local API proxy to avoid CORS issues
+// For server-side rendering, we need absolute URLs
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    // Client-side: use relative URLs
+    return '';
+  }
+  // Server-side: use absolute URL
+  return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
+};
+
+const WP_POSTS_API = `${getBaseUrl()}/api/wordpress/posts`;
+const WP_BLOG_CONFIG_API = `${getBaseUrl()}/api/wordpress/blog-config`;
+const WP_CATEGORIES_API = `${getBaseUrl()}/api/wordpress/categories`;
 
 // Development mode check
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -122,13 +134,12 @@ class BlogService {
         searchParams.append('search', search);
       }
 
-      const url = `${WP_API_BASE}/posts?${searchParams}`;
+      const url = `${WP_POSTS_API}?${searchParams}`;
       const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        mode: 'cors',
         cache: 'no-cache'
       });
 
@@ -143,7 +154,7 @@ class BlogService {
       const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0');
       const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1');
 
-      const formattedPosts: BlogPost[] = posts.map(this.formatPost.bind(this));
+      const formattedPosts: BlogPost[] = await Promise.all(posts.map(post => this.formatPost(post)));
 
       const result: BlogPostsResponse = {
         posts: formattedPosts,
@@ -181,14 +192,14 @@ class BlogService {
     if (cached) return cached;
 
     try {
-      const url = `${WP_API_BASE}/posts?slug=${slug}&_embed=true&status=publish`;
+      const url = `${WP_POSTS_API}?slug=${slug}&_embed=true&status=publish`;
       const posts: any[] = await this.fetchWithErrorHandling(url);
 
       if (posts.length === 0) {
         return null;
       }
 
-      const post = this.formatPost(posts[0]);
+      const post = await this.formatPost(posts[0]);
       cache.set(cacheKey, post);
       return post;
     } catch (error) {
@@ -204,7 +215,7 @@ class BlogService {
 
     try {
       // Try custom API first
-      const config = await this.fetchWithErrorHandling<BlogConfig>(`${CUSTOM_API_BASE}/blog-config`);
+      const config = await this.fetchWithErrorHandling<BlogConfig>(WP_BLOG_CONFIG_API);
       
       if (!config) {
         throw new Error('Empty config response');
@@ -244,7 +255,7 @@ class BlogService {
     if (cached) return cached;
 
     try {
-      const categories: any[] = await this.fetchWithErrorHandling(`${WP_API_BASE}/categories`);
+      const categories: any[] = await this.fetchWithErrorHandling(WP_CATEGORIES_API);
       
       const formattedCategories: BlogCategory[] = categories.map(cat => ({
         id: cat.id,
@@ -265,7 +276,7 @@ class BlogService {
     return this.fetchPosts({ search: query, page });
   }
 
-  private formatPost(post: any): BlogPost {
+  private async formatPost(post: any): Promise<BlogPost> {
     // Calculate reading time (assuming 200 words per minute)
     const wordCount = post.content?.rendered 
       ? post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length 
@@ -291,6 +302,9 @@ class BlogService {
       ? post.excerpt.rendered.replace(/<[^>]*>/g, '').trim()
       : '';
 
+    // Extract SEO data
+    const seoData = await this.extractSEOData(post);
+
     return {
       id: post.id,
       title: post.title || { rendered: '' },
@@ -306,7 +320,49 @@ class BlogService {
       tags: post.tags || [],
       reading_time: readingTime,
       link: post.link,
-      status: post.status
+      status: post.status,
+      seo: seoData
+    };
+  }
+
+  private async extractSEOData(post: any): Promise<any> {
+    try {
+      const slug = post.slug;
+      const wpUrl = `https://wp.servidentalcr.com/${slug}/`;
+      const rankmathUrl = `https://wp.servidentalcr.com/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(wpUrl)}`;
+      const response = await fetch(rankmathUrl);
+      const data = await response.json();
+      
+      if (data.success && data.head && !data.head.includes('Page Not Found')) {
+        const head = data.head;
+        
+        const ogTitleMatch = head.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']+)["']/i);
+        const title = ogTitleMatch ? ogTitleMatch[1] : '';
+        
+        const descMatch = head.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
+        const description = descMatch ? descMatch[1] : '';
+        
+        const schemaMatch = head.match(/"keywords":"([^"]+)"/i);
+        const keywords = schemaMatch ? schemaMatch[1] : '';
+        
+        const canonical = `https://servidentalcr.com/blog/${slug}`;
+        
+        return {
+          title,
+          description,
+          keywords,
+          canonical,
+        };
+      }
+    } catch (error) {
+      console.warn('Error obteniendo SEO de RankMath:', error);
+    }
+    
+    return {
+      title: post.title?.rendered || '',
+      description: post.excerpt_plain || '',
+      keywords: '',
+      canonical: `https://servidentalcr.com/blog/${post.slug}`,
     };
   }
 

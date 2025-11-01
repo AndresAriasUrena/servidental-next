@@ -10,6 +10,7 @@ import { TbBrandWaze } from "react-icons/tb";
 import { TbBrandYoutube } from "react-icons/tb";
 
 import assets from '@/assets'
+import TrustBadges from '@/components/common/TrustBadges'
 
 const socialLinks = [
   {
@@ -78,6 +79,9 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
+
+            {/* Trust Badges */}
+            <TrustBadges variant="footer" />
           </motion.div>
 
           {/* Certificaciones */}

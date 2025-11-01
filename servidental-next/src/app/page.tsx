@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 
 const Hero = dynamic(() => import('@/components/home/Hero'));
+const BlackNovemberBanner = dynamic(() => import('@/components/home/BlackNovemberBanner'));
 const ProductsSection = dynamic(() => import('@/components/home/ProductsSection'));
 const YouTubeVideoSection = dynamic(() => import('@/components/home/YouTubeVideoSection'));
 const ServicesSection = dynamic(() => import('@/components/home/ServicesSection'));
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <BlackNovemberBanner />
       <Hero />
       <ProductsSection />
       <YouTubeVideoSection />
