@@ -21,6 +21,12 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+    // Deshabilitar optimización para imágenes de WooCommerce que causan errores 402
+    unoptimized: false,
+    // Aumentar el timeout para imágenes externas
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   trailingSlash: true,
   typescript: {
