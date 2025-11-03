@@ -21,6 +21,12 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+    // Desactivar optimización de Vercel para evitar error 402 (límite excedido)
+    // En plan Hobby, Vercel tiene límite de 1000 optimizaciones/mes
+    unoptimized: true,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   trailingSlash: true,
   typescript: {

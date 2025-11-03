@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
+import WooCommerceImage from './WooCommerceImage';
 import { WooCommerceProduct, ProductVariation } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
@@ -420,7 +421,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                 );
               } else {
                 return (
-                  <Image
+                  <WooCommerceImage
                     src={currentMedia.src}
                     alt={currentMedia.alt}
                     width={600}
@@ -446,12 +447,12 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                       key={index}
                       onClick={() => setSelectedMediaIndex(index)}
                       className={`aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:shadow-md relative ${
-                        selectedMediaIndex === index 
-                          ? 'border-servi_green shadow-md scale-105' 
+                        selectedMediaIndex === index
+                          ? 'border-servi_green shadow-md scale-105'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <Image
+                      <WooCommerceImage
                         src={media.thumbnail || media.src}
                         alt={media.alt}
                         width={120}
