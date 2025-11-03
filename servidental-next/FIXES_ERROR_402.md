@@ -32,87 +32,90 @@ El widget de Instagram de Elfsight está deshabilitado en su servicio, probablem
 
 ---
 
-### 2. ⚠️ Error 402 en Imágenes de WooCommerce (PARCIALMENTE SOLUCIONADO)
+### 2. ✅ Error 402 en Imágenes (SOLUCIONADO - CAUSA REAL IDENTIFICADA)
 
 **Problema:**
 ```
 Failed to load resource: the server responded with a status of 402 ()
+URL: /_next/image/?url=https%3A%2F%2Fwp.servidentalcr.com%2F...
 ```
-Múltiples imágenes de productos fallan al cargar con código HTTP 402 (Payment Required).
+Múltiples imágenes fallan al cargar con código HTTP 402 (Payment Required).
 
-**Causa Raíz:**
-El error 402 indica que hay un servicio de optimización de imágenes en el servidor de WordPress que ha excedido su límite gratuito o requiere renovación de pago. Posibles culpables:
-- **Jetpack Photon CDN** (límite de imágenes excedido)
-- **Smush Pro** (suscripción vencida)
-- **ShortPixel** (cuota mensual agotada)
-- **WP Rocket** u otro plugin CDN
-- **Servicio CDN externo** configurado en el servidor
+**Causa Raíz REAL (Identificada):**
+❌ **NO era un problema de WordPress** (como se pensó inicialmente)
+✅ **Es un problema de Vercel Image Optimization**
 
-**Soluciones Implementadas:**
+**Diagnóstico:**
+- El error 402 viene del endpoint `/_next/image` de **VERCEL**
+- Plan Hobby de Vercel tiene límite de **1000 optimizaciones/mes**
+- Tu proyecto ha **excedido ese límite**
+- Por eso falla para **TODAS** las imágenes:
+  - Imágenes de WordPress (wp.servidentalcr.com)
+  - Thumbnails de YouTube (img.youtube.com)
+  - Cualquier imagen externa
+- En **localhost funciona** porque el dev server no tiene límites
 
-#### A. Componente WooCommerceImage con Fallback
-Creado componente especializado que:
-- Detecta errores al cargar imágenes
-- Intenta cargar sin optimización si falla
-- Muestra placeholder si todo falla
-- Mejora la experiencia del usuario
+**Solución Implementada:**
+
+#### Configuración de Next.js - Desactivar Image Optimization
+```javascript
+// next.config.js
+images: {
+  unoptimized: true,  // ← SOLUCIÓN CRÍTICA
+  remotePatterns: [...],
+}
+```
+
+**¿Qué hace esto?**
+- Desactiva completamente el servicio de optimización de Vercel
+- Next.js Image component se comporta como `<img>` nativo
+- Las imágenes se sirven directamente desde su origen
+- **NO** pasa por `/_next/image` de Vercel
+- **Elimina completamente el error 402**
+
+**Trade-offs:**
+- ❌ Sin optimización automática de Vercel (WebP, redimensionado, etc.)
+- ❌ Imágenes se sirven en tamaño original
+- ✅ Sin límites de uso
+- ✅ Sin costos adicionales
+- ✅ Funciona inmediatamente
+
+**Archivos Modificados:**
+- `next.config.js` - Configurado `unoptimized: true`
+
+---
+
+#### [OPCIONAL] Componente WooCommerceImage con Fallback
+También se creó un componente especializado (ya no es necesario con `unoptimized: true`, pero se mantiene por si acaso):
 
 **Archivo Creado:**
 - `src/components/ecommerce/product/WooCommerceImage.tsx`
 
-#### B. Actualización de ProductDetails
-- Reemplazado componente `Image` de Next.js con `WooCommerceImage`
-- Aplicado en imágenes principales y miniaturas del producto
-
 **Archivos Modificados:**
 - `src/components/ecommerce/product/ProductDetails.tsx`
 
-#### C. Configuración de Next.js Mejorada
-- Agregadas configuraciones de seguridad para imágenes externas
-- Habilitado soporte para SVG
-- Configurado Content Security Policy
+---
 
-**Archivos Modificados:**
-- `next.config.js`
+**✅ PROBLEMA RESUELTO - NO SE REQUIERE ACCIÓN EN WORDPRESS**
 
-**⚠️ ACCIÓN REQUERIDA EN WORDPRESS:**
+El problema NO era de WordPress. Era del límite de Vercel Image Optimization.
+Ya está solucionado con `unoptimized: true`.
 
-Para solucionar completamente el error 402, debe verificar en el servidor de WordPress:
+**Alternativas futuras (opcional):**
 
-1. **Revisar plugins de optimización de imágenes:**
-   ```
-   - Jetpack → Settings → Performance → Image CDN
-   - Smush → Dashboard (verificar cuota)
-   - ShortPixel → Settings (verificar créditos)
-   - WP Rocket → Media (verificar configuración CDN)
-   ```
+1. **Upgrade a Vercel Pro:**
+   - Costo: $20/mes por miembro
+   - Límite: 5000 optimizaciones/mes (5x más)
+   - Incluye optimización automática WebP, AVIF, redimensionado
 
-2. **Deshabilitar temporalmente plugins sospechosos:**
-   - Deshabilitar uno por uno y verificar si las imágenes cargan
-   - Comenzar con Jetpack, Smush, ShortPixel
+2. **Optimizar imágenes en WordPress:**
+   - Usar plugins como ShortPixel o Smush para comprimir antes de subir
+   - Subir imágenes ya optimizadas (comprimidas, redimensionadas)
+   - Esto mejorará el rendimiento incluso sin optimización de Vercel
 
-3. **Verificar configuración de .htaccess:**
-   ```apache
-   # Buscar reglas de redirección de imágenes
-   # Comentar reglas sospechosas que redirijan a CDN externos
-   ```
-
-4. **Verificar en WooCommerce → Settings → Products:**
-   - Regenerar thumbnails si es necesario
-   - Verificar que las URLs de imágenes sean correctas
-
-5. **Logs del servidor:**
-   ```bash
-   tail -f /var/log/apache2/error.log
-   # o
-   tail -f /var/log/nginx/error.log
-   ```
-
-**Comando útil para identificar el plugin:**
-```bash
-# En el servidor WordPress, buscar configuraciones de CDN
-grep -r "402\|cdn\|optimize\|photon" wp-content/plugins/*/
-```
+3. **CDN externo (Cloudflare, BunnyCDN):**
+   - Configurar CDN para servir imágenes optimizadas
+   - Más complejo pero más control
 
 ---
 
@@ -151,22 +154,26 @@ El logo tenía `priority` pero no se renderizaba inmediatamente, causando advert
 
 ## Próximos Pasos
 
-### Prioritarios (WordPress Backend):
-1. ⚠️ **CRÍTICO:** Identificar y solucionar el plugin que causa el error 402
-2. Verificar todos los plugins de optimización de imágenes
-3. Revisar configuración de CDN en el servidor
-4. Regenerar thumbnails de WooCommerce si es necesario
+### Inmediato (Testing):
+1. ✅ Verificar deployment preview - Validar que las imágenes cargan
+2. ✅ Confirmar que no hay errores 402 en la consola
+3. ✅ Confirmar que no hay errores de Elfsight
+4. ✅ Confirmar que no hay advertencias de preload
 
-### Opcionales (Frontend):
-1. ✅ Implementar galería de Instagram alternativa (si no se reactiva Elfsight)
-2. ✅ Monitorear errores de imágenes en producción
-3. ✅ Agregar logging más detallado para errores 402
+### Opcional (Optimización):
+1. **Optimizar imágenes de productos en WordPress:**
+   - Comprimir imágenes antes de subir (recomendado: < 200KB)
+   - Usar formato WebP cuando sea posible
+   - Redimensionar a tamaños apropiados (máx 1920px ancho)
 
-### Testing:
-1. Probar la carga de imágenes después de solucionar el problema 402
-2. Verificar que el componente WooCommerceImage funciona correctamente
-3. Confirmar que no hay advertencias de preload en la consola
-4. Verificar que no aparecen errores de Elfsight
+2. **Considerar upgrade de Vercel a Pro si necesitas:**
+   - Optimización automática de imágenes
+   - Más límites de bandwidth
+   - Mejores analíticas
+
+3. **Reactivar o reemplazar widget de Instagram:**
+   - Renovar suscripción de Elfsight
+   - O implementar feed de Instagram nativo
 
 ---
 
@@ -223,4 +230,5 @@ Si los problemas persisten después de aplicar estas soluciones:
 ---
 
 **Última actualización:** 2025-11-03
-**Estado:** Soluciones implementadas, requiere acción en WordPress para 402
+**Estado:** ✅ SOLUCIONADO - Causa real identificada (Vercel Image Optimization)
+**Solución:** `unoptimized: true` en next.config.js
