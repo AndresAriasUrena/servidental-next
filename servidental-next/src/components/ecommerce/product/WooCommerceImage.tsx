@@ -10,40 +10,53 @@ interface WooCommerceImageProps extends Omit<ImageProps, 'onError'> {
 /**
  * Componente para manejar imágenes de WooCommerce con fallback
  * Si la imagen falla al cargar (por ejemplo, error 402 de plugins de WordPress),
- * intenta cargar sin optimización o usa una imagen de fallback
+ * usa un tag <img> nativo para bypass completo de Next.js optimization
  */
 export default function WooCommerceImage({
   src,
   alt,
   fallbackSrc,
+  className,
+  width,
+  height,
   ...props
 }: WooCommerceImageProps) {
-  const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const [useNativeImg, setUseNativeImg] = useState(false);
+
+  const getSrcString = (source: typeof src): string => {
+    if (typeof source === 'string') return source;
+    if (typeof source === 'object' && 'src' in source) return source.src;
+    return String(source);
+  };
 
   const handleError = () => {
-    console.warn(`Error loading image: ${imgSrc}`);
+    const srcString = getSrcString(src);
+    console.warn(`Error loading image via Next.js Image: ${srcString}. Switching to native <img> tag.`);
 
     if (!hasError) {
       setHasError(true);
-
-      // Si hay un fallback, usarlo
-      if (fallbackSrc) {
-        setImgSrc(fallbackSrc);
-      } else if (typeof src === 'string') {
-        // Intentar cargar la imagen original directamente sin optimización
-        // Esto bypasea el Next.js Image Optimization que puede estar causando el 402
-        setImgSrc(src);
-      }
+      // Switch to native img tag to completely bypass Next.js image optimization
+      setUseNativeImg(true);
     }
   };
 
-  // Si hay error y no hay fallback, mostrar placeholder
-  if (hasError && !fallbackSrc) {
+  const handleNativeError = () => {
+    const srcString = getSrcString(src);
+    console.error(`Failed to load image even with native tag: ${srcString}`);
+    // After native img fails, we'll show placeholder
+    setHasError(true);
+  };
+
+  // Si falló con native img también, mostrar placeholder
+  if (hasError && useNativeImg) {
     return (
       <div
-        className="flex items-center justify-center bg-gray-100 text-gray-400"
-        style={{ width: props.width, height: props.height }}
+        className={`flex items-center justify-center bg-gray-100 text-gray-400 ${className || ''}`}
+        style={{
+          width: typeof width === 'number' ? `${width}px` : width,
+          height: typeof height === 'number' ? `${height}px` : height
+        }}
       >
         <svg
           className="w-12 h-12"
@@ -62,14 +75,33 @@ export default function WooCommerceImage({
     );
   }
 
+  // Si detectamos error con Next.js Image, usar native img tag
+  if (useNativeImg && !hasError) {
+    const imgSrc = fallbackSrc || getSrcString(src);
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={imgSrc}
+        alt={alt}
+        className={className}
+        width={typeof width === 'number' ? width : undefined}
+        height={typeof height === 'number' ? height : undefined}
+        onError={handleNativeError}
+        loading="lazy"
+      />
+    );
+  }
+
+  // Intento inicial con Next.js Image
   return (
     <Image
       {...props}
-      src={imgSrc}
+      src={src}
       alt={alt}
+      width={width}
+      height={height}
+      className={className}
       onError={handleError}
-      // Usar unoptimized si ya hubo un error
-      unoptimized={hasError}
     />
   );
 }

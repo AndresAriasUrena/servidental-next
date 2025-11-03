@@ -106,7 +106,8 @@ export default function Header() {
                 fill
                 sizes="(max-width: 1024px) 160px, 180px"
                 className="object-contain"
-                loading="eager"
+                priority
+                fetchPriority="high"
               />
             </div>
           </Link>
