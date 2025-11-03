@@ -21,9 +21,9 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    // Deshabilitar optimización para imágenes de WooCommerce que causan errores 402
-    unoptimized: false,
-    // Aumentar el timeout para imágenes externas
+    // Desactivar optimización de Vercel para evitar error 402 (límite excedido)
+    // En plan Hobby, Vercel tiene límite de 1000 optimizaciones/mes
+    unoptimized: true,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
