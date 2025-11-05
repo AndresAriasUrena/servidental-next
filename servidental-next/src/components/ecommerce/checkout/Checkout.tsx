@@ -945,6 +945,8 @@ export default function Checkout() {
                   price: item.price,
                   quantity: item.quantity,
                   sku: item.sku,
+                  variationId: item.variationId,
+                  variationAttributes: item.variationAttributes,
                 })),
                 total: getShippingCost() > 0 ? getTotalWithShipping() : cart.total,
               }}

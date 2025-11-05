@@ -77,7 +77,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
 
       // Step 2: Create WooCommerce order first (optional but recommended)
       console.log('📦 Creating WooCommerce order...');
-      
+
       const orderResponse = await fetch('/api/woocommerce/orders', {
         method: 'POST',
         headers: {

@@ -143,9 +143,16 @@ export async function POST(request: NextRequest) {
       },
       line_items: cartItems.map((item: any) => ({
         product_id: item.id,
+        variation_id: item.variationId || 0,
         quantity: item.quantity,
         name: item.name,
         price: item.price,
+        ...(item.variationAttributes && item.variationAttributes.length > 0 ? {
+          meta_data: item.variationAttributes.map((attr: any) => ({
+            key: attr.name,
+            value: attr.option
+          }))
+        } : {})
       })),
       shipping_lines: [
         {
