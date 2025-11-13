@@ -6,6 +6,7 @@ import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
 import { formatPrice } from '@/utils/currency';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
 import TrustBadges from '@/components/common/TrustBadges';
+import { trackBeginCheckout } from '@/lib/analytics';
 
 // Costa Rica geographic data
 const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
@@ -235,6 +236,18 @@ export default function Checkout() {
     };
 
     localStorage.setItem('checkout-form-data', JSON.stringify(updatedFormData));
+
+    // Track begin checkout in Google Analytics
+    trackBeginCheckout({
+      items: cart.items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price.toString(),
+        quantity: item.quantity
+      })),
+      total: cart.total.toString()
+    });
+
     setShowTilopayCheckout(true);
   };
 

@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { trackPurchase } from '@/lib/analytics';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -11,6 +12,27 @@ function SuccessContent() {
     // Support both 'order' and 'orderNumber' parameters for compatibility
     const order = searchParams.get('order') || searchParams.get('orderNumber');
     setOrderNumber(order);
+
+    // Track purchase in Google Analytics before clearing cart
+    const cartData = localStorage.getItem('servidental-cart');
+    if (cartData && order) {
+      try {
+        const cart = JSON.parse(cartData);
+        trackPurchase({
+          transactionId: order,
+          total: cart.total?.toString() || '0',
+          items: cart.items?.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            category: item.categories?.[0]?.name || 'Sin categoría'
+          })) || []
+        });
+      } catch (error) {
+        console.error('Error tracking purchase:', error);
+      }
+    }
 
     // Clear cart from localStorage on successful payment
     localStorage.removeItem('servidental-cart');

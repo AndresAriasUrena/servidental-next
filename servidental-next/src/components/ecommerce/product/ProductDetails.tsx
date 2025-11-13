@@ -18,6 +18,7 @@ import { QuoteFormModal } from '../quote/QuoteFormModal';
 import { ProductTabs } from './ProductTabs';
 import TrustBadges from '@/components/common/TrustBadges';
 import VariationSelector from './VariationSelector';
+import { trackProductView, trackAddToCart } from '@/lib/analytics';
 
 // Helper functions for media handling
 const getYouTubeVideoId = (url: string): string | null => {
@@ -146,6 +147,14 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
       try {
         const product = await fetchProductBySlug(slug);
         setProduct(product);
+
+        // Track product view in Google Analytics
+        trackProductView({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          category: product.categories?.[0]?.name || 'Sin categoría'
+        });
       } catch (err) {
         console.error('Error loading product:', err);
         setError('Producto no encontrado');
@@ -230,6 +239,15 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
     try {
       const result = await addToCart(product, quantity, selectedVariation || undefined);
       if (result.success) {
+        // Track add to cart in Google Analytics
+        trackAddToCart({
+          id: product.id,
+          name: product.name,
+          price: selectedVariation?.price || product.price,
+          quantity: quantity,
+          category: product.categories?.[0]?.name || 'Sin categoría'
+        });
+
         // Reset quantity and emit custom event to open mini cart
         setQuantity(1);
         setSelectedVariation(null);

@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { CartProvider } from '@/hooks/useCart';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -51,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${inter.className} bg-white`}>
+        <GoogleAnalytics />
         <CartProvider>
           <Header />
           <main className="text-black pt-[100px] lg:pt-[108px]">
