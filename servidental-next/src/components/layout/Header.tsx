@@ -67,28 +67,61 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-white fixed z-30 w-full shadow-sm">
+    <header className="bg-white fixed top-0 z-30 w-full shadow-sm">
 
-      {/* Top bar with social icons - hidden on mobile */}
-      <div className="hidden lg:block bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-end items-center py-2 space-x-4">
-            <span className="text-sm text-gray-600 mr-4">Síguenos:</span>
-            {socialLinks.map((social) => {
-              const IconComponent = social.icon
-              return (
-                <Link
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${social.color} transition-colors p-1`}
-                  aria-label={social.name}
-                >
-                  <IconComponent className="w-5 h-5" />
-                </Link>
-              )
-            })}
+      {/* Top bar with contact info and social icons - hidden on mobile */}
+      <div className="hidden lg:block bg-[#263238] text-white relative overflow-hidden">
+        {/* Decorative diagonal background - folder/tab style */}
+        <div className="absolute top-0 right-0 w-[400px] h-full bg-servi_green transform origin-top-right -skew-x-[20deg] translate-x-[150px]"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex justify-between items-center py-2.5">
+            {/* Contact Info - Left */}
+            <div className="flex items-center space-x-5 text-xs">
+              <a href="tel:+50621016114" className="flex items-center hover:text-servi_green transition-colors">
+                <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                (+506) 2101-6114
+              </a>
+              <a href="mailto:info@servidentalcr.com" className="flex items-center hover:text-servi_green transition-colors">
+                <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                info@servidentalcr.com
+              </a>
+              <a
+                href="https://www.google.com/maps/place/ServiDental+CR/@9.9981373,-84.1085891,17z/data=!3m1!4b1!4m6!3m5!1s0x8fa0fbd15e2f87f1:0x9e4c7e0b0e4c7e0b!8m2!3d9.9981373!4d-84.1060142!16s%2Fg%2F11c1q7q7q7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center hover:text-white/80 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                Cómo llegar
+              </a>
+            </div>
+
+            {/* Social Links - Right - positioned over the green diagonal */}
+            <div className="flex items-center space-x-4">
+              {socialLinks.map((social) => {
+                const IconComponent = social.icon
+                return (
+                  <Link
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-white/80 transition-colors"
+                    aria-label={social.name}
+                  >
+                    <IconComponent className="w-4 h-4" />
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>

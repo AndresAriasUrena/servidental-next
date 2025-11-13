@@ -36,14 +36,14 @@ export default function BlackNovemberBanner() {
       </div>
 
       {/* Contenido del banner */}
-      <div className="relative container mx-auto px-4 py-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="relative container mx-auto px-4 py-2.5 sm:py-3">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
 
           {/* Badge Black November */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="bg-gradient-to-br from-gray-700 to-gray-900 text-white px-4 py-2 rounded-lg font-black text-lg md:text-xl shadow-lg transform hover:scale-105 transition-transform">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5" />
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="bg-gradient-to-br from-gray-700 to-gray-900 text-white px-3 py-1.5 rounded-lg font-black text-sm md:text-base shadow-lg transform hover:scale-105 transition-transform">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4" />
                 <span>BLACK NOVEMBER</span>
               </div>
             </div>
@@ -58,7 +58,7 @@ export default function BlackNovemberBanner() {
                 animation: 'slideIn 0.5s ease-out'
               }}
             >
-              <p className="text-sm md:text-lg font-semibold text-white">
+              <p className="text-xs md:text-sm font-semibold text-white">
                 {messages[currentMessageIndex]}
               </p>
             </div>
@@ -67,9 +67,9 @@ export default function BlackNovemberBanner() {
           {/* Botón CTA */}
           <Link
             href="/tienda?on_sale=true"
-            className="flex-shrink-0 bg-servi_green hover:bg-servi_dark text-white font-bold px-6 py-3 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+            className="flex-shrink-0 bg-servi_green hover:bg-servi_dark text-white font-bold px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-1.5 text-xs md:text-sm"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-3.5 h-3.5" />
             <span className="whitespace-nowrap">Ver Ofertas</span>
           </Link>
         </div>

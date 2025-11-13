@@ -50,10 +50,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-white`}>
         <CartProvider>
           <Header />
-          <main className="text-black pt-24 lg:pt-32">
+          <main className="text-black pt-[100px] lg:pt-[108px]">
             {children}
           </main>
           <Footer />
