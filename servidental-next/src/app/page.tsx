@@ -41,10 +41,10 @@ export default function Home() {
     <>
       <BlackNovemberBanner />
       <Hero />
+      <BrandsSection />
       <ProductsSection />
       <YouTubeVideoSection />
       <ServicesSection />
-      <BrandsSection />
       {/* <Instagram /> */}
       {/* Widget de Instagram temporalmente deshabilitado - El widget Elfsight está deshabilitado */}
     </>
