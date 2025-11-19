@@ -36,14 +36,14 @@ export default function BlackNovemberBanner() {
       </div>
 
       {/* Contenido del banner */}
-      <div className="relative container mx-auto px-4 py-2.5 sm:py-3">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="relative container mx-auto px-4 py-2 sm:py-2.5">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2">
 
           {/* Badge Black November */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="bg-gradient-to-br from-gray-700 to-gray-900 text-white px-3 py-1.5 rounded-lg font-black text-sm md:text-base shadow-lg transform hover:scale-105 transition-transform">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4" />
+            <div className="bg-gradient-to-br from-gray-700 to-gray-900 text-white px-2.5 py-1 rounded-lg font-black text-xs md:text-sm shadow-lg transform hover:scale-105 transition-transform">
+              <div className="flex items-center gap-1">
+                <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
                 <span>BLACK NOVEMBER</span>
               </div>
             </div>
@@ -58,7 +58,7 @@ export default function BlackNovemberBanner() {
                 animation: 'slideIn 0.5s ease-out'
               }}
             >
-              <p className="text-xs md:text-sm font-semibold text-white">
+              <p className="text-[10px] md:text-xs font-semibold text-white">
                 {messages[currentMessageIndex]}
               </p>
             </div>
@@ -67,22 +67,22 @@ export default function BlackNovemberBanner() {
           {/* Botón CTA */}
           <Link
             href="/tienda?on_sale=true"
-            className="flex-shrink-0 bg-servi_green hover:bg-servi_dark text-white font-bold px-4 py-2 md:px-5 md:py-2.5 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-1.5 text-xs md:text-sm"
+            className="flex-shrink-0 bg-servi_green hover:bg-servi_dark text-white font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-1 text-[11px] md:text-xs"
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3 h-3" />
             <span className="whitespace-nowrap">Ver Ofertas</span>
           </Link>
         </div>
       </div>
 
       {/* Indicadores de mensaje (opcional - puntos para mostrar qué mensaje está activo) */}
-      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1.5">
+      <div className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 flex gap-1">
         {messages.map((_, index) => (
           <div
             key={index}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+            className={`w-1 h-1 rounded-full transition-all duration-300 ${
               index === currentMessageIndex
-                ? 'bg-slate-300 w-4'
+                ? 'bg-slate-300 w-3'
                 : 'bg-gray-600'
             }`}
           />
