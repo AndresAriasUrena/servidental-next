@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
       noteComponents.push(`--- INFORMACIÓN DETALLADA DEL CLIENTE ---`);
       noteComponents.push(`Nombre/Razón Social: ${personal_info.company_name || 'N/A'}`);
       noteComponents.push(`Cédula: ${personal_info.id_number || 'N/A'}`);
-      
+      if (personal_info.hacienda_code) {
+        noteComponents.push(`Código de actividad de Hacienda: ${personal_info.hacienda_code}`);
+      }
+
       // Add client type information
       if (personal_info.client_type) {
         const clientTypeLabels = {
@@ -77,6 +80,9 @@ export async function POST(request: NextRequest) {
         noteComponents.push(`Dirección: ${personal_info.address.province}, ${personal_info.address.canton}, ${personal_info.address.district}`);
         if (personal_info.address.other_details) {
           noteComponents.push(`Otras señas: ${personal_info.address.other_details}`);
+        }
+        if (personal_info.address.waze_link) {
+          noteComponents.push(`Enlace Waze: ${personal_info.address.waze_link}`);
         }
       }
       
@@ -207,6 +213,10 @@ export async function POST(request: NextRequest) {
             value: personal_info.company_name || '',
           },
           {
+            key: '_customer_hacienda_code',
+            value: personal_info.hacienda_code || '',
+          },
+          {
             key: '_customer_client_type',
             value: personal_info.client_type || '',
           },
@@ -245,6 +255,10 @@ export async function POST(request: NextRequest) {
           {
             key: '_customer_address_details',
             value: personal_info.address?.other_details || '',
+          },
+          {
+            key: '_customer_waze_link',
+            value: personal_info.address?.waze_link || '',
           },
         ] : []),
         

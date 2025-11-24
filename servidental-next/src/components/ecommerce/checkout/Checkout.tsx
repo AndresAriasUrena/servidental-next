@@ -115,6 +115,7 @@ interface CheckoutFormData {
   personal_info: {
     company_name: string;
     id_number: string;
+    hacienda_code: string; // Código de actividad de Hacienda
     client_type: 'odontologo' | 'tecnico' | 'otro';
     client_type_other: string; // Campo para especificar cuando es "otro"
     contact_numbers: {
@@ -130,6 +131,7 @@ interface CheckoutFormData {
       canton: string;
       district: string;
       other_details: string;
+      waze_link: string; // Enlace de Waze para dirección de envío
     };
   };
   shipping_option: 'messenger' | 'pickup' | 'other' | 'gam_free' | 'outside_gam';
@@ -189,6 +191,7 @@ export default function Checkout() {
     personal_info: {
       company_name: '',
       id_number: '',
+      hacienda_code: '',
       client_type: 'odontologo',
       client_type_other: '',
       contact_numbers: {
@@ -203,7 +206,8 @@ export default function Checkout() {
         province: '',
         canton: '',
         district: '',
-        other_details: ''
+        other_details: '',
+        waze_link: ''
       }
     },
     shipping_option: hasProductsWithShipping ? 'gam_free' : 'outside_gam', // Default: gratis si tiene tag 'envio'
@@ -311,7 +315,18 @@ export default function Checkout() {
                   }))}
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
                 />
-                
+                <input
+                  type="text"
+                  placeholder="Código de actividad económica de Hacienda *"
+                  required
+                  value={formData.personal_info.hacienda_code}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    personal_info: { ...prev.personal_info, hacienda_code: e.target.value }
+                  }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                />
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Tipo de cliente *
@@ -535,13 +550,29 @@ export default function Checkout() {
                     value={formData.personal_info.address.other_details}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
-                      personal_info: { 
-                        ...prev.personal_info, 
+                      personal_info: {
+                        ...prev.personal_info,
                         address: { ...prev.personal_info.address, other_details: e.target.value }
                       }
                     }))}
                     className="w-full border border-gray-300 rounded-md px-3 py-2"
                   />
+                  <input
+                    type="url"
+                    placeholder="Enlace de Waze (opcional)"
+                    value={formData.personal_info.address.waze_link}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      personal_info: {
+                        ...prev.personal_info,
+                        address: { ...prev.personal_info.address, waze_link: e.target.value }
+                      }
+                    }))}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 mt-4"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Puede pegar el enlace de Waze para facilitar la ubicación de su dirección
+                  </p>
                 </div>
               </div>
             </div>
