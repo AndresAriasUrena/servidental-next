@@ -32,13 +32,14 @@ function ProductGrid({
   const [repuestosFilter, setRepuestosFilter] = useState<'all' | 'repuestos' | 'no_repuestos'>('all');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [categories, setCategories] = useState<any[]>([]);
 
   const PRODUCTS_PER_PAGE = 27; // Cargar 27 productos por página
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { fetchProducts } = useWooCommerce();
+  const { fetchProducts, fetchCategories } = useWooCommerce();
 
   const getFiltersFromURL = (): ProductFilters => {
     const filters: ProductFilters = {};
@@ -48,7 +49,13 @@ function ProductGrid({
 
     const categoriesParam = searchParams.get('categories');
     if (categoriesParam) {
-      filters.categories = categoriesParam.split(',').map(Number).filter(Boolean);
+      // Parsear como slugs, no como números
+      const categorySlugs = categoriesParam.split(',').filter(Boolean);
+      // Convertir slugs a IDs para uso interno
+      const categoryIds = getCategoryIdsFromSlugs(categorySlugs);
+      if (categoryIds.length > 0) {
+        filters.categories = categoryIds;
+      }
     }
 
     // ============================================
@@ -98,10 +105,14 @@ function ProductGrid({
 
   const updateURL = (newFilters: ProductFilters, page: number = 1) => {
     const params = new URLSearchParams();
-    
+
     if (newFilters.search) params.set('search', newFilters.search);
     if (newFilters.categories && newFilters.categories.length > 0) {
-      params.set('categories', newFilters.categories.join(','));
+      // Convertir IDs de categorías a slugs para la URL
+      const categorySlugs = getCategorySlugs(newFilters.categories);
+      if (categorySlugs.length > 0) {
+        params.set('categories', categorySlugs.join(','));
+      }
     }
     if (newFilters.price_min !== undefined) params.set('price_min', String(newFilters.price_min));
     if (newFilters.price_max !== undefined) params.set('price_max', String(newFilters.price_max));
@@ -109,7 +120,7 @@ function ProductGrid({
     if (newFilters.in_stock) params.set('in_stock', 'true');
     if (page > 1) params.set('page', String(page));
     if (repuestosFilter !== 'all') params.set('repuestos', repuestosFilter);
-    
+
     const newURL = params.toString() ? `${pathname}?${params.toString()}` : pathname;
     router.push(newURL, { scroll: false });
   };
@@ -122,13 +133,25 @@ function ProductGrid({
     }
 
     try {
-      // Cargar solo PRODUCTS_PER_PAGE productos por request
+      // Preparar parámetros para la API
       const params = {
         per_page: PRODUCTS_PER_PAGE,
         page: pageToUse,
         ...filtersToUse,
         ...(categoryId && { categories: [categoryId] })
       };
+
+      // ============================================
+      // FILTRO DE REPUESTOS: Aplicar en BACKEND
+      // Solo para "Solo repuestos" - filtra por categoría en el backend
+      // ============================================
+      if (repuestosFilter === 'repuestos') {
+        // Enviar el slug de categoría al backend, que lo resolverá a ID
+        params.category_slug = 'repuestos';
+        console.log('[Repuestos Filter] Aplicando filtro de categoría "repuestos" en backend');
+      }
+      // NOTA: El filtro "no_repuestos" (Equipos principales) se aplica en frontend
+      // porque WooCommerce no tiene parámetro nativo para excluir por categoría
 
       const response = await fetchProducts(params);
       if (signal?.aborted) return;
@@ -139,28 +162,17 @@ function ProductGrid({
       let productsToShow = response.data;
 
       // Filtro de Black November (etiqueta "noviembre")
+      // NOTA: Este filtro SÍ se aplica en frontend porque WooCommerce no tiene
+      // parámetro nativo para filtrar por etiquetas específicas
       if (filtersToUse.on_sale) {
         console.log('[Black November Filter] Filtrando productos con etiqueta "noviembre"...');
         console.log(`[Black November Filter] Total productos antes del filtro: ${productsToShow.length}`);
-
-        // Debug: Mostrar todas las etiquetas únicas en los productos
-        const allTags = new Set<string>();
-        productsToShow.forEach(product => {
-          product.tags?.forEach(tag => {
-            allTags.add(`${tag.name} (slug: ${tag.slug})`);
-          });
-        });
-        console.log(`[Black November Filter] Todas las etiquetas encontradas:`, Array.from(allTags));
 
         // Filtrar productos con etiqueta "noviembre"
         const productsWithNoviembre = productsToShow.filter(product => {
           const hasNoviembre = product.tags?.some(tag =>
             tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
           );
-
-          if (hasNoviembre) {
-            console.log(`[Black November Filter] ✅ Producto "${product.name}" tiene etiqueta noviembre:`, product.tags);
-          }
 
           return hasNoviembre;
         });
@@ -169,20 +181,24 @@ function ProductGrid({
         productsToShow = productsWithNoviembre;
       }
 
-      // Filtro de repuestos
-      if (repuestosFilter === 'repuestos') {
-        productsToShow = productsToShow.filter(product =>
-          product.tags.some(tag =>
-            tag.name.toLowerCase().includes('repuesto')
-          )
-        );
-      } else if (repuestosFilter === 'no_repuestos') {
-        productsToShow = productsToShow.filter(product =>
-          !product.tags.some(tag =>
-            tag.name.toLowerCase().includes('repuesto')
-          )
-        );
+      // Filtro de "Equipos principales" (excluir repuestos)
+      // NOTA: Este filtro se aplica en frontend porque WooCommerce no tiene
+      // parámetro nativo para excluir por categoría
+      if (repuestosFilter === 'no_repuestos') {
+        console.log('[Equipos Principales Filter] Excluyendo productos con categoría "repuestos"...');
+        console.log(`[Equipos Principales Filter] Total productos antes del filtro: ${productsToShow.length}`);
+
+        productsToShow = productsToShow.filter(product => {
+          const hasRepuestos = product.categories?.some(cat =>
+            cat.slug === 'repuestos'
+          );
+          return !hasRepuestos; // Excluir si tiene categoría repuestos
+        });
+
+        console.log(`[Equipos Principales Filter] Productos sin categoría "repuestos": ${productsToShow.length}`);
       }
+
+      // NOTA: El filtro "Solo repuestos" se aplica en BACKEND (ver líneas 137-141)
 
       // ============================================
       // NOTA: El filtro de marcas ya NO se aplica en el frontend
@@ -220,27 +236,42 @@ function ProductGrid({
     }
   };
 
-  // 1) Hidratar desde URL SOLO al montar
+  // 1) Cargar categorías primero (necesarias para parsear URL)
   useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const response = await fetchCategories();
+        setCategories(response.data || []);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    };
+    loadCategories();
+  }, [fetchCategories]);
+
+  // 2) Hidratar desde URL SOLO al montar (después de cargar categorías)
+  useEffect(() => {
+    // Esperar a que las categorías estén cargadas antes de parsear URL
+    if (categories.length === 0) return;
     if (didInit.current) return;
     didInit.current = true;
     const urlFilters = getFiltersFromURL();
     setFilters(urlFilters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [categories]);
 
-  // 2) Si cambia la URL por navegación (no por UI), re-hidratar
+  // 3) Si cambia la URL por navegación (no por UI), re-hidratar
   useEffect(() => {
     if (!didInit.current) return;
-    if (fromUI.current) { 
-      fromUI.current = false; 
-      return; 
+    if (fromUI.current) {
+      fromUI.current = false;
+      return;
     }
     const urlFilters = getFiltersFromURL();
     setFilters(urlFilters);
   }, [searchParams]);
 
-  // 3) Cargar productos al cambiar filtros, con cancelación
+  // 4) Cargar productos al cambiar filtros, con cancelación
   useEffect(() => {
     // Cancelar carga anterior
     if (abortControllerRef.current) {
@@ -269,7 +300,7 @@ function ProductGrid({
     };
   }, [filters, categoryId, repuestosFilter]);
 
-  // 4) Función para cargar más productos
+  // 5) Función para cargar más productos
   const handleLoadMore = () => {
     if (!loading && !loadingMore && hasMore) {
       const nextPage = currentPage + 1;
@@ -320,6 +351,42 @@ function ProductGrid({
   useEffect(() => {
     setSearchInput(filters.search || '');
   }, [filters.search]);
+
+  // Obtener nombres de categorías desde IDs
+  const getCategoryNames = (categoryIds: number[]): string[] => {
+    if (!categoryIds || categoryIds.length === 0) return [];
+
+    return categoryIds
+      .map(id => {
+        const category = categories.find(cat => cat.id === id);
+        return category ? category.name : null;
+      })
+      .filter(Boolean) as string[];
+  };
+
+  // Convertir IDs de categorías a slugs
+  const getCategorySlugs = (categoryIds: number[]): string[] => {
+    if (!categoryIds || categoryIds.length === 0) return [];
+
+    return categoryIds
+      .map(id => {
+        const category = categories.find(cat => cat.id === id);
+        return category ? category.slug : null;
+      })
+      .filter(Boolean) as string[];
+  };
+
+  // Convertir slugs de categorías a IDs
+  const getCategoryIdsFromSlugs = (categorySlugs: string[]): number[] => {
+    if (!categorySlugs || categorySlugs.length === 0) return [];
+
+    return categorySlugs
+      .map(slug => {
+        const category = categories.find(cat => cat.slug === slug);
+        return category ? category.id : null;
+      })
+      .filter(Boolean) as number[];
+  };
 
   return (
     <div className="w-full">
@@ -428,6 +495,23 @@ function ProductGrid({
               </button>
             </div>
           </div>
+
+          {/* Mostrar categorías activas */}
+          {filters.categories && filters.categories.length > 0 && (
+            <div className="mb-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm font-medium text-gray-700">Categorías:</span>
+                {getCategoryNames(filters.categories).map((categoryName, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-servi_green/10 text-servi_dark border border-servi_green/20"
+                  >
+                    {categoryName}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {!loading && (
             <div className="mb-4 flex justify-between items-center">

@@ -84,6 +84,11 @@ export function useWooCommerce() {
       params.status = filters.status;
     }
 
+    // Pasar category_slug al backend para que lo resuelva a ID
+    if (filters.category_slug) {
+      params.category_slug = filters.category_slug;
+    }
+
     return params;
   }, []);
 

@@ -270,6 +270,62 @@ export async function GET(request: NextRequest) {
     console.log('[WooCommerce API] Products request params:', Object.fromEntries(searchParams.entries()));
 
     // ============================================
+    // RESOLUCIÓN DE CATEGORY SLUG → ID
+    // Convierte slug de categoría a ID para filtrar en WooCommerce
+    // ============================================
+    const categorySlug = searchParams.get('category_slug');
+
+    if (categorySlug) {
+      console.log(`[Products API] Resolving category slug "${categorySlug}"...`);
+
+      if (!WP_URL || !WC_KEY || !WC_SECRET) {
+        console.error('[Products API] ❌ WooCommerce credentials not configured');
+      } else {
+        try {
+          // Consultar categorías por slug
+          const categoriesUrl = new URLSearchParams({
+            consumer_key: WC_KEY,
+            consumer_secret: WC_SECRET,
+            slug: categorySlug,
+            per_page: '1'
+          });
+
+          const catResponse = await fetch(`${WP_URL}/wp-json/wc/v3/products/categories?${categoriesUrl.toString()}`, {
+            method: 'GET',
+            signal: AbortSignal.timeout(10000),
+            next: { revalidate: 3600 } // Cache por 1 hora
+          });
+
+          if (catResponse.ok) {
+            const categories = await catResponse.json();
+
+            if (Array.isArray(categories) && categories.length > 0) {
+              const categoryId = categories[0].id;
+              console.log(`[Products API] ✅ Category "${categorySlug}" resolved to ID: ${categoryId}`);
+
+              // Remover category_slug y agregar category con el ID
+              searchParams.delete('category_slug');
+
+              // Si ya existe un parámetro category, agregarlo (separado por coma)
+              const existingCategory = searchParams.get('category');
+              if (existingCategory) {
+                searchParams.set('category', `${existingCategory},${categoryId}`);
+              } else {
+                searchParams.set('category', String(categoryId));
+              }
+            } else {
+              console.warn(`[Products API] ⚠️  Category slug "${categorySlug}" not found`);
+              searchParams.delete('category_slug');
+            }
+          }
+        } catch (error) {
+          console.error('[Products API] Error resolving category slug:', error);
+          searchParams.delete('category_slug');
+        }
+      }
+    }
+
+    // ============================================
     // RESOLUCIÓN DE BRAND SLUG(S) → ID(S)
     // Soporte para múltiples marcas separadas por coma
     // ============================================
