@@ -49,13 +49,18 @@ function ProductGrid({
 
     const categoriesParam = searchParams.get('categories');
     if (categoriesParam) {
-      // Parsear como slugs, no como números
       const categorySlugs = categoriesParam.split(',').filter(Boolean);
-      // Convertir slugs a IDs para uso interno
-      const categoryIds = getCategoryIdsFromSlugs(categorySlugs);
-      if (categoryIds.length > 0) {
-        filters.categories = categoryIds;
+
+      // Solo intentar convertir si las categorías están cargadas
+      if (categories.length > 0) {
+        // Convertir slugs a IDs para uso interno
+        const categoryIds = getCategoryIdsFromSlugs(categorySlugs);
+        if (categoryIds.length > 0) {
+          filters.categories = categoryIds;
+        }
       }
+      // Si las categorías no están cargadas aún, no asignamos nada
+      // El useEffect se encargará de actualizar cuando las categorías estén disponibles
     }
 
     // ============================================
@@ -262,6 +267,8 @@ function ProductGrid({
 
   // 3) Si cambia la URL por navegación (no por UI), re-hidratar
   useEffect(() => {
+    // Esperar a que las categorías estén cargadas
+    if (categories.length === 0) return;
     if (!didInit.current) return;
     if (fromUI.current) {
       fromUI.current = false;
@@ -269,6 +276,7 @@ function ProductGrid({
     }
     const urlFilters = getFiltersFromURL();
     setFilters(urlFilters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // 4) Cargar productos al cambiar filtros, con cancelación
