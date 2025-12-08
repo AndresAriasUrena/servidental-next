@@ -153,11 +153,20 @@ export default function XRayCertificationPage() {
                     <h3 className="font-semibold text-gray-800 mb-2">Forma de pago</h3>
                     <p className="text-gray-600 mb-3">
                       Una vez agendado el servicio, se debe realizar la cancelación del mismo.
+                      Recuerde reportar su pago al{' '}
+                      <Link
+                        href="https://api.whatsapp.com/send?phone=50683505757"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-servi_green hover:text-servi_dark underline font-semibold"
+                      >
+                        WhatsApp 8350-5757
+                      </Link>.
                     </p>
                     <div className="bg-gray-100 p-4 rounded-lg space-y-2">
                       <p className="font-medium">
                         <span className="text-gray-700">Sinpe:</span>{' '}
-                        <span className="text-servi_green font-bold">8704-5556</span>
+                        <span className="text-servi_green font-bold">8350-5757</span>
                       </p>
                       <p className="font-medium">
                         <span className="text-gray-700">Cuentas bancarias:</span>{' '}
@@ -267,10 +276,12 @@ export default function XRayCertificationPage() {
               </button>
             </div>
             <div className="p-4 overflow-auto max-h-[calc(90vh-80px)]">
-              <iframe
-                src="/pdf/medios-de-pago.pdf"
-                className="w-full h-[600px]"
-                title="Medios de pago"
+              <Image
+                src="/pdf/ServiDental.jpg"
+                alt="Información de Cuentas Bancarias"
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain"
               />
             </div>
           </div>

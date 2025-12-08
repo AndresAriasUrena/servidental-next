@@ -263,9 +263,18 @@ export default function ServicesPage() {
                     <p className="font-semibold text-gray-800 mb-2">• Forma de pago</p>
                     <p className="pl-4 mb-2">
                       Una vez finalizado el servicio, se debe realizar la cancelación del mismo.
+                      Recuerde reportar su pago al{' '}
+                      <Link
+                        href="https://api.whatsapp.com/send?phone=50683505757"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-servi_green hover:text-servi_dark underline font-semibold"
+                      >
+                        WhatsApp 8350-5757
+                      </Link>.
                     </p>
                     <div className="pl-4 space-y-2">
-                      <p><strong>Sinpe:</strong> 8704-5556</p>
+                      <p><strong>Sinpe:</strong> 8350-5757</p>
                       <p>
                         <strong>Cuentas bancarias:</strong>{' '}
                         <button
@@ -379,10 +388,12 @@ export default function ServicesPage() {
               </button>
             </div>
             <div className="p-4 overflow-auto max-h-[calc(90vh-80px)]">
-              <iframe
-                src="/pdf/medios-de-pago.pdf"
-                className="w-full h-[600px]"
-                title="Medios de pago"
+              <Image
+                src="/pdf/ServiDental.jpg"
+                alt="Información de Cuentas Bancarias"
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain"
               />
             </div>
           </div>
