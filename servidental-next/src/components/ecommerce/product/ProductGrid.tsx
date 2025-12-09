@@ -34,7 +34,7 @@ function ProductGrid({
   const [searchInput, setSearchInput] = useState('');
   const [categories, setCategories] = useState<any[]>([]);
 
-  const PRODUCTS_PER_PAGE = 27; // Cargar 27 productos por página
+  const PRODUCTS_PER_PAGE = 27; // Cargar 27 productos por cada página de resultados
 
   const router = useRouter();
   const pathname = usePathname();
