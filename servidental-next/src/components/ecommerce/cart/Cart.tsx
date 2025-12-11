@@ -7,6 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { formatPrice } from '@/utils/currency';
 import { XMarkIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import TrustBadges from '@/components/common/TrustBadges';
+import CouponInput from './CouponInput';
 
 export function Cart() {
   const { cart, updateQuantity, removeFromCart, clearCart, isLoading } = useCart();
@@ -154,12 +155,21 @@ export function Cart() {
             <h2 className="text-lg font-medium text-gray-900 mb-4">
               Resumen del pedido
             </h2>
-            
+
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-sm">
                 <span>Subtotal ({cart.totalQuantity} artículos)</span>
-                <span>{formatPrice(cart.total)}</span>
+                <span>{formatPrice(cart.subtotal)}</span>
               </div>
+
+              {/* Show discount if there are applied coupons */}
+              {cart.discount > 0 && (
+                <div className="flex justify-between text-sm text-green-600">
+                  <span>Descuento</span>
+                  <span>-{formatPrice(cart.discount)}</span>
+                </div>
+              )}
+
               <div className="flex justify-between text-sm">
                 <span>Envío</span>
                 <span>Por calcular</span>
@@ -170,6 +180,11 @@ export function Cart() {
                   <span>{formatPrice(cart.total)}</span>
                 </div>
               </div>
+            </div>
+
+            {/* Coupon Input */}
+            <div className="mb-6">
+              <CouponInput />
             </div>
 
             <Link
