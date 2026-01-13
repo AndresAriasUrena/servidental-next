@@ -109,6 +109,19 @@ export default function MiniCart({ onClose }: MiniCartProps) {
           
           {cart.items.length > 0 && (
             <div className="border-t border-gray-100 bg-gray-50 px-6 py-4 lg:py-4">
+              {/* Show discount if applied */}
+              {cart.discount > 0 && (
+                <div className="space-y-1 mb-3 pb-3 border-b border-gray-200">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal:</span>
+                    <span>{formatPrice(cart.subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-green-600 font-medium">
+                    <span>Descuento:</span>
+                    <span>-{formatPrice(cart.discount)}</span>
+                  </div>
+                </div>
+              )}
               <div className="flex justify-between items-center mb-4">
                 <span className="text-lg font-semibold text-gray-900">Total:</span>
                 <span className="text-xl font-bold text-servi_green">

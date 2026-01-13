@@ -7,6 +7,7 @@ import { formatPrice } from '@/utils/currency';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
 import TrustBadges from '@/components/common/TrustBadges';
 import { trackBeginCheckout } from '@/lib/analytics';
+import CouponInput from '../cart/CouponInput';
 
 // Costa Rica geographic data
 const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
@@ -896,12 +897,23 @@ export default function Checkout() {
                   </div>
                 ))}
               </div>
-              
+
+              {/* Coupon Input */}
+              <div className="mb-6">
+                <CouponInput />
+              </div>
+
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>{formatPrice(cart.total)}</span>
+                  <span>{formatPrice(cart.subtotal)}</span>
                 </div>
+                {cart.discount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Descuento</span>
+                    <span>-{formatPrice(cart.discount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Envío</span>
                   <span>

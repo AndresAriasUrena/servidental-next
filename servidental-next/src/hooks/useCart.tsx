@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { WooCommerceProduct, Cart, CartItem, productToCartItem, ProductVariation } from '@/types/woocommerce';
+import { WooCommerceProduct, Cart, CartItem, productToCartItem, ProductVariation, AppliedCoupon, WooCommerceCoupon } from '@/types/woocommerce';
 import { canAddToCart, validateQuantity, getStockErrorMessage } from '@/utils/stock';
 
 const CartContext = createContext<{
@@ -12,14 +12,19 @@ const CartContext = createContext<{
   clearCart: () => void;
   isLoading: boolean;
   getCartQuantity: (productId: number) => number;
+  applyCoupon: (code: string) => Promise<{ success: boolean; error?: string }>;
+  removeCoupon: (code: string) => void;
 } | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Cart>({
     items: [],
+    subtotal: 0,
+    discount: 0,
     total: 0,
     totalItems: 0,
-    totalQuantity: 0
+    totalQuantity: 0,
+    appliedCoupons: []
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,15 +46,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('servidental-cart', JSON.stringify(cart));
   }, [cart]);
 
-  const calculateCartTotals = useCallback((items: CartItem[]): Cart => {
+  const calculateCartTotals = useCallback((items: CartItem[], coupons: AppliedCoupon[] = []): Cart => {
     const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-    const total = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+
+    let discount = 0;
+    coupons.forEach(coupon => {
+      if (coupon.discountType === 'percent') {
+        discount += (subtotal * parseFloat(coupon.amount)) / 100;
+      } else if (coupon.discountType === 'fixed_cart') {
+        discount += parseFloat(coupon.amount);
+      }
+    });
+
+    discount = Math.min(discount, subtotal);
+
+    const total = subtotal - discount;
 
     return {
       items,
+      subtotal,
+      discount,
       total,
       totalItems: items.length,
-      totalQuantity
+      totalQuantity,
+      appliedCoupons: coupons
     };
   }, []);
 
@@ -112,7 +133,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           newItems = [...currentCart.items, newItem];
         }
 
-        return calculateCartTotals(newItems);
+        return calculateCartTotals(newItems, currentCart.appliedCoupons);
       });
 
       return { success: true };
@@ -127,7 +148,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeFromCart = useCallback((productId: number) => {
     setCart(currentCart => {
       const newItems = currentCart.items.filter(item => item.id !== productId);
-      return calculateCartTotals(newItems);
+      return calculateCartTotals(newItems, currentCart.appliedCoupons);
     });
   }, [calculateCartTotals]);
 
@@ -153,7 +174,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           ? { ...item, quantity, subtotal: quantity * item.price }
           : item
       );
-      return calculateCartTotals(newItems);
+      return calculateCartTotals(newItems, currentCart.appliedCoupons);
     });
 
     return { success: true };
@@ -162,11 +183,87 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = useCallback(() => {
     setCart({
       items: [],
+      subtotal: 0,
+      discount: 0,
       total: 0,
       totalItems: 0,
-      totalQuantity: 0
+      totalQuantity: 0,
+      appliedCoupons: []
     });
   }, []);
+
+  const applyCoupon = useCallback(async (code: string): Promise<{ success: boolean; error?: string }> => {
+    if (!code || code.trim() === '') {
+      return { success: false, error: 'Por favor ingrese un código de cupón' };
+    }
+
+    if (cart.appliedCoupons.length > 0) {
+      return { success: false, error: 'Solo se puede usar un cupón por compra. Elimina el cupón actual para aplicar otro.' };
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`/api/woocommerce/coupons/${encodeURIComponent(code)}`);
+      const data = await response.json();
+
+      if (!response.ok || !data.valid) {
+        return { success: false, error: data.error || 'Cupón inválido' };
+      }
+
+      const coupon: WooCommerceCoupon = data.coupon;
+
+      if (coupon.minimum_amount && parseFloat(coupon.minimum_amount) > 0) {
+        if (cart.subtotal < parseFloat(coupon.minimum_amount)) {
+          return {
+            success: false,
+            error: `Este cupón requiere un mínimo de ₡${parseFloat(coupon.minimum_amount).toLocaleString('es-CR')}`
+          };
+        }
+      }
+
+      if (coupon.maximum_amount && parseFloat(coupon.maximum_amount) > 0) {
+        if (cart.subtotal > parseFloat(coupon.maximum_amount)) {
+          return {
+            success: false,
+            error: `Este cupón solo es válido para compras menores a ₡${parseFloat(coupon.maximum_amount).toLocaleString('es-CR')}`
+          };
+        }
+      }
+
+      let discountAmount = 0;
+      if (coupon.discount_type === 'percent') {
+        discountAmount = (cart.subtotal * parseFloat(coupon.amount)) / 100;
+      } else if (coupon.discount_type === 'fixed_cart') {
+        discountAmount = parseFloat(coupon.amount);
+      }
+
+      const newCoupon: AppliedCoupon = {
+        code: coupon.code,
+        discount: discountAmount,
+        discountType: coupon.discount_type,
+        amount: coupon.amount
+      };
+
+      setCart(currentCart => {
+        return calculateCartTotals(currentCart.items, [newCoupon]);
+      });
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error applying coupon:', error);
+      return { success: false, error: 'Error al validar el cupón' };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cart, calculateCartTotals]);
+
+  const removeCoupon = useCallback((code: string) => {
+    setCart(currentCart => {
+      const newCoupons = currentCart.appliedCoupons.filter(c => c.code !== code);
+      return calculateCartTotals(currentCart.items, newCoupons);
+    });
+  }, [calculateCartTotals]);
 
   return (
     <CartContext.Provider value={{
@@ -176,7 +273,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateQuantity,
       clearCart,
       isLoading,
-      getCartQuantity
+      getCartQuantity,
+      applyCoupon,
+      removeCoupon
     }}>
       {children}
     </CartContext.Provider>

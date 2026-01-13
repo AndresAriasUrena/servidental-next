@@ -87,6 +87,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           customerInfo: customerInfo,
           cartItems: cart.items,
           total: cart.total,
+          appliedCoupons: cart.appliedCoupons, // Include applied coupons
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
           customer_note: customerNote, // Include customer notes

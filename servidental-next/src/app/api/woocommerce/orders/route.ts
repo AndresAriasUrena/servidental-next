@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
+    const {
       customerInfo,
       cartItems,
       total,
+      appliedCoupons, // Applied coupons from cart
       paymentIntentId, // For ONVO compatibility (legacy)
       paymentMethod,
       tilopayOrderNumber,
@@ -160,6 +161,11 @@ export async function POST(request: NextRequest) {
           }))
         } : {})
       })),
+      coupon_lines: appliedCoupons?.map((coupon: any) => ({
+        code: coupon.code,
+        discount: coupon.discount.toString(),
+        discount_tax: '0'
+      })) || [],
       shipping_lines: [
         {
           method_id: shipping_option === 'messenger' ? 'messenger_delivery' : 'flat_rate',
