@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { WooCommerceProduct, ProductFilters } from '@/types/woocommerce';
 import { ProductCard } from './ProductCard';
 import { ProductFiltersPanel } from '../filters/ProductFiltersPanel';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { SlidersHorizontal, Search, X } from 'lucide-react';
+import { VirtuosoGrid } from 'react-virtuoso';
 
 interface ProductGridProps {
   initialProducts?: WooCommerceProduct[];
@@ -360,6 +361,30 @@ function ProductGrid({
     setSearchInput(filters.search || '');
   }, [filters.search]);
 
+  const VIRTUALIZATION_THRESHOLD = 30;
+  const shouldVirtualize = productsUnique.length > VIRTUALIZATION_THRESHOLD;
+
+  const gridComponents = useMemo(() => ({
+    List: React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+      (props, ref) => (
+        <div
+          ref={ref}
+          {...props}
+          className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6"
+        />
+      )
+    ),
+    Item: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & { children?: React.ReactNode }) => (
+      <div {...props}>{children}</div>
+    ),
+  }), []);
+
+  const renderProduct = useCallback((index: number) => {
+    const product = productsUnique[index];
+    if (!product) return null;
+    return <ProductCard key={`${instanceKey}-${product.id}`} product={product} />;
+  }, [productsUnique, instanceKey]);
+
   // Obtener nombres de categorías desde IDs
   const getCategoryNames = (categoryIds: number[]): string[] => {
     if (!categoryIds || categoryIds.length === 0) return [];
@@ -550,12 +575,22 @@ function ProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6">
-                {productsUnique.map((product) => (
-                  <ProductCard key={`${instanceKey}-${product.id}`} product={product} />
-                ))}
-              </div>
-              
+              {shouldVirtualize ? (
+                <VirtuosoGrid
+                  useWindowScroll
+                  totalCount={productsUnique.length}
+                  components={gridComponents}
+                  itemContent={renderProduct}
+                  overscan={200}
+                />
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6">
+                  {productsUnique.map((product) => (
+                    <ProductCard key={`${instanceKey}-${product.id}`} product={product} />
+                  ))}
+                </div>
+              )}
+
               {productsUnique.length === 0 && !loading && (
                 <div className="text-center py-12">
                   <h3 className="text-lg font-medium text-gray-900 mb-2">

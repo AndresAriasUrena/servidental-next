@@ -51,6 +51,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://wp.servidentalcr.com" />
+        <link rel="dns-prefetch" href="https://wp.servidentalcr.com" />
+      </head>
       <body className={`${inter.className} bg-white`}>
         <GoogleAnalytics />
         <CartProvider>
