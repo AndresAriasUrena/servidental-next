@@ -24,8 +24,7 @@ const WP_CATEGORIES_API = `${getBaseUrl()}/api/wordpress/categories`;
 // Development mode check
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Cache duration in milliseconds (5 minutes)
-const CACHE_DURATION = 5 * 60 * 1000;
+const CACHE_DURATION = 15 * 60 * 1000;
 
 interface CacheItem<T> {
   data: T;

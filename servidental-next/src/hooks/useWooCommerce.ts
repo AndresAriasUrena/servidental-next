@@ -106,6 +106,10 @@ export function useWooCommerce() {
         mappedParams.status = 'publish';
       }
 
+      if (!params.fullDetails) {
+        mappedParams.view = 'grid';
+      }
+
       Object.entries(mappedParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
           queryParams.append(key, String(value));

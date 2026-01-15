@@ -222,6 +222,37 @@ export default function Checkout() {
   
   const [isSubmitting] = useState(false);
 
+  React.useEffect(() => {
+    const savedData = localStorage.getItem('checkout-form-data');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed.personal_info) {
+          setFormData(prev => ({
+            ...prev,
+            personal_info: {
+              ...prev.personal_info,
+              ...parsed.personal_info
+            }
+          }));
+        }
+      } catch (e) {
+        console.error('Error loading saved checkout data:', e);
+      }
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const dataToSave = {
+        personal_info: formData.personal_info
+      };
+      localStorage.setItem('checkout-form-data', JSON.stringify(dataToSave));
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData.personal_info]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

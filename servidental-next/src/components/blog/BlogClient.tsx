@@ -2,10 +2,41 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { blogService } from '@/services/blogService';
 import { BlogPost, BlogConfig, BlogSearchParams } from '@/types/blog';
-import BlogGrid from './BlogGrid';
-import BlogSidebar from './BlogSidebar';
+
+const BlogGrid = dynamic(() => import('./BlogGrid'), {
+  loading: () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 animate-pulse">
+          <div className="h-48 bg-gray-200"></div>
+          <div className="p-6">
+            <div className="h-4 bg-gray-200 rounded mb-2"></div>
+            <div className="h-6 bg-gray-200 rounded mb-3"></div>
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+});
+
+const BlogSidebar = dynamic(() => import('./BlogSidebar'), {
+  loading: () => (
+    <div className="space-y-8">
+      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 animate-pulse">
+        <div className="h-6 bg-gray-200 rounded mb-4"></div>
+        <div className="space-y-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-4 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+});
 
 export default function BlogClient() {
   const searchParams = useSearchParams();

@@ -52,7 +52,7 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
 
   return (
     <>
-      <Link href={`/tienda/${product.slug}`} className="group block h-full">
+      <Link href={`/tienda/${product.slug}`} className="group block h-full" prefetch={true}>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden h-full flex flex-col">
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-50">
@@ -63,6 +63,10 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-200"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23f5f5f5' width='400' height='400'/%3E%3C/svg%3E"
+              loading="lazy"
+              quality={75}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -97,6 +101,8 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
                   width={40}
                   height={20}
                   className="max-w-[40px] max-h-[20px] object-contain"
+                  loading="lazy"
+                  quality={60}
                 />
               </div>
             </div>

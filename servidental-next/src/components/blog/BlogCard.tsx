@@ -34,6 +34,10 @@ export default function BlogCard({ post }: BlogCardProps) {
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 192'%3E%3Crect fill='%23e5f3f1' width='400' height='192'/%3E%3C/svg%3E"
+            loading="lazy"
+            quality={75}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-servi_light to-gray-100 flex items-center justify-center">
@@ -65,7 +69,7 @@ export default function BlogCard({ post }: BlogCardProps) {
 
         {/* Title */}
         <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-servi_green transition-colors">
-          <Link href={`/blog/${post.slug}`} className="hover:underline">
+          <Link href={`/blog/${post.slug}`} className="hover:underline" prefetch={true}>
             <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
           </Link>
         </h2>
@@ -93,6 +97,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         <Link
           href={`/blog/${post.slug}`}
           className="inline-flex items-center text-servi_green font-semibold hover:text-servi_dark transition-colors group"
+          prefetch={true}
         >
           Leer más
           <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
