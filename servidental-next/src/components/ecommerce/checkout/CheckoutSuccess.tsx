@@ -44,7 +44,6 @@ export default function CheckoutSuccess() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('cart');
       localStorage.removeItem('servidental-cart');
-      localStorage.removeItem('checkout-form-data');
     }
   }, [searchParams]);
 

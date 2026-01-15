@@ -15,6 +15,12 @@ export async function GET(request: NextRequest) {
       params.append(key, value);
     });
 
+    if (params.get('_embed') === 'true') {
+      params.set('_embed', 'author,wp:featuredmedia');
+    } else if (!searchParams.get('slug') && !params.has('_fields')) {
+      params.set('_fields', 'id,title,excerpt,slug,date,modified,author,featured_media,categories,tags,link,status');
+    }
+
     const wpUrl = `${WORDPRESS_API_URL}/posts?${params.toString()}`;
 
     console.log('[WordPress Proxy] Fetching:', wpUrl);

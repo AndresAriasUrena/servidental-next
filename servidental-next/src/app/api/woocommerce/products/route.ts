@@ -153,7 +153,7 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
         'Accept': 'application/json'
       },
       signal: AbortSignal.timeout(30000),
-      next: { revalidate: 0 }
+      next: { revalidate: 300 }
     });
 
     if (!response.ok) {
@@ -176,6 +176,27 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
     console.error('[WooCommerce API] Request failed:', error);
     throw error;
   }
+}
+
+function optimizeForGridView(products: WooCommerceProduct[]): Partial<WooCommerceProduct>[] {
+  return products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    type: product.type,
+    status: product.status,
+    price: product.price,
+    regular_price: product.regular_price,
+    sale_price: product.sale_price,
+    stock_status: product.stock_status,
+    images: product.images?.slice(0, 1) || [],
+    categories: product.categories,
+    tags: product.tags,
+    brands: product.brands,
+    primaryBrand: (product as any).primaryBrand,
+    short_description: (product as any).short_description,
+    resources: (product as any).resources,
+  }));
 }
 
 /**
@@ -391,8 +412,13 @@ export async function GET(request: NextRequest) {
     // ============================================
     const productsWithBrand = await injectPrimaryBrand(response.data);
 
+    const viewMode = searchParams.get('view');
+    const finalProducts = viewMode === 'grid'
+      ? optimizeForGridView(productsWithBrand)
+      : productsWithBrand;
+
     return NextResponse.json({
-      data: productsWithBrand,
+      data: finalProducts,
       total: response.total,
       total_pages: response.totalPages,
       current_page: parseInt(searchParams.get('page') || '1'),
