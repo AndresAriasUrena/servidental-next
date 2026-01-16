@@ -12,7 +12,7 @@ export default function BlackNovemberBanner() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   const messages = [
-    { text: 'Visite nuestra tienda en línea y adquiera su equipo a 6 meses sin intereses con BAC.', link: null },
+    { text: 'Visite nuestra tienda en línea y adquiera su equipo a 6 meses sin intereses con BAC (a partir de $800).', link: null },
     { text: 'Conozca nuestros servicios — Clic aquí.', link: '/#services' },
     { text: 'Certificación radiológica — Ver información.', link: '/x-ray-certification' },
     { text: 'Visite nuestro showroom; estamos ubicados en San Pedro, Montes de Oca.', link: null }
