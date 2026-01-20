@@ -1,94 +1,141 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
-import { FaCheckCircle } from 'react-icons/fa';
 import Image, { StaticImageData } from 'next/image';
-import assets from '@/assets';
 import Link from 'next/link';
+
+import hero1 from '@/assets/hero/1.avif';
+import hero1Mobile from '@/assets/hero/1Mobile.avif';
+import hero2 from '@/assets/hero/2.avif';
+import hero2Mobile from '@/assets/hero/2Mobile.avif';
+import hero3 from '@/assets/hero/3.avif';
+import hero3Mobile from '@/assets/hero/3Mobile.avif';
+import hero4 from '@/assets/hero/4.avif';
+import hero4Mobile from '@/assets/hero/4Mobile.avif';
+import hero5 from '@/assets/hero/5.avif';
+import hero5Mobile from '@/assets/hero/5Mobile.avif';
+
+type TitlePart = {
+  text: string;
+  highlighted?: boolean;
+};
 
 type Slide = {
   id: number;
-  badge: string;
-  title: string;
-  description: string;
+  titleParts: TitlePart[];
+  cta: {
+    text: string;
+    href: string;
+  };
   image: StaticImageData;
-  primaryCTA: {
-    text: string;
-    href: string;
-  };
-  secondaryCTA: {
-    text: string;
-    href: string;
-  };
+  imageMobile: StaticImageData;
+  desktopPosition: 'left' | 'right';
+  mobilePosition: 'left' | 'right';
 };
 
 const slides: Slide[] = [
   {
     id: 1,
-    badge: 'Expertos en soporte técnico',
-    title: 'Equipo de ingenieros y técnicos profesionales, comprometidos en ofrecerle el mejor apoyo',
-    description: 'Combinamos conocimiento especializado y dedicación para ofrecerle el soporte más robusto y confiable.',
-    image: assets.images.Compu,
-    primaryCTA: {
-      text: 'Equipo Médico',
-      href: '/tienda'
+    titleParts: [
+      { text: 'SU EQUIPO DENTAL' },
+      { text: 'A UN CLICK', highlighted: true },
+    ],
+    cta: {
+      text: 'Tienda en linea',
+      href: '/tienda',
     },
-    secondaryCTA: {
-      text: 'Servicio Técnico',
-      href: '/services'
-    }
+    image: hero1,
+    imageMobile: hero1Mobile,
+    desktopPosition: 'left',
+    mobilePosition: 'right',
   },
   {
     id: 2,
-    badge: 'Seguridad y profesionalismo',
-    title: 'Mantenimiento preventivo y correctivo',
-    description: 'Ofrecemos servicios de mantenimiento preventivo y correctivo para todo tipo de equipo odontológico, asegurando su óptimo funcionamiento y prolongando su vida útil',
-    image: assets.images.Mantenimiento,
-    primaryCTA: {
-      text: 'Equipo Médico',
-      href: '/tienda'
+    titleParts: [
+      { text: 'INGENIEROS' },
+      { text: 'Y TECNICOS', highlighted: true },
+      { text: 'ESPECIALIZADOS', highlighted: true },
+    ],
+    cta: {
+      text: 'Servicio tecnico',
+      href: '/services',
     },
-    secondaryCTA: {
-      text: 'Servicio Técnico',
-      href: '/services'
-    }
+    image: hero2,
+    imageMobile: hero2Mobile,
+    desktopPosition: 'right',
+    mobilePosition: 'right',
   },
   {
     id: 3,
-    badge: 'Creando profesionales',
-    title: 'Capacitaciones',
-    description: 'Nuestro equipo recibe capacitación continua para ofrecerle únicamente los servicios de la más alta calidad',
-    image: assets.images.Capacitaciones,
-    primaryCTA: {
-      text: 'Equipo Médico',
-      href: '/tienda'
+    titleParts: [
+      { text: 'CERTIFIQUE' },
+      { text: 'SU EQUIPO DE' },
+      { text: 'RAYOS X', highlighted: true },
+    ],
+    cta: {
+      text: 'Mas informacion',
+      href: '/x-ray-certification',
     },
-    secondaryCTA: {
-      text: 'Servicio Técnico',
-      href: '/services'
-    }
+    image: hero3,
+    imageMobile: hero3Mobile,
+    desktopPosition: 'left',
+    mobilePosition: 'left',
   },
   {
     id: 4,
-    badge: 'Solo equipo de alta calidad',
-    title: 'Venta de equipo médico odontológico e instalaciones',
-    description: 'Adquiera su equipo con nosotros, contamos con variedad de opciones, instalación profesional y respaldo en mantenimiento preventivo',
-    image: assets.images.VentaDeEquipo,
-    primaryCTA: {
-      text: 'Equipo Médico',
-      href: '/tienda'
+    titleParts: [
+      { text: 'MANTENIMIENTOS' },
+      { text: '✓ PREVENTIVOS', highlighted: true },
+      { text: '✓ CORRECTIVOS' },
+    ],
+    cta: {
+      text: 'Mas informacion',
+      href: '/services',
     },
-    secondaryCTA: {
-      text: 'Servicio Técnico',
-      href: '/services'
-    }
+    image: hero4,
+    imageMobile: hero4Mobile,
+    desktopPosition: 'left',
+    mobilePosition: 'left',
+  },
+  {
+    id: 5,
+    titleParts: [
+      { text: 'SHOWROOM' },
+      { text: 'EQUIPOS Y ASESORIA', highlighted: true },
+      { text: 'ESPECIALIZADA', highlighted: true },
+    ],
+    cta: {
+      text: 'Agende su cita',
+      href: '/tienda',
+    },
+    image: hero5,
+    imageMobile: hero5Mobile,
+    desktopPosition: 'right',
+    mobilePosition: 'right',
   },
 ];
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -99,10 +146,24 @@ export default function HeroCarousel() {
   };
 
   const currentSlide = slides[currentIndex];
+  const position = isMobile ? currentSlide.mobilePosition : currentSlide.desktopPosition;
+
+  const getPositionClasses = () => {
+    if (position === 'left') {
+      return 'items-start text-left';
+    }
+    return 'items-end text-right';
+  };
+
+  const getContainerClasses = () => {
+    if (position === 'left') {
+      return 'justify-start';
+    }
+    return 'justify-end';
+  };
 
   return (
-    <section className="relative w-full h-[50vh] md:h-[55vh] lg:h-[60vh] bg-[#2C3E50] text-white overflow-hidden">
-      {/* Contenedor de slides */}
+    <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[80vh] overflow-hidden">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={currentIndex}
@@ -112,88 +173,91 @@ export default function HeroCarousel() {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          {/* Imagen de fondo */}
-          <div className="absolute inset-0">
+          {/* Background Image - Desktop */}
+          <div className="absolute inset-0 hidden md:block">
             <Image
               src={currentSlide.image}
-              alt={currentSlide.title}
+              alt="Hero background"
+              fill
+              priority={currentIndex === 0}
+              className="object-cover object-[60%_30%]"
+              quality={90}
+            />
+          </div>
+
+          {/* Background Image - Mobile */}
+          <div className="absolute inset-0 md:hidden">
+            <Image
+              src={currentSlide.imageMobile}
+              alt="Hero background"
               fill
               priority={currentIndex === 0}
               className="object-cover"
               quality={90}
             />
-            {/* Overlay oscuro más pronunciado */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1a2332]/98 via-[#2C3E50]/95 to-[#2C3E50]/70" />
           </div>
 
-          {/* Contenido */}
-          <div className="relative h-full flex items-center py-4 sm:py-6 z-10">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl">
-              <div className="max-w-lg lg:max-w-xl">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-1 bg-servi_green/20 text-servi_green border border-servi_green/50 px-2.5 py-0.5 rounded-full mb-2">
-                  <FaCheckCircle className="w-2.5 h-2.5" />
-                  <span className="text-[10px] sm:text-xs text-white font-semibold">{currentSlide.badge}</span>
-                </div>
-
-                {/* Título */}
-                <h1 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-2 text-white">
-                  {currentSlide.title}
+          {/* Content */}
+          <div className="relative h-full z-10">
+            <div className={`container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl h-full flex ${getContainerClasses()}`}>
+              <div className={`flex flex-col ${getPositionClasses()} pt-8 md:pt-12 lg:pt-16 max-w-md lg:max-w-xl`}>
+                {/* Title */}
+                <h1 className="font-bold leading-tight mb-4 md:mb-6">
+                  {currentSlide.titleParts.map((part, idx) => (
+                    <span
+                      key={idx}
+                      className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase ${
+                        part.highlighted ? 'text-[#2a7e87]' : 'text-[#383536]'
+                      }`}
+                      style={{
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                      }}
+                    >
+                      {part.text}
+                    </span>
+                  ))}
                 </h1>
 
-                {/* Descripción */}
-                <p className="text-[11px] sm:text-xs md:text-sm lg:text-base text-gray-100 mb-3 leading-relaxed max-w-md">
-                  {currentSlide.description}
-                </p>
-
-                {/* Botones CTA */}
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Link
-                    href={currentSlide.primaryCTA.href}
-                    className="inline-flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 bg-servi_green hover:bg-servi_green/90 text-white text-[11px] sm:text-xs font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    {currentSlide.primaryCTA.text}
-                    <MdArrowForward className="ml-1 w-3 h-3" />
-                  </Link>
-                  <Link
-                    href={currentSlide.secondaryCTA.href}
-                    className="inline-flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 bg-transparent border-2 border-white hover:bg-white hover:text-servi_dark text-white text-[11px] sm:text-xs font-semibold rounded-lg transition-all duration-200"
-                  >
-                    {currentSlide.secondaryCTA.text}
-                  </Link>
-                </div>
+                {/* CTA Button */}
+                <Link
+                  href={currentSlide.cta.href}
+                  className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 bg-servi_green hover:bg-servi_green/90 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl w-fit"
+                >
+                  {currentSlide.cta.text}
+                  <MdArrowForward className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                </Link>
               </div>
             </div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Controles del carrusel */}
+      {/* Carousel Controls */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-3 z-30 bg-white/10 backdrop-blur-sm text-white p-1 sm:p-1.5 rounded-full hover:bg-white/20 transition-all duration-200"
+        className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-4 z-30 bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
         aria-label="Slide anterior"
       >
-        <MdArrowBack size={16} className="sm:w-4 sm:h-4" />
+        <MdArrowBack size={20} className="sm:w-6 sm:h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-3 z-30 bg-white/10 backdrop-blur-sm text-white p-1 sm:p-1.5 rounded-full hover:bg-white/20 transition-all duration-200"
+        className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-4 z-30 bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
         aria-label="Siguiente slide"
       >
-        <MdArrowForward size={16} className="sm:w-4 sm:h-4" />
+        <MdArrowForward size={20} className="sm:w-6 sm:h-6" />
       </button>
 
-      {/* Indicadores de slides */}
-      <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-30">
+      {/* Slide Indicators */}
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`transition-all duration-300 rounded-full ${
               currentIndex === idx
-                ? 'w-4 sm:w-5 h-1 bg-servi_green'
-                : 'w-1 h-1 bg-white/50 hover:bg-white/75'
+                ? 'w-6 sm:w-8 h-2 bg-servi_green'
+                : 'w-2 h-2 bg-white/50 hover:bg-white/75'
             }`}
             aria-label={`Ir al slide ${idx + 1}`}
           />
