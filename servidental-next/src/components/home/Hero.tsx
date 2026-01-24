@@ -180,7 +180,7 @@ export default function HeroCarousel() {
               alt="Hero background"
               fill
               priority={currentIndex === 0}
-              className="object-cover object-[60%_30%]"
+              className="object-cover object-top"
               quality={90}
             />
           </div>
