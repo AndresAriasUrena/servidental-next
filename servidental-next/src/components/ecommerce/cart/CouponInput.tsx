@@ -9,8 +9,11 @@ export default function CouponInput() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleApplyCoupon = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleApplyCoupon = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation(); // Prevent event from bubbling up to parent forms
+    }
     setError('');
     setSuccess('');
 
@@ -92,18 +95,26 @@ export default function CouponInput() {
 
       {/* Coupon Input Form - Only show if no coupon applied */}
       {cart.appliedCoupons.length === 0 && (
-        <form onSubmit={handleApplyCoupon} className="space-y-2">
+        <div className="space-y-2">
           <div className="flex flex-col gap-2">
             <input
               type="text"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleApplyCoupon();
+                }
+              }}
               placeholder="Código de cupón"
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-servi_green focus:border-transparent"
               disabled={isLoading}
             />
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleApplyCoupon()}
               disabled={isLoading || !couponCode.trim()}
               className="px-6 py-2 bg-servi_green text-white font-medium rounded-lg hover:bg-servi_dark transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
@@ -150,7 +161,7 @@ export default function CouponInput() {
               <span>{success}</span>
             </div>
           )}
-        </form>
+        </div>
       )}
     </div>
   );
