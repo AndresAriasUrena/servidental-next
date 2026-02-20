@@ -574,7 +574,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                     product.stock_status === 'instock' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {product.stock_status === 'instock'
-                      ? (isCompressor(product) ? 'Entrega en 30 días' : 'Entrega Inmediata')
+                      ? 'Entrega Inmediata'
                       : 'Contra Pedido'}
                   </span>
                 </div>

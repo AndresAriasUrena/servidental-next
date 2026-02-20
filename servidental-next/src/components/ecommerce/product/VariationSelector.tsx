@@ -173,7 +173,7 @@ export default function VariationSelector({
               }`}
             >
               {selectedVariation.stock_status === 'instock'
-                ? (isCompressor(product) ? 'Entrega en 30 días' : 'Entrega Inmediata')
+                ? 'Entrega Inmediata'
                 : 'Contra Pedido'}
             </span>
           </div>
