@@ -345,6 +345,9 @@ function ProductGrid({
     setHasMore(true);
   };
 
+  // Referencia estable para productos (evita recrear renderProduct callback)
+  const productsRef = useRef<WooCommerceProduct[]>([]);
+
   // De-duplicación de productos por ID
   const productsUnique = useMemo(() => {
     const map = new Map<string | number, WooCommerceProduct>();
@@ -353,7 +356,12 @@ function ProductGrid({
         map.set(p.id, p);
       }
     }
-    return Array.from(map.values());
+    const uniqueArray = Array.from(map.values());
+
+    // Actualizar ref con la nueva lista
+    productsRef.current = uniqueArray;
+
+    return uniqueArray;
   }, [products]);
 
   // Sincronizar searchInput con filters.search
@@ -361,7 +369,9 @@ function ProductGrid({
     setSearchInput(filters.search || '');
   }, [filters.search]);
 
-  const VIRTUALIZATION_THRESHOLD = 30;
+  // Desactivar virtualización temporalmente para evitar saltos en scroll
+  // TODO: Reactivar con defaultItemHeight cuando se estabilicen las alturas
+  const VIRTUALIZATION_THRESHOLD = 999999;
   const shouldVirtualize = productsUnique.length > VIRTUALIZATION_THRESHOLD;
 
   const gridComponents = useMemo(() => ({
@@ -380,10 +390,12 @@ function ProductGrid({
   }), []);
 
   const renderProduct = useCallback((index: number) => {
-    const product = productsUnique[index];
+    // Usar ref en lugar de productsUnique para evitar recrear el callback
+    const product = productsRef.current[index];
     if (!product) return null;
-    return <ProductCard key={`${instanceKey}-${product.id}`} product={product} />;
-  }, [productsUnique, instanceKey]);
+    // NO usar key aquí - VirtuosoGrid maneja keys por índice internamente
+    return <ProductCard product={product} />;
+  }, []);
 
   // Obtener nombres de categorías desde IDs
   const getCategoryNames = (categoryIds: number[]): string[] => {
@@ -581,7 +593,7 @@ function ProductGrid({
                   totalCount={productsUnique.length}
                   components={gridComponents}
                   itemContent={renderProduct}
-                  overscan={200}
+                  overscan={100}
                 />
               ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6">

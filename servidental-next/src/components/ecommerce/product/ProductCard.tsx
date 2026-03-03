@@ -15,7 +15,7 @@ interface ProductCardProps {
   showAddToCart?: boolean;
 }
 
-export function ProductCard({ product, showAddToCart = true }: ProductCardProps) {
+function ProductCardComponent({ product, showAddToCart = true }: ProductCardProps) {
   const { addToCart, isLoading } = useCart();
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
@@ -65,8 +65,9 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               placeholder="blur"
               blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect fill='%23f5f5f5' width='400' height='400'/%3E%3C/svg%3E"
-              loading="lazy"
+              priority={false}
               quality={75}
+              unoptimized={false}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -208,3 +209,18 @@ export function ProductCard({ product, showAddToCart = true }: ProductCardProps)
     </>
   );
 }
+
+// Comparador personalizado para React.memo
+// Solo re-renderizar si el ID del producto o showAddToCart cambian
+const arePropsEqual = (
+  prevProps: ProductCardProps,
+  nextProps: ProductCardProps
+) => {
+  return (
+    prevProps.product.id === nextProps.product.id &&
+    prevProps.showAddToCart === nextProps.showAddToCart
+  );
+};
+
+// Exportar componente memoizado para evitar re-renders innecesarios
+export const ProductCard = React.memo(ProductCardComponent, arePropsEqual);
