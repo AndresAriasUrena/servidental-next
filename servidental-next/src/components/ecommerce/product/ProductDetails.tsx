@@ -65,32 +65,22 @@ const getUnifiedMediaItems = (product: WooCommerceProduct): MediaItem[] => {
     });
   }
   
-  // Add videos from custom fields
-  const video1Url = getMetaDataValue(product, 'video_1_url');
-  if (video1Url) {
-    const videoId = getYouTubeVideoId(video1Url);
-    if (videoId) {
-      mediaItems.push({
-        type: 'video',
-        src: video1Url,
-        alt: `Video demostrativo - ${product.name}`,
-        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        videoId
-      });
-    }
-  }
-  
-  const video2Url = getMetaDataValue(product, 'video_2_url');
-  if (video2Url) {
-    const videoId = getYouTubeVideoId(video2Url);
-    if (videoId) {
-      mediaItems.push({
-        type: 'video',
-        src: video2Url,
-        alt: `Video demostrativo #2 - ${product.name}`,
-        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        videoId
-      });
+  // Add videos from custom fields (support up to 6 videos)
+  for (let i = 1; i <= 6; i++) {
+    const videoUrl = getMetaDataValue(product, `video_${i}_url`);
+    if (videoUrl) {
+      const videoId = getYouTubeVideoId(videoUrl);
+      if (videoId) {
+        mediaItems.push({
+          type: 'video',
+          src: videoUrl,
+          alt: i === 1
+            ? `Video demostrativo - ${product.name}`
+            : `Video demostrativo #${i} - ${product.name}`,
+          thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+          videoId
+        });
+      }
     }
   }
   
