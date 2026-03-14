@@ -1,7 +1,8 @@
 // /src/app/api/tilopay/callback/route.ts
+// TiloPay payment callback handler - redirects user after payment
 import { NextResponse } from 'next/server';
 
-// ——— Ajusta estas funciones a tu capa real de WooCommerce ———
+// ——— Funciones de integración con WooCommerce ———
 async function markWooOrderPaid(wooOrderId: number | string, payload: any) {
   try {
     console.log(`✅ Marking WooCommerce order ${wooOrderId} as paid...`);
