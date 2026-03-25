@@ -8,7 +8,7 @@ export default function StoreBenefitsBanner() {
     },
     {
       icon: TruckIcon,
-      text: 'Envío gratuito dentro del Área Metropolitana',
+      text: 'Envío gratuito dentro del Área Metropolitana (exclusivo para equipos)',
     },
     {
       icon: WrenchScrewdriverIcon,

@@ -65,8 +65,8 @@ const getUnifiedMediaItems = (product: WooCommerceProduct): MediaItem[] => {
     });
   }
   
-  // Add videos from custom fields (support up to 6 videos)
-  for (let i = 1; i <= 6; i++) {
+  // Add videos from custom fields (support up to 7 videos)
+  for (let i = 1; i <= 7; i++) {
     const videoUrl = getMetaDataValue(product, `video_${i}_url`);
     if (videoUrl) {
       const videoId = getYouTubeVideoId(videoUrl);
