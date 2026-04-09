@@ -87,6 +87,14 @@ export async function POST(request: NextRequest) {
         }
       }
       
+      // Coupon information
+      if (appliedCoupons && appliedCoupons.length > 0) {
+        noteComponents.push(`--- CUPONES APLICADOS ---`);
+        appliedCoupons.forEach((coupon: any) => {
+          noteComponents.push(`Cupón: ${coupon.code} — Descuento: ₡${coupon.discount.toLocaleString('es-CR')}`);
+        });
+      }
+
       // Shipping information
       if (shipping_option) {
         noteComponents.push(`--- INFORMACIÓN DE ENVÍO ---`);
