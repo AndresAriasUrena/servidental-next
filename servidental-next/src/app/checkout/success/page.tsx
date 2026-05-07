@@ -68,7 +68,7 @@ function SuccessContent() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
               <div className="flex items-center justify-center space-x-2">
                 <span>📧</span>
-                <span>Recibirás confirmación por email</span>
+                <span>Recibirás confirmación por whatsapp</span>
               </div>
               <div className="flex items-center justify-center space-x-2">
                 <span>📦</span>
