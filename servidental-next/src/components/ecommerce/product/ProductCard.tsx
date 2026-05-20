@@ -45,9 +45,14 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
   const salePrice = parsePrice(product.sale_price);
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
 
-  // Detectar si el producto tiene la etiqueta "noviembre" (Black November)
+  // Detectar si el producto tiene la etiqueta "promociones"
   const hasBlackNovemberTag = product.tags?.some(
-    tag => tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
+    tag => tag.slug?.toLowerCase() === 'promociones' || tag.name?.toLowerCase() === 'promociones'
+  );
+
+  // Detectar si el producto tiene el tag "silla-dental" (entrega en 22 días)
+  const isSillaDental = product.tags?.some(
+    tag => tag.slug === 'silla-dental'
   );
 
   return (
@@ -80,7 +85,19 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
             <div className="absolute top-2 left-2 z-10">
               <div className="bg-gradient-to-r from-gray-900 to-black text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border uppercase flex items-center gap-1">
                 <span className="inline-block w-1.5 h-1.5 bg-slate-400 rounded-full animate-pulse"></span>
-                Descuento
+                Promociones
+              </div>
+            </div>
+          )}
+
+          {/* Entrega en 22 días (sillas dentales) */}
+          {isSillaDental && (
+            <div className="absolute bottom-2 left-2 z-10">
+              <div className="bg-servi_green text-white text-xs px-2 py-1 rounded-md shadow-md flex items-center gap-1">
+                <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Entrega en 22 días
               </div>
             </div>
           )}
@@ -88,7 +105,7 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
           {/* Sale Badge */}
           {productOnSale && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-              Oferta
+              Oferta Congreso
             </div>
           )}
 

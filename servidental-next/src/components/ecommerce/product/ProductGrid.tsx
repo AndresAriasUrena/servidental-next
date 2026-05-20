@@ -174,16 +174,14 @@ function ProductGrid({
         console.log('[Black November Filter] Filtrando productos con etiqueta "noviembre"...');
         console.log(`[Black November Filter] Total productos antes del filtro: ${productsToShow.length}`);
 
-        // Filtrar productos con etiqueta "noviembre"
+        // Filtrar productos con etiqueta "promociones"
         const productsWithNoviembre = productsToShow.filter(product => {
-          const hasNoviembre = product.tags?.some(tag =>
-            tag.slug?.toLowerCase() === 'noviembre' || tag.name?.toLowerCase() === 'noviembre'
+          return product.tags?.some(tag =>
+            tag.slug?.toLowerCase() === 'promociones' || tag.name?.toLowerCase() === 'promociones'
           );
-
-          return hasNoviembre;
         });
 
-        console.log(`[Black November Filter] Productos con etiqueta "noviembre": ${productsWithNoviembre.length}`);
+        console.log(`[Promociones Filter] Productos con etiqueta "promociones": ${productsWithNoviembre.length}`);
         productsToShow = productsWithNoviembre;
       }
 

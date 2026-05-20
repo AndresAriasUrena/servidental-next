@@ -530,7 +530,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                       {formatPrice(regularPrice)}
                     </span>
                     <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      OFERTA
+                      OFERTA CONGRESO
                     </span>
                   </div>
                 ) : price > 0 ? (
