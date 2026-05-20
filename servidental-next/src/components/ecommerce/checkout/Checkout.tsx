@@ -112,6 +112,7 @@ interface CheckoutFormData {
   billing: BillingAddress;
   shipping: ShippingAddress;
   payment_method: string;
+  transfer_document_number: string;
   customer_note: string;
   personal_info: {
     company_name: string;
@@ -188,6 +189,7 @@ export default function Checkout() {
       country: 'CR'
     },
     payment_method: 'tilopay',
+    transfer_document_number: '',
     customer_note: '',
     personal_info: {
       company_name: '',
@@ -220,7 +222,8 @@ export default function Checkout() {
     }
   });
   
-  const [isSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [transferOrderSuccess, setTransferOrderSuccess] = useState(false);
 
   React.useEffect(() => {
     const savedData = localStorage.getItem('checkout-form-data');
@@ -283,6 +286,45 @@ export default function Checkout() {
       })),
       total: cart.total.toString()
     });
+
+    if (formData.payment_method === 'transferencia') {
+      setIsSubmitting(true);
+      try {
+        const res = await fetch('/api/woocommerce/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerInfo: {
+              firstName: formData.personal_info.company_name,
+              lastName: '',
+              email: formData.personal_info.emails.billing,
+              phone: formData.personal_info.contact_numbers.cellphone,
+            },
+            cartItems: cart.items,
+            total: cart.total,
+            paymentMethod: 'transferencia',
+            personal_info: {
+              ...formData.personal_info,
+              transfer_document_number: formData.transfer_document_number,
+            },
+            shipping_option: formData.shipping_option,
+            shipping_other_details: formData.shipping_other_details,
+            contact_data: formData.contact_data,
+            customer_note: formData.customer_note,
+          }),
+        });
+        if (res.ok) {
+          setTransferOrderSuccess(true);
+        } else {
+          alert('Hubo un error al registrar su pedido. Por favor contáctenos por WhatsApp.');
+        }
+      } catch {
+        alert('Hubo un error al registrar su pedido. Por favor contáctenos por WhatsApp.');
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
 
     setShowTilopayCheckout(true);
   };
@@ -873,25 +915,99 @@ export default function Checkout() {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Método de pago
               </h2>
-              <div className="p-3 border border-gray-300 rounded-md bg-gray-50">
-                <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="payment_method"
-                    value="tilopay"
-                    checked={formData.payment_method === 'tilopay'}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      payment_method: e.target.value
-                    }))}
-                    className="mr-3"
-                  />
-                  <div>
-                    <div className="font-medium">Tarjeta de crédito/débito (TiloPay)</div>
-                    <div className="text-sm text-gray-500">
-                      Pago seguro con tarjeta a través de TiloPay
+              <div className="space-y-3">
+                {/* TiloPay */}
+                <div className="p-3 border border-gray-300 rounded-md bg-gray-50">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      value="tilopay"
+                      checked={formData.payment_method === 'tilopay'}
+                      onChange={(e) => setFormData(prev => ({ ...prev, payment_method: e.target.value }))}
+                      className="mr-3"
+                    />
+                    <div>
+                      <div className="font-medium">Tarjeta de crédito/débito (TiloPay)</div>
+                      <div className="text-sm text-gray-500">Pago seguro con tarjeta a través de TiloPay</div>
                     </div>
-                  </div>
+                  </label>
+                </div>
+
+                {/* Transferencia bancaria */}
+                <div className={`border rounded-md overflow-hidden ${formData.payment_method === 'transferencia' ? 'border-servi_green' : 'border-gray-300'}`}>
+                  <label className="flex items-center p-3 bg-gray-50 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      value="transferencia"
+                      checked={formData.payment_method === 'transferencia'}
+                      onChange={(e) => setFormData(prev => ({ ...prev, payment_method: e.target.value }))}
+                      className="mr-3"
+                    />
+                    <div>
+                      <div className="font-medium">Transferencia bancaria</div>
+                      <div className="text-sm text-gray-500">Transferencia o depósito a cuentas de ServiDental</div>
+                    </div>
+                  </label>
+
+                  {formData.payment_method === 'transferencia' && (
+                    <div className="p-4 border-t border-gray-200 space-y-4">
+                      {/* Campo número de documento */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Número de documento (cédula o jurídica) *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ej: 1-1234-5678"
+                          required={formData.payment_method === 'transferencia'}
+                          value={formData.transfer_document_number}
+                          onChange={(e) => setFormData(prev => ({ ...prev, transfer_document_number: e.target.value }))}
+                          className="w-full border border-gray-300 rounded-md px-3 py-2"
+                        />
+                      </div>
+
+                      {/* Cuentas bancarias */}
+                      <div className="space-y-3">
+                        <p className="text-sm font-medium text-gray-700">Datos bancarios para la transferencia:</p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {/* BAC Colones */}
+                          <div className="bg-white border border-gray-200 rounded-md p-3">
+                            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">BAC — Colones</p>
+                            <p className="text-sm"><span className="text-gray-500">Cuenta:</span> 936 064 039</p>
+                            <p className="text-sm"><span className="text-gray-500">IBAN:</span> CR70 0102 0000 9360 6403 97</p>
+                          </div>
+
+                          {/* BAC Dólares */}
+                          <div className="bg-white border border-gray-200 rounded-md p-3">
+                            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">BAC — Dólares</p>
+                            <p className="text-sm"><span className="text-gray-500">Cuenta:</span> 936 064 021</p>
+                            <p className="text-sm"><span className="text-gray-500">IBAN:</span> CR75 0102 0000 9360 6402 10</p>
+                          </div>
+
+                          {/* BN Colones */}
+                          <div className="bg-white border border-gray-200 rounded-md p-3">
+                            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Banco Nacional — Colones</p>
+                            <p className="text-sm"><span className="text-gray-500">Cuenta:</span> 200-01-203-005889-8</p>
+                            <p className="text-sm"><span className="text-gray-500">IBAN:</span> CR71 0151 2032 0010 0588 96</p>
+                          </div>
+
+                          {/* BN Dólares */}
+                          <div className="bg-white border border-gray-200 rounded-md p-3">
+                            <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Banco Nacional — Dólares</p>
+                            <p className="text-sm"><span className="text-gray-500">Cuenta:</span> 200-02-203-001776-3</p>
+                            <p className="text-sm"><span className="text-gray-500">IBAN:</span> CR94 0151 2032 0020 0177 63</p>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-gray-500">
+                          Una vez realizada la transferencia, un asesor de ServiDental confirmará el pago y procesará su pedido.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -997,6 +1113,31 @@ export default function Checkout() {
           </div>
         </div>
       </form>
+
+      {transferOrderSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-servi_green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">¡Pedido registrado!</h2>
+            <p className="text-gray-600 mb-4">
+              Su pedido ha sido registrado exitosamente. Una vez confirmada la transferencia, un asesor de ServiDental procesará su orden y coordinará la entrega.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Para consultas puede escribirnos al WhatsApp <strong>2101-6114</strong>.
+            </p>
+            <a
+              href="/tienda"
+              className="inline-block bg-servi_green text-white px-6 py-3 rounded-md hover:bg-servi_dark transition-colors"
+            >
+              Volver a la tienda
+            </a>
+          </div>
+        </div>
+      )}
 
       {showTilopayCheckout && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">

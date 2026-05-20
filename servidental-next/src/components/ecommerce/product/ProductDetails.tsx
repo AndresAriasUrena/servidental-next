@@ -568,6 +568,16 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                       : 'Contra Pedido'}
                   </span>
                 </div>
+
+                {/* Entrega en 22 días (sillas dentales) */}
+                {product.tags?.some(tag => tag.slug === 'silla-dental') && (
+                  <div className="flex items-center gap-1.5 bg-servi_green text-white text-xs px-2.5 py-1 rounded-md">
+                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Entrega en 22 días
+                  </div>
+                )}
               </div>
 
               {/* Rating */}

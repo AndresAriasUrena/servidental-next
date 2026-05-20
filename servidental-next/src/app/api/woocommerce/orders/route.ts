@@ -30,7 +30,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine payment method
-    const isTilopay = paymentMethod === 'TiloPay' || tilopayOrderNumber;
+    const isTransfer = paymentMethod === 'transferencia';
+    const isTilopay = !isTransfer && (paymentMethod === 'TiloPay' || tilopayOrderNumber);
     
     // Build comprehensive customer notes from new structured data
     let structuredCustomerNote = customer_note || '';
@@ -87,6 +88,12 @@ export async function POST(request: NextRequest) {
         }
       }
       
+      // Transfer payment info
+      if (isTransfer) {
+        noteComponents.push(`--- PAGO POR TRANSFERENCIA ---`);
+        noteComponents.push(`Número de documento: ${personal_info.transfer_document_number || 'N/A'}`);
+      }
+
       // Coupon information
       if (appliedCoupons && appliedCoupons.length > 0) {
         noteComponents.push(`--- CUPONES APLICADOS ---`);
@@ -129,9 +136,9 @@ export async function POST(request: NextRequest) {
     
     // Preparar datos para WooCommerce
     const orderData = {
-      payment_method: isTilopay ? 'tilopay' : 'onvo_pay',
-      payment_method_title: isTilopay ? 'TiloPay' : 'ONVO Pay',
-      set_paid: paymentIntentId ? true : false, // Solo marcar como pagado si ONVO ya procesó el pago
+      payment_method: isTransfer ? 'bacs' : isTilopay ? 'tilopay' : 'onvo_pay',
+      payment_method_title: isTransfer ? 'Transferencia bancaria' : isTilopay ? 'TiloPay' : 'ONVO Pay',
+      set_paid: isTransfer ? false : (paymentIntentId ? true : false), // Solo marcar como pagado si ONVO ya procesó el pago
       customer_note: structuredCustomerNote, // Enhanced customer notes with structured data
       billing: {
         first_name: personal_info?.company_name || customerInfo.firstName || billingAddress?.first_name || '',
