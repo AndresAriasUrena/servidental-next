@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       // Transfer payment info
       if (isTransfer) {
         noteComponents.push(`--- PAGO POR TRANSFERENCIA ---`);
-        noteComponents.push(`Número de documento: ${personal_info.transfer_document_number || 'N/A'}`);
+        noteComponents.push(`Número de comprobante: ${personal_info.transfer_document_number || 'N/A'}`);
       }
 
       // Coupon information

@@ -956,11 +956,11 @@ export default function Checkout() {
                       {/* Campo número de documento */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Número de documento (cédula o jurídica) *
+                          Número de comprobante de transferencia *
                         </label>
                         <input
                           type="text"
-                          placeholder="Ej: 1-1234-5678"
+                          placeholder="Ej: 202505221234567"
                           required={formData.payment_method === 'transferencia'}
                           value={formData.transfer_document_number}
                           onChange={(e) => setFormData(prev => ({ ...prev, transfer_document_number: e.target.value }))}
