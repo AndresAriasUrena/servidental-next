@@ -57,7 +57,7 @@ export default function AboutPage() {
             <p className="lead">
               Somos una empresa con extensa trayectoria en el sector dental desde el 
               2007, combinada con una capacidad técnica sobresaliente que nos ha 
-              posicionado como la opción preferida por más de 800 clínicas de 
+              posicionado como la opción preferida por más de 2000 clínicas de 
               odontología que buscan un socio experto y confiable.
             </p>
             

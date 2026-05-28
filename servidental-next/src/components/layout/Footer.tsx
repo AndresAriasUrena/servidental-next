@@ -61,7 +61,7 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Acerca de nosotros</h4>
             <p className="text-gray-400 mb-6">
               Nuestra larga trayectoria, combinada con una capacidad técnica destacada
-              en el mercado, nos hace la elección de más de 800 clínicas de odontología
+              en el mercado, nos hace la elección de más de 2000 clínicas de odontología
               cuando buscan un socio experto.
             </p>
             {/* Social Icons */}
