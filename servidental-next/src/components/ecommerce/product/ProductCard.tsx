@@ -83,9 +83,9 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
           {/* Black November Badge (esquina superior izquierda) */}
           {hasBlackNovemberTag && (
             <div className="absolute top-2 left-2 z-10">
-              <div className="bg-gradient-to-r from-gray-900 to-black text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border uppercase flex items-center gap-1">
-                <span className="inline-block w-1.5 h-1.5 bg-slate-400 rounded-full animate-pulse"></span>
-                Promociones
+              <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border border-red-800 uppercase flex items-center gap-1">
+                <span className="inline-block w-1.5 h-1.5 bg-red-200 rounded-full animate-pulse"></span>
+                Oferta Congreso
               </div>
             </div>
           )}
