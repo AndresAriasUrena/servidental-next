@@ -534,7 +534,7 @@ function ProductGrid({
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                Solo repuestos
+                Insumos
               </button>
             </div>
           </div>
