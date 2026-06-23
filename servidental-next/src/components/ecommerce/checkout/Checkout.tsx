@@ -389,17 +389,21 @@ export default function Checkout() {
                   }))}
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
                 />
-                <input
-                  type="text"
-                  placeholder="Código de actividad económica de Hacienda *"
-                  required
-                  value={formData.personal_info.hacienda_code}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    personal_info: { ...prev.personal_info, hacienda_code: e.target.value }
-                  }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Código de actividad económica de Hacienda"
+                    value={formData.personal_info.hacienda_code}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      personal_info: { ...prev.personal_info, hacienda_code: e.target.value }
+                    }))}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    Aplica únicamente si es contribuyente
+                  </p>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
