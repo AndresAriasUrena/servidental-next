@@ -251,11 +251,18 @@ export default function ServicesPage() {
 
                   <div>
                     <p className="font-semibold text-gray-800 mb-2">• Valor del servicio</p>
+                    <p className="pl-4 mb-2">
+                      El mantenimiento preventivo tiene un costo base de <span className="font-bold text-servi_green">
+                      ₡75.000 + IVA</span>.
+                    </p>
+                    <p className="pl-4 mb-2">
+                      El mantenimiento correctivo tiene un costo base de <span className="font-bold text-servi_green">
+                      ₡35.000 + IVA</span>; a este monto se le sumará el valor de los repuestos utilizados
+                      y los procesos adicionales que el equipo requiera.
+                    </p>
                     <p className="pl-4">
-                      La visita técnica tiene un costo base de <span className="font-bold text-servi_green">
-                      ₡35.000 + IVA</span>. A este monto se sumará el valor de los repuestos utilizados, 
-                      procesos realizados y aplica para el <strong>Área Metropolitana</strong>. Se aplicará un costo 
-                      adicional según la distancia de traslado del profesional.
+                      Ambos servicios aplican dentro del <strong>Área Metropolitana</strong>. Para ubicaciones
+                      fuera de esta zona, se adicionará un costo según la distancia de traslado del técnico.
                     </p>
                   </div>
 

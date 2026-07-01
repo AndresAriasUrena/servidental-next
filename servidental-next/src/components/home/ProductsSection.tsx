@@ -5,71 +5,81 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import assets from '@/assets'
 
-const categories = [
+// Productos principales del carrusel del home.
+// Imágenes y logos servidos de forma estática desde /public/products-home
+// para carga instantánea. El enlace apunta a la ficha real en la tienda.
+const products = [
   {
     id: 1,
-    name: 'Escáner intraoral DL-300P, Coxo, Launca',
-    description: 'Alámbrico',
-    image: assets.products.scanner.EscanerIntraoralDL300PCoxoLaunca.default,
-    // href: '/products?category=Scanner', // Cambiado
-    brand: assets.logos.brands.coxo 
+    name: 'Escáner intraoral Breezyscan',
+    description: 'Más preciso, ligero y compacto',
+    slug: 'escaner-intraoral-breezyscan',
+    image: '/products-home/breezyscan.jpg',
+    brandLogo: '/products-home/brand-coxo.avif',
+    brandName: 'Coxo',
   },
   {
     id: 2,
-    name: 'Microarenador Standar Microblaster"',
-    description: 'Rápido y fácil de usar',
-    image: assets.products.pulidoras.MicroarenadorStandarMicroblaster.default,
-    // href: '/products?category=Fresadora', // Cambiado
-    brand: assets.logos.brands.bioart
+    name: 'Escáner intraoral DL-300P',
+    description: 'Ligero y rápido',
+    slug: 'escaner-intraoral-dl-300p-coxo',
+    image: '/products-home/dl-300p.webp',
+    brandLogo: '/products-home/brand-coxo.avif',
+    brandName: 'Coxo',
   },
   {
     id: 3,
-    name: 'Lavadora ultrasónica BioWhash',
-    description: 'Optimiza y acelera el proceso de lavado',
-    image: assets.products.lavadoraUltrasonido.LavadoraUltrasonicaBioWhash.default,
-    // href: '/products?category=Compresores', // Cambiado
-    brand: assets.logos.brands.bioart
+    name: 'Rayos X portátil XVbeam2000',
+    description: 'Sistema portátil con protección avanzada',
+    slug: 'rayos-x-portatil-xvbeam2000',
+    image: '/products-home/xvbeam2000.webp',
+    brandLogo: '/products-home/brand-xpect-vision.avif',
+    brandName: 'Xpect Vision',
   },
   {
     id: 4,
-    name: 'Carro-movil-multifuncional',
-    description: 'Diseño minimalista',
-    image: assets.products.Mobiliario.CarroMovilMultifuncional.default,
-    // href: '/products?category=Esterilización', // Cambiado
-    brand: assets.logos.brands.siger//CAMBIAR ESTO!!!
+    name: 'Esterilizador AMI-23B clase “B”',
+    description: 'Rendimiento de primera clase con diseño compacto',
+    slug: 'esterilizador-ami-23b-clase-b',
+    image: '/products-home/ami-23b.jpg',
+    brandLogo: '/products-home/brand-siger.avif',
+    brandName: 'SIGER',
   },
   {
     id: 5,
-    name: 'Pulidora dental por aire CP-1',
-    description: 'Pieza de mano de alto rendimiento',
-    image: assets.products.pulidoras.PulidoraDentalPorAireCP.default,
-    // href: '/products?category=Equipo+de+Rayos+X', // Cambiado
-    brand: assets.logos.brands.coxo
+    name: 'Motor de implantes C-Sailor S1',
+    description: 'Rendimiento y precisión',
+    slug: 'motor-de-implantes-c-sailor-s1',
+    image: '/products-home/c-sailor-s1.jpg',
+    brandLogo: '/products-home/brand-coxo.avif',
+    brandName: 'Coxo',
   },
   {
     id: 6,
-    name: "Motor de cirugía C-Puma-Master",
-    description: "Rotación precisa y estable",
-    image: assets.products.MotoresDeCirugias.MotorDeCirugiaCPumaMaster.default,
-    brand: assets.logos.brands.coxo 
+    name: 'Unidad dental U100',
+    description: 'Confort y tecnología para tu consultorio',
+    slug: 'unidad-dental-u100',
+    image: '/products-home/u100.jpg',
+    brandLogo: '/products-home/brand-siger.avif',
+    brandName: 'SIGER',
   },
 ]
 
 // Duplicamos las categorías para el efecto infinito
-const extendedCategories = [...categories, ...categories, ...categories]
+const extendedProducts = [...products, ...products, ...products]
 
 export default function ProductsSection() {
-  const [currentIndex, setCurrentIndex] = useState<number>(categories.length)
+  const [currentIndex, setCurrentIndex] = useState<number>(products.length)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [slideTransform, setSlideTransform] = useState<string>('0%')
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex: number) => {
       const next = prevIndex + 1
       // Si llegamos al final del set duplicado, volvemos al set del medio
-      if (next >= categories.length * 2) {
-        return categories.length
+      if (next >= products.length * 2) {
+        return products.length
       }
       return next
     })
@@ -80,14 +90,14 @@ export default function ProductsSection() {
       const prev = prevIndex - 1
       // Si llegamos al inicio del set duplicado, volvemos al set del medio
       if (prev < 0) {
-        return categories.length - 1
+        return products.length - 1
       }
       return prev
     })
   }
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index + categories.length)
+    setCurrentIndex(index + products.length)
   }
 
   useEffect(() => {
@@ -101,38 +111,35 @@ export default function ProductsSection() {
   }, [isAutoPlaying])
 
   // Normaliza el índice para los indicadores
-  const normalizedIndex = currentIndex % categories.length
-  
-  const [slideTransform, setSlideTransform] = useState<string>('0%')
+  const normalizedIndex = currentIndex % products.length
 
   // Función para calcular el desplazamiento según el viewport
   const getSlideTransform = (): string => {
-    if (typeof window === 'undefined') return '0%';
-    
+    if (typeof window === 'undefined') return '0%'
+
     // En móvil (menos de 640px)
     if (window.innerWidth < 640) {
-      return `-${currentIndex * 100}%`;
+      return `-${currentIndex * 100}%`
     }
     // En tablet (menos de 1024px)
     else if (window.innerWidth < 1024) {
-      return `-${currentIndex * 50}%`;
+      return `-${currentIndex * 50}%`
     }
     // En desktop
-    return `-${currentIndex * (100/3)}%`;
+    return `-${currentIndex * (100 / 3)}%`
   }
 
-useEffect(() => {
-  const updateTransform = () => {
-    setSlideTransform(getSlideTransform());
-  }
+  useEffect(() => {
+    const updateTransform = () => {
+      setSlideTransform(getSlideTransform())
+    }
 
-  // Actualizar en el montaje y al cambiar el tamaño de la ventana
-  updateTransform();
-  window.addEventListener('resize', updateTransform);
+    // Actualizar en el montaje y al cambiar el tamaño de la ventana
+    updateTransform()
+    window.addEventListener('resize', updateTransform)
 
-  return () => window.removeEventListener('resize', updateTransform);
-}, [currentIndex]);
-
+    return () => window.removeEventListener('resize', updateTransform)
+  }, [currentIndex])
 
   return (
     <section className="bg-white py-16">
@@ -151,64 +158,66 @@ useEffect(() => {
           </p>
         </motion.div>
 
-        <div 
+        <div
           className="relative"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
           <div className="overflow-hidden">
-            <motion.div 
+            <motion.div
               className="flex"
               animate={{
                 x: slideTransform
               }}
               transition={{
                 duration: 0.5,
-                ease: "easeInOut"
+                ease: 'easeInOut'
               }}
             >
-              {extendedCategories.map((product, index) => (
+              {extendedProducts.map((product, index) => (
                 <motion.div
                   key={`${product.id}-${index}`}
                   className="flex-none w-full sm:w-1/2 lg:w-1/3 px-4"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className="h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                    {/* Brand logo */}
-                    <div className="absolute top-2 right-6 z-10 bg-white p-1.5 rounded-lg shadow-sm">
-                      <div className="relative h-6 w-16">
+                  <Link href={`/tienda/${product.slug}`} className="group block h-full">
+                    <div className="relative h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                      {/* Brand logo */}
+                      <div className="absolute top-2 right-6 z-10 bg-white p-1.5 rounded-lg shadow-sm">
+                        <div className="relative h-6 w-16">
+                          <Image
+                            src={product.brandLogo}
+                            alt={product.brandName}
+                            fill
+                            sizes="64px"
+                            className="object-contain"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Product image */}
+                      <div className="relative aspect-[16/12] p-2">
                         <Image
-                          src={product.brand}
-                          alt="Brand logo"
+                          src={product.image}
+                          alt={product.name}
                           fill
-                          sizes="64px"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           className="object-contain"
+                          priority
                         />
                       </div>
-                    </div>
 
-                    {/* Product image */}
-                    <div className="relative aspect-[16/12] p-2">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-contain"
-                        priority
-                      />
+                      {/* Product info */}
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-900 text-lg group-hover:text-servi_green transition-colors">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {product.description}
+                        </p>
+                      </div>
                     </div>
-
-                    {/* Product info */}
-                    <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 text-lg">
-                        {product.name}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {product.description}
-                      </p>
-                    </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </motion.div>
@@ -229,7 +238,7 @@ useEffect(() => {
 
             {/* Dots Indicator */}
             <div className="flex gap-2">
-              {categories.map((_, index) => (
+              {products.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => {
@@ -237,7 +246,7 @@ useEffect(() => {
                     setIsAutoPlaying(false)
                   }}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === normalizedIndex ? "bg-servi_green w-4" : "bg-gray-300"
+                    index === normalizedIndex ? 'bg-servi_green w-4' : 'bg-gray-300'
                   }`}
                   aria-label={`Ir a slide ${index + 1}`}
                 />
@@ -262,7 +271,7 @@ useEffect(() => {
             href="/tienda"
             className="inline-block bg-servi_green text-white px-8 py-3 rounded-md hover:bg-servi_dark transition-colors"
           >
-            Ver catálogo completo
+            Ver tienda en línea
           </Link>
         </div>
       </div>
