@@ -341,6 +341,29 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
 
+  // Precio a mostrar arriba del producto.
+  // En productos variables mostramos "Desde $X" (el precio base) hasta que el
+  // cliente selecciona una variación; entonces mostramos el precio exacto de esa
+  // variación para que coincida con el recuadro de detalle y no genere confusión.
+  const isVariable = product.type === 'variable';
+  const hasSelectedVariation = !!selectedVariation;
+
+  const displayPrice = hasSelectedVariation
+    ? parsePrice(selectedVariation.price)
+    : price;
+  const displayRegular = hasSelectedVariation
+    ? parsePrice(selectedVariation.regular_price)
+    : regularPrice;
+  const displaySale = hasSelectedVariation
+    ? parsePrice(selectedVariation.sale_price)
+    : salePrice;
+  const displayOnSale = hasSelectedVariation
+    ? isOnSale(selectedVariation.regular_price, selectedVariation.sale_price)
+    : productOnSale;
+
+  // Solo mostramos "Desde" en productos variables mientras no haya variación elegida
+  const showDesde = isVariable && !hasSelectedVariation && displayPrice > 0;
+
   // Generate JSON-LD for SEO
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -521,21 +544,29 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 {/* Precio */}
-                {productOnSale ? (
+                {displayOnSale ? (
                   <div className="flex items-center gap-2">
+                    {showDesde && (
+                      <span className="text-base font-medium text-gray-500">Desde</span>
+                    )}
                     <span className="text-3xl font-bold text-servi_green">
-                      {formatPrice(salePrice)}
+                      {formatPrice(displaySale)}
                     </span>
                     <span className="text-lg text-gray-500 line-through">
-                      {formatPrice(regularPrice)}
+                      {formatPrice(displayRegular)}
                     </span>
                     <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                       OFERTA CONGRESO
                     </span>
                   </div>
-                ) : price > 0 ? (
-                  <span className="text-3xl font-bold text-gray-900">
-                    {formatPrice(price)}
+                ) : displayPrice > 0 ? (
+                  <span className="flex items-baseline gap-2">
+                    {showDesde && (
+                      <span className="text-base font-medium text-gray-500">Desde</span>
+                    )}
+                    <span className="text-3xl font-bold text-gray-900">
+                      {formatPrice(displayPrice)}
+                    </span>
                   </span>
                 ) : (
                   <span className="text-xl text-gray-500">
