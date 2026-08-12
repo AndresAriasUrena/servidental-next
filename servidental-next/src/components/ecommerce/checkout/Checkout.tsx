@@ -729,7 +729,7 @@ export default function Checkout() {
                         <div>
                           <div className="font-medium">Envío dentro del Área Metropolitana</div>
                           <div className="text-sm text-gray-500">
-                            Gratuito. Disponible para entregas por mensajería.
+                            Envíos GRATIS en compras superiores a ₡80,000 dentro del GAM. Disponible para entregas por mensajería.
                           </div>
                         </div>
                       </label>

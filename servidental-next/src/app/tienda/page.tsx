@@ -40,8 +40,8 @@ export default function TiendaPage() {
             Tienda ServidentalCR
           </h1>
           <p className="text-sm lg:text-lg text-gray-600 max-w-2xl mx-auto hidden lg:block">
-            Descubre nuestro catálogo completo de equipos médicos dentales de
-            alta calidad. Con 18 años de experiencia en Costa Rica.
+            Descubra nuestra gama de equipos dentales. Respaldo y experiencia
+            desde el 2007 en Costa Rica.
           </p>
         </div>
 

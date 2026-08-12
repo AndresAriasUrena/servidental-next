@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import FloatingWhatsAppButton from '@/components/common/FloatingWhatsAppButton';
 import { CartProvider } from '@/hooks/useCart';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 
@@ -63,6 +64,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <FloatingWhatsAppButton />
         </CartProvider>
       </body>
     </html>

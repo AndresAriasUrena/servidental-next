@@ -8,7 +8,7 @@ export default function StoreBenefitsBanner() {
     },
     {
       icon: TruckIcon,
-      text: 'Envío gratuito dentro del Área Metropolitana (exclusivo para equipos)',
+      text: 'Envíos GRATIS en compras superiores a ₡80,000 excepto fuera del GAM.',
     },
     {
       icon: WrenchScrewdriverIcon,
