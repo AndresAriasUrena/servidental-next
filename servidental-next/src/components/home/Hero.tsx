@@ -14,8 +14,9 @@ import hero3 from '@/assets/hero/3.avif';
 import hero3Mobile from '@/assets/hero/3Mobile.avif';
 import hero4 from '@/assets/hero/4.avif';
 import hero4Mobile from '@/assets/hero/4Mobile.avif';
-import hero5 from '@/assets/hero/5.avif';
-import hero5Mobile from '@/assets/hero/5Mobile.avif';
+// Showroom (slide 5) ocultado temporalmente:
+// import hero5 from '@/assets/hero/5.avif';
+// import hero5Mobile from '@/assets/hero/5Mobile.avif';
 
 type TitlePart = {
   text: string;
@@ -49,26 +50,10 @@ const slides: Slide[] = [
     image: hero1,
     imageMobile: hero1Mobile,
     desktopPosition: 'left',
-    mobilePosition: 'right',
+    mobilePosition: 'left',
   },
   {
     id: 2,
-    titleParts: [
-      { text: 'INGENIEROS' },
-      { text: 'Y TECNICOS', highlighted: true },
-      { text: 'ESPECIALIZADOS', highlighted: true },
-    ],
-    cta: {
-      text: 'Servicio tecnico',
-      href: '/services',
-    },
-    image: hero2,
-    imageMobile: hero2Mobile,
-    desktopPosition: 'right',
-    mobilePosition: 'right',
-  },
-  {
-    id: 3,
     titleParts: [
       { text: 'CERTIFIQUE' },
       { text: 'SU EQUIPO DE' },
@@ -77,6 +62,22 @@ const slides: Slide[] = [
     cta: {
       text: 'Mas informacion',
       href: '/x-ray-certification',
+    },
+    image: hero2,
+    imageMobile: hero2Mobile,
+    desktopPosition: 'left',
+    mobilePosition: 'left',
+  },
+  {
+    id: 3,
+    titleParts: [
+      { text: 'INGENIEROS' },
+      { text: 'Y TECNICOS', highlighted: true },
+      { text: 'ESPECIALIZADOS', highlighted: true },
+    ],
+    cta: {
+      text: 'Servicio tecnico',
+      href: '/services',
     },
     image: hero3,
     imageMobile: hero3Mobile,
@@ -99,22 +100,23 @@ const slides: Slide[] = [
     desktopPosition: 'left',
     mobilePosition: 'left',
   },
-  {
-    id: 5,
-    titleParts: [
-      { text: 'SHOWROOM' },
-      { text: 'EQUIPOS Y ASESORIA', highlighted: true },
-      { text: 'ESPECIALIZADA', highlighted: true },
-    ],
-    cta: {
-      text: 'Agende su cita',
-      href: '/tienda',
-    },
-    image: hero5,
-    imageMobile: hero5Mobile,
-    desktopPosition: 'right',
-    mobilePosition: 'right',
-  },
+  // Slide de Showroom ocultado temporalmente a pedido de la clienta.
+  // {
+  //   id: 5,
+  //   titleParts: [
+  //     { text: 'SHOWROOM' },
+  //     { text: 'EQUIPOS Y ASESORIA', highlighted: true },
+  //     { text: 'ESPECIALIZADA', highlighted: true },
+  //   ],
+  //   cta: {
+  //     text: 'Agende su cita',
+  //     href: '/tienda',
+  //   },
+  //   image: hero5,
+  //   imageMobile: hero5Mobile,
+  //   desktopPosition: 'right',
+  //   mobilePosition: 'right',
+  // },
 ];
 
 export default function HeroCarousel() {
@@ -163,7 +165,7 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[80vh] overflow-hidden">
+    <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={currentIndex}
@@ -174,25 +176,25 @@ export default function HeroCarousel() {
           className="absolute inset-0"
         >
           {/* Background Image - Desktop */}
-          <div className="absolute inset-0 hidden md:block">
+          <div className="absolute inset-0 hidden md:block bg-white">
             <Image
               src={currentSlide.image}
               alt="Hero background"
               fill
               priority={currentIndex === 0}
-              className="object-cover object-top"
+              className="object-contain object-center"
               quality={90}
             />
           </div>
 
           {/* Background Image - Mobile */}
-          <div className="absolute inset-0 md:hidden">
+          <div className="absolute inset-0 md:hidden bg-white">
             <Image
               src={currentSlide.imageMobile}
               alt="Hero background"
               fill
               priority={currentIndex === 0}
-              className="object-cover"
+              className="object-contain object-bottom"
               quality={90}
             />
           </div>
