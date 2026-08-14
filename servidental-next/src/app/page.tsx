@@ -8,7 +8,7 @@ const CategoriesSection = dynamic(() => import('@/components/home/CategoriesSect
 const YouTubeVideoSection = dynamic(() => import('@/components/home/YouTubeVideoSection'));
 const ServicesSection = dynamic(() => import('@/components/home/ServicesSection'));
 const BrandsSection = dynamic(() => import('@/components/home/BrandsSection'));
-// const Instagram = dynamic(() => import('@/components/home/instagram')); // Deshabilitado temporalmente - Widget Elfsight deshabilitado
+const Instagram = dynamic(() => import('@/components/home/instagram'));
 
 export const metadata: Metadata = {
   title: 'ServiDental | Equipo Médico Dental Costa Rica',
@@ -47,8 +47,7 @@ export default function Home() {
       <CategoriesSection />
       <YouTubeVideoSection />
       <ServicesSection />
-      {/* <Instagram /> */}
-      {/* Widget de Instagram temporalmente deshabilitado - El widget Elfsight está deshabilitado */}
+      <Instagram />
     </>
   );
 }

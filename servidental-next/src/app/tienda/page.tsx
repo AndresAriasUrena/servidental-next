@@ -33,7 +33,15 @@ function ProductGridSkeleton() {
 export default function TiendaPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
-      <BlackNovemberBanner />
+      <BlackNovemberBanner
+        extraMessages={[
+          {
+            text: '🎉 ¡Sorteo! Realice una compra en nuestra tienda en línea y participe por una taza china exclusiva y una pieza de alta velocidad. Válido del 7 al 31 de agosto.',
+            link: '/tienda',
+            expiresAt: '2026-09-01T00:00:00-06:00',
+          },
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 lg:mb-12">
           <h1 className="text-2xl lg:text-4xl font-bold text-servi_dark mb-2 lg:mb-4">

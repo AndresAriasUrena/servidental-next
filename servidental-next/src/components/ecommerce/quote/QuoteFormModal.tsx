@@ -11,9 +11,20 @@ interface QuoteFormModalProps {
   onClose: () => void;
   product: WooCommerceProduct;
   onSubmit: (fullName: string, email: string) => void;
+  /** Título del modal (default: "Solicitar Cotización") */
+  title?: string;
+  /** Texto del botón de envío (default: "Enviar Cotización") */
+  submitLabel?: string;
 }
 
-export function QuoteFormModal({ isOpen, onClose, product, onSubmit }: QuoteFormModalProps) {
+export function QuoteFormModal({
+  isOpen,
+  onClose,
+  product,
+  onSubmit,
+  title = 'Solicitar Cotización',
+  submitLabel = 'Enviar Cotización',
+}: QuoteFormModalProps) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,7 +89,7 @@ export function QuoteFormModal({ isOpen, onClose, product, onSubmit }: QuoteForm
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Solicitar Cotización
+                    {title}
                   </Dialog.Title>
                   <button
                     onClick={handleClose}
@@ -137,7 +148,7 @@ export function QuoteFormModal({ isOpen, onClose, product, onSubmit }: QuoteForm
                       disabled={isSubmitting || !fullName.trim() || !email.trim()}
                       className="flex-1 px-4 py-2 text-sm font-medium text-white bg-servi_green border border-transparent rounded-md hover:bg-servi_dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-servi_green disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      {isSubmitting ? 'Enviando...' : 'Enviar Cotización'}
+                      {isSubmitting ? 'Enviando...' : submitLabel}
                     </button>
                   </div>
                 </form>

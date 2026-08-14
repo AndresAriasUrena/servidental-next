@@ -4,19 +4,39 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 
+interface BannerMessage {
+  text: string;
+  link?: string | null;
+  /** Fecha ISO tras la cual el mensaje deja de mostrarse (ej. sorteos temporales). */
+  expiresAt?: string;
+}
+
+interface BlackNovemberBannerProps {
+  /** Mensajes adicionales (ej. promociones temporales) que se concatenan a los base. */
+  extraMessages?: BannerMessage[];
+}
+
 /**
  * Banner deslizante promocional para página de inicio
  * Muestra mensajes rotativos con información importante
  */
-export default function BlackNovemberBanner() {
+export default function BlackNovemberBanner({ extraMessages = [] }: BlackNovemberBannerProps) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-  const messages = [
+  const baseMessages: BannerMessage[] = [
     { text: 'Visite nuestra tienda en línea y adquiera su equipo a 6 meses sin intereses con BAC (a partir de $800).', link: null },
     { text: 'Conozca nuestros servicios — Clic aquí.', link: '/#services' },
     { text: 'Certificación radiológica — Ver información.', link: '/x-ray-certification' },
     { text: 'Visite nuestro showroom; estamos ubicados en San Pedro, Montes de Oca.', link: null }
   ];
+
+  // Descarta los mensajes extra que ya expiraron (ej. sorteo que termina en cierta fecha)
+  const now = Date.now();
+  const activeExtras = extraMessages.filter(
+    (m) => !m.expiresAt || new Date(m.expiresAt).getTime() > now
+  );
+
+  const messages = [...activeExtras, ...baseMessages];
 
   useEffect(() => {
     const interval = setInterval(() => {

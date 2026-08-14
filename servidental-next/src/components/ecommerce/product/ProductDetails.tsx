@@ -8,7 +8,7 @@ import { WooCommerceProduct, ProductVariation } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
-import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
+import { requiresQuote, hasStockAlertTag, sendQuoteToWhatsAppWithCustomerInfo, sendStockAlertToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
 import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -122,6 +122,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const [relatedProducts, setRelatedProducts] = useState<WooCommerceProduct[]>([]);
   const [loadingRelated, setLoadingRelated] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'quote' | 'stock'>('quote');
   const [stockError, setStockError] = useState<string | null>(null);
   const [variations, setVariations] = useState<ProductVariation[]>([]);
   const [selectedVariation, setSelectedVariation] = useState<ProductVariation | null>(null);
@@ -286,12 +287,22 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   };
 
   const handleQuoteRequest = () => {
+    setModalMode('quote');
+    setIsQuoteModalOpen(true);
+  };
+
+  const handleStockAlertRequest = () => {
+    setModalMode('stock');
     setIsQuoteModalOpen(true);
   };
 
   const handleQuoteSubmit = (fullName: string, email: string) => {
     if (!product) return;
-    sendQuoteToWhatsAppWithCustomerInfo(product, fullName, email);
+    if (modalMode === 'stock') {
+      sendStockAlertToWhatsAppWithCustomerInfo(product, fullName, email);
+    } else {
+      sendQuoteToWhatsAppWithCustomerInfo(product, fullName, email);
+    }
   };
 
   // Check if product has 'timbre' tag
@@ -681,11 +692,21 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                     </div>
                   )}
 
-                {/* Determine which button to show based on product type and stock */}
-                {requiresQuote(product) ||
-                 (product.type === 'variable' && selectedVariation && selectedVariation.stock_status !== 'instock') ||
-                 (product.type !== 'variable' && product.stock_status !== 'instock') ? (
-                  // Show quote button
+                {/* Determine which button to show.
+                    Prioridad: etiqueta 'avisar' (avísame) > cotización > agregar al carrito */}
+                {hasStockAlertTag(product) ? (
+                  // Producto con etiqueta 'avisar': capturar lead con "Avísame cuando haya stock"
+                  <button
+                    onClick={handleStockAlertRequest}
+                    className="flex-1 bg-servi_green text-white h-10 px-6 rounded-lg hover:bg-servi_dark transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    Avísame cuando haya stock
+                  </button>
+                ) : requiresQuote(product) ? (
+                  // Producto a cotizar (disponible pero sin precio directo)
                   <button
                     onClick={handleQuoteRequest}
                     className="flex-1 bg-servi_green text-white h-10 px-6 rounded-lg hover:bg-servi_dark transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
@@ -844,6 +865,8 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
           onClose={() => setIsQuoteModalOpen(false)}
           product={product}
           onSubmit={handleQuoteSubmit}
+          title={modalMode === 'stock' ? 'Avísame cuando haya stock' : 'Solicitar Cotización'}
+          submitLabel={modalMode === 'stock' ? 'Enviar aviso' : 'Enviar Cotización'}
         />
       )}
     </div>

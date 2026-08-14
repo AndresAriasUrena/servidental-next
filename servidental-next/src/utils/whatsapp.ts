@@ -31,6 +31,16 @@ export function requiresQuote(product: WooCommerceProduct): boolean {
 }
 
 /**
+ * Checks if a product should show the "notify me when in stock" option.
+ * Controlado por la etiqueta 'avisar' en WooCommerce (configurada manualmente por el cliente).
+ */
+export function hasStockAlertTag(product: WooCommerceProduct): boolean {
+  return product.tags?.some(tag =>
+    tag.name.toLowerCase().includes('avisar')
+  ) || false;
+}
+
+/**
  * Generates WhatsApp message for product quotation
  */
 export function generateQuoteMessage(product: WooCommerceProduct): string {
@@ -119,6 +129,43 @@ export function sendQuoteToWhatsAppWithCustomerInfo(
   const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
   
   // Open WhatsApp in new tab/window
+  window.open(whatsappUrl, '_blank');
+}
+
+/**
+ * Generates WhatsApp message for a "notify me when in stock" lead
+ */
+export function generateStockAlertMessage(
+  product: WooCommerceProduct,
+  fullName: string,
+  email: string
+): string {
+  const productUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/tienda/${product.slug}`;
+
+  let message = `¡Hola! Me interesa el siguiente producto que actualmente está agotado:\n\n`;
+  message += `    📦 ${product.name}\n`;
+  message += `    📋 SKU: ${product.sku || product.name}\n`;
+  message += `    🔗 Enlace: ${productUrl}\n\n`;
+  message += `    Mi nombre completo es ${fullName}\n`;
+  message += `    Mi correo electrónico es ${email}\n\n`;
+  message += `    Por favor, avísenme cuando haya stock disponible.\n\n`;
+  message += `    ¡Gracias!`;
+
+  return message;
+}
+
+/**
+ * Opens WhatsApp with a "notify me when in stock" message including customer info
+ */
+export function sendStockAlertToWhatsAppWithCustomerInfo(
+  product: WooCommerceProduct,
+  fullName: string,
+  email: string
+): void {
+  const message = generateStockAlertMessage(product, fullName, email);
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+
   window.open(whatsappUrl, '_blank');
 }
 
