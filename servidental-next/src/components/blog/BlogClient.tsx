@@ -186,7 +186,7 @@ export default function BlogClient() {
               Noticias, artículos y novedades
               </p>
               <div className="mt-8 text-lg text-gray-200">
-              18 años compartiendo conocimiento, tecnología y respaldo.
+              Conocimiento, tecnología y respaldo para acompañar su práctica dental.
               </div>
             </div>
           </div>
@@ -285,7 +285,7 @@ export default function BlogClient() {
               {blogConfig?.site_description || 'Noticias, artículos y novedades'}
             </p>
             <div className="mt-8 text-lg text-gray-200">
-            18 años compartiendo conocimiento, tecnología y respaldo.
+            Conocimiento, tecnología y respaldo para acompañar su práctica dental.
             </div>
           </div>
         </div>

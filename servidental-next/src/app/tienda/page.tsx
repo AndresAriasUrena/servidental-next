@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import ProductGrid from '@/components/ecommerce/product/ProductGrid';
 import StoreBenefitsBanner from '@/components/ecommerce/ui/StoreBenefitsBanner';
 import BlackNovemberBanner from '@/components/home/BlackNovemberBanner';
+import SorteoBanner from '@/components/common/PagePlaceholderBanner';
 
 export const metadata = {
   title: 'Tienda | ServidentalCR - Equipo Médico Dental',
@@ -33,20 +34,11 @@ function ProductGridSkeleton() {
 export default function TiendaPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
-      <BlackNovemberBanner
-        extraMessages={[
-          {
-            text: '🎉 ¡Sorteo! Realice una compra en nuestra tienda en línea y participe por una taza china exclusiva y una pieza de alta velocidad. Válido del 7 al 31 de agosto.',
-            link: '/tienda',
-            expiresAt: '2026-09-01T00:00:00-06:00',
-          },
-        ]}
-      />
+      <BlackNovemberBanner />
+      {/* Banner del sorteo (placeholder tentativo hasta recibir la imagen gráfica) */}
+      <SorteoBanner />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 lg:mb-12">
-          <h1 className="text-2xl lg:text-4xl font-bold text-servi_dark mb-2 lg:mb-4">
-            Tienda ServidentalCR
-          </h1>
           <p className="text-sm lg:text-lg text-gray-600 max-w-2xl mx-auto hidden lg:block">
             Descubra nuestra gama de equipos dentales. Respaldo y experiencia
             desde el 2007 en Costa Rica.

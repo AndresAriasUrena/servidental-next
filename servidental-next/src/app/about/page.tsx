@@ -40,7 +40,7 @@ export default function AboutPage() {
     <main>
       <BlackNovemberBanner />
       {/* Hero Section */}
-      <section className="bg-nosotros_bg bg-cover bg-center bg-no-repeat text-white pb-20 pt-40 md:pt-[27rem]">
+      <section className="bg-gradient-to-r from-servi_green to-servi_dark text-white py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
