@@ -34,7 +34,7 @@ export default function PagePlaceholderBanner() {
           {/* Contenido textual */}
           <div className="flex-1">
             <span className="inline-flex items-center rounded-full bg-yellow-400 px-4 py-1 text-sm font-bold uppercase tracking-wide text-servi_dark">
-              🎉 Sorteo
+              Sorteo
             </span>
             <h2 className="mt-4 text-2xl font-bold leading-tight md:text-4xl">
               Realice una compra y participe por una{' '}

@@ -38,7 +38,7 @@ export default function TiendaPage() {
       {/* Banner del sorteo (placeholder tentativo hasta recibir la imagen gráfica) */}
       <SorteoBanner />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-6 lg:mb-12">
+        <div className="text-center pt-8 lg:pt-12 mb-6 lg:mb-12">
           <p className="text-sm lg:text-lg text-gray-600 max-w-2xl mx-auto hidden lg:block">
             Descubra nuestra gama de equipos dentales. Respaldo y experiencia
             desde el 2007 en Costa Rica.
