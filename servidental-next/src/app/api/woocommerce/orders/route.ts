@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
       customer_note, // Add customer notes support
       personal_info, // New structured personal info
       shipping_option, // New shipping options
+      shipping_zone_label, // Etiqueta legible de la zona seleccionada
+      shipping_cost, // Costo de envío calculado según la zona
       shipping_other_details,
       contact_data // Optional contact data
     } = body;
@@ -105,13 +107,11 @@ export async function POST(request: NextRequest) {
       // Shipping information
       if (shipping_option) {
         noteComponents.push(`--- INFORMACIÓN DE ENVÍO ---`);
-        const shippingOptions = {
-          'messenger': 'Envío por mensajería ($9)',
-          'pickup': 'Retiro en instalaciones (Sin costo)',
-          'other': 'Otro'
-        };
-        noteComponents.push(`Opción de envío: ${shippingOptions[shipping_option] || shipping_option}`);
-        
+        const zoneLabel = shipping_zone_label || shipping_option;
+        const cost = Number(shipping_cost) || 0;
+        const costLabel = cost > 0 ? `$${cost}` : 'Sin costo / por coordinar';
+        noteComponents.push(`Zona de envío: ${zoneLabel} (${costLabel})`);
+
         if (shipping_option === 'other' && shipping_other_details) {
           noteComponents.push(`Detalles de envío: ${shipping_other_details}`);
         }
@@ -183,10 +183,13 @@ export async function POST(request: NextRequest) {
       })) || [],
       shipping_lines: [
         {
-          method_id: shipping_option === 'messenger' ? 'messenger_delivery' : 'flat_rate',
-          method_title: shipping_option === 'messenger' ? 'Envío por mensajería' : 
-                       shipping_option === 'pickup' ? 'Retiro en instalaciones' : 'Envío personalizado',
-          total: shipping_option === 'messenger' ? '9' : '0',
+          method_id: shipping_option === 'pickup' ? 'local_pickup' : 'flat_rate',
+          method_title: shipping_option === 'pickup'
+            ? 'Retiro en showroom'
+            : shipping_zone_label
+            ? `Envío - ${shipping_zone_label}`
+            : 'Envío',
+          total: (Number(shipping_cost) || 0).toString(),
         },
       ],
       meta_data: [

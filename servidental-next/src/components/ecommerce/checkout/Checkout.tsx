@@ -136,7 +136,7 @@ interface CheckoutFormData {
       waze_link: string; // Enlace de Waze para dirección de envío
     };
   };
-  shipping_option: 'messenger' | 'pickup' | 'other' | 'gam_free' | 'outside_gam';
+  shipping_option: string;
   shipping_other_details: string;
   // Nuevos campos de datos de contacto opcionales
   contact_data: {
@@ -155,6 +155,47 @@ const hasShippingTag = (product: any): boolean => {
     (tag: any) => tag.slug?.toLowerCase() === 'envio' || tag.name?.toLowerCase() === 'envio'
   ) || false;
 };
+
+// Umbral de compra (USD) para envío gratis dentro del GAM (~₡80.000)
+const FREE_SHIPPING_THRESHOLD = 180;
+
+interface ShippingZone {
+  id: string;
+  label: string;
+  cost: number; // costo fijo en USD (la tienda cobra en dólares)
+  isGam?: boolean; // aplica envío gratis sobre el umbral
+  quote?: boolean; // el costo se coordina/cotiza después (no suma al total)
+  details?: string; // texto de ayuda
+}
+
+// Zonas del GAM (todas $9, envío gratis en compras > umbral)
+const GAM_DISTRICTS = [
+  'San José', 'San Pedro', 'Zapote', 'San Francisco', 'Calle Blancos', 'Guadalupe',
+  'Coronado', 'Moravia', 'Sabanilla', 'Curridabat', 'Desamparados', 'Alajuelita',
+  'Escazú', 'Sabana', 'Paseo Colón', 'Tres Ríos',
+];
+
+const SHIPPING_ZONES: ShippingZone[] = [
+  // Retiro en showroom (sin costo)
+  { id: 'pickup', label: 'Retiro en showroom', cost: 0, details: 'Sin costo adicional. Puede retirar su pedido en nuestro showroom ubicado en San Pedro de Montes de Oca.' },
+  // Distritos del GAM ($9 c/u)
+  ...GAM_DISTRICTS.map((d): ShippingZone => ({
+    id: `gam_${d.toLowerCase().replace(/\s+/g, '_')}`,
+    label: d,
+    cost: 9,
+    isGam: true,
+  })),
+  // Cabeceras fuera del GAM (precio fijo, sin envío gratis)
+  { id: 'heredia_centro', label: 'Heredia centro', cost: 13 },
+  { id: 'alajuela_centro', label: 'Alajuela centro', cost: 17.5 },
+  { id: 'cartago_centro', label: 'Cartago centro', cost: 22 },
+  // Encomiendas fuera del GAM
+  { id: 'encomienda', label: 'Encomienda fuera del GAM', cost: 13, details: 'Aplica a paquetes pequeños/medianos.' },
+  // Equipo grande / a cotizar
+  { id: 'equipo_grande', label: 'Equipo grande o instalación (fuera del GAM)', cost: 0, quote: true, details: 'El costo se coordina y se cancela por aparte una vez analizados los datos de entrega o instalación.' },
+  // Otra preferencia coordinada por el cliente
+  { id: 'other', label: 'Otro', cost: 0, quote: true, details: 'Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente).' },
+];
 
 export default function Checkout() {
   const { cart } = useCart();
@@ -213,7 +254,7 @@ export default function Checkout() {
         waze_link: ''
       }
     },
-    shipping_option: hasProductsWithShipping ? 'gam_free' : 'outside_gam', // Default: gratis si tiene tag 'envio'
+    shipping_option: '', // El cliente debe seleccionar una zona/opción de envío
     shipping_other_details: '',
     contact_data: {
       name: '',
@@ -259,9 +300,18 @@ export default function Checkout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar que se haya seleccionado una zona/opción de envío
+    if (!selectedZone) {
+      alert('Por favor seleccione una zona u opción de envío.');
+      return;
+    }
+
     // Update billing info from personal_info for compatibility
     const updatedFormData = {
       ...formData,
+      // Datos de envío calculados (para el flujo de Tilopay que lee de localStorage)
+      shipping_zone_label: selectedZone.label,
+      shipping_cost: getShippingCost(),
       billing: {
         ...formData.billing,
         first_name: formData.personal_info.company_name,
@@ -301,13 +351,15 @@ export default function Checkout() {
               phone: formData.personal_info.contact_numbers.cellphone,
             },
             cartItems: cart.items,
-            total: cart.total,
+            total: getTotalWithShipping(),
             paymentMethod: 'transferencia',
             personal_info: {
               ...formData.personal_info,
               transfer_document_number: formData.transfer_document_number,
             },
             shipping_option: formData.shipping_option,
+            shipping_zone_label: selectedZone.label,
+            shipping_cost: getShippingCost(),
             shipping_other_details: formData.shipping_other_details,
             contact_data: formData.contact_data,
             customer_note: formData.customer_note,
@@ -329,10 +381,18 @@ export default function Checkout() {
     setShowTilopayCheckout(true);
   };
 
+  // Zona de envío seleccionada
+  const selectedZone = SHIPPING_ZONES.find(z => z.id === formData.shipping_option);
+
+  // Envío gratis dentro del GAM en compras superiores al umbral
+  const qualifiesForFreeGamShipping =
+    !!selectedZone?.isGam && cart.subtotal >= FREE_SHIPPING_THRESHOLD;
+
+  // Costo de envío en USD (la tienda cobra en dólares). Se suma al total online.
   const getShippingCost = () => {
-    // Todos los envíos son gratis o se coordinan después
-    // No se cobra ningún costo adicional en el checkout
-    return 0;
+    if (!selectedZone || selectedZone.quote) return 0;
+    if (qualifiesForFreeGamShipping) return 0;
+    return selectedZone.cost;
   };
 
   const getTotalWithShipping = () => {
@@ -709,198 +769,69 @@ export default function Checkout() {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Opciones de envío
               </h2>
-              <div className="space-y-4">
-                {hasProductsWithShipping ? (
-                  // Opciones cuando hay productos con etiqueta 'envio' en el carrito
-                  <>
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="gam_free"
-                          checked={formData.shipping_option === 'gam_free'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div>
-                          <div className="font-medium">Envío dentro del Área Metropolitana</div>
-                          <div className="text-sm text-gray-500">
-                            Envíos GRATIS en compras superiores a ₡80,000 dentro del GAM. Disponible para entregas por mensajería.
-                          </div>
-                        </div>
-                      </label>
-                    </div>
+              <div className="space-y-3">
+                <p className="text-sm text-gray-600">
+                  Seleccione su zona de entrega. Envíos <strong>GRATIS</strong> en compras
+                  superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)} dentro del GAM.
+                </p>
 
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="outside_gam"
-                          checked={formData.shipping_option === 'outside_gam'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div>
-                          <div className="font-medium">Encomienda, envío o instalación fuera del Área Metropolitana</div>
-                          <div className="text-sm text-gray-500">
-                            El costo se calcula según la ubicación y el tipo de servicio requerido.<br />
-                            Debe ser cancelado adicionalmente una vez analizados los datos de entrega o instalación.
-                          </div>
-                        </div>
-                      </label>
-                    </div>
+                {SHIPPING_ZONES.map((zone) => {
+                  const isSelected = formData.shipping_option === zone.id;
+                  const isFreeGam = zone.isGam && cart.subtotal >= FREE_SHIPPING_THRESHOLD;
+                  // Etiqueta de precio a la derecha de cada opción
+                  const priceLabel = zone.quote
+                    ? 'Por coordinar'
+                    : zone.cost === 0
+                    ? 'Gratis'
+                    : isFreeGam
+                    ? 'Gratis'
+                    : formatPrice(zone.cost);
 
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="pickup"
-                          checked={formData.shipping_option === 'pickup'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div>
-                          <div className="font-medium">Retiro en showroom</div>
-                          <div className="text-sm text-gray-500">
-                            Sin costo adicional.<br />
-                            Puede retirar su pedido en nuestro showroom ubicado en San Pedro de Montes de Oca.
+                  return (
+                    <div
+                      key={zone.id}
+                      className={`border rounded-md p-4 ${isSelected ? 'border-servi_green ring-1 ring-servi_green' : 'border-gray-300'}`}
+                    >
+                      <label className="flex items-start justify-between gap-3 cursor-pointer">
+                        <div className="flex items-start space-x-3">
+                          <input
+                            type="radio"
+                            name="shipping_option"
+                            value={zone.id}
+                            checked={isSelected}
+                            onChange={(e) => setFormData(prev => ({
+                              ...prev,
+                              shipping_option: e.target.value
+                            }))}
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium">{zone.label}</div>
+                            {zone.details && (
+                              <div className="text-sm text-gray-500">{zone.details}</div>
+                            )}
+                            {zone.id === 'other' && isSelected && (
+                              <textarea
+                                placeholder="Describa su preferencia de envío... *"
+                                rows={3}
+                                required
+                                value={formData.shipping_other_details}
+                                onChange={(e) => setFormData(prev => ({
+                                  ...prev,
+                                  shipping_other_details: e.target.value
+                                }))}
+                                className="w-full border border-gray-300 rounded-md px-3 py-2 mt-2"
+                              />
+                            )}
                           </div>
                         </div>
+                        <span className={`text-sm font-semibold whitespace-nowrap ${priceLabel === 'Gratis' ? 'text-servi_green' : 'text-gray-700'}`}>
+                          {priceLabel}
+                        </span>
                       </label>
                     </div>
-
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="other"
-                          checked={formData.shipping_option === 'other'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div className="flex-1">
-                          <div className="font-medium">Otro</div>
-                          <div className="text-sm text-gray-500 mb-2">
-                            Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente)
-                          </div>
-                          {formData.shipping_option === 'other' && (
-                            <textarea
-                              placeholder="Describa su preferencia de envío... *"
-                              rows={3}
-                              required
-                              value={formData.shipping_other_details}
-                              onChange={(e) => setFormData(prev => ({
-                                ...prev,
-                                shipping_other_details: e.target.value
-                              }))}
-                              className="w-full border border-gray-300 rounded-md px-3 py-2"
-                            />
-                          )}
-                        </div>
-                      </label>
-                    </div>
-                  </>
-                ) : (
-                  // Opciones cuando NO hay productos con etiqueta 'envio'
-                  <>
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="outside_gam"
-                          checked={formData.shipping_option === 'outside_gam'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div>
-                          <div className="font-medium">Encomienda o envío</div>
-                          <div className="text-sm text-gray-500">
-                            El costo se calcula según la ubicación y el tipo de servicio requerido.<br />
-                            Debe ser cancelado adicionalmente una vez analizados los datos de entrega.
-                          </div>
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="pickup"
-                          checked={formData.shipping_option === 'pickup'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div>
-                          <div className="font-medium">Retiro en showroom</div>
-                          <div className="text-sm text-gray-500">
-                            Sin costo adicional.<br />
-                            Puede retirar su pedido en nuestro showroom ubicado en San Pedro de Montes de Oca.
-                          </div>
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className="border border-gray-300 rounded-md p-4">
-                      <label className="flex items-start space-x-3">
-                        <input
-                          type="radio"
-                          name="shipping_option"
-                          value="other"
-                          checked={formData.shipping_option === 'other'}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            shipping_option: e.target.value as CheckoutFormData['shipping_option']
-                          }))}
-                          className="mt-1"
-                        />
-                        <div className="flex-1">
-                          <div className="font-medium">Otro</div>
-                          <div className="text-sm text-gray-500 mb-2">
-                            Indique su preferencia (por ejemplo, Uber Flash coordinado por el cliente)
-                          </div>
-                          {formData.shipping_option === 'other' && (
-                            <textarea
-                              placeholder="Describa su preferencia de envío... *"
-                              rows={3}
-                              required
-                              value={formData.shipping_other_details}
-                              onChange={(e) => setFormData(prev => ({
-                                ...prev,
-                                shipping_other_details: e.target.value
-                              }))}
-                              className="w-full border border-gray-300 rounded-md px-3 py-2"
-                            />
-                          )}
-                        </div>
-                      </label>
-                    </div>
-                  </>
-                )}
+                  );
+                })}
 
                 {/* Mensaje informativo */}
                 <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md flex items-start gap-3">
@@ -1067,16 +998,14 @@ export default function Checkout() {
                 )}
                 <div className="flex justify-between">
                   <span>Envío</span>
-                  <span>
-                    {formData.shipping_option === 'gam_free'
-                      ? 'Gratis'
-                      : formData.shipping_option === 'outside_gam'
+                  <span className="text-right">
+                    {!selectedZone
+                      ? 'Seleccione zona'
+                      : selectedZone.quote
                       ? 'Por coordinar'
-                      : formData.shipping_option === 'messenger'
+                      : getShippingCost() === 0
                       ? 'Gratis'
-                      : formData.shipping_option === 'pickup'
-                      ? 'Gratis'
-                      : 'Por coordinar'
+                      : formatPrice(getShippingCost())
                     }
                   </span>
                 </div>

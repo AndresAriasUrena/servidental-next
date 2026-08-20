@@ -58,17 +58,21 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
       const checkoutFormData = localStorage.getItem('checkout-form-data');
       let customerNote = '';
       let personalInfo = null;
-      let shippingOption = 'messenger';
+      let shippingOption = '';
       let shippingOtherDetails = '';
+      let shippingZoneLabel = '';
+      let shippingCost = 0;
       let contactData = null;
-      
+
       if (checkoutFormData) {
         try {
           const formData = JSON.parse(checkoutFormData);
           customerNote = formData.customer_note || '';
           personalInfo = formData.personal_info || null;
-          shippingOption = formData.shipping_option || 'messenger';
+          shippingOption = formData.shipping_option || '';
           shippingOtherDetails = formData.shipping_other_details || '';
+          shippingZoneLabel = formData.shipping_zone_label || '';
+          shippingCost = Number(formData.shipping_cost) || 0;
           contactData = formData.contact_data || null;
         } catch (e) {
           console.log('Could not parse checkout form data from localStorage');
@@ -86,13 +90,15 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
         body: JSON.stringify({
           customerInfo: customerInfo,
           cartItems: cart.items,
-          total: cart.total,
+          total: cart.total + shippingCost, // Incluye el costo de envío (USD)
           appliedCoupons: cart.appliedCoupons, // Include applied coupons
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
           customer_note: customerNote, // Include customer notes
           personal_info: personalInfo, // Include all new structured data
           shipping_option: shippingOption, // Include shipping preference
+          shipping_zone_label: shippingZoneLabel, // Etiqueta legible de la zona
+          shipping_cost: shippingCost, // Costo de envío calculado
           shipping_other_details: shippingOtherDetails, // Include custom shipping details
           contact_data: contactData, // Include optional contact data
           billingAddress: {
@@ -136,7 +142,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: cart.total,
+          amount: cart.total + shippingCost, // Incluye el costo de envío (USD)
           currency: 'USD',
           orderNumber: orderNumber,
           wooOrderId: wooOrderId,
