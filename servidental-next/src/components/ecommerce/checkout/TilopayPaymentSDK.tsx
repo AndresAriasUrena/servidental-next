@@ -38,6 +38,8 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string>('');
+  // Costo de envío leído del checkout (localStorage). Fuente única para el total mostrado y el cobro.
+  const [shippingCost, setShippingCost] = useState<number>(0);
 
   // Generate order number on component mount
   useEffect(() => {
@@ -45,7 +47,21 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     const newOrderNumber = `SRV-${timestamp}-${random}`;
     setOrderNumber(newOrderNumber);
+
+    // Leer el costo de envío calculado en el checkout
+    try {
+      const checkoutFormData = localStorage.getItem('checkout-form-data');
+      if (checkoutFormData) {
+        const formData = JSON.parse(checkoutFormData);
+        setShippingCost(Number(formData.shipping_cost) || 0);
+      }
+    } catch {
+      setShippingCost(0);
+    }
   }, []);
+
+  // Total que se muestra y se cobra = subtotal (cart.total) + envío
+  const totalWithShipping = cart.total + shippingCost;
 
   const handleTilopayPayment = async () => {
     setLoading(true);
@@ -54,14 +70,14 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     try {
       console.log('🚀 Starting TiloPay Payment Link flow...');
       
-      // Step 1: Get comprehensive checkout data from localStorage
+      // Step 1: Get comprehensive checkout data from localStorage.
+      // El costo de envío usa el estado `shippingCost` (leído al montar) como fuente única.
       const checkoutFormData = localStorage.getItem('checkout-form-data');
       let customerNote = '';
       let personalInfo = null;
       let shippingOption = '';
       let shippingOtherDetails = '';
       let shippingZoneLabel = '';
-      let shippingCost = 0;
       let contactData = null;
 
       if (checkoutFormData) {
@@ -72,7 +88,6 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           shippingOption = formData.shipping_option || '';
           shippingOtherDetails = formData.shipping_other_details || '';
           shippingZoneLabel = formData.shipping_zone_label || '';
-          shippingCost = Number(formData.shipping_cost) || 0;
           contactData = formData.contact_data || null;
         } catch (e) {
           console.log('Could not parse checkout form data from localStorage');
@@ -90,7 +105,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
         body: JSON.stringify({
           customerInfo: customerInfo,
           cartItems: cart.items,
-          total: cart.total + shippingCost, // Incluye el costo de envío (USD)
+          total: totalWithShipping, // subtotal + envío (USD)
           appliedCoupons: cart.appliedCoupons, // Include applied coupons
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
@@ -142,7 +157,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: cart.total + shippingCost, // Incluye el costo de envío (USD)
+          amount: totalWithShipping, // subtotal + envío (USD)
           currency: 'USD',
           orderNumber: orderNumber,
           wooOrderId: wooOrderId,
@@ -208,7 +223,7 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
               Pago seguro con tarjeta de crédito o débito
             </p>
             <p className="text-xs text-gray-500">
-              Total: ${cart.total.toLocaleString()} USD
+              Total: ${totalWithShipping.toLocaleString()} USD
             </p>
           </div>
         </div>
