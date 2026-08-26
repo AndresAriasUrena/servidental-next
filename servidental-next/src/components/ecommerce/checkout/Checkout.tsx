@@ -1109,7 +1109,9 @@ export default function Checkout() {
                   variationId: item.variationId,
                   variationAttributes: item.variationAttributes,
                 })),
-                total: getShippingCost() > 0 ? getTotalWithShipping() : cart.total,
+                // El SDK suma el envío (shippingCost del localStorage) una sola vez.
+                // Aquí se pasa el total SIN envío para evitar doble cobro.
+                total: cart.total,
               }}
             />
           </div>
