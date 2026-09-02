@@ -3,6 +3,9 @@ import ContactForm from '@/components/contact/ContactForm'
 import ContactInfo from '@/components/contact/ContactInfo'
 import Map from '@/components/contact/Map'
 import BlackNovemberBanner from '@/components/home/BlackNovemberBanner'
+import PageBanner from '@/components/common/PageBanner'
+import contactoDesktop from '@/assets/banners/contacto-desktop.avif'
+import contactoMobile from '@/assets/banners/contacto-mobile.avif'
 
 export const metadata: Metadata = {
   title: 'Contáctenos | ServiDental',
@@ -14,18 +17,14 @@ export default function ContactPage() {
     <main>
       <BlackNovemberBanner />
       {/* Hero Section */}
-      <section className="bg-contacto_bg bg-cover bg-center bg-no-repeat text-white py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Contáctenos
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-100 max-w-2xl mx-auto">
-              Estamos aquí para ayudarle con todas sus necesidades de equipamiento dental
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageBanner desktop={contactoDesktop} mobile={contactoMobile} alt="Contáctenos">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          Contáctenos
+        </h1>
+        <p className="mt-4 text-base leading-7 text-gray-100 max-w-2xl mx-auto">
+          Estamos aquí para ayudarle con todas sus necesidades de equipamiento dental
+        </p>
+      </PageBanner>
 
       {/* Contact Section */}
       <section className="py-16 bg-white">

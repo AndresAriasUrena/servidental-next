@@ -5,6 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { blogService } from '@/services/blogService';
 import { BlogPost, BlogConfig, BlogSearchParams } from '@/types/blog';
+import PageBanner from '@/components/common/PageBanner';
+import blogDesktop from '@/assets/banners/blog-desktop.avif';
+import blogMobile from '@/assets/banners/blog-mobile.avif';
 
 const BlogGrid = dynamic(() => import('./BlogGrid'), {
   loading: () => (
@@ -175,22 +178,17 @@ export default function BlogClient() {
     return (
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-servi_green to-servi_dark py-16 lg:py-24">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center text-white">
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-                Blog ServiDental
-              </h1>
-              <p className="text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto">
-              Noticias, artículos y novedades
-              </p>
-              <div className="mt-8 text-lg text-gray-200">
-              Conocimiento, tecnología y respaldo para acompañar su práctica dental.
-              </div>
-            </div>
+        <PageBanner desktop={blogDesktop} mobile={blogMobile} alt="Blog ServiDental">
+          <h1 className="text-3xl lg:text-5xl font-bold mb-3">
+            Blog ServiDental
+          </h1>
+          <p className="text-base lg:text-xl text-gray-100 max-w-3xl mx-auto">
+            Noticias, artículos y novedades
+          </p>
+          <div className="mt-3 text-sm lg:text-base text-gray-200">
+            Conocimiento, tecnología y respaldo para acompañar su práctica dental.
           </div>
-        </section>
+        </PageBanner>
 
         {/* Loading State */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -232,16 +230,11 @@ export default function BlogClient() {
     return (
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-servi_green to-servi_dark py-16 lg:py-24">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center text-white">
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-                Blog ServiDental
-              </h1>
-            </div>
-          </div>
-        </section>
+        <PageBanner desktop={blogDesktop} mobile={blogMobile} alt="Blog ServiDental">
+          <h1 className="text-3xl lg:text-5xl font-bold">
+            Blog ServiDental
+          </h1>
+        </PageBanner>
 
         {/* Error State */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -274,22 +267,17 @@ export default function BlogClient() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-servi_green to-servi_dark py-16 lg:py-24">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-white">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-              Blog ServiDental
-            </h1>
-            <p className="text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto">
-              {blogConfig?.site_description || 'Noticias, artículos y novedades'}
-            </p>
-            <div className="mt-8 text-lg text-gray-200">
-            Conocimiento, tecnología y respaldo para acompañar su práctica dental.
-            </div>
-          </div>
+      <PageBanner desktop={blogDesktop} mobile={blogMobile} alt="Blog ServiDental">
+        <h1 className="text-3xl lg:text-5xl font-bold mb-3">
+          Blog ServiDental
+        </h1>
+        <p className="text-base lg:text-xl text-gray-100 max-w-3xl mx-auto">
+          {blogConfig?.site_description || 'Noticias, artículos y novedades'}
+        </p>
+        <div className="mt-3 text-sm lg:text-base text-gray-200">
+          Conocimiento, tecnología y respaldo para acompañar su práctica dental.
         </div>
-      </section>
+      </PageBanner>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

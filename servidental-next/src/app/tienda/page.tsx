@@ -2,7 +2,9 @@ import { Suspense } from 'react';
 import ProductGrid from '@/components/ecommerce/product/ProductGrid';
 import StoreBenefitsBanner from '@/components/ecommerce/ui/StoreBenefitsBanner';
 import BlackNovemberBanner from '@/components/home/BlackNovemberBanner';
-import SorteoBanner from '@/components/common/PagePlaceholderBanner';
+import PageBanner from '@/components/common/PageBanner';
+import tiendaDesktop from '@/assets/banners/tienda-desktop.avif';
+import tiendaMobile from '@/assets/banners/tienda-mobile.avif';
 
 export const metadata = {
   title: 'Tienda | ServidentalCR - Equipo Médico Dental',
@@ -35,8 +37,12 @@ export default function TiendaPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
       <BlackNovemberBanner />
-      {/* Banner del sorteo (placeholder tentativo hasta recibir la imagen gráfica) */}
-      <SorteoBanner />
+      {/* Banner de la tienda (decorativo) */}
+      <PageBanner
+        desktop={tiendaDesktop}
+        mobile={tiendaMobile}
+        alt="Tienda en línea ServiDental"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center pt-8 lg:pt-12 mb-6 lg:mb-12">
           <p className="text-sm lg:text-lg text-gray-600 max-w-2xl mx-auto hidden lg:block">

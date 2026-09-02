@@ -4,6 +4,9 @@ import Link from 'next/link'
 import assets from '@/assets'
 import { ValuesSection } from './ValuesSection'
 import BlackNovemberBanner from '@/components/home/BlackNovemberBanner'
+import PageBanner from '@/components/common/PageBanner'
+import nosotrosDesktop from '@/assets/banners/nosotros-desktop.avif'
+import nosotrosMobile from '@/assets/banners/nosotros-mobile.avif'
 export const metadata: Metadata = {
   title: '¿Quiénes Somos? | ServiDental',
   description: 'Expertos en equipamiento dental desde 2007, brindando soluciones técnicas y mantenimiento especializado para clínicas dentales en Costa Rica.',
@@ -40,15 +43,11 @@ export default function AboutPage() {
     <main>
       <BlackNovemberBanner />
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-servi_green to-servi_dark text-white py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              ¿Quiénes Somos?
-            </h1>
-          </div>
-        </div>
-      </section>
+      <PageBanner desktop={nosotrosDesktop} mobile={nosotrosMobile} alt="¿Quiénes Somos?">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          ¿Quiénes Somos?
+        </h1>
+      </PageBanner>
 
       {/* About Section */}
       <section className="py-16 bg-white">
