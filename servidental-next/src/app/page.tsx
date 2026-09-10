@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 const Hero = dynamic(() => import('@/components/home/Hero'));
 const BlackNovemberBanner = dynamic(() => import('@/components/home/BlackNovemberBanner'));
 const ProductsSection = dynamic(() => import('@/components/home/ProductsSection'));
-const CategoriesSection = dynamic(() => import('@/components/home/CategoriesSection'));
+const CategoryShowcaseStacked = dynamic(() => import('@/components/home/CategoryShowcaseStacked'));
 const YouTubeVideoSection = dynamic(() => import('@/components/home/YouTubeVideoSection'));
 const ServicesSection = dynamic(() => import('@/components/home/ServicesSection'));
 const BrandsSection = dynamic(() => import('@/components/home/BrandsSection'));
@@ -44,7 +44,7 @@ export default function Home() {
       <Hero />
       <BrandsSection />
       <ProductsSection />
-      <CategoriesSection />
+      <CategoryShowcaseStacked />
       <YouTubeVideoSection />
       <ServicesSection />
       <Instagram />
