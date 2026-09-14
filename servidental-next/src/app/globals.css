@@ -537,3 +537,11 @@ body {
 .product-description h4 {
   @apply text-lg font-bold text-gray-900 mt-4 mb-2;
 }
+/* Oculta la scrollbar en tiras horizontales (categorías del home) manteniendo el scroll funcional */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
