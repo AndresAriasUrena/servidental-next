@@ -9,6 +9,7 @@ import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { requiresQuote, hasStockAlertTag, sendQuoteToWhatsAppWithCustomerInfo, sendStockAlertToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
+import { isIndependenciaActive, hasIndependenciaTag } from '@/utils/promo';
 import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -594,6 +595,21 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                         Incluye timbre odontológico
                       </span>
                     </div>
+                  </div>
+                )}
+
+                {/* Promo Independencia */}
+                {isIndependenciaActive() && hasIndependenciaTag(product.tags) && (
+                  <div className="mt-3 rounded-lg border border-blue-200 bg-gradient-to-r from-blue-50 to-red-50 p-3">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-gradient-to-r from-blue-700 to-red-600 px-2 py-0.5 text-xs font-bold uppercase text-white">
+                        Promo Independencia
+                      </span>
+                      <span className="text-sm font-medium text-servi_dark">20% de descuento</span>
+                    </div>
+                    <p className="mt-1 text-xs text-gray-600">
+                      Aplica pagando por <strong>transferencia bancaria</strong>. Válido del 14 al 30 de setiembre.
+                    </p>
                   </div>
                 )}
 

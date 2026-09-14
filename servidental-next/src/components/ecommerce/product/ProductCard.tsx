@@ -7,6 +7,7 @@ import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { formatPrice, parsePrice, isOnSale } from '@/utils/currency';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
+import { isIndependenciaActive, hasIndependenciaTag } from '@/utils/promo';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { QuoteFormModal } from '@/components/ecommerce/quote/QuoteFormModal';
 
@@ -55,6 +56,9 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
     tag => tag.slug === 'silla-dental'
   );
 
+  // Promoción de Independencia (20% por transferencia), activa por fecha
+  const hasIndependencia = isIndependenciaActive() && hasIndependenciaTag(product.tags);
+
   return (
     <>
       <Link href={`/tienda/${product.slug}`} className="group block h-full" prefetch={true}>
@@ -86,6 +90,15 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
               <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border border-red-800 uppercase flex items-center gap-1">
                 <span className="inline-block w-1.5 h-1.5 bg-red-200 rounded-full animate-pulse"></span>
                 Oferta Congreso
+              </div>
+            </div>
+          )}
+
+          {/* Promo Independencia Badge (esquina superior izquierda) */}
+          {hasIndependencia && (
+            <div className="absolute top-2 left-2 z-10">
+              <div className="bg-gradient-to-r from-blue-700 via-white to-red-600 text-servi_dark text-xs px-3 py-1.5 rounded-md shadow-lg border border-blue-800 font-bold uppercase flex items-center gap-1">
+                -20% Independencia
               </div>
             </div>
           )}

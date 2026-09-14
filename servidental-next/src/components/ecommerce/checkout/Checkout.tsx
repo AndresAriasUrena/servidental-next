@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
 import { formatPrice } from '@/utils/currency';
+import { getIndependenciaDiscount } from '@/utils/promo';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
 import TrustBadges from '@/components/common/TrustBadges';
 import { trackBeginCheckout } from '@/lib/analytics';
@@ -360,6 +361,7 @@ export default function Checkout() {
             shipping_option: formData.shipping_option,
             shipping_zone_label: selectedZone.label,
             shipping_cost: getShippingCost(),
+            independencia_discount: independenciaDiscount,
             shipping_other_details: formData.shipping_other_details,
             contact_data: formData.contact_data,
             customer_note: formData.customer_note,
@@ -395,8 +397,13 @@ export default function Checkout() {
     return selectedZone.cost;
   };
 
+  // Descuento Promoción de Independencia (20% sobre items etiquetados),
+  // SOLO cuando el pago es por transferencia bancaria.
+  const independenciaDiscount =
+    formData.payment_method === 'transferencia' ? getIndependenciaDiscount(cart.items) : 0;
+
   const getTotalWithShipping = () => {
-    return cart.total + getShippingCost();
+    return cart.total + getShippingCost() - independenciaDiscount;
   };
 
   if (cart.items.length === 0) {
@@ -845,7 +852,26 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Método de pago */}
+            {/* Notas del pedido */}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Notas del pedido
+              </h2>
+              <textarea
+                placeholder="Notas sobre tu pedido (opcional)"
+                rows={4}
+                value={formData.customer_note}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  customer_note: e.target.value
+                }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {/* Método de pago (sobre el resumen para que se entienda el descuento por transferencia) */}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Método de pago
@@ -947,26 +973,7 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Notas del pedido */}
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Notas del pedido
-              </h2>
-              <textarea
-                placeholder="Notas sobre tu pedido (opcional)"
-                rows={4}
-                value={formData.customer_note}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  customer_note: e.target.value
-                }))}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="bg-gray-50 rounded-lg p-6 sticky top-4">
+            <div className="bg-gray-50 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Resumen del pedido
               </h2>
@@ -996,6 +1003,12 @@ export default function Checkout() {
                     <span>-{formatPrice(cart.discount)}</span>
                   </div>
                 )}
+                {independenciaDiscount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Descuento Independencia (-20%)</span>
+                    <span>-{formatPrice(independenciaDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Envío</span>
                   <span className="text-right">
@@ -1012,12 +1025,7 @@ export default function Checkout() {
                 <div className="border-t pt-2">
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span>
-                      {getShippingCost() > 0
-                        ? formatPrice(getTotalWithShipping())
-                        : formatPrice(cart.total)
-                      }
-                    </span>
+                    <span>{formatPrice(getTotalWithShipping())}</span>
                   </div>
                 </div>
               </div>

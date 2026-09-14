@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
       shipping_option, // New shipping options
       shipping_zone_label, // Etiqueta legible de la zona seleccionada
       shipping_cost, // Costo de envío calculado según la zona
+      independencia_discount, // Descuento Promoción de Independencia (solo transferencia)
       shipping_other_details,
       contact_data // Optional contact data
     } = body;
@@ -116,7 +117,13 @@ export async function POST(request: NextRequest) {
           noteComponents.push(`Detalles de envío: ${shipping_other_details}`);
         }
       }
-      
+
+      // Descuento Promoción de Independencia (solo transferencia)
+      if (Number(independencia_discount) > 0) {
+        noteComponents.push(`--- PROMOCIÓN ---`);
+        noteComponents.push(`Descuento Independencia (-20% por transferencia): -$${Number(independencia_discount).toFixed(2)}`);
+      }
+
       // Contact data (optional)
       if (contact_data && (contact_data.name || contact_data.email || contact_data.phone)) {
         noteComponents.push(`--- DATOS DE CONTACTO ADICIONALES ---`);
@@ -192,6 +199,18 @@ export async function POST(request: NextRequest) {
           total: (Number(shipping_cost) || 0).toString(),
         },
       ],
+      // Descuento de la Promoción de Independencia como fee negativo (queda registrado en la orden)
+      ...(Number(independencia_discount) > 0
+        ? {
+            fee_lines: [
+              {
+                name: 'Descuento Promoción de Independencia (-20%)',
+                total: (-Math.abs(Number(independencia_discount))).toFixed(2),
+                tax_status: 'none',
+              },
+            ],
+          }
+        : {}),
       meta_data: [
         // Payment-specific metadata
         ...(isTilopay ? [
