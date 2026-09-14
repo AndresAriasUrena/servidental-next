@@ -97,10 +97,7 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
           {/* Promo Independencia Badge (esquina superior izquierda) */}
           {hasIndependencia && (
             <div className="absolute top-2 left-2 z-10">
-              <div
-                className="bg-gradient-to-r from-blue-700 via-white to-red-600 text-white text-xs px-3 py-1.5 rounded-md shadow-lg border border-blue-800 font-bold uppercase flex items-center gap-1"
-                style={{ WebkitTextStroke: '0.5px #037971' }}
-              >
+              <div className="bg-gradient-to-r from-blue-700 to-red-600 text-white text-xs px-3 py-1.5 rounded-md shadow-lg font-bold uppercase flex items-center gap-1">
                 -20% Independencia
               </div>
             </div>
