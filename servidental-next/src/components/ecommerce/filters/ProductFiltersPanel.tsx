@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ProductFilters, WooCommerceCategory, WooCommerceBrand } from '@/types/woocommerce';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPriceRange, PRIMARY_CURRENCY } from '@/utils/currency';
+import { isIndependenciaActive } from '@/utils/promo';
 import { ChevronDown, ChevronUp, ChevronRight } from 'lucide-react';
 
 // Interfaz para categoría con subcategorías
@@ -205,7 +206,7 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
     onFiltersChange({});
   };
 
-  const relevantFilterKeys = ['search', 'categories', 'brands', 'price_min', 'price_max', 'on_sale', 'in_stock'];
+  const relevantFilterKeys = ['search', 'categories', 'brands', 'price_min', 'price_max', 'on_sale', 'in_stock', 'independencia'];
   const hasActiveFilters = relevantFilterKeys.some(key => {
     const value = filters[key as keyof ProductFilters];
     if ((key === 'categories' || key === 'brands') && Array.isArray(value)) {
@@ -367,19 +368,6 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
           <label className="flex items-center space-x-2 cursor-pointer">
             <input
               type="checkbox"
-              checked={filters.on_sale || false}
-              onChange={(e) => onFiltersChange({
-                ...filters,
-                on_sale: e.target.checked || undefined
-              })}
-              className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
-            />
-            <span className="text-sm text-gray-700">Promociones</span>
-          </label>
-          
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="checkbox"
               checked={filters.in_stock || false}
               onChange={(e) => onFiltersChange({
                 ...filters,
@@ -389,6 +377,21 @@ export function ProductFiltersPanel({ filters, onFiltersChange, className = '' }
             />
             <span className="text-sm text-gray-700">Entrega Inmediata</span>
           </label>
+
+          {isIndependenciaActive() && (
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.independencia || false}
+                onChange={(e) => onFiltersChange({
+                  ...filters,
+                  independencia: e.target.checked || undefined
+                })}
+                className="rounded border-gray-300 text-servi_green focus:ring-servi_green"
+              />
+              <span className="text-sm text-gray-700">Promoción de Independencia</span>
+            </label>
+          )}
         </div>
       </div>
 

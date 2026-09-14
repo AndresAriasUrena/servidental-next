@@ -85,6 +85,9 @@ function ProductGrid({
     const inStock = searchParams.get('in_stock');
     if (inStock === 'true') filters.in_stock = true;
 
+    const independencia = searchParams.get('independencia');
+    if (independencia === 'true') filters.independencia = true;
+
     const page = searchParams.get('page');
     if (page) setCurrentPage(parseInt(page));
 
@@ -97,7 +100,7 @@ function ProductGrid({
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const getHasActiveFilters = () => {
-    const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock'];
+    const relevantFilterKeys = ['search', 'categories', 'price_min', 'price_max', 'on_sale', 'in_stock', 'independencia'];
     const hasRegularFilters = relevantFilterKeys.some(key => {
       const value = filters[key as keyof ProductFilters];
       if (key === 'categories' && Array.isArray(value)) {
@@ -124,6 +127,7 @@ function ProductGrid({
     if (newFilters.price_max !== undefined) params.set('price_max', String(newFilters.price_max));
     if (newFilters.on_sale) params.set('on_sale', 'true');
     if (newFilters.in_stock) params.set('in_stock', 'true');
+    if (newFilters.independencia) params.set('independencia', 'true');
     if (page > 1) params.set('page', String(page));
     if (repuestosFilter !== 'all') params.set('repuestos', repuestosFilter);
 
@@ -139,9 +143,15 @@ function ProductGrid({
     }
 
     try {
+      // Los filtros por etiqueta (independencia, promociones) se aplican en el frontend
+      // sobre la página cargada. Para que muestren TODOS los productos de una vez (y no
+      // de a pocos por página), traemos un lote grande cuando alguno está activo.
+      const isTagFilterActive = !!filtersToUse.independencia || !!filtersToUse.on_sale;
+      const perPage = isTagFilterActive ? 100 : PRODUCTS_PER_PAGE;
+
       // Preparar parámetros para la API
       const params = {
-        per_page: PRODUCTS_PER_PAGE,
+        per_page: perPage,
         page: pageToUse,
         ...filtersToUse,
         ...(categoryId && { categories: [categoryId] })
@@ -185,6 +195,15 @@ function ProductGrid({
         productsToShow = productsWithNoviembre;
       }
 
+      // Filtro de Promoción de Independencia (etiqueta "independencia")
+      if (filtersToUse.independencia) {
+        productsToShow = productsToShow.filter(product =>
+          product.tags?.some(tag =>
+            tag.slug?.toLowerCase() === 'independencia' || tag.name?.toLowerCase() === 'independencia'
+          )
+        );
+      }
+
       // Filtro de "Equipos principales" (excluir repuestos)
       // NOTA: Este filtro se aplica en frontend porque WooCommerce no tiene
       // parámetro nativo para excluir por categoría
@@ -219,8 +238,9 @@ function ProductGrid({
           setProducts(productsToShow);
         }
 
-        // Actualizar estado de "hay más"
-        setHasMore(response.total_pages > pageToUse);
+        // Actualizar estado de "hay más". Con filtro por etiqueta ya traemos todo
+        // en un solo lote, así que no hay paginación adicional.
+        setHasMore(!isTagFilterActive && response.total_pages > pageToUse);
         setTotal(response.total);
       }
     } catch (error) {

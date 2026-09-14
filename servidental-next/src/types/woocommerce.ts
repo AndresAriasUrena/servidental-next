@@ -442,6 +442,7 @@ export interface ProductFilters {
   price_max?: number;
   on_sale?: boolean;
   in_stock?: boolean;
+  independencia?: boolean; // Filtro: productos en Promoción de Independencia
   search?: string;
   per_page?: number;
   page?: number;
