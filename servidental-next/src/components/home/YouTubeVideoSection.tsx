@@ -16,8 +16,8 @@ export default function YouTubeVideoSection() {
           </h2>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto">
-          <motion.div 
+        <div>
+          <motion.div
             className="aspect-video shadow-lg rounded-lg overflow-hidden"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}

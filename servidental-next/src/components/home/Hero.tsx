@@ -165,106 +165,112 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="absolute inset-0"
-        >
-          {/* Background Image - Desktop */}
-          <div className="absolute inset-0 hidden md:block bg-white">
-            <Image
-              src={currentSlide.image}
-              alt="Hero background"
-              fill
-              priority={currentIndex === 0}
-              className="object-contain object-center"
-              quality={90}
-            />
-          </div>
-
-          {/* Background Image - Mobile */}
-          <div className="absolute inset-0 md:hidden bg-white">
-            <Image
-              src={currentSlide.imageMobile}
-              alt="Hero background"
-              fill
-              priority={currentIndex === 0}
-              className="object-contain object-bottom"
-              quality={90}
-            />
-          </div>
-
-          {/* Content */}
-          <div className="relative h-full z-10">
-            <div className={`container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl h-full flex ${getContainerClasses()}`}>
-              <div className={`flex flex-col ${getPositionClasses()} pt-8 md:pt-12 lg:pt-16 max-w-md lg:max-w-xl`}>
-                {/* Title */}
-                <h1 className="font-bold leading-tight mb-4 md:mb-6">
-                  {currentSlide.titleParts.map((part, idx) => (
-                    <span
-                      key={idx}
-                      className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase ${
-                        part.highlighted ? 'text-[#2a7e87]' : 'text-[#383536]'
-                      }`}
-                      style={{
-                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                      }}
-                    >
-                      {part.text}
-                    </span>
-                  ))}
-                </h1>
-
-                {/* CTA Button */}
-                <Link
-                  href={currentSlide.cta.href}
-                  className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 bg-servi_green hover:bg-servi_green/90 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl w-fit"
-                >
-                  {currentSlide.cta.text}
-                  <MdArrowForward className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                </Link>
+    <div className="bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+        <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden rounded-2xl shadow-lg">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 bg-gradient-to-b from-white via-servi_light to-servi_green"
+            >
+              {/* Background Image - Desktop */}
+              <div className="absolute inset-0 hidden md:block">
+                <Image
+                  src={currentSlide.image}
+                  alt="Hero background"
+                  fill
+                  priority={currentIndex === 0}
+                  className="object-contain object-center"
+                  quality={90}
+                />
               </div>
+
+              {/* Background Image - Mobile */}
+              <div className="absolute inset-0 md:hidden">
+                <Image
+                  src={currentSlide.imageMobile}
+                  alt="Hero background"
+                  fill
+                  priority={currentIndex === 0}
+                  className="object-contain object-bottom"
+                  quality={90}
+                />
+              </div>
+
+              {/* Content */}
+              <div className="relative h-full z-10">
+                <div className={`container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl h-full flex ${getContainerClasses()}`}>
+                  <div className={`flex flex-col ${getPositionClasses()} pt-8 md:pt-12 lg:pt-16 max-w-md lg:max-w-xl`}>
+                    {/* Title */}
+                    <h1 className="font-bold leading-tight mb-4 md:mb-6">
+                      {currentSlide.titleParts.map((part, idx) => (
+                        <span
+                          key={idx}
+                          className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase ${
+                            part.highlighted ? 'text-[#2a7e87]' : 'text-[#383536]'
+                          }`}
+                          style={{
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                          }}
+                        >
+                          {part.text}
+                        </span>
+                      ))}
+                    </h1>
+
+                    {/* CTA Button */}
+                    <Link
+                      href={currentSlide.cta.href}
+                      className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 bg-servi_green hover:bg-servi_green/90 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl w-fit"
+                    >
+                      {currentSlide.cta.text}
+                      <MdArrowForward className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Carousel Controls + Slide Indicators */}
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 sm:gap-4 z-30">
+            <button
+              onClick={prevSlide}
+              className="bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
+              aria-label="Slide anterior"
+            >
+              <MdArrowBack size={20} className="sm:w-6 sm:h-6" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`transition-all duration-300 rounded-full ${
+                    currentIndex === idx
+                      ? 'w-6 sm:w-8 h-2 bg-servi_green'
+                      : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  aria-label={`Ir al slide ${idx + 1}`}
+                />
+              ))}
             </div>
+
+            <button
+              onClick={nextSlide}
+              className="bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
+              aria-label="Siguiente slide"
+            >
+              <MdArrowForward size={20} className="sm:w-6 sm:h-6" />
+            </button>
           </div>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Carousel Controls */}
-      <button
-        onClick={prevSlide}
-        className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-4 z-30 bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
-        aria-label="Slide anterior"
-      >
-        <MdArrowBack size={20} className="sm:w-6 sm:h-6" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-4 z-30 bg-[#2a7e87] backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-200"
-        aria-label="Siguiente slide"
-      >
-        <MdArrowForward size={20} className="sm:w-6 sm:h-6" />
-      </button>
-
-      {/* Slide Indicators */}
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentIndex(idx)}
-            className={`transition-all duration-300 rounded-full ${
-              currentIndex === idx
-                ? 'w-6 sm:w-8 h-2 bg-servi_green'
-                : 'w-2 h-2 bg-white/50 hover:bg-white/75'
-            }`}
-            aria-label={`Ir al slide ${idx + 1}`}
-          />
-        ))}
+        </section>
       </div>
-    </section>
+    </div>
   );
 }

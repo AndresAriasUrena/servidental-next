@@ -6,6 +6,15 @@
 /* WordPress Gutenberg block styles for full-width content */
 @import '../styles/wp-gutenberg.css';
 
+/* Oculta la scrollbar en tiras horizontales (categorías del home) manteniendo el scroll funcional */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Reset link styles globally - prevent blue color and underline */
 @layer base {
   a {
