@@ -28,21 +28,22 @@ const services: Service[] = [
     hasLink: true,
     linkUrl: '/x-ray-certification'
   },
-  {
-    title: 'Instalaciones',
-    description: 'El proceso de instalación es llevado a cabo por nuestro personal altamente calificado, siguiendo los más altos estándares de calidad.',
-    image: assets.services.instalaciones
-  },
+  // Ocultadas a pedido de la clienta:
+  // {
+  //   title: 'Instalaciones',
+  //   description: 'El proceso de instalación es llevado a cabo por nuestro personal altamente calificado, siguiendo los más altos estándares de calidad.',
+  //   image: assets.services.instalaciones
+  // },
   // {
   //   title: 'Traslado de equipos',
   //   description: 'Ofrecemos un servicio de traslado de equipos que incluye la desinstalación, el transporte y la instalación, todo ello tras una cuidadosa coordinación.',
   //   image: assets.services.traslados
   // },
-  {
-    title: 'Calibraciones',
-    description: 'Al ser distribuidores nacionales, contamos con líneas de comunicación directa con los fabricantes, manteniéndonos al día en las últimas actualizaciones de software.',
-    image: assets.services.calibraciones
-  },
+  // {
+  //   title: 'Calibraciones',
+  //   description: 'Al ser distribuidores nacionales, contamos con líneas de comunicación directa con los fabricantes, manteniéndonos al día en las últimas actualizaciones de software.',
+  //   image: assets.services.calibraciones
+  // },
 ]
 
 export default function ServicesSection() {

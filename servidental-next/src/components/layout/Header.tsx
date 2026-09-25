@@ -10,11 +10,45 @@ import assets from '@/assets'
 import MiniCart from '@/components/ecommerce/cart/MiniCart'
 import { useCart } from '@/hooks/useCart'
 
-const navigation = [
+interface NavItem {
+  name: string
+  href: string
+  submenu?: { label: string; href: string }[]
+}
+
+// Categorías de la tienda (submenú), con su slug real de WooCommerce
+const tiendaSubmenu = [
+  { label: 'Escáneres', href: '/tienda?categories=escaneres' },
+  { label: 'Unidades dentales', href: '/tienda?categories=unidades-dentales' },
+  { label: 'Equipo de Rayos X', href: '/tienda?categories=equipo-de-rayos-x' },
+  { label: 'Piezas de mano', href: '/tienda?categories=piezas-de-mano' },
+  { label: 'Motores eléctricos', href: '/tienda?categories=motores-de-cirugias' },
+  { label: 'Motores de implantes', href: '/tienda?categories=motores-de-implantes' },
+  { label: 'Motores para laboratorio', href: '/tienda?categories=motores-de-laboratorio' },
+  { label: 'Esterilizadores', href: '/tienda?categories=esterilizadores' },
+  { label: 'Compresores', href: '/tienda?categories=compresores' },
+  { label: 'Bombas de vacío', href: '/tienda?categories=bombas-de-vacio' },
+  { label: 'Mobiliario', href: '/tienda?categories=mobiliario' },
+  { label: 'Lámparas de fotocurado', href: '/tienda?categories=lamparas-de-fotocurado' },
+  { label: 'Lámparas dentales', href: '/tienda?categories=lamparas-dentales' },
+  { label: 'Equipo para endodoncia', href: '/tienda?categories=equipo-para-endodoncia' },
+  { label: 'Lámpara de blanqueamiento', href: '/tienda?categories=lamparas-de-blanqueamiento' },
+  { label: 'Selladoras', href: '/tienda?categories=selladoras' },
+  { label: 'Sets dentales', href: '/tienda?categories=sets' },
+  { label: 'Fresadoras', href: '/tienda?categories=fresadoras' },
+  { label: 'Termoformadoras', href: '/tienda?categories=termoformadoras' },
+]
+
+const serviciosSubmenu = [
+  { label: 'Mantenimiento y servicio técnico', href: '/services' },
+  { label: 'Certificación de RX', href: '/x-ray-certification' },
+]
+
+const navigation: NavItem[] = [
   { name: 'INICIO', href: '/' },
   { name: 'NOSOTROS', href: '/about' },
-  { name: 'SERVICIOS', href: '/#services' },
-  { name: 'TIENDA', href: '/tienda' },
+  { name: 'SERVICIOS', href: '/#services', submenu: serviciosSubmenu },
+  { name: 'TIENDA', href: '/tienda', submenu: tiendaSubmenu },
   { name: 'BLOG', href: '/blog' },
   { name: 'CONTACTO', href: '/contact' },
 ]
@@ -49,6 +83,7 @@ const socialLinks = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showMiniCart, setShowMiniCart] = useState(false)
+  const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null)
   const cartState = useCart()
   const totalQuantity = cartState.cart.totalQuantity
   const justAdded = false
@@ -92,7 +127,7 @@ export default function Header() {
                 info@servidentalcr.com
               </a>
               <a
-                href="https://www.google.com/maps/place/ServiDental+CR/@9.9981373,-84.1085891,17z/data=!3m1!4b1!4m6!3m5!1s0x8fa0fbd15e2f87f1:0x9e4c7e0b0e4c7e0b!8m2!3d9.9981373!4d-84.1060142!16s%2Fg%2F11c1q7q7q7"
+                href="https://www.google.com/maps?q=9.92788314819336,-84.05352783203125&z=17&hl=es"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center hover:text-white/80 transition-colors"
@@ -187,13 +222,48 @@ export default function Header() {
         {/* Desktop navigation */}
         <div className="hidden lg:flex lg:gap-x-8">
           {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green no-underline"
-            >
-              {item.name}
-            </Link>
+            item.submenu ? (
+              <div key={item.name} className="group relative">
+                {/* El nombre navega a su página; el submenú aparece al hover */}
+                <Link
+                  href={item.href}
+                  className="inline-flex items-center text-sm font-medium leading-6 text-gray-700 group-hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent group-hover:border-servi_green no-underline"
+                >
+                  {item.name}
+                  <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </Link>
+                {/* Panel del submenú */}
+                <div
+                  className={`invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-1/2 -translate-x-1/2 top-full z-50 pt-3 ${
+                    item.name === 'TIENDA' ? 'w-[640px] left-auto right-0 translate-x-0' : 'w-64'
+                  }`}
+                >
+                  <div className="rounded-lg bg-white shadow-xl ring-1 ring-black/5 p-3">
+                    <div className={item.name === 'TIENDA' ? 'grid grid-cols-3 gap-x-4 gap-y-1' : 'flex flex-col'}>
+                      {item.submenu.map((sub) => (
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-sm font-medium leading-6 text-gray-700 hover:text-servi_green transition-colors py-2 px-1 border-b-2 border-transparent hover:border-servi_green no-underline"
+              >
+                {item.name}
+              </Link>
+            )
           ))}
         </div>
 
@@ -270,14 +340,56 @@ export default function Header() {
               {/* Navigation links */}
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
+                  item.submenu ? (
+                    <div key={item.name} className="-mx-3">
+                      {/* Fila con enlace a la página + botón para expandir el submenú */}
+                      <div className="flex items-center justify-between rounded-lg hover:bg-gray-50">
+                        <Link
+                          href={item.href}
+                          className="flex-1 block px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:text-servi_green transition-colors no-underline"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                        <button
+                          type="button"
+                          aria-label={`Ver ${item.name}`}
+                          onClick={() => setOpenMobileSubmenu(openMobileSubmenu === item.name ? null : item.name)}
+                          className="px-3 py-3 text-gray-500"
+                        >
+                          <svg
+                            className={`w-5 h-5 transition-transform ${openMobileSubmenu === item.name ? 'rotate-180' : ''}`}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                      </div>
+                      {openMobileSubmenu === item.name && (
+                        <div className="pl-4 pb-2">
+                          {item.submenu.map((sub) => (
+                            <Link
+                              key={sub.label}
+                              href={sub.href}
+                              className="block rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-3 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50 hover:text-servi_green transition-colors no-underline"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )
                 ))}
               </div>
 
