@@ -44,7 +44,7 @@ const slides: Slide[] = [
       { text: 'A UN CLICK', highlighted: true },
     ],
     cta: {
-      text: 'Tienda en linea',
+      text: 'Tienda en línea',
       href: '/tienda',
     },
     image: hero1,
@@ -60,7 +60,7 @@ const slides: Slide[] = [
       { text: 'RAYOS X', highlighted: true },
     ],
     cta: {
-      text: 'Mas informacion',
+      text: 'Más información',
       href: '/x-ray-certification',
     },
     image: hero2,
@@ -76,7 +76,7 @@ const slides: Slide[] = [
       { text: 'ESPECIALIZADOS', highlighted: true },
     ],
     cta: {
-      text: 'Servicio tecnico',
+      text: 'Servicio técnico',
       href: '/services',
     },
     image: hero3,
@@ -92,7 +92,7 @@ const slides: Slide[] = [
       { text: '✓ CORRECTIVOS' },
     ],
     cta: {
-      text: 'Mas informacion',
+      text: 'Más información',
       href: '/services',
     },
     image: hero4,
@@ -177,8 +177,8 @@ export default function HeroCarousel() {
               transition={{ duration: 0.5 }}
               className="absolute inset-0 bg-gradient-to-b from-white via-servi_light to-servi_green"
             >
-              {/* Background Image - Desktop */}
-              <div className="absolute inset-0 hidden md:block">
+              {/* Background Image - Desktop (decorativa: no debe interceptar clics del botón) */}
+              <div className="absolute inset-0 hidden md:block pointer-events-none">
                 <Image
                   src={currentSlide.image}
                   alt="Hero background"
@@ -189,8 +189,8 @@ export default function HeroCarousel() {
                 />
               </div>
 
-              {/* Background Image - Mobile */}
-              <div className="absolute inset-0 md:hidden">
+              {/* Background Image - Mobile (decorativa: no debe interceptar clics del botón) */}
+              <div className="absolute inset-0 md:hidden pointer-events-none">
                 <Image
                   src={currentSlide.imageMobile}
                   alt="Hero background"
