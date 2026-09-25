@@ -42,6 +42,22 @@ const nextConfig = {
     WP_API_URL: 'https://wp.servidentalcr.com/wp-json/wp/v2',
     CUSTOM_API_URL: 'https://wp.servidentalcr.com/wp-json/servidental/v1'
   },
+  async redirects() {
+    return [
+      // La antigua página /products (datos desactualizados) se eliminó.
+      // Redirigir a la tienda real para no dejar enlaces rotos ni sitelinks viejos en Google.
+      {
+        source: '/products',
+        destination: '/tienda',
+        permanent: true,
+      },
+      {
+        source: '/products/:slug*',
+        destination: '/tienda',
+        permanent: true,
+      },
+    ];
+  },
   webpack(config) {
     // Agregar regla para manejar archivos multimedia
     config.module.rules.push({
