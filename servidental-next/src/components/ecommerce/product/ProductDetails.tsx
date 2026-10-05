@@ -9,7 +9,7 @@ import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { requiresQuote, hasStockAlertTag, sendQuoteToWhatsAppWithCustomerInfo, sendStockAlertToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
-import { isIndependenciaActive, hasIndependenciaTag } from '@/utils/promo';
+import { getActivePromoForTags } from '@/utils/promo';
 import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -352,6 +352,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const salePrice = parsePrice(product.sale_price);
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
+  const activePromo = getActivePromoForTags(product.tags);
 
   // Precio a mostrar arriba del producto.
   // En productos variables mostramos "Desde $X" (el precio base) hasta que el
@@ -598,18 +599,18 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   </div>
                 )}
 
-                {/* Promo Independencia */}
-                {isIndependenciaActive() && hasIndependenciaTag(product.tags) && (
-                  <div className="mt-3 rounded-lg border border-blue-200 bg-gradient-to-r from-blue-50 to-red-50 p-3">
+                {/* Promo activa */}
+                {activePromo && (
+                  <div className="mt-3 rounded-lg border border-servi_green/30 bg-servi_light p-3">
                     <div className="flex items-center gap-2">
-                      <span className="rounded bg-gradient-to-r from-blue-700 to-red-600 px-2 py-0.5 text-xs font-bold uppercase text-white">
-                        Promo Independencia
+                      <span className={`rounded ${activePromo.badgeClassName} px-2 py-0.5 text-xs font-bold uppercase`}>
+                        {activePromo.label}
                       </span>
-                      <span className="text-sm font-medium text-servi_dark">20% de descuento</span>
+                      <span className="text-sm font-medium text-servi_dark">
+                        {Math.round(activePromo.rate * 100)}% de descuento
+                      </span>
                     </div>
-                    <p className="mt-1 text-xs text-gray-600">
-                      Aplica pagando por <strong>transferencia bancaria</strong>. Válido del 14 al 30 de setiembre.
-                    </p>
+                    <p className="mt-1 text-xs text-gray-600">{activePromo.noteText}</p>
                   </div>
                 )}
 

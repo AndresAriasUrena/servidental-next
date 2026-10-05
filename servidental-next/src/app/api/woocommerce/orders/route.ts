@@ -19,10 +19,14 @@ export async function POST(request: NextRequest) {
       shipping_option, // New shipping options
       shipping_zone_label, // Etiqueta legible de la zona seleccionada
       shipping_cost, // Costo de envío calculado según la zona
-      independencia_discount, // Descuento Promoción de Independencia (solo transferencia)
+      promo_discount, // Descuento de promoción activa (solo transferencia)
+      independencia_discount, // Compat: descuento de promo (campo antiguo)
       shipping_other_details,
       contact_data // Optional contact data
     } = body;
+
+    // Descuento de promoción unificado (acepta el campo nuevo o el antiguo)
+    const promoDiscount = Number(promo_discount ?? independencia_discount) || 0;
 
     // Validaciones
     if (!customerInfo || !cartItems || !total) {
@@ -118,10 +122,10 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Descuento Promoción de Independencia (solo transferencia)
-      if (Number(independencia_discount) > 0) {
+      // Descuento de promoción (solo transferencia)
+      if (promoDiscount > 0) {
         noteComponents.push(`--- PROMOCIÓN ---`);
-        noteComponents.push(`Descuento Independencia (-20% por transferencia): -$${Number(independencia_discount).toFixed(2)}`);
+        noteComponents.push(`Descuento promoción (-20% por transferencia): -$${promoDiscount.toFixed(2)}`);
       }
 
       // Contact data (optional)
@@ -199,13 +203,13 @@ export async function POST(request: NextRequest) {
           total: (Number(shipping_cost) || 0).toString(),
         },
       ],
-      // Descuento de la Promoción de Independencia como fee negativo (queda registrado en la orden)
-      ...(Number(independencia_discount) > 0
+      // Descuento de promoción como fee negativo (queda registrado en la orden)
+      ...(promoDiscount > 0
         ? {
             fee_lines: [
               {
-                name: 'Descuento Promoción de Independencia (-20%)',
-                total: (-Math.abs(Number(independencia_discount))).toFixed(2),
+                name: 'Descuento promoción (-20%)',
+                total: (-Math.abs(promoDiscount)).toFixed(2),
                 tax_status: 'none',
               },
             ],

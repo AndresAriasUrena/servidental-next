@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { BillingAddress, ShippingAddress } from '@/types/woocommerce';
 import { formatPrice } from '@/utils/currency';
-import { getIndependenciaDiscount } from '@/utils/promo';
+import { getPromoDiscount } from '@/utils/promo';
 import TilopayPaymentSDK from './TilopayPaymentSDK';
 import TrustBadges from '@/components/common/TrustBadges';
 import { trackBeginCheckout } from '@/lib/analytics';
@@ -361,7 +361,8 @@ export default function Checkout() {
             shipping_option: formData.shipping_option,
             shipping_zone_label: selectedZone.label,
             shipping_cost: getShippingCost(),
-            independencia_discount: independenciaDiscount,
+            promo_discount: promoDiscount,
+            independencia_discount: promoDiscount,
             shipping_other_details: formData.shipping_other_details,
             contact_data: formData.contact_data,
             customer_note: formData.customer_note,
@@ -397,13 +398,13 @@ export default function Checkout() {
     return selectedZone.cost;
   };
 
-  // Descuento Promoción de Independencia (20% sobre items etiquetados),
+  // Descuento de promoción (20% sobre items con etiqueta de promo activa),
   // SOLO cuando el pago es por transferencia bancaria.
-  const independenciaDiscount =
-    formData.payment_method === 'transferencia' ? getIndependenciaDiscount(cart.items) : 0;
+  const promoDiscount =
+    formData.payment_method === 'transferencia' ? getPromoDiscount(cart.items) : 0;
 
   const getTotalWithShipping = () => {
-    return cart.total + getShippingCost() - independenciaDiscount;
+    return cart.total + getShippingCost() - promoDiscount;
   };
 
   if (cart.items.length === 0) {
@@ -1003,10 +1004,10 @@ export default function Checkout() {
                     <span>-{formatPrice(cart.discount)}</span>
                   </div>
                 )}
-                {independenciaDiscount > 0 && (
+                {promoDiscount > 0 && (
                   <div className="flex justify-between text-green-600">
-                    <span>Descuento Independencia (-20%)</span>
-                    <span>-{formatPrice(independenciaDiscount)}</span>
+                    <span>Descuento promoción (-20%)</span>
+                    <span>-{formatPrice(promoDiscount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
