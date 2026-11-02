@@ -86,6 +86,59 @@ export function getActivePromoForTags(tags?: ProductTag[], now: number = Date.no
   return PROMOS.find((p) => isPromoActive(p, now) && tagsMatchPromo(p, tags)) || null;
 }
 
+// ---------------------------------------------------------------------------
+// Badges de campaña INFORMATIVOS (solo distintivo visual, sin descuento).
+// Para productos con promo que no es un % (ej. "3x2"). No afectan el checkout.
+// ---------------------------------------------------------------------------
+
+export interface PromoBadge {
+  /** Etiquetas (slug o name, case-insensitive) que activan el badge. */
+  tagSlugs: string[];
+  /** Texto del badge. */
+  label: string;
+  /** Clases Tailwind del badge. */
+  badgeClassName: string;
+  /** Si se define, el badge solo se muestra mientras esa promo de PROMOS esté activa. */
+  promoId?: string;
+}
+
+export const PROMO_BADGES: PromoBadge[] = [
+  {
+    tagSlugs: ['3x2promo'],
+    label: '3x2 Black November',
+    badgeClassName: 'bg-gradient-to-r from-gray-900 to-gray-700 text-white',
+    promoId: 'blacknovember',
+  },
+];
+
+function tagsMatchSlugs(slugs: string[], tags?: ProductTag[]): boolean {
+  if (!tags || tags.length === 0) return false;
+  const wanted = slugs.map((s) => s.toLowerCase());
+  return tags.some(
+    (t) =>
+      (t.slug && wanted.includes(t.slug.toLowerCase())) ||
+      (t.name && wanted.includes(t.name.toLowerCase()))
+  );
+}
+
+/**
+ * Devuelve el primer badge de campaña cuya etiqueta matchee los tags y cuya
+ * promo asociada (si tiene promoId) esté activa por fecha; o null.
+ */
+export function getActivePromoBadgeForTags(
+  tags?: ProductTag[],
+  now: number = Date.now()
+): PromoBadge | null {
+  return (
+    PROMO_BADGES.find((b) => {
+      if (!tagsMatchSlugs(b.tagSlugs, tags)) return false;
+      if (!b.promoId) return true;
+      const promo = PROMOS.find((p) => p.id === b.promoId);
+      return promo ? isPromoActive(promo, now) : false;
+    }) || null
+  );
+}
+
 /**
  * Descuento total (en USD) sobre los items del carrito cuya promo esté activa.
  * Cada item usa su propia promo (y su propia tasa). Devuelve 0 si nada aplica.

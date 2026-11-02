@@ -9,7 +9,7 @@ import { useCart } from '@/hooks/useCart';
 import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { requiresQuote, hasStockAlertTag, sendQuoteToWhatsAppWithCustomerInfo, sendStockAlertToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
-import { getActivePromoForTags } from '@/utils/promo';
+import { getActivePromoForTags, getActivePromoBadgeForTags } from '@/utils/promo';
 import { getDeliveryDaysForTags } from '@/utils/delivery';
 import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
@@ -354,6 +354,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
   const activePromo = getActivePromoForTags(product.tags);
+  const promoBadge = getActivePromoBadgeForTags(product.tags);
   const deliveryDays = getDeliveryDaysForTags(product.tags);
 
   // Precio a mostrar arriba del producto.
@@ -570,9 +571,15 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                     <span className="text-lg text-gray-500 line-through">
                       {formatPrice(displayRegular)}
                     </span>
-                    <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      Promoción
-                    </span>
+                    {promoBadge ? (
+                      <span className={`${promoBadge.badgeClassName} text-xs px-2 py-1 rounded-full font-medium uppercase`}>
+                        {promoBadge.label}
+                      </span>
+                    ) : (
+                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                        Promoción
+                      </span>
+                    )}
                   </div>
                 ) : displayPrice > 0 ? (
                   <span className="flex items-baseline gap-2">

@@ -7,7 +7,7 @@ import { WooCommerceProduct } from '@/types/woocommerce';
 import { useCart } from '@/hooks/useCart';
 import { formatPrice, parsePrice, isOnSale } from '@/utils/currency';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
-import { getActivePromoForTags } from '@/utils/promo';
+import { getActivePromoForTags, getActivePromoBadgeForTags } from '@/utils/promo';
 import { getDeliveryDaysForTags } from '@/utils/delivery';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { QuoteFormModal } from '@/components/ecommerce/quote/QuoteFormModal';
@@ -53,6 +53,9 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
   // Promoción activa (20% por transferencia) según etiqueta y fecha
   const activePromo = getActivePromoForTags(product.tags);
 
+  // Badge de campaña informativo (ej. "3x2 Black November"), sin descuento
+  const promoBadge = getActivePromoBadgeForTags(product.tags);
+
   return (
     <>
       <Link href={`/tienda/${product.slug}`} className="group block h-full" prefetch={true}>
@@ -87,6 +90,15 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
             </div>
           )}
 
+          {/* Badge de campaña informativo, ej. "3x2 Black November" (sin descuento) */}
+          {promoBadge && !activePromo && (
+            <div className="absolute top-2 left-2 z-10">
+              <div className={`${promoBadge.badgeClassName} text-xs px-3 py-1.5 rounded-md shadow-lg font-bold uppercase flex items-center gap-1`}>
+                {promoBadge.label}
+              </div>
+            </div>
+          )}
+
           {/* Entrega en X días (según etiqueta) */}
           {deliveryDays && (
             <div className="absolute bottom-2 left-2 z-10">
@@ -99,8 +111,8 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
             </div>
           )}
 
-          {/* Sale Badge */}
-          {productOnSale && (
+          {/* Sale Badge (se oculta si hay badge de campaña como 3x2) */}
+          {productOnSale && !promoBadge && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
               Promoción
             </div>
