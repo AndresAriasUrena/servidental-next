@@ -1,14 +1,32 @@
 // Categorías destacadas del home (portada elegida manualmente por la clienta).
 // Compartidas por las secciones de propuesta (tabs / bloques apilados).
 
+import { StaticImageData } from 'next/image'
+import blackNovemberCategoria from '@/assets/banners/blacknovember-categoria.avif'
+
 export interface FeaturedCategory {
   name: string
   slug: string
-  image: string
+  image: string | StaticImageData
   subtitle: string
+  /** Si se define, la fila carga productos por esta etiqueta (frontend) en vez de por categoría. */
+  tagSlug?: string
+  /** Enlace "Ver todos" personalizado (ej. /tienda?on_sale=true). */
+  href?: string
+  /** Si se define, la fila solo se muestra mientras esa promo (por id en PROMOS) esté activa. */
+  activeOnlyDuringPromoId?: string
 }
 
 export const FEATURED_CATEGORIES: FeaturedCategory[] = [
+  {
+    name: 'Productos en promoción',
+    slug: 'blacknovember',
+    image: blackNovemberCategoria,
+    subtitle: 'Black November · 20% por transferencia',
+    tagSlug: 'blacknovember',
+    href: '/tienda?on_sale=true',
+    activeOnlyDuringPromoId: 'blacknovember',
+  },
   {
     name: 'Escáneres',
     slug: 'escaneres',

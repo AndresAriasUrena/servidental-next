@@ -8,6 +8,7 @@ import { WooCommerceProduct } from '@/types/woocommerce'
 import { useWooCommerce } from '@/hooks/useWooCommerce'
 import { FEATURED_CATEGORIES, FeaturedCategory } from './featured-categories'
 import { ProductCard } from '@/components/ecommerce/product/ProductCard'
+import { PROMOS, isPromoActive } from '@/utils/promo'
 
 /**
  * Sección "Nuestros equipos por categoría": una fila por categoría con una
@@ -32,16 +33,33 @@ function CategoryRow({ category }: { category: FeaturedCategory }) {
       (entries) => {
         if (entries[0].isIntersecting) {
           observer.disconnect()
-          fetchProducts({ category_slug: category.slug, per_page: PER_PAGE, status: 'publish' })
-            .then((res) => setProducts(res.data || []))
-            .catch(() => setProducts([]))
+          if (category.tagSlug) {
+            // Filas por etiqueta: WooCommerce no filtra por tag-slug, así que traemos
+            // un lote grande y filtramos en el cliente por la etiqueta.
+            const tag = category.tagSlug.toLowerCase()
+            fetchProducts({ per_page: 100, status: 'publish' })
+              .then((res) =>
+                setProducts(
+                  (res.data || []).filter((p) =>
+                    p.tags?.some(
+                      (t) => t.slug?.toLowerCase() === tag || t.name?.toLowerCase() === tag
+                    )
+                  )
+                )
+              )
+              .catch(() => setProducts([]))
+          } else {
+            fetchProducts({ category_slug: category.slug, per_page: PER_PAGE, status: 'publish' })
+              .then((res) => setProducts(res.data || []))
+              .catch(() => setProducts([]))
+          }
         }
       },
       { rootMargin: '200px' }
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [category.slug, fetchProducts])
+  }, [category.slug, category.tagSlug, fetchProducts])
 
   const scrollByStep = (direction: 1 | -1) => {
     const step = window.innerWidth < 640 ? SCROLL_STEP_MOBILE : SCROLL_STEP_DESKTOP
@@ -58,7 +76,7 @@ function CategoryRow({ category }: { category: FeaturedCategory }) {
           {category.name}
         </span>
         <Link
-          href={`/tienda?categories=${category.slug}`}
+          href={category.href ?? `/tienda?categories=${category.slug}`}
           className="inline-flex items-center gap-1 text-xs font-medium text-servi_dark transition-colors hover:text-servi_green"
         >
           Ver todos
@@ -87,7 +105,7 @@ function CategoryRow({ category }: { category: FeaturedCategory }) {
 
           <div className="relative z-10 flex items-center justify-between gap-2 p-3">
             <Link
-              href={`/tienda?categories=${category.slug}`}
+              href={category.href ?? `/tienda?categories=${category.slug}`}
               className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-servi_dark shadow-sm transition-colors hover:text-servi_green"
             >
               Ver todos
@@ -177,7 +195,11 @@ export default function CategoryShowcaseStacked() {
         </div>
 
         <div className="space-y-8">
-          {FEATURED_CATEGORIES.map((cat) => (
+          {FEATURED_CATEGORIES.filter((cat) => {
+            if (!cat.activeOnlyDuringPromoId) return true
+            const promo = PROMOS.find((p) => p.id === cat.activeOnlyDuringPromoId)
+            return promo ? isPromoActive(promo) : false
+          }).map((cat) => (
             <CategoryRow key={cat.slug} category={cat} />
           ))}
         </div>

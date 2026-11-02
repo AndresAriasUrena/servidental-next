@@ -49,6 +49,17 @@ export const PROMOS: Promo[] = [
     badgeClassName: 'bg-gradient-to-r from-servi_green to-servi_dark text-white',
     noteText: 'Aplica pagando por transferencia bancaria. Válido hasta el 15 de octubre.',
   },
+  {
+    id: 'blacknovember',
+    label: 'Black November',
+    badgeLabel: '-20% Black November',
+    tagSlugs: ['blacknovember'],
+    start: new Date('2026-11-01T00:00:00-06:00').getTime(),
+    end: new Date('2026-12-01T00:00:00-06:00').getTime(), // exclusivo: incluye todo el 30-nov
+    rate: 0.20,
+    badgeClassName: 'bg-gradient-to-r from-gray-900 to-gray-700 text-white',
+    noteText: 'Aplica pagando por transferencia bancaria. Válido del 1 al 30 de noviembre.',
+  },
 ];
 
 /** ¿La promo está activa según la fecha actual? */

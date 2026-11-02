@@ -8,6 +8,7 @@ import { useCart } from '@/hooks/useCart';
 import { formatPrice, parsePrice, isOnSale } from '@/utils/currency';
 import { requiresQuote, sendQuoteToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
 import { getActivePromoForTags } from '@/utils/promo';
+import { getDeliveryDaysForTags } from '@/utils/delivery';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { QuoteFormModal } from '@/components/ecommerce/quote/QuoteFormModal';
 
@@ -46,15 +47,8 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
   const salePrice = parsePrice(product.sale_price);
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
 
-  // Detectar si el producto tiene la etiqueta "promociones"
-  const hasBlackNovemberTag = product.tags?.some(
-    tag => tag.slug?.toLowerCase() === 'promociones' || tag.name?.toLowerCase() === 'promociones'
-  );
-
-  // Detectar si el producto tiene el tag "silla-dental" (entrega en 22 días)
-  const isSillaDental = product.tags?.some(
-    tag => tag.slug === 'silla-dental'
-  );
+  // Días de entrega según etiqueta (black30=30, black15=15, silla-dental=22)
+  const deliveryDays = getDeliveryDaysForTags(product.tags);
 
   // Promoción activa (20% por transferencia) según etiqueta y fecha
   const activePromo = getActivePromoForTags(product.tags);
@@ -84,16 +78,6 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
             </div>
           )}
 
-          {/* Black November Badge (esquina superior izquierda) */}
-          {hasBlackNovemberTag && (
-            <div className="absolute top-2 left-2 z-10">
-              <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs  px-3 py-1.5 rounded-md shadow-lg border border-red-800 uppercase flex items-center gap-1">
-                <span className="inline-block w-1.5 h-1.5 bg-red-200 rounded-full animate-pulse"></span>
-                Oferta Congreso
-              </div>
-            </div>
-          )}
-
           {/* Promo Badge (esquina superior izquierda) */}
           {activePromo && (
             <div className="absolute top-2 left-2 z-10">
@@ -103,14 +87,14 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
             </div>
           )}
 
-          {/* Entrega en 22 días (sillas dentales) */}
-          {isSillaDental && (
+          {/* Entrega en X días (según etiqueta) */}
+          {deliveryDays && (
             <div className="absolute bottom-2 left-2 z-10">
               <div className="bg-servi_green text-white text-xs px-2 py-1 rounded-md shadow-md flex items-center gap-1">
                 <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Entrega en 22 días
+                Entrega en {deliveryDays} días
               </div>
             </div>
           )}
@@ -118,7 +102,7 @@ function ProductCardComponent({ product, showAddToCart = true }: ProductCardProp
           {/* Sale Badge */}
           {productOnSale && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-              Oferta Congreso
+              Promoción
             </div>
           )}
 

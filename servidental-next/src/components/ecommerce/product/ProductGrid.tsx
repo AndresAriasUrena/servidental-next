@@ -177,22 +177,18 @@ function ProductGrid({
       // Aplicar filtros en el frontend
       let productsToShow = response.data;
 
-      // Filtro de Black November (etiqueta "noviembre")
+      // Filtro de promoción (etiqueta "blacknovember")
       // NOTA: Este filtro SÍ se aplica en frontend porque WooCommerce no tiene
       // parámetro nativo para filtrar por etiquetas específicas
       if (filtersToUse.on_sale) {
-        console.log('[Black November Filter] Filtrando productos con etiqueta "noviembre"...');
-        console.log(`[Black November Filter] Total productos antes del filtro: ${productsToShow.length}`);
-
-        // Filtrar productos con etiqueta "promociones"
-        const productsWithNoviembre = productsToShow.filter(product => {
+        const productsEnPromo = productsToShow.filter(product => {
           return product.tags?.some(tag =>
-            tag.slug?.toLowerCase() === 'promociones' || tag.name?.toLowerCase() === 'promociones'
+            tag.slug?.toLowerCase() === 'blacknovember' || tag.name?.toLowerCase() === 'blacknovember'
           );
         });
 
-        console.log(`[Promociones Filter] Productos con etiqueta "promociones": ${productsWithNoviembre.length}`);
-        productsToShow = productsWithNoviembre;
+        console.log(`[Promoción Filter] Productos con etiqueta "blacknovember": ${productsEnPromo.length}`);
+        productsToShow = productsEnPromo;
       }
 
       // Filtro de Promoción de Independencia (etiqueta "independencia")

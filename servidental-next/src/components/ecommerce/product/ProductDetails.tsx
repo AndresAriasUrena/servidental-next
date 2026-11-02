@@ -10,6 +10,7 @@ import { useWooCommerce } from '@/hooks/useWooCommerce';
 import { formatPrice, parsePrice, isOnSale, getBestPrice } from '@/utils/currency';
 import { requiresQuote, hasStockAlertTag, sendQuoteToWhatsAppWithCustomerInfo, sendStockAlertToWhatsAppWithCustomerInfo } from '@/utils/whatsapp';
 import { getActivePromoForTags } from '@/utils/promo';
+import { getDeliveryDaysForTags } from '@/utils/delivery';
 import { getMaxPurchasable, getRemainingQuantity } from '@/utils/stock';
 import { MinusIcon, PlusIcon, ShoppingBagIcon, StarIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -353,6 +354,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
   const productOnSale = isOnSale(product.regular_price, product.sale_price);
   const rating = parseFloat(product.average_rating) || 0;
   const activePromo = getActivePromoForTags(product.tags);
+  const deliveryDays = getDeliveryDaysForTags(product.tags);
 
   // Precio a mostrar arriba del producto.
   // En productos variables mostramos "Desde $X" (el precio base) hasta que el
@@ -569,7 +571,7 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                       {formatPrice(displayRegular)}
                     </span>
                     <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      OFERTA CONGRESO
+                      Promoción
                     </span>
                   </div>
                 ) : displayPrice > 0 ? (
@@ -628,13 +630,13 @@ export default function ProductDetails({ slug }: ProductDetailsProps) {
                   </span>
                 </div>
 
-                {/* Entrega en 22 días (sillas dentales) */}
-                {product.tags?.some(tag => tag.slug === 'silla-dental') && (
+                {/* Entrega en X días (según etiqueta) */}
+                {deliveryDays && (
                   <div className="flex items-center gap-1.5 bg-servi_green text-white text-xs px-2.5 py-1 rounded-md">
                     <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Entrega en 22 días
+                    Entrega en {deliveryDays} días
                   </div>
                 )}
               </div>

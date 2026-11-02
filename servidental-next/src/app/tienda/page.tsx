@@ -5,6 +5,9 @@ import BlackNovemberBanner from '@/components/home/BlackNovemberBanner';
 import PageBanner from '@/components/common/PageBanner';
 import tiendaDesktop from '@/assets/banners/tienda-desktop.avif';
 import tiendaMobile from '@/assets/banners/tienda-mobile.avif';
+import blackNovemberDesktop from '@/assets/banners/blacknovember-tienda-desktop.avif';
+import blackNovemberMobile from '@/assets/banners/blacknovember-tienda-mobile.avif';
+import { PROMOS, isPromoActive } from '@/utils/promo';
 
 export const metadata = {
   title: 'Tienda | ServidentalCR - Equipo Médico Dental',
@@ -34,14 +37,18 @@ function ProductGridSkeleton() {
 }
 
 export default function TiendaPage() {
+  // Durante Black November se muestra el banner de la promo; fuera, el general.
+  const blackNovember = PROMOS.find((p) => p.id === 'blacknovember');
+  const showBlackNovember = blackNovember ? isPromoActive(blackNovember) : false;
+
   return (
     <div className="min-h-screen bg-gray-50 py-4 lg:py-8">
       <BlackNovemberBanner />
-      {/* Banner general de la tienda (decorativo) */}
+      {/* Banner de la tienda (Black November durante noviembre, general el resto del año) */}
       <PageBanner
-        desktop={tiendaDesktop}
-        mobile={tiendaMobile}
-        alt="Tienda en línea ServiDental"
+        desktop={showBlackNovember ? blackNovemberDesktop : tiendaDesktop}
+        mobile={showBlackNovember ? blackNovemberMobile : tiendaMobile}
+        alt={showBlackNovember ? 'Black November en ServiDental' : 'Tienda en línea ServiDental'}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center pt-8 lg:pt-12 mb-6 lg:mb-12">
