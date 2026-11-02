@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/android-chrome-512x512.png',
-        width: 512,
-        height: 512,
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 700,
         alt: 'ServiDental CR Logo',
       },
     ],
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ServiDental CR | Equipo Médico Dental',
     description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
-    images: ['/android-chrome-512x512.png'],
+    images: ['/og-image.jpg'],
   },
 };
 

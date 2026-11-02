@@ -13,16 +13,16 @@ export const metadata: Metadata = {
   title: 'ServiDental | Equipo Médico Dental',
   description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
   keywords: 'equipo médico dental, servicio técnico dental, Costa Rica, unidades dentales',
-  metadataBase: new URL('http://servidentalcr.com'),
+  metadataBase: new URL('https://servidentalcr.com'),
   openGraph: {
     title: 'ServidentalCR',
     description: '18 años de experiencia en el mercado costarricense, ofrecemos soluciones efectivas para los problemas técnicos asociados con clínicas odontológicas.',
-    url: 'http://servidentalcr.com/',
+    url: 'https://servidentalcr.com/',
     images: [
       {
-        url: '/android-chrome-512x512.png',
-        width: 512,
-        height: 512,
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 700,
         alt: 'ServiDental CR Logo',
       },
     ],
@@ -36,8 +36,9 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     shortcut: '/favicon.ico',
     other: [
       { rel: 'manifest', url: '/site.webmanifest' },
