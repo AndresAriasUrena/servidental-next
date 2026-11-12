@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -119,6 +118,9 @@ const slides: Slide[] = [
   // },
 ];
 
+const SLIDE_INTERVAL_MS = 5000;
+const FADE_MS = 500;
+
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -132,12 +134,14 @@ export default function HeroCarousel() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // El timer se reinicia en cada cambio de slide (automático o manual), así un
+  // clic del usuario justo antes del tick no provoca dos cambios seguidos.
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timeout = setTimeout(() => {
       setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    }, SLIDE_INTERVAL_MS);
+    return () => clearTimeout(timeout);
+  }, [currentIndex]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -147,94 +151,101 @@ export default function HeroCarousel() {
     setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  const currentSlide = slides[currentIndex];
-  const position = isMobile ? currentSlide.mobilePosition : currentSlide.desktopPosition;
-
-  const getPositionClasses = () => {
-    if (position === 'left') {
-      return 'items-start text-left';
-    }
-    return 'items-end text-right';
-  };
-
-  const getContainerClasses = () => {
-    if (position === 'left') {
-      return 'justify-start';
-    }
-    return 'justify-end';
-  };
-
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-        <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden rounded-2xl shadow-lg">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0 bg-gradient-to-b from-white via-servi_light to-servi_green"
-            >
-              {/* Background Image - Desktop (decorativa: no debe interceptar clics del botón) */}
-              <div className="absolute inset-0 hidden md:block pointer-events-none">
-                <Image
-                  src={currentSlide.image}
-                  alt="Hero background"
-                  fill
-                  priority={currentIndex === 0}
-                  className="object-contain object-center"
-                  quality={90}
-                />
-              </div>
+        {/* El degradado vive en el contenedor (fijo), no en cada slide, para que
+            nunca se vea un hueco blanco entre una transición y otra. */}
+        <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden rounded-2xl shadow-lg bg-gradient-to-b from-white via-servi_light to-servi_green">
+          {/* Todos los slides permanecen montados y apilados: las imágenes se
+              cargan/decodifican una sola vez y el cambio es solo de opacidad.
+              Antes se desmontaba y montaba cada slide (AnimatePresence mode="wait"),
+              lo que causaba fade-out a vacío + imagen apareciendo tarde (parpadeo). */}
+          {slides.map((slide, index) => {
+            const isActive = index === currentIndex;
+            const position = isMobile ? slide.mobilePosition : slide.desktopPosition;
+            const positionClasses =
+              position === 'left' ? 'items-start text-left' : 'items-end text-right';
+            const containerClasses = position === 'left' ? 'justify-start' : 'justify-end';
+            const TitleTag = isActive ? 'h1' : 'p';
 
-              {/* Background Image - Mobile (decorativa: no debe interceptar clics del botón) */}
-              <div className="absolute inset-0 md:hidden pointer-events-none">
-                <Image
-                  src={currentSlide.imageMobile}
-                  alt="Hero background"
-                  fill
-                  priority={currentIndex === 0}
-                  className="object-contain object-bottom"
-                  quality={90}
-                />
-              </div>
+            return (
+              <div
+                key={slide.id}
+                aria-hidden={!isActive}
+                className={`absolute inset-0 ${isActive ? 'z-10' : 'z-0'}`}
+                style={{
+                  opacity: isActive ? 1 : 0,
+                  visibility: isActive ? 'visible' : 'hidden',
+                  // El slide que entra hace fade-in encima; el que sale se queda
+                  // opaco debajo hasta que termina el fade y luego se oculta.
+                  // Así nunca hay un momento con ambos semitransparentes.
+                  transition: isActive
+                    ? `opacity ${FADE_MS}ms ease-in-out`
+                    : `opacity 0s linear ${FADE_MS}ms, visibility 0s linear ${FADE_MS}ms`,
+                  willChange: 'opacity',
+                }}
+              >
+                {/* Background Image - Desktop (decorativa: no debe interceptar clics del botón) */}
+                <div className="absolute inset-0 hidden md:block pointer-events-none">
+                  <Image
+                    src={slide.image}
+                    alt="Hero background"
+                    fill
+                    priority={index === 0}
+                    className="object-contain object-center"
+                    quality={90}
+                  />
+                </div>
 
-              {/* Content */}
-              <div className="relative h-full z-10">
-                <div className={`container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl h-full flex ${getContainerClasses()}`}>
-                  <div className={`flex flex-col ${getPositionClasses()} pt-8 md:pt-12 lg:pt-16 max-w-md lg:max-w-xl`}>
-                    {/* Title */}
-                    <h1 className="font-bold leading-tight mb-4 md:mb-6">
-                      {currentSlide.titleParts.map((part, idx) => (
-                        <span
-                          key={idx}
-                          className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase ${
-                            part.highlighted ? 'text-[#2a7e87]' : 'text-[#383536]'
-                          }`}
-                          style={{
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                          }}
-                        >
-                          {part.text}
-                        </span>
-                      ))}
-                    </h1>
+                {/* Background Image - Mobile (decorativa: no debe interceptar clics del botón) */}
+                <div className="absolute inset-0 md:hidden pointer-events-none">
+                  <Image
+                    src={slide.imageMobile}
+                    alt="Hero background"
+                    fill
+                    priority={index === 0}
+                    className="object-contain object-bottom"
+                    quality={90}
+                  />
+                </div>
 
-                    {/* CTA Button */}
-                    <Link
-                      href={currentSlide.cta.href}
-                      className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 bg-servi_green hover:bg-servi_green/90 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl w-fit"
-                    >
-                      {currentSlide.cta.text}
-                      <MdArrowForward className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-                    </Link>
+                {/* Content */}
+                <div className="relative h-full z-10">
+                  <div className={`container mx-auto px-4 sm:px-6 lg:px-10 max-w-7xl h-full flex ${containerClasses}`}>
+                    <div className={`flex flex-col ${positionClasses} pt-8 md:pt-12 lg:pt-16 max-w-md lg:max-w-xl`}>
+                      {/* Title (solo el slide activo es h1) */}
+                      <TitleTag className="font-bold leading-tight mb-4 md:mb-6">
+                        {slide.titleParts.map((part, idx) => (
+                          <span
+                            key={idx}
+                            className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl uppercase ${
+                              part.highlighted ? 'text-[#2a7e87]' : 'text-[#383536]'
+                            }`}
+                            style={{
+                              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                            }}
+                          >
+                            {part.text}
+                          </span>
+                        ))}
+                      </TitleTag>
+
+                      {/* CTA Button */}
+                      <Link
+                        href={slide.cta.href}
+                        tabIndex={isActive ? 0 : -1}
+                        className="inline-flex items-center justify-center px-6 py-2.5 sm:px-8 sm:py-3 bg-servi_green hover:bg-servi_green/90 text-white text-sm sm:text-base font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl w-fit"
+                      >
+                        {slide.cta.text}
+                        <MdArrowForward className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </AnimatePresence>
+            );
+          })}
 
           {/* Carousel Controls + Slide Indicators */}
           <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 sm:gap-4 z-30">
