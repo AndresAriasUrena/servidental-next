@@ -9,9 +9,13 @@ interface CacheEntry {
 
 const reviewsCache = new Map<string, CacheEntry>();
 const CACHE_TTL = 60 * 1000; // 60 segundos
+const CACHE_LIMIT = 256;
+const MAX_PAGE_SIZE = 100;
 
-function getCacheKey(productId: string, page: string): string {
-  return `${productId}:${page}`;
+function parsePositiveInteger(value: string | null): number {
+  if (!value || !/^\d+$/.test(value)) return NaN;
+  const number = Number(value);
+  return Number.isSafeInteger(number) && number > 0 ? number : NaN;
 }
 
 function getFromCache(key: string): any | null {
@@ -29,6 +33,11 @@ function getFromCache(key: string): any | null {
 }
 
 function setCache(key: string, data: any): void {
+  reviewsCache.delete(key);
+  if (reviewsCache.size >= CACHE_LIMIT) {
+    const oldest = reviewsCache.keys().next();
+    if (!oldest.done) reviewsCache.delete(oldest.value);
+  }
   reviewsCache.set(key, {
     data,
     timestamp: Date.now(),
@@ -39,8 +48,8 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const productId = searchParams.get('productId');
-    const page = searchParams.get('page') || '1';
-    const perPage = searchParams.get('per_page') || '10';
+    const page = searchParams.get('page') ?? '1';
+    const perPage = searchParams.get('per_page') ?? '10';
 
     if (!productId) {
       return NextResponse.json(
@@ -49,18 +58,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const productIdNum = parseInt(productId, 10);
-    const pageNum = parseInt(page, 10);
-    const perPageNum = parseInt(perPage, 10);
+    const productIdNum = parsePositiveInteger(productId);
+    const pageNum = parsePositiveInteger(page);
+    const perPageNum = parsePositiveInteger(perPage);
 
-    if (isNaN(productIdNum) || isNaN(pageNum) || isNaN(perPageNum)) {
+    if (isNaN(productIdNum) || isNaN(pageNum) || isNaN(perPageNum) || perPageNum > MAX_PAGE_SIZE) {
       return NextResponse.json(
         { error: 'Invalid parameters' },
         { status: 400 }
       );
     }
 
-    const cacheKey = getCacheKey(productId, page);
+    const cacheKey = `${productIdNum}:${pageNum}:${perPageNum}`;
     const cached = getFromCache(cacheKey);
     if (cached) {
       return NextResponse.json(cached);
