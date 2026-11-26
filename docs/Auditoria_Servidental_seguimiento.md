@@ -60,3 +60,7 @@ Este cambio cubre la solicitud de enlace del checkout habitual. Queda validar c�
 - H26. Los enlaces PDF se limitan a HTTPS y a los orígenes autorizados. Los predeterminados son Google Drive y los dos orígenes WordPress de Servidental. Si hay manuales en otros proveedores, configurar una lista de orígenes HTTPS exactos separados por comas en `PRODUCT_RESOURCE_ORIGINS`.
 
 Validar en staging la recuperación de una búsqueda fallida, la visualización de productos y manuales, y la compilación completa. La conciliación de pagos y la idempotencia del servidor siguen pendientes de los bloques anteriores.
+
+## H6 Datos personales en registros
+
+Los flujos revisados de pedidos y pagos dejaron de registrar cuerpos completos, datos de facturación, fragmentos de tokens y enlaces de pago. Los errores del proveedor se resumen con su código HTTP cuando está disponible. Confirmar en staging el alcance de los registros históricos y la política de retención.

@@ -128,7 +128,6 @@ export default function TilopayPaymentLink({
       savedOrder.current = order;
 
       // Step 2: Create TiloPay Payment Link
-      console.log('💳 Creating TiloPay payment link...');
       
       const tilopayResponse = await fetch('/api/tilopay/process-payment', {
         method: 'POST',
@@ -140,15 +139,12 @@ export default function TilopayPaymentLink({
 
       if (!tilopayResponse.ok) {
         const errorData = await tilopayResponse.json();
-        console.error('❌ TiloPay payment link creation failed:', errorData);
         throw new Error(errorData.details || errorData.error || 'Failed to create TiloPay payment link');
       }
 
       const tilopayData = await tilopayResponse.json();
-      console.log('✅ TiloPay response:', tilopayData);
       
       if (tilopayData.success && tilopayData.paymentUrl) {
-        console.log('🔗 Redirecting to TiloPay payment link:', tilopayData.paymentUrl);
         
         // Redirect to TiloPay payment page
         window.location.href = tilopayData.paymentUrl;
@@ -157,7 +153,6 @@ export default function TilopayPaymentLink({
       }
       
     } catch (error) {
-      console.error('❌ TiloPay payment process failed:', error);
       setError(error instanceof Error ? error.message : 'Error al procesar el pago');
       submitting.current = false;
       setLoading(false);

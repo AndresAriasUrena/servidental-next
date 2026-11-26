@@ -43,8 +43,8 @@ export async function wooCommerceRequest<T = any>(
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[WC] API Error ${response.status}:`, errorText);
+      await response.body?.cancel();
+      console.error('[WC] API error', { status: response.status });
       throw new Error(`WooCommerce API error: ${response.status}`);
     }
 
@@ -72,7 +72,7 @@ export async function wooCommerceRequest<T = any>(
       throw new Error('Request timeout');
     }
 
-    console.error('[WC] Request failed:', error);
+    console.error('[WC] Request failed');
     throw error;
   }
 }

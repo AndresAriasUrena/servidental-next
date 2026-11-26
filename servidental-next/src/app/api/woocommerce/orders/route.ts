@@ -364,8 +364,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Creando orden en WooCommerce:', JSON.stringify(orderData, null, 2));
-
     const wooResponse = await fetch(`${woocommerceUrl}/wp-json/wc/v3/orders`, {
       method: 'POST',
       headers: {
@@ -377,12 +375,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (!wooResponse.ok) {
-      const errorText = await wooResponse.text();
-      console.error('Error de WooCommerce:', errorText);
+      await wooResponse.body?.cancel();
+      console.error('[Pedidos] WooCommerce rechazó la solicitud', { status: wooResponse.status });
       return NextResponse.json(
         { 
           error: 'Error al crear la orden en WooCommerce',
-          details: errorText
         },
         { status: wooResponse.status }
       );
@@ -403,12 +400,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-  } catch (error) {
-    console.error('Error creando orden:', error);
+  } catch {
+    console.error('[Pedidos] Error al crear el pedido');
     return NextResponse.json(
       { 
         error: 'Error interno del servidor',
-        details: error instanceof Error ? error.message : 'Error desconocido'
       },
       { status: 500 }
     );

@@ -55,73 +55,29 @@ export interface CreatePaymentInput {
   };
 }
 
-// Utility function to redact secrets in logs
-function redactSecrets(obj: any): any {
-  const redacted = { ...obj };
-  const secretKeys = ['access_token', 'token', 'password', 'key', 'apiPassword', 'apiKey'];
-  
-  for (const key in redacted) {
-    if (secretKeys.some(secretKey => key.toLowerCase().includes(secretKey.toLowerCase()))) {
-      if (typeof redacted[key] === 'string' && redacted[key].length > 8) {
-        redacted[key] = `${redacted[key].substring(0, 4)}...${redacted[key].substring(redacted[key].length - 4)}`;
-      } else {
-        redacted[key] = '***';
-      }
-    }
-  }
-  
-  return redacted;
-}
-
 /**
  * Get access token from TiloPay
  * POST https://app.tilopay.com/api/v1/login
  */
 export async function getAccessToken(): Promise<string> {
-  try {
-    console.log('🔑 Getting TiloPay access token...');
-    
-    const authUrl = `${tilopayConfig.apiBase}${tilopayConfig.authPath}`;
-    const authPayload = {
+  const authUrl = `${tilopayConfig.apiBase}${tilopayConfig.authPath}`;
+  const response = await fetch(authUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({
       apiuser: tilopayConfig.apiUser,
       password: tilopayConfig.apiPassword,
-    };
+    }),
+    signal: AbortSignal.timeout(12_000),
+  });
 
-    console.log('📡 Auth request to:', authUrl);
-    console.log('📡 Auth payload:', redactSecrets(authPayload));
-
-    const response = await fetch(authUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(authPayload),
-      signal: AbortSignal.timeout(12_000),
-    });
-
-    console.log('📡 Auth response status:', response.status);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ Auth error response:', errorText);
-      throw new Error(`Authentication failed (${response.status}): ${errorText}`);
-    }
-
-    const data: TilopayAuthResponse = await response.json();
-    console.log('📡 Auth response data:', redactSecrets(data));
-
-    if (!data.access_token) {
-      throw new Error('No access_token in response');
-    }
-
-    console.log('✅ TiloPay access token obtained');
-    return data.access_token;
-
-  } catch (error) {
-    console.error('❌ Failed to get TiloPay access token:', error);
-    throw error;
+  if (!response.ok) {
+    await response.body?.cancel();
+    throw new Error(`Authentication failed (${response.status})`);
   }
+  const data: TilopayAuthResponse = await response.json();
+  if (!data.access_token) throw new Error('No access_token in response');
+  return data.access_token;
 }
 
 /**
@@ -130,7 +86,6 @@ export async function getAccessToken(): Promise<string> {
  */
 export async function createPayment(input: CreatePaymentInput): Promise<TilopayCreatePaymentResponse> {
   try {
-    console.log('💳 Creating TiloPay payment link...');
     
     // Step 1: Get access token
     const accessToken = await getAccessToken();
@@ -151,9 +106,6 @@ export async function createPayment(input: CreatePaymentInput): Promise<TilopayC
       callback_url: tilopayConfig.callbackUrl,
     };
 
-    console.log('📡 Payment request to:', paymentUrl);
-    console.log('📡 Payment payload:', redactSecrets(paymentPayload));
-
     const response = await fetch(paymentUrl, {
       method: 'POST',
       headers: {
@@ -165,26 +117,19 @@ export async function createPayment(input: CreatePaymentInput): Promise<TilopayC
       signal: AbortSignal.timeout(12_000),
     });
 
-    console.log('📡 Payment response status:', response.status);
-
-    const responseText = await response.text();
-    console.log('📡 Payment response text:', responseText);
-
     if (!response.ok) {
-      console.error('❌ Payment error response:', responseText);
+      await response.body?.cancel();
       return {
         success: false,
-        error: `Payment creation failed (${response.status}): ${responseText}`,
+        error: `Payment creation failed (${response.status})`,
       };
     }
 
     // Try to parse as JSON
     let data;
     try {
-      data = JSON.parse(responseText);
-      console.log('📡 Payment response data:', redactSecrets(data));
-    } catch (parseError) {
-      console.error('❌ Failed to parse payment response as JSON:', parseError);
+      data = await response.json();
+    } catch {
       return {
         success: false,
         error: 'Invalid JSON response from TiloPay',
@@ -195,15 +140,12 @@ export async function createPayment(input: CreatePaymentInput): Promise<TilopayC
     const paymentUrl_redirect = data?.url || data?.data?.url || data?.paymentUrl;
     
     if (!paymentUrl_redirect) {
-      console.error('❌ No payment URL in response:', data);
       return {
         success: false,
         error: 'No payment URL returned from TiloPay',
-        message: JSON.stringify(data),
       };
     }
 
-    console.log('✅ TiloPay payment link created successfully');
     return {
       success: true,
       data: {
@@ -213,11 +155,10 @@ export async function createPayment(input: CreatePaymentInput): Promise<TilopayC
       },
     };
 
-  } catch (error) {
-    console.error('❌ Failed to create TiloPay payment:', error);
+  } catch {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error creating payment',
+      error: 'No se pudo solicitar el enlace de pago',
     };
   }
 }
@@ -238,7 +179,6 @@ export function validateTilopayConfig(): void {
     throw new Error(`Missing TiloPay environment variables: ${missing.join(', ')}`);
   }
 
-  console.log('✅ TiloPay configuration is valid');
 }
 
 /**
