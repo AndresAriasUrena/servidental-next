@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const MAX_ORDER_LINES = 100;
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Datos de pedido inválidos' }, { status: 400 });
+    }
     const {
       customerInfo,
       cartItems,
@@ -31,6 +36,13 @@ export async function POST(request: NextRequest) {
     if (!customerInfo || !cartItems || !total) {
       return NextResponse.json(
         { error: 'Información incompleta para crear la orden' },
+        { status: 400 }
+      );
+    }
+
+    if (!Array.isArray(cartItems) || cartItems.length === 0 || cartItems.length > MAX_ORDER_LINES) {
+      return NextResponse.json(
+        { error: `El pedido debe contener entre 1 y ${MAX_ORDER_LINES} líneas de productos` },
         { status: 400 }
       );
     }
