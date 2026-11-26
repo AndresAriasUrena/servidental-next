@@ -97,6 +97,7 @@ export async function getAccessToken(): Promise<string> {
         'Accept': 'application/json',
       },
       body: JSON.stringify(authPayload),
+      signal: AbortSignal.timeout(12_000),
     });
 
     console.log('📡 Auth response status:', response.status);
@@ -161,6 +162,7 @@ export async function createPayment(input: CreatePaymentInput): Promise<TilopayC
         'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(paymentPayload),
+      signal: AbortSignal.timeout(12_000),
     });
 
     console.log('📡 Payment response status:', response.status);

@@ -30,9 +30,6 @@ export async function wooCommerceRequest<T = any>(
   url.searchParams.set('consumer_key', consumerKey);
   url.searchParams.set('consumer_secret', consumerSecret);
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
   try {
     const response = await fetch(url.toString(), {
       method,
@@ -42,10 +39,8 @@ export async function wooCommerceRequest<T = any>(
         'User-Agent': 'ServidentalCR-NextJS/1.0',
       },
       body: body ? JSON.stringify(body) : undefined,
-      signal: controller.signal,
+      signal: AbortSignal.timeout(timeout),
     });
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -72,9 +67,7 @@ export async function wooCommerceRequest<T = any>(
 
     return data as T;
   } catch (error) {
-    clearTimeout(timeoutId);
-
-    if (error instanceof Error && error.name === 'AbortError') {
+    if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
       console.error('[WC] Request timeout');
       throw new Error('Request timeout');
     }

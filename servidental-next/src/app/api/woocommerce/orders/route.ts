@@ -361,6 +361,7 @@ export async function POST(request: NextRequest) {
         Authorization: `Basic ${Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64')}`,
       },
       body: JSON.stringify(orderData),
+      signal: AbortSignal.timeout(12_000),
     });
 
     if (!wooResponse.ok) {
