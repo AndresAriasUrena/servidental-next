@@ -11,9 +11,6 @@ function SuccessContent() {
     // Support both 'order' and 'orderNumber' parameters for compatibility
     const order = searchParams.get('order') || searchParams.get('orderNumber');
     setOrderNumber(order);
-
-    // Clear cart from localStorage on successful payment
-    localStorage.removeItem('servidental-cart');
   }, [searchParams]);
 
   return (

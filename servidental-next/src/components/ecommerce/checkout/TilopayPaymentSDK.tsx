@@ -148,9 +148,6 @@ export default function TilopayPaymentLink({
       if (tilopayData.success && tilopayData.paymentUrl) {
         console.log('🔗 Redirecting to TiloPay payment link:', tilopayData.paymentUrl);
         
-        // Clear cart before redirecting since order is created
-        localStorage.removeItem('servidental-cart');
-        
         // Redirect to TiloPay payment page
         window.location.href = tilopayData.paymentUrl;
       } else {

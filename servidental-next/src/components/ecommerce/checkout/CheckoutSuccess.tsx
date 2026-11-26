@@ -40,11 +40,6 @@ export default function CheckoutSuccess() {
     };
 
     fetchPaymentData();
-
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('cart');
-      localStorage.removeItem('servidental-cart');
-    }
   }, [searchParams]);
 
   if (loading) {
