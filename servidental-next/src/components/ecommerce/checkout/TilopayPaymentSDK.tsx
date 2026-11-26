@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { CheckoutFormData } from './Checkout';
 
 interface CustomerInfo {
@@ -42,6 +42,8 @@ interface TilopayPaymentLinkProps {
 export default function TilopayPaymentLink({
   customerInfo, cart, checkoutData, shippingCost, shippingZoneLabel,
 }: TilopayPaymentLinkProps) {
+  const savedOrder = useRef<{ wooOrderId: number; orderKey: string } | null>(null);
+  const submitting = useRef(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string>('');
@@ -57,65 +59,71 @@ export default function TilopayPaymentLink({
   // Total que se muestra y se cobra = subtotal (cart.total) + envío
   const totalWithShipping = cart.total + shippingCost;
 
+  const createOrder = async () => {
+    const orderResponse = await fetch('/api/woocommerce/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        customerInfo: customerInfo,
+        cartItems: cart.items,
+        total: totalWithShipping, // subtotal + envío (USD)
+        appliedCoupons: cart.appliedCoupons, // Include applied coupons
+        paymentMethod: 'TiloPay',
+        tilopayOrderNumber: orderNumber,
+        customer_note: checkoutData.customer_note, // Include customer notes
+        personal_info: checkoutData.personal_info, // Include all new structured data
+        shipping_option: checkoutData.shipping_option, // Include shipping preference
+        shipping_zone_label: shippingZoneLabel, // Etiqueta legible de la zona
+        shipping_cost: shippingCost, // Costo de envío calculado
+        shipping_other_details: checkoutData.shipping_other_details, // Include custom shipping details
+        contact_data: checkoutData.contact_data, // Include optional contact data
+        billingAddress: {
+          first_name: customerInfo.firstName,
+          last_name: customerInfo.lastName,
+          email: customerInfo.email,
+          phone: customerInfo.phone,
+          address_1: customerInfo.address?.line1 || '',
+          city: customerInfo.address?.city || '',
+          state: customerInfo.address?.state || '',
+          postcode: customerInfo.address?.postalCode || '',
+          country: customerInfo.address?.country || 'CR'
+        },
+        shippingAddress: {
+          first_name: customerInfo.firstName,
+          last_name: customerInfo.lastName,
+          address_1: customerInfo.address?.line1 || '',
+          city: customerInfo.address?.city || '',
+          state: customerInfo.address?.state || '',
+          postcode: customerInfo.address?.postalCode || '',
+          country: customerInfo.address?.country || 'CR'
+        }
+      }),
+    });
+
+    if (!orderResponse.ok) {
+      const errorData = await orderResponse.json();
+      throw new Error(errorData.error || 'Failed to create WooCommerce order');
+    }
+
+    const orderData = await orderResponse.json();
+    const { id, order_key } = orderData.order ?? {};
+    if (!Number.isSafeInteger(id) || id < 1 || typeof order_key !== 'string' || !order_key) {
+      throw new Error('WooCommerce no devolvió los datos del pedido.');
+    }
+    return { wooOrderId: id, orderKey: order_key };
+  };
+
   const handleTilopayPayment = async () => {
+    if (submitting.current) return;
+    submitting.current = true;
     setLoading(true);
     setError(null);
 
     try {
-      console.log('🚀 Starting TiloPay Payment Link flow...');
-      
-      console.log('📦 Creating WooCommerce order...');
-
-      const orderResponse = await fetch('/api/woocommerce/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          customerInfo: customerInfo,
-          cartItems: cart.items,
-          total: totalWithShipping, // subtotal + envío (USD)
-          appliedCoupons: cart.appliedCoupons, // Include applied coupons
-          paymentMethod: 'TiloPay',
-          tilopayOrderNumber: orderNumber,
-          customer_note: checkoutData.customer_note, // Include customer notes
-          personal_info: checkoutData.personal_info, // Include all new structured data
-          shipping_option: checkoutData.shipping_option, // Include shipping preference
-          shipping_zone_label: shippingZoneLabel, // Etiqueta legible de la zona
-          shipping_cost: shippingCost, // Costo de envío calculado
-          shipping_other_details: checkoutData.shipping_other_details, // Include custom shipping details
-          contact_data: checkoutData.contact_data, // Include optional contact data
-          billingAddress: {
-            first_name: customerInfo.firstName,
-            last_name: customerInfo.lastName,
-            email: customerInfo.email,
-            phone: customerInfo.phone,
-            address_1: customerInfo.address?.line1 || '',
-            city: customerInfo.address?.city || '',
-            state: customerInfo.address?.state || '',
-            postcode: customerInfo.address?.postalCode || '',
-            country: customerInfo.address?.country || 'CR'
-          },
-          shippingAddress: {
-            first_name: customerInfo.firstName,
-            last_name: customerInfo.lastName,
-            address_1: customerInfo.address?.line1 || '',
-            city: customerInfo.address?.city || '',
-            state: customerInfo.address?.state || '',
-            postcode: customerInfo.address?.postalCode || '',
-            country: customerInfo.address?.country || 'CR'
-          }
-        }),
-      });
-
-      if (!orderResponse.ok) {
-        const errorData = await orderResponse.json();
-        throw new Error(errorData.error || 'Failed to create WooCommerce order');
-      }
-
-      const orderData = await orderResponse.json();
-      const wooOrderId = orderData.order.id;
-      console.log('✅ WooCommerce order created:', wooOrderId);
+      const order = savedOrder.current ?? await createOrder();
+      savedOrder.current = order;
 
       // Step 2: Create TiloPay Payment Link
       console.log('💳 Creating TiloPay payment link...');
@@ -125,10 +133,7 @@ export default function TilopayPaymentLink({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          wooOrderId,
-          orderKey: orderData.order.order_key,
-        }),
+        body: JSON.stringify(order),
       });
 
       if (!tilopayResponse.ok) {
@@ -155,6 +160,7 @@ export default function TilopayPaymentLink({
     } catch (error) {
       console.error('❌ TiloPay payment process failed:', error);
       setError(error instanceof Error ? error.message : 'Error al procesar el pago');
+      submitting.current = false;
       setLoading(false);
     }
   };
