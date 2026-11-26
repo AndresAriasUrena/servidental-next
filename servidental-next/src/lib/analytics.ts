@@ -105,34 +105,6 @@ export const trackBeginCheckout = (cart: {
   }
 };
 
-// Track cuando se completa una compra
-export const trackPurchase = (order: {
-  transactionId: string;
-  total: string;
-  items: Array<{
-    id: number;
-    name: string;
-    price: string;
-    quantity: number;
-    category?: string;
-  }>;
-}) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'purchase', {
-      transaction_id: order.transactionId,
-      currency: 'CRC',
-      value: parseFloat(order.total),
-      items: order.items.map((item) => ({
-        item_id: item.id.toString(),
-        item_name: item.name,
-        item_category: item.category || 'Sin categoría',
-        price: parseFloat(item.price),
-        quantity: item.quantity,
-      })),
-    });
-  }
-};
-
 // Track búsquedas de productos
 export const trackSearch = (searchTerm: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
