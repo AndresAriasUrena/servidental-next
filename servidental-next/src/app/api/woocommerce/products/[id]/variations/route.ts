@@ -37,7 +37,7 @@ async function makeWooCommerceRequest(endpoint: string) {
             const jsonData = JSON.parse(data);
             resolve(jsonData);
           } else {
-            reject(new Error(`API Error ${res.statusCode}: ${data}`));
+            reject(new Error(`API Error ${res.statusCode}`));
           }
         } catch (error) {
           reject(new Error(`Parse Error: ${error}`));
@@ -81,7 +81,6 @@ export async function GET(
     return NextResponse.json(
       {
         error: 'Failed to fetch product variations',
-        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

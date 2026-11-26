@@ -152,9 +152,7 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[WooCommerce API] Upstream error ${response.status}:`, errorText);
-      throw new Error(`Upstream WooCommerce API returned ${response.status}: ${errorText}`);
+      throw new Error(`Upstream WooCommerce API returned ${response.status}`);
     }
 
     const jsonData = await response.json();
@@ -431,7 +429,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'WooCommerce API error',
-          detail: error.message,
           upstream: true
         },
         { status: 502 }
@@ -442,7 +439,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Failed to fetch products',
-        detail: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

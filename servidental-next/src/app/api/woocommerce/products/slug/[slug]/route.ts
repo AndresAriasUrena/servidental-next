@@ -25,8 +25,7 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams 
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`API Error ${response.status}: ${errorText}`);
+      throw new Error(`API Error ${response.status}`);
     }
 
     return await response.json();
@@ -162,7 +161,6 @@ export async function GET(
     return NextResponse.json(
       {
         error: 'Failed to fetch product',
-        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );
