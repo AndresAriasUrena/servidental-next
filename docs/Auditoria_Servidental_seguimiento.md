@@ -64,3 +64,11 @@ Validar en staging la recuperación de una búsqueda fallida, la visualización 
 ## H6 Datos personales en registros
 
 Los flujos revisados de pedidos y pagos dejaron de registrar cuerpos completos, datos de facturación, fragmentos de tokens y enlaces de pago. Los errores del proveedor se resumen con su código HTTP cuando está disponible. Confirmar en staging el alcance de los registros históricos y la política de retención.
+
+## H1 a H3 Consulta de transacciones de TiloPay
+
+El módulo de servidor `servidental-next/src/server/tilopay-confirmation.ts` consulta la operación documentada `POST /api/v1/consult`. Usa el importe, la moneda y la referencia esperados del pedido guardado. Comprueba también el comercio y el ambiente. Devuelve el identificador de la transacción cuando existe un único pago aprobado y capturado que coincide con esos datos. Los resultados ambiguos quedan pendientes de revisión.
+
+Configurar `TILOPAY_MERCHANT_ID` y `TILOPAY_TRANSACTION_ENVIRONMENT` con el identificador del comercio y el valor que devuelve TiloPay en el ambiente de pruebas. El ejemplo oficial usa `Test`. Referencia: https://tilopay.com/developers/api/procesos-operativos/consult
+
+Esta consulta todavía no se conecta al webhook. Antes de habilitar la escritura de pagos se debe establecer cómo se autentica el webhook, cómo se vincula cada intento a un pedido y cómo se registra una sola transición durable cuando se repite un evento. Probar la integración con el comercio de staging.
