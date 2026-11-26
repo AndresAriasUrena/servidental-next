@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
       cartItems,
       total,
       appliedCoupons, // Applied coupons from cart
-      paymentIntentId, // For ONVO compatibility (legacy)
       paymentMethod,
       tilopayOrderNumber,
       tilopayData,
@@ -149,7 +148,7 @@ export async function POST(request: NextRequest) {
     const orderData = {
       payment_method: isTransfer ? 'bacs' : isTilopay ? 'tilopay' : 'onvo_pay',
       payment_method_title: isTransfer ? 'Transferencia bancaria' : isTilopay ? 'TiloPay' : 'ONVO Pay',
-      set_paid: isTransfer ? false : (paymentIntentId ? true : false), // Solo marcar como pagado si ONVO ya procesó el pago
+      set_paid: false,
       customer_note: structuredCustomerNote, // Enhanced customer notes with structured data
       billing: {
         first_name: personal_info?.company_name || customerInfo.firstName || billingAddress?.first_name || '',
@@ -237,7 +236,7 @@ export async function POST(request: NextRequest) {
         ] : [
           {
             key: '_onvo_payment_intent_id',
-            value: paymentIntentId || '',
+            value: '',
           },
           {
             key: '_payment_via',
@@ -245,7 +244,7 @@ export async function POST(request: NextRequest) {
           },
           {
             key: '_transaction_id',
-            value: paymentIntentId || '',
+            value: '',
           },
         ]),
         

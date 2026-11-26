@@ -36,3 +36,11 @@ Este documento amplía el informe de avance del 18 de noviembre. La revisión co
 Confirmar con el responsable del despliegue el callback activo, si `notify` está registrado y el alcance de la credencial de WooCommerce que modifica pedidos. Basta con las rutas configuradas y los permisos, sin compartir valores de credenciales. Revisar el contrato de confirmación de TiloPay antes de modificar el flujo de pagos.
 
 La búsqueda de consumidores en `src` no encontró llamadas a `create-payment` ni `create-headless-payment`. Su uso externo queda pendiente. Esta fase no efectuó cobros ni modificó pedidos.
+
+## Contención de escrituras de pago
+
+- H1. La ruta de actualización directa devuelve 410. La página de retorno muestra que el pago está pendiente y conserva el carrito.
+- H2. El retorno redirige a la pantalla pendiente. Las notificaciones GET y POST devuelven 503 mientras falta la confirmación del proveedor.
+- H5. La creación de pedidos envía `set_paid: false`.
+
+La conciliación automática queda pendiente. Antes de desplegar este bloque, configurar una verificación TiloPay del lado servidor y comprobar en staging que el estado aprobado corresponda al comercio, pedido, moneda e importe persistidos. Verificar también una notificación repetida, una discrepancia de monto y una interrupción de la consulta. H3, H4 y los demás hallazgos permanecen abiertos.
