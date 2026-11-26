@@ -128,7 +128,7 @@ export async function GET(
         break;
       }
 
-      foundProduct = pageProducts.find((product: any) => product.slug === slug);
+      foundProduct = pageProducts.find((product: any) => product?.status === 'publish' && product.slug === slug);
 
       if (foundProduct) {
         break;

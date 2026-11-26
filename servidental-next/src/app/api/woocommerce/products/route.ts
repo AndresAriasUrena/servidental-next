@@ -131,16 +131,11 @@ async function makeWooCommerceRequest(endpoint: string, params: URLSearchParams)
   }
 
   try {
-    // Agregar filtro status=publish por defecto si no se especifica
-    if (!params.has('status')) {
-      params.set('status', 'publish');
-    }
-
-    const queryParams = new URLSearchParams({
-      consumer_key: WC_KEY,
-      consumer_secret: WC_SECRET,
-      ...Object.fromEntries(params.entries())
-    });
+    const queryParams = new URLSearchParams(params);
+    queryParams.set('status', 'publish');
+    queryParams.set('context', 'view');
+    queryParams.set('consumer_key', WC_KEY);
+    queryParams.set('consumer_secret', WC_SECRET);
 
     const apiUrl = `${WP_URL}/wp-json/wc/v3/${endpoint}?${queryParams.toString()}`;
 
@@ -410,7 +405,10 @@ export async function GET(request: NextRequest) {
     // ============================================
     // INYECTAR PRIMARY BRAND CON LOGO
     // ============================================
-    const productsWithBrand = await injectPrimaryBrand(response.data);
+    const publishedProducts = response.data.filter(
+      (product: WooCommerceProduct) => product?.status === 'publish'
+    );
+    const productsWithBrand = await injectPrimaryBrand(publishedProducts);
 
     const viewMode = searchParams.get('view');
     const finalProducts = viewMode === 'grid'
