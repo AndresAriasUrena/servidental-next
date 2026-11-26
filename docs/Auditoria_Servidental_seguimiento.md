@@ -50,3 +50,13 @@ La conciliación automática queda pendiente. Antes de desplegar este bloque, co
 El checkout entrega el ID y la clave del pedido recién creado. El servidor consulta WooCommerce y verifica que la clave coincida y que el pedido esté pendiente, sin fecha de pago y registrado para TiloPay. El enlace se solicita con el monto, moneda, referencia y datos de facturación del pedido guardado.
 
 Este cambio cubre la solicitud de enlace del checkout habitual. Queda validar cómo se calculan y guardan los precios, descuentos y envío al crear el pedido, revisar las rutas alternativas y completar la conciliación del cobro. En staging, verificar la moneda efectiva de WooCommerce y que el total guardado corresponda al total visible al comprador.
+
+## H22 a H26 Catálogo y compilación
+
+- H22. La búsqueda por marcas devuelve 502 si no puede consultar WordPress. Un resultado vacío se reserva para consultas exitosas sin coincidencias. La tienda muestra un error recuperable con opción de reintentar.
+- H23. El filtro admite hasta diez marcas distintas por consulta. La resolución elimina duplicados, comparte un plazo de diez segundos y conserva en caché las consultas exitosas.
+- H24. Las respuestas grid y completa del listado proyectan campos públicos explícitos. El listado omite los metadatos crudos y conserva los PDF procesados. La ficha por slug conserva su contrato existente.
+- H25. El build vuelve a comprobar los tipos. El comando `npm run typecheck` genera los tipos de rutas y ejecuta TypeScript. Se retiraron las rutas alternativas de TiloPay sin consumidores identificados en el repositorio. Confirmar su uso externo antes de desplegar.
+- H26. Los enlaces PDF se limitan a HTTPS y a los orígenes autorizados. Los predeterminados son Google Drive y los dos orígenes WordPress de Servidental. Si hay manuales en otros proveedores, configurar una lista de orígenes HTTPS exactos separados por comas en `PRODUCT_RESOURCE_ORIGINS`.
+
+Validar en staging la recuperación de una búsqueda fallida, la visualización de productos y manuales, y la compilación completa. La conciliación de pagos y la idempotencia del servidor siguen pendientes de los bloques anteriores.

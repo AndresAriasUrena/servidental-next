@@ -3,9 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductGrid from '@/components/ecommerce/product/ProductGrid';
 
 interface BrandPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 // ============================================
@@ -43,7 +41,8 @@ async function getBrandBySlug(slug: string) {
 // METADATA
 // ============================================
 export async function generateMetadata({ params }: BrandPageProps) {
-  const brand = await getBrandBySlug(params.slug);
+  const { slug } = await params;
+  const brand = await getBrandBySlug(slug);
 
   if (!brand) {
     return {
@@ -66,7 +65,8 @@ export async function generateMetadata({ params }: BrandPageProps) {
 // COMPONENTE PRINCIPAL
 // ============================================
 export default async function BrandPage({ params }: BrandPageProps) {
-  const brand = await getBrandBySlug(params.slug);
+  const { slug } = await params;
+  const brand = await getBrandBySlug(slug);
 
   if (!brand) {
     notFound();
@@ -91,7 +91,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
 
         {/* Grilla de productos con filtro aplicado */}
         <Suspense fallback={<ProductGridSkeleton />}>
-          <BrandProductGrid brandSlug={params.slug} />
+          <BrandProductGrid brandSlug={slug} />
         </Suspense>
       </div>
     </main>

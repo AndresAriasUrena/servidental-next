@@ -21,32 +21,42 @@ export type ProductResource = {
  */
 const ALLOWED_PDF_KEYS = ['manual_pdf_url', 'product_sheet_pdf_url'] as const;
 
-/**
- * Normaliza URLs de Google Drive
- * Soporta: /file/d/<id>/view, /open?id=<id>, /uc?id=<id>
- */
-export function normalizeDriveUrl(url: string): { view: string; download?: string } | null {
-  if (!url.includes('drive.google.com')) return null;
+const DEFAULT_RESOURCE_ORIGINS = [
+  'https://drive.google.com',
+  'https://wp.servidentalcr.com',
+  'https://apiwp.servidentalcr.com',
+];
 
-  let fileId: string | null = null;
-
-  // Patrón: /file/d/<id>/view o /file/d/<id>/edit
-  const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (fileMatch) {
-    fileId = fileMatch[1];
+function parseHttpsResource(value: string): URL | null {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password ? url : null;
+  } catch {
+    return null;
   }
+}
 
-  // Patrón: open?id=<id> o uc?id=<id>
-  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (idMatch) {
-    fileId = idMatch[1];
-  }
+function isAllowedResourceOrigin(url: URL): boolean {
+  if (DEFAULT_RESOURCE_ORIGINS.includes(url.origin)) return true;
 
-  if (!fileId) return null;
+  return (process.env.PRODUCT_RESOURCE_ORIGINS ?? '').split(',').some((entry) => {
+    const origin = parseHttpsResource(entry.trim());
+    return origin?.origin === url.origin && origin.pathname === '/' && !origin.search && !origin.hash;
+  });
+}
+
+export function normalizeDriveUrl(value: string): { view: string; download: string } | null {
+  const url = parseHttpsResource(value);
+  if (url?.origin !== 'https://drive.google.com') return null;
+
+  const filePath = url.pathname.match(/^\/file\/d\/([a-zA-Z0-9_-]+)(?:\/(?:view|edit|preview))?\/?$/);
+  const fileId = filePath?.[1] ??
+    (['/open', '/uc'].includes(url.pathname) ? url.searchParams.get('id') : null);
+  if (!fileId || !/^[a-zA-Z0-9_-]+$/.test(fileId)) return null;
 
   return {
     view: `https://drive.google.com/file/d/${fileId}/preview`,
-    download: `https://drive.google.com/uc?export=download&id=${fileId}`
+    download: `https://drive.google.com/uc?export=download&id=${fileId}`,
   };
 }
 
@@ -118,30 +128,18 @@ export function extractResourcesFromMeta(
       continue;
     }
 
-    // Validar que sea una URL válida (string, no array)
-    if (typeof value !== 'string' || !value.match(/^https?:\/\/.+/)) {
-      continue;
-    }
+    const url = typeof value === 'string' ? parseHttpsResource(value) : null;
+    if (!url || !isAllowedResourceOrigin(url)) continue;
 
-    const rawUrl = value;
+    const driveResource = normalizeDriveUrl(url.href);
+    if (url.origin === 'https://drive.google.com' && !driveResource) continue;
     const title = generateTitle(key);
-    const id = key; // Usar la clave como ID único
-
-    let finalUrl = rawUrl;
-    let downloadUrl: string | undefined;
-
-    // Normalizar Google Drive si aplica
-    const driveNormalized = normalizeDriveUrl(rawUrl);
-    if (driveNormalized) {
-      finalUrl = driveNormalized.view;
-      downloadUrl = driveNormalized.download;
-    }
 
     resources.push({
-      id,
+      id: key,
       title,
-      url: finalUrl,
-      downloadUrl,
+      url: driveResource?.view ?? url.href,
+      downloadUrl: driveResource?.download,
       kind: 'pdf',
       mime: 'application/pdf'
     });

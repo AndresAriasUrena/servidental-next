@@ -35,9 +35,6 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   trailingSlash: true,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   env: {
     WP_API_URL: 'https://wp.servidentalcr.com/wp-json/wp/v2',
     CUSTOM_API_URL: 'https://wp.servidentalcr.com/wp-json/servidental/v1'

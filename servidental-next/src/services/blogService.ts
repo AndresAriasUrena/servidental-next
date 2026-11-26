@@ -400,7 +400,7 @@ class BlogService {
     
     try {
       // Test WP API
-      const wpResponse = await fetch(`${WP_API_BASE}/posts?per_page=1`, {
+      const wpResponse = await fetch(`${WP_POSTS_API}?per_page=1`, {
         method: 'HEAD',
         mode: 'cors'
       });
@@ -411,7 +411,7 @@ class BlogService {
     
     try {
       // Test Custom API
-      const customResponse = await fetch(`${CUSTOM_API_BASE}/blog-config`, {
+      const customResponse = await fetch(`${WP_BLOG_CONFIG_API}`, {
         method: 'HEAD',
         mode: 'cors'
       });

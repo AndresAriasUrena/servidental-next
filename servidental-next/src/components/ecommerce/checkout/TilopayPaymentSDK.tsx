@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import type { Cart } from '@/types/woocommerce';
 import type { CheckoutFormData } from './Checkout';
 
 interface CustomerInfo {
@@ -34,6 +35,7 @@ interface TilopayPaymentLinkProps {
   shippingZoneLabel: string;
   cart: {
     items: CartItem[];
+    appliedCoupons: Cart['appliedCoupons'];
     total: number;
   };
   orderId?: string;

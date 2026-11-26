@@ -27,6 +27,7 @@ function ProductGrid({
   const [products, setProducts] = useState<WooCommerceProduct[]>(initialProducts);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [failedLoad, setFailedLoad] = useState<{ page: number; append: boolean } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
@@ -136,6 +137,7 @@ function ProductGrid({
   };
 
   const loadProducts = async (filtersToUse: ProductFilters = filters, pageToUse: number = 1, signal?: AbortSignal, append: boolean = false) => {
+    setFailedLoad(null);
     if (append) {
       setLoadingMore(true);
     } else {
@@ -154,6 +156,7 @@ function ProductGrid({
         per_page: perPage,
         page: pageToUse,
         ...filtersToUse,
+        ...(repuestosFilter === 'repuestos' && { category_slug: 'repuestos' }),
         ...(categoryId && { categories: [categoryId] })
       };
 
@@ -163,7 +166,6 @@ function ProductGrid({
       // ============================================
       if (repuestosFilter === 'repuestos') {
         // Enviar el slug de categoría al backend, que lo resolverá a ID
-        params.category_slug = 'repuestos';
         console.log('[Repuestos Filter] Aplicando filtro de categoría "repuestos" en backend');
       }
       // NOTA: El filtro "no_repuestos" (Equipos principales) se aplica en frontend
@@ -238,14 +240,14 @@ function ProductGrid({
         // en un solo lote, así que no hay paginación adicional.
         setHasMore(!isTagFilterActive && response.total_pages > pageToUse);
         setTotal(response.total);
+        setCurrentPage(pageToUse);
       }
     } catch (error) {
       if ((error as Error)?.name !== 'AbortError') {
         console.error('Error loading products:', error);
         if (!signal?.aborted) {
-          if (!append) {
-            setProducts([]);
-          }
+          setFailedLoad({ page: pageToUse, append });
+          if (!append) setProducts([]);
         }
       }
     } finally {
@@ -327,7 +329,6 @@ function ProductGrid({
   const handleLoadMore = () => {
     if (!loading && !loadingMore && hasMore) {
       const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
       loadProducts(filters, nextPage, undefined, true);
     }
   };
@@ -572,7 +573,7 @@ function ProductGrid({
             </div>
           )}
 
-          {!loading && (
+          {!loading && !failedLoad && (
             <div className="mb-4 flex justify-between items-center">
               <p className="text-sm text-gray-600">
                 Mostrando {productsUnique.length} de {total} productos
@@ -617,7 +618,20 @@ function ProductGrid({
                 </div>
               )}
 
-              {productsUnique.length === 0 && !loading && (
+              {failedLoad && (
+                <div role="alert" className="my-6 text-center">
+                  <p className="mb-3 text-gray-700">No se pudieron cargar los productos.</p>
+                  <button
+                    type="button"
+                    className="rounded-md bg-servi_green px-4 py-2 text-white"
+                    onClick={() => loadProducts(filters, failedLoad.page, abortControllerRef.current?.signal, failedLoad.append)}
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              )}
+
+              {productsUnique.length === 0 && !loading && !failedLoad && (
                 <div className="text-center py-12">
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
                     No se encontraron productos
@@ -637,7 +651,7 @@ function ProductGrid({
               )}
 
               {/* Botón Cargar Más */}
-              {!loading && productsUnique.length > 0 && hasMore && (
+              {!loading && !failedLoad && productsUnique.length > 0 && hasMore && (
                 <div className="mt-8 flex justify-center">
                   <button
                     onClick={handleLoadMore}

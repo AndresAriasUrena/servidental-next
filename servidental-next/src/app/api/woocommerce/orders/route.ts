@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
       // Add client type information
       if (personal_info.client_type) {
-        const clientTypeLabels = {
+        const clientTypeLabels: Record<string, string> = {
           'odontologo': 'Odontólogo',
           'tecnico': 'Técnico Dental',
           'otro': 'Otro'

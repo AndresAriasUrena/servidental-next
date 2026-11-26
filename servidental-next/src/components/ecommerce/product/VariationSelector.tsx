@@ -154,7 +154,7 @@ export default function VariationSelector({
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium text-gray-700">Precio:</span>
             <span className="text-lg font-bold text-servi_green">
-              {formatPrice(selectedVariation.price)}
+              {formatPrice(Number(selectedVariation.price))}
             </span>
           </div>
           {selectedVariation.sku && (

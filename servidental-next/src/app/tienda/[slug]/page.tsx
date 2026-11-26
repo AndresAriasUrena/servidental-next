@@ -3,9 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductDetails from '@/components/ecommerce/product/ProductDetails';
 
 interface ProductPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: ProductPageProps) {

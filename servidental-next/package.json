@@ -6,6 +6,7 @@
     "dev": "next dev --webpack",
     "dev:aurigital": "dotenv -e .env.aurigital.local -- next dev",
     "dev:servidental": "dotenv -e .env.servidental.local -- next dev",
+    "typecheck": "next typegen && tsc --noEmit",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",

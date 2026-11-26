@@ -1080,6 +1080,7 @@ export default function Checkout() {
                 })),
                 // Aquí se pasa el total SIN envío para evitar doble cobro.
                 total: cart.total,
+                appliedCoupons: cart.appliedCoupons,
               }}
             />
           </div>
