@@ -44,3 +44,9 @@ La búsqueda de consumidores en `src` no encontró llamadas a `create-payment` n
 - H5. La creación de pedidos envía `set_paid: false`.
 
 La conciliación automática queda pendiente. Antes de desplegar este bloque, configurar una verificación TiloPay del lado servidor y comprobar en staging que el estado aprobado corresponda al comercio, pedido, moneda e importe persistidos. Verificar también una notificación repetida, una discrepancia de monto y una interrupción de la consulta. H3, H4 y los demás hallazgos permanecen abiertos.
+
+## H4 Inicio de pago desde el pedido guardado
+
+El checkout entrega el ID y la clave del pedido recién creado. El servidor consulta WooCommerce y verifica que la clave coincida y que el pedido esté pendiente, sin fecha de pago y registrado para TiloPay. El enlace se solicita con el monto, moneda, referencia y datos de facturación del pedido guardado.
+
+Este cambio cubre la solicitud de enlace del checkout habitual. Queda validar cómo se calculan y guardan los precios, descuentos y envío al crear el pedido, revisar las rutas alternativas y completar la conciliación del cobro. En staging, verificar la moneda efectiva de WooCommerce y que el total guardado corresponda al total visible al comprador.

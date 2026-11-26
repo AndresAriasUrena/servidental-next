@@ -1,100 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createPayment, validateTilopayConfig, generateOrderNumber } from '@/lib/tilopay';
+import { createPayment, validateTilopayConfig } from '@/lib/tilopay';
+import { wooCommerceRequest } from '@/server/wc';
+import { paymentFromOrder, readOrderCredentials } from '@/server/tilopay-order';
 
-export async function POST(request: NextRequest) {
-  try {
-    console.log('🚀 Processing TiloPay Payment Link...');
-
-    const body = await request.json();
-    const { amount, currency, orderNumber, customerInfo, items } = body;
-
-    // Validate required fields
-    if (!amount || !currency || !customerInfo) {
-      return NextResponse.json(
-        { error: 'Missing required payment data' },
-        { status: 400 }
-      );
-    }
-
-    console.log('Payment request data:', { amount, currency, orderNumber });
-
-    // Validate TiloPay configuration
-    try {
-      validateTilopayConfig();
-    } catch (configError) {
-      console.error('❌ TiloPay configuration error:', configError);
-      return NextResponse.json(
-        { 
-          success: false,
-          error: 'TiloPay configuration error',
-          details: configError instanceof Error ? configError.message : 'Invalid configuration'
-        },
-        { status: 500 }
-      );
-    }
-
-    // Generate order number if not provided
-    const finalOrderNumber = orderNumber || generateOrderNumber('SRV');
-
-    // Prepare payment input for TiloPay
-    const paymentInput = {
-      amount: parseFloat(amount.toString()),
-      currency: currency || 'USD',
-      orderNumber: finalOrderNumber,
-      customerInfo: {
-        firstName: customerInfo.firstName,
-        lastName: customerInfo.lastName,
-        email: customerInfo.email,
-      }
-    };
-
-    console.log('Creating TiloPay payment link...');
-
-    // Create payment link with TiloPay
-    const paymentResult = await createPayment(paymentInput);
-
-    if (!paymentResult.success) {
-      console.error('❌ TiloPay payment creation failed:', paymentResult.error);
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Payment link creation failed',
-          details: paymentResult.error,
-          message: paymentResult.message,
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log('✅ TiloPay payment link created successfully');
-
-    return NextResponse.json({
-      success: true,
-      paymentUrl: paymentResult.data?.url,
-      orderNumber: finalOrderNumber,
-      reference: paymentResult.data?.reference,
-      paymentId: paymentResult.data?.id,
-    });
-
-  } catch (error) {
-    console.error('❌ Process Payment Route Error:', error);
-
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to process payment',
-        details: errorMessage,
-      },
-      { status: 500 }
-    );
+export async function POST(request: Request) {
+  const credentials = readOrderCredentials(await request.json().catch(() => null));
+  if (!credentials) {
+    return Response.json({ error: 'Datos del pedido inválidos' }, { status: 400 });
   }
-}
 
-export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed. Use POST to process payment.' },
-    { status: 405 }
-  );
+  try {
+    const order = await wooCommerceRequest(`orders/${credentials.id}`);
+    const payment = paymentFromOrder(order, credentials);
+    if (!payment) {
+      return Response.json({ error: 'Pedido no disponible para pago' }, { status: 404 });
+    }
+
+    validateTilopayConfig();
+    const result = await createPayment(payment);
+    if (!result.success || !result.data?.url) {
+      return Response.json({ error: 'No se pudo generar el enlace de pago' }, { status: 502 });
+    }
+
+    return Response.json({
+      success: true,
+      paymentUrl: result.data.url,
+      orderNumber: payment.orderNumber,
+      reference: result.data.reference,
+      paymentId: result.data.id,
+    });
+  } catch {
+    return Response.json({ error: 'No se pudo iniciar el pago' }, { status: 502 });
+  }
 }

@@ -157,12 +157,8 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: totalWithShipping, // subtotal + envío (USD)
-          currency: 'USD',
-          orderNumber: orderNumber,
-          wooOrderId: wooOrderId,
-          customerInfo: customerInfo,
-          items: cart.items,
+          wooOrderId,
+          orderKey: orderData.order.order_key,
         }),
       });
 
