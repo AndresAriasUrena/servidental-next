@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import type { CheckoutFormData } from './Checkout';
 
 interface CustomerInfo {
   firstName: string;
@@ -27,6 +28,10 @@ interface CartItem {
 
 interface TilopayPaymentLinkProps {
   customerInfo: CustomerInfo;
+  checkoutData: Pick<CheckoutFormData, 'customer_note' | 'personal_info' | 'shipping_option' |
+    'shipping_other_details' | 'contact_data'>;
+  shippingCost: number;
+  shippingZoneLabel: string;
   cart: {
     items: CartItem[];
     total: number;
@@ -34,13 +39,12 @@ interface TilopayPaymentLinkProps {
   orderId?: string;
 }
 
-export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymentLinkProps) {
+export default function TilopayPaymentLink({
+  customerInfo, cart, checkoutData, shippingCost, shippingZoneLabel,
+}: TilopayPaymentLinkProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string>('');
-  // Costo de envío leído del checkout (localStorage). Fuente única para el total mostrado y el cobro.
-  const [shippingCost, setShippingCost] = useState<number>(0);
-
   // Generate order number on component mount
   useEffect(() => {
     const timestamp = Date.now();
@@ -48,16 +52,6 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     const newOrderNumber = `SRV-${timestamp}-${random}`;
     setOrderNumber(newOrderNumber);
 
-    // Leer el costo de envío calculado en el checkout
-    try {
-      const checkoutFormData = localStorage.getItem('checkout-form-data');
-      if (checkoutFormData) {
-        const formData = JSON.parse(checkoutFormData);
-        setShippingCost(Number(formData.shipping_cost) || 0);
-      }
-    } catch {
-      setShippingCost(0);
-    }
   }, []);
 
   // Total que se muestra y se cobra = subtotal (cart.total) + envío
@@ -70,31 +64,6 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
     try {
       console.log('🚀 Starting TiloPay Payment Link flow...');
       
-      // Step 1: Get comprehensive checkout data from localStorage.
-      // El costo de envío usa el estado `shippingCost` (leído al montar) como fuente única.
-      const checkoutFormData = localStorage.getItem('checkout-form-data');
-      let customerNote = '';
-      let personalInfo = null;
-      let shippingOption = '';
-      let shippingOtherDetails = '';
-      let shippingZoneLabel = '';
-      let contactData = null;
-
-      if (checkoutFormData) {
-        try {
-          const formData = JSON.parse(checkoutFormData);
-          customerNote = formData.customer_note || '';
-          personalInfo = formData.personal_info || null;
-          shippingOption = formData.shipping_option || '';
-          shippingOtherDetails = formData.shipping_other_details || '';
-          shippingZoneLabel = formData.shipping_zone_label || '';
-          contactData = formData.contact_data || null;
-        } catch (e) {
-          console.log('Could not parse checkout form data from localStorage');
-        }
-      }
-
-      // Step 2: Create WooCommerce order first (optional but recommended)
       console.log('📦 Creating WooCommerce order...');
 
       const orderResponse = await fetch('/api/woocommerce/orders', {
@@ -109,13 +78,13 @@ export default function TilopayPaymentLink({ customerInfo, cart }: TilopayPaymen
           appliedCoupons: cart.appliedCoupons, // Include applied coupons
           paymentMethod: 'TiloPay',
           tilopayOrderNumber: orderNumber,
-          customer_note: customerNote, // Include customer notes
-          personal_info: personalInfo, // Include all new structured data
-          shipping_option: shippingOption, // Include shipping preference
+          customer_note: checkoutData.customer_note, // Include customer notes
+          personal_info: checkoutData.personal_info, // Include all new structured data
+          shipping_option: checkoutData.shipping_option, // Include shipping preference
           shipping_zone_label: shippingZoneLabel, // Etiqueta legible de la zona
           shipping_cost: shippingCost, // Costo de envío calculado
-          shipping_other_details: shippingOtherDetails, // Include custom shipping details
-          contact_data: contactData, // Include optional contact data
+          shipping_other_details: checkoutData.shipping_other_details, // Include custom shipping details
+          contact_data: checkoutData.contact_data, // Include optional contact data
           billingAddress: {
             first_name: customerInfo.firstName,
             last_name: customerInfo.lastName,

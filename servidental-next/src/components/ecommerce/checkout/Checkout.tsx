@@ -109,7 +109,7 @@ const COSTA_RICA_LOCATIONS: Record<string, Record<string, string[]>> = {
   }
 };
 
-interface CheckoutFormData {
+export interface CheckoutFormData {
   billing: BillingAddress;
   shipping: ShippingAddress;
   payment_method: string;
@@ -268,35 +268,12 @@ export default function Checkout() {
   const [transferOrderSuccess, setTransferOrderSuccess] = useState(false);
 
   React.useEffect(() => {
-    const savedData = localStorage.getItem('checkout-form-data');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        if (parsed.personal_info) {
-          setFormData(prev => ({
-            ...prev,
-            personal_info: {
-              ...prev.personal_info,
-              ...parsed.personal_info
-            }
-          }));
-        }
-      } catch (e) {
-        console.error('Error loading saved checkout data:', e);
-      }
+    try {
+      localStorage.removeItem('checkout-form-data');
+    } catch {
+      // El checkout sigue funcionando si el navegador bloquea el almacenamiento.
     }
   }, []);
-
-  React.useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      const dataToSave = {
-        personal_info: formData.personal_info
-      };
-      localStorage.setItem('checkout-form-data', JSON.stringify(dataToSave));
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [formData.personal_info]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,26 +283,6 @@ export default function Checkout() {
       alert('Por favor seleccione una zona u opción de envío.');
       return;
     }
-
-    // Update billing info from personal_info for compatibility
-    const updatedFormData = {
-      ...formData,
-      // Datos de envío calculados (para el flujo de Tilopay que lee de localStorage)
-      shipping_zone_label: selectedZone.label,
-      shipping_cost: getShippingCost(),
-      billing: {
-        ...formData.billing,
-        first_name: formData.personal_info.company_name,
-        email: formData.personal_info.emails.billing,
-        phone: formData.personal_info.contact_numbers.cellphone,
-        address_1: `${formData.personal_info.address.province}, ${formData.personal_info.address.canton}, ${formData.personal_info.address.district}`,
-        address_2: formData.personal_info.address.other_details,
-        city: formData.personal_info.address.canton,
-        state: formData.personal_info.address.province
-      }
-    };
-
-    localStorage.setItem('checkout-form-data', JSON.stringify(updatedFormData));
 
     // Track begin checkout in Google Analytics
     trackBeginCheckout({
@@ -1094,6 +1051,9 @@ export default function Checkout() {
             </button>
             
             <TilopayPaymentSDK
+              checkoutData={formData}
+              shippingCost={getShippingCost()}
+              shippingZoneLabel={selectedZone?.label ?? ''}
               customerInfo={{
                 firstName: formData.personal_info.company_name,
                 lastName: '',
@@ -1118,7 +1078,6 @@ export default function Checkout() {
                   variationId: item.variationId,
                   variationAttributes: item.variationAttributes,
                 })),
-                // El SDK suma el envío (shippingCost del localStorage) una sola vez.
                 // Aquí se pasa el total SIN envío para evitar doble cobro.
                 total: cart.total,
               }}
