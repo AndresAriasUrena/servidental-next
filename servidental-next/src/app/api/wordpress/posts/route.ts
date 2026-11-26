@@ -1,5 +1,6 @@
 // src/app/api/wordpress/posts/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { sanitizeBlogPost } from '@/server/sanitize';
 
 const WORDPRESS_API_URL = process.env.WORDPRESS_API_URL || 'https://wp.servidentalcr.com/wp-json/wp/v2';
 
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await response.json();
+    const data = (await response.json()).map(sanitizeBlogPost);
 
     // Forward WordPress headers (pagination info)
     const headers = new Headers();

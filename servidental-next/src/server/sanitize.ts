@@ -34,3 +34,36 @@ export function normalizeDescription(html: string): string {
 
   return cleaned;
 }
+
+type BlogRenderedField = { rendered?: unknown };
+type BlogRenderedFields = {
+  title?: BlogRenderedField;
+  excerpt?: BlogRenderedField;
+  content?: BlogRenderedField;
+};
+
+export function sanitizeBlogPost<T extends BlogRenderedFields>(post: T): T {
+  const result = { ...post };
+  for (const key of ['title', 'excerpt', 'content'] as const) {
+    const field = post[key];
+    if (typeof field?.rendered !== 'string') continue;
+
+    result[key] = {
+      ...field,
+      rendered: sanitizeHtml(field.rendered, {
+        allowedTags: key === 'title' ? [] : [
+          ...sanitizeHtml.defaults.allowedTags, 'img', 'figure', 'figcaption',
+        ],
+        allowedAttributes: {
+          a: ['href', 'title'],
+          img: ['src', 'alt', 'title', 'width', 'height', 'loading'],
+        },
+        allowedSchemes: ['https', 'http', 'mailto', 'tel'],
+        allowedSchemesByTag: { img: ['https', 'http'] },
+        allowProtocolRelative: false,
+      }),
+    };
+  }
+
+  return result;
+}

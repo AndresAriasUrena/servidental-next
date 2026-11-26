@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { sanitizeBlogPost } from '@/server/sanitize';
 import { notFound } from 'next/navigation';
 import BlogPostServer from '@/components/blog/BlogPostServer';
 
@@ -25,7 +26,7 @@ async function getPostBySlug(slug: string) {
     }
 
     const posts = await res.json();
-    return posts && posts.length > 0 ? posts[0] : null;
+    return posts && posts.length > 0 ? sanitizeBlogPost(posts[0]) : null;
   } catch (error) {
     console.error('Error fetching post:', error);
     return null;
